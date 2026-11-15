@@ -77,8 +77,10 @@ capture. Final full-video and compact/full feedback reruns both passed, includin
 desktop/narrow layouts. Full lint and focused lint of the adjusted harnesses
 passed. Verification is `passed`; implementation is `implemented`. The owner
 authorized publication and merge into `main`; final learner acceptance remains
-pending. Next permitted action is publishing the reviewed commits and merging
-the pull request.
+pending. [PR #8](https://github.com/DiligentPenguinn/codex-content-creator-course/pull/8)
+merged both feature sets at `3a2a878`, and the local `main` checkout was
+fast-forwarded to that result. Next permitted action is owner review of the
+updated app; beginner-pilot, native macOS and overall acceptance gates remain.
 
 Logs are ignored under `.superpowers/qa/features-merge-*`. Personal learner
 state, raw recordings and temporary workspaces are excluded from the index.
