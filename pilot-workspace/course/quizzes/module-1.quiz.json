@@ -19,12 +19,12 @@
       "bloomLabel": "Hiểu",
       "prompt": "Một người dùng yêu cầu Codex sửa lỗi trong dự án. Dấu hiệu nào cho thấy Codex đang hoạt động như một coding agent thay vì chatbot chỉ trả lời bằng văn bản?",
       "choices": [
-        "Codex đọc các tệp liên quan, sửa trong phạm vi được giao, chạy kiểm tra rồi báo cáo kết quả.",
         "Codex giải thích lỗi có thể nằm ở đâu nhưng không làm việc với dự án.",
         "Codex trả lời thật dài và dùng nhiều thuật ngữ kỹ thuật.",
+        "Codex đọc các tệp liên quan, sửa trong phạm vi được giao, chạy kiểm tra rồi báo cáo kết quả.",
         "Codex luôn được toàn quyền truy cập máy tính trước khi bắt đầu."
       ],
-      "answerIndex": 0,
+      "answerIndex": 2,
       "explanation": "Coding agent có thể hành động trong dự án bằng công cụ và kiểm tra kết quả. Một câu trả lời dài hoặc có thuật ngữ chưa chứng minh khả năng đó.",
       "source": {
         "label": "OpenAI Docs — Codex app",
@@ -39,12 +39,12 @@
       "bloomLabel": "Vận dụng",
       "prompt": "Bạn muốn xem cuộc trò chuyện đã dùng bao nhiêu context và sau đó giao cho Codex một mục tiêu cần tiếp tục theo đuổi qua nhiều lượt. Bạn nên dùng cặp lệnh nào?",
       "choices": [
-        "Dùng /status để xem mức sử dụng context, rồi dùng /goal để đặt mục tiêu bền vững.",
         "Dùng /model để xem context, rồi dùng /status để đặt mục tiêu bền vững.",
+        "Dùng /status để xem mức sử dụng context, rồi dùng /goal để đặt mục tiêu bền vững.",
         "Dùng @ để xem context, rồi dùng /reasoning để đặt mục tiêu bền vững.",
         "Dùng /compact để đặt mục tiêu, rồi dùng /goal để xem mức sử dụng context."
       ],
-      "answerIndex": 0,
+      "answerIndex": 1,
       "explanation": "/status hiển thị mức sử dụng context của cuộc trò chuyện. /goal tạo một mục tiêu bền vững để Codex tiếp tục theo đuổi cho đến khi hoàn thành, tạm dừng hoặc cần thêm thông tin.",
       "source": {
         "label": "OpenAI Docs — Slash commands",
@@ -59,12 +59,12 @@
       "bloomLabel": "Vận dụng",
       "prompt": "Bạn muốn Codex luôn chạy kiểm tra sau khi sửa tệp JavaScript trong riêng dự án portfolio này, kể cả khi bắt đầu một task mới. Bạn nên lưu quy tắc đó ở đâu?",
       "choices": [
-        "Trong tệp AGENTS.md của dự án portfolio.",
         "Trong một tin nhắn của task hiện tại rồi đóng task.",
         "Trong phần chọn model để mọi model tự ghi nhớ quy tắc.",
-        "Trong chế độ Full access để Codex tự quyết định cách kiểm tra."
+        "Trong chế độ Full access để Codex tự quyết định cách kiểm tra.",
+        "Trong tệp AGENTS.md của dự án portfolio."
       ],
-      "answerIndex": 0,
+      "answerIndex": 3,
       "explanation": "AGENTS.md của dự án là nơi phù hợp cho quy tắc cần được Codex đọc lại khi làm việc trong dự án đó. Một tin nhắn chỉ thuộc task hiện tại, còn model và Full access không lưu quy tắc dự án.",
       "source": {
         "label": "OpenAI Docs — AGENTS.md",

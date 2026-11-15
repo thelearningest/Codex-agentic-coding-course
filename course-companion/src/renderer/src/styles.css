@@ -1981,15 +1981,6 @@ button:focus-visible {
   text-align: center;
 }
 
-/* Without a video stage, keep the navigation where dialogue actions sit on other pages. */
-.pixel-learning-shell[data-scene-id="module-1-complete"] .pixel-lesson-navigation {
-  position: absolute;
-  right: calc(5vw + 20px);
-  bottom: 34px;
-  left: calc(5vw + 20px);
-  width: auto;
-}
-
 .pixel-assessment {
   position: relative;
   z-index: 1;

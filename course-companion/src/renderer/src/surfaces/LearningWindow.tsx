@@ -477,25 +477,6 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     showTitle: false,
     showPanel: false
   },
-  'module-1-complete': {
-    lessonId: 'module-1',
-    checkpointId: 'm1-complete',
-    step: 6,
-    totalSteps: 6,
-    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
-    mission: 'Sẵn sàng làm việc với Codex',
-    objective: 'Module 1 đã hoàn thành',
-    panelLabel: 'NỀN TẢNG LÀM VIỆC',
-    panelStatus: 'SẴN SÀNG CHO MODULE 2',
-    tone: 'good',
-    request: 'Bạn đã có ranh giới làm việc rõ trước khi bắt đầu planning.',
-    evidence: [
-      { label: 'CODEX', value: 'Coding agent có thể hành động', ready: true },
-      { label: 'CẤU HÌNH', value: 'Đã được Triết duyệt', ready: true },
-      { label: 'BƯỚC TIẾP', value: 'Planning, PRD và prompt', ready: true }
-    ],
-    choices: [{ label: 'Mở Module 2', next: 'module-2-portfolio-workspace', afterSave: 'home', primary: true }]
-  },
   'module-2-why-planning': {
     lessonId: 'module-2',
     checkpointId: 'm2-why-planning',
@@ -1295,8 +1276,7 @@ const courseLessonPages = {
     ['module-1-final-2'],
     ['module-1-final-3'],
     ['module-1-final-4'],
-    ['module-1-final-summary'],
-    ['module-1-complete']
+    ['module-1-final-summary']
   ],
   ...registryLessonPages
 } as Record<CourseLessonId, readonly (readonly SceneId[])[]>
@@ -1703,7 +1683,6 @@ function GuidanceLessonBoard({
         {kind === 'agents' ? (
           <>
             <header>
-              <small>AGENTS.md - bộ quy luật cho coding agents</small>
               <h1 id={titleId}>Vậy, giả dụ có một thông tin mình muốn agent ghi nhớ mà không cần phải nhắc đi nhắc lại thì mình sẽ làm gì?</h1>
               <p>Bạn có thể lưu thông tin đó trong <code>AGENTS.md</code>.</p>
               <p>Đây là một tệp văn bản chứa các quy tắc và thông tin coding agent cần biết trước khi bắt đầu công việc. Codex đọc tệp này để hiểu cách bạn muốn dự án được xử lý.</p>
@@ -2256,7 +2235,7 @@ function PixelAppShell({
     progress.sceneId === 'module-1-setup-checklist' ? 'module-1-skills-portfolio' : progress.sceneId
   ]
   const completed = new Set(progress.completedCheckpointIds)
-  if (progress.sceneId === 'module-1-complete' || progress.sceneId === 'module-2-complete') {
+  if (progress.sceneId === 'module-2-complete') {
     completed.add(progress.checkpointId)
   }
   const completedCheckpointCount = runnableCheckpointIds.filter((id) => completed.has(id)).length
@@ -2708,6 +2687,9 @@ export function LearningWindow() {
     if (currentScene.checkpointId !== nextScene.checkpointId) {
       completed.add(currentScene.checkpointId)
     }
+    if (progress.sceneId === 'module-1-final-summary' && nextSceneId === 'module-2-portfolio-workspace') {
+      completed.add('m1-complete')
+    }
     await persist({
       currentLessonId: nextScene.lessonId,
       currentCourseLessonId: courseLessonIdForScene(nextSceneId),
@@ -3111,7 +3093,6 @@ export function LearningWindow() {
   const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
-  const navigationOnly = isVercelTutorial || displayedSceneId === 'module-1-complete'
   const canExpandLessonVisual = scene.lessonId !== 'intro'
   const canShowSceneMedia = !assessmentQuestion && !scene.assessmentSummary
   const usesPairedLessonNavigation = isReviewing || (!assessmentQuestion && !scene.assessmentSummary)
@@ -3369,12 +3350,12 @@ export function LearningWindow() {
       ) : null}
 
       <section
-        aria-label={navigationOnly ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
-        aria-labelledby={isAssessmentQuestionPage || navigationOnly ? undefined : 'teacherName'}
-        className={navigationOnly ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
+        aria-label={isVercelTutorial ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
+        aria-labelledby={isAssessmentQuestionPage || isVercelTutorial ? undefined : 'teacherName'}
+        className={isVercelTutorial ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
-        {isAssessmentQuestionPage || navigationOnly ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
-        {isAssessmentQuestionPage || navigationOnly ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
+        {isAssessmentQuestionPage || isVercelTutorial ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
+        {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
           <PortfolioWorkspacePicker
             courseRunId={progress.courseRunId}
             onContinue={() => void advanceToScene('module-2-portfolio-practice', progress.decisions)}
@@ -3469,7 +3450,8 @@ export function LearningWindow() {
                 onClick={() => finalPassed
                   ? void choose({
                       label: scene.lessonId === 'module-1' ? 'Hoàn thành Module 1' : 'Hoàn thành Module 2',
-                      next: scene.lessonId === 'module-1' ? 'module-1-complete' : 'module-2-complete',
+                      next: scene.lessonId === 'module-1' ? 'module-2-portfolio-workspace' : 'module-2-complete',
+                      afterSave: scene.lessonId === 'module-1' ? 'home' : undefined,
                       decision: scene.lessonId === 'module-1'
                         ? { key: 'setupMastery', value: 'passed-three-of-four' }
                         : { key: 'masteryEvidence', value: 'artifacts-approved-and-aligned' }

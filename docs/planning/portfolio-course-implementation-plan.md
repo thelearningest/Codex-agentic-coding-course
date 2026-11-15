@@ -49,6 +49,22 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Module 1 completion page removed and quiz answers reordered, 16 November 2026
+
+Implementation: `implemented` on branch `portfolio-agents-md`. Passing the
+Module 1 assessment now records `m1-complete` and returns to Home Base with
+Module 2 opening at `module-2-portfolio-workspace`; the `module-1-complete`
+page is gone. Saved progress on that page resumes at the same destination
+and the page is dropped from review history. The small "AGENTS.md - bộ quy
+luật cho coding agents" label above the Module 1 AGENTS.md page heading is
+removed. Three Module 1 quiz questions now place the correct answer at
+positions 3, 2 and 4 instead of first; the owner confirmed the reorder and
+the frozen digest for `module-1.quiz.json` was updated.
+
+Verification: typecheck and lint `passed`; progress-repository, frozen
+Module 1, Teacher course-context and start-prompt tests pass (51). The full
+unit suite, build and `test:electron` were not run.
+
 ### Portfolio AGENTS.md covers Modules 2–4, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`. The owner

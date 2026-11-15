@@ -11,7 +11,7 @@ const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': 'ddc99dba0bd0763810363db2075d45155782122294036dc158198fc55f5eb0bb',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',
-  '../pilot-workspace/course/quizzes/module-1.quiz.json': '695fc00f447b386fe247380863d42671d1a9f6e7e5acafe900b306e35660b174',
+  '../pilot-workspace/course/quizzes/module-1.quiz.json': '4f2f3741c432693f6606d828f2403541587aea9dad48d8f60f8d147bdc8e8a30',
   '../pilot-workspace/course/practices/m1-codex-safe-setup.json': 'e38108154ecab20070d2820b1ec8118c0383dd727d267ff02bcea8f9660cad65',
   'content/practices/m1-codex-safe-setup.json': 'a93062fa4386ac54e085b31cfb9a26690d03ba79f2a8810f2b4991d2b04d0d28',
   '../pilot-workspace/course/codex-setup/app.js': '76ee417775f75c302be3758c31442564dbc6371e83ae8942b2c87baccfd7424d',
@@ -60,12 +60,9 @@ describe('frozen introduction and approved Module 1', () => {
       source.indexOf('const staticScenes'),
       source.indexOf("  'module-2-why-planning'")
     )
-    const masteryScene = scenes.slice(
-      scenes.indexOf("'module-1-mastery': {"),
-      scenes.indexOf("'module-1-complete': {")
-    )
+    const masteryScene = scenes.slice(scenes.indexOf("'module-1-mastery': {"))
     expect(digest(assessment)).toBe('e9569f7111a13d7db61fef221f3a85a436f29899494ece43dc9ced61bde46b65')
-    expect(digest(scenes)).toBe('d82d96c3d959cb216327ffefa22a64fec5d101c538ef07ebdca75bd0a34b1445')
+    expect(digest(scenes)).toBe('d9e3b40df275eb8f87aa1549ceaec017324ba06f14b55b7d36cb929dba0a54a9')
     expect(scenes).toContain("dialogue: 'Trong khoá học này, bạn sẽ được học cách dùng coding agents thông qua một dự án thực hành: Xây Portfolio cá nhân.'")
     expect(scenes).toContain("dialogue: 'Cuối khoá này, bạn sẽ có một web portfolio thật để có thể gửi cho nhà tuyển dụng.'")
     expect(scenes).toContain("dialogue: 'Những kỹ năng bạn học được trong khoá này không chỉ giúp bạn xây Portfolio, mà còn trang bị cho bạn kiến thức để tạo bất kỳ công cụ nào bạn muốn với AI'")
@@ -85,6 +82,6 @@ describe('frozen introduction and approved Module 1', () => {
     expect(scenes).toContain("dialogue: 'Bây giờ hãy cùng nhau trả lời các câu hỏi ôn tập để củng cố kiến thức vừa học nhen!'")
     expect(masteryScene).toContain('showTitle: false')
     expect(masteryScene).toContain('showPanel: false')
-    expect(scenes).toContain("choices: [{ label: 'Mở Module 2', next: 'module-2-portfolio-workspace', afterSave: 'home', primary: true }]")
+    expect(scenes).not.toContain("'module-1-complete': {")
   })
 })

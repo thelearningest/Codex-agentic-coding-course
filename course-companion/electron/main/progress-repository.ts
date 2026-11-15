@@ -269,6 +269,26 @@ function redirectRetiredModuleOneAssessment(raw: Record<string, unknown>): Recor
   }
 }
 
+function skipRetiredModuleOneCompletionPage(raw: Record<string, unknown>): Record<string, unknown> {
+  const retiredPage = 'module-1-complete'
+  const sceneHistory = Array.isArray(raw.sceneHistory)
+    ? raw.sceneHistory.filter((id) => id !== retiredPage)
+    : raw.sceneHistory
+  if (raw.sceneId !== retiredPage) return { ...raw, sceneHistory }
+  if (raw.currentLessonId !== 'module-1' || raw.currentCourseLessonId !== 'm1-assessment'
+    || raw.checkpointId !== 'm1-complete' || !Array.isArray(raw.completedCheckpointIds)) return raw
+  const destination = 'module-2-portfolio-workspace'
+  return {
+    ...raw,
+    currentLessonId: 'module-2',
+    currentCourseLessonId: courseLessonIdForScene(destination),
+    checkpointId: sceneCheckpoint[destination],
+    sceneId: destination,
+    sceneHistory,
+    completedCheckpointIds: [...new Set([...raw.completedCheckpointIds, 'm1-complete'])]
+  }
+}
+
 function redirectRetiredModuleTwoReferences(raw: Record<string, unknown>): Record<string, unknown> {
   const hasRetiredScene = typeof raw.sceneId === 'string' && RETIRED_MODULE_TWO_SCENES.has(raw.sceneId)
   const hasRetiredLesson = typeof raw.currentCourseLessonId === 'string'
@@ -756,7 +776,7 @@ function migrateLearnerProgress(value: unknown): LearnerProgress | null {
       ...(redirected.courseRunId === undefined ? { courseRunId: courseRunId(startedAt) } : {}),
       ...(redirected.practiceCompletions === undefined ? { practiceCompletions: [] } : {})
     }
-    const normalized = normalizeCurrentModuleTwoOrder(compatible)
+    const normalized = normalizeCurrentModuleTwoOrder(skipRetiredModuleOneCompletionPage(compatible))
     if (!isLearnerProgress(normalized)) return null
     const requiresFreshPortfolioReview = normalized.currentLessonId === 'module-3'
       && !hasPortfolioModuleCompletion(normalized)

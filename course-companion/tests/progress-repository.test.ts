@@ -74,6 +74,30 @@ describe('ProgressRepository', () => {
     expect(activity.trim().split('\n')).toHaveLength(2)
   })
 
+  it('resumes past the former Module 1 completion page and removes it from review history', async () => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save(moduleOneStart)
+    const decisions = { setupMastery: 'passed-three-of-four' }
+    const oldProgress = {
+      ...started, currentCourseLessonId: 'm1-assessment', checkpointId: 'm1-complete',
+      sceneId: 'module-1-complete', sceneHistory: ['module-1-final-summary'],
+      completedCheckpointIds: ['m1-mastery'], decisions
+    }
+    const statePath = join(directory, 'learner-state.json')
+    await writeFile(statePath, JSON.stringify(oldProgress))
+    const expected = {
+      ...oldProgress, currentLessonId: 'module-2', currentCourseLessonId: 'm2-portfolio-brief',
+      checkpointId: 'm2-portfolio-brief', sceneId: 'module-2-portfolio-workspace',
+      completedCheckpointIds: ['m1-mastery', 'm1-complete']
+    }
+    await expect(repository.load()).resolves.toEqual({ status: 'returning', progress: expected })
+    await writeFile(statePath, JSON.stringify({
+      ...expected, sceneHistory: ['module-1-final-summary', 'module-1-complete']
+    }))
+    await expect(repository.load()).resolves.toEqual({ status: 'returning', progress: expected })
+  })
+
   it('moves retired Harness progress to setup Practice', async () => {
     const directory = await temporaryDirectory()
     const repository = new ProgressRepository(directory)
