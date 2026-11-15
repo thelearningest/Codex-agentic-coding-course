@@ -56,7 +56,7 @@ import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
 import { PracticeGuide } from '../components/PracticeGuide'
 import { PortfolioWorkspacePicker } from '../components/PortfolioWorkspacePicker'
 import { HighlightedDialogue } from '../components/HighlightedDialogue'
-import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages } from '../../../../shared/course/outline'
+import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages, reviewTrail } from '../../../../shared/course/outline'
 import {
   registryLessonDefinitions,
   registryLessonPages,
@@ -1088,6 +1088,12 @@ const scenes = {
     assessmentSummary: true
   }
 } as Record<SceneId, SceneContent>
+
+// The single forward page of a linear scene; branching and action choices have none.
+function nextReviewPageOf(sceneId: SceneId): SceneId | undefined {
+  const forward = (scenes[sceneId]?.choices ?? []).filter((choice) => choice.next && !choice.action)
+  return forward.length === 1 ? forward[0]!.next : undefined
+}
 
 type CourseLessonDefinition = {
   id: CourseLessonId
@@ -2855,7 +2861,8 @@ export function LearningWindow() {
       return
     }
     if (choice.action === 'review-module') {
-      const firstModuleSceneIndex = progress.sceneHistory.findIndex((sceneId) => sceneId.startsWith('module-2-'))
+      const firstModuleSceneIndex = reviewTrail(progress.sceneHistory, progress.sceneId, nextReviewPageOf)
+        .findIndex((sceneId) => sceneId.startsWith('module-2-'))
       if (firstModuleSceneIndex >= 0) setReviewHistoryIndex(firstModuleSceneIndex)
       return
     }
@@ -2980,11 +2987,12 @@ export function LearningWindow() {
     )
   }
 
+  const reviewSceneTrail = reviewTrail(progress.sceneHistory, progress.sceneId, nextReviewPageOf)
   const reviewingSceneId = reviewHistoryIndex === null
     ? undefined
-    : progress.sceneHistory[reviewHistoryIndex]
+    : reviewSceneTrail[reviewHistoryIndex]
   const isReviewing = outlineSceneId !== null || reviewingSceneId !== undefined
-  const currentReviewIndex = reviewHistoryIndex ?? progress.sceneHistory.length
+  const currentReviewIndex = reviewHistoryIndex ?? reviewSceneTrail.length
   const displayedSceneId = outlineSceneId ?? reviewingSceneId
     ?? (progress.sceneId === 'module-1-setup-checklist'
       ? 'module-1-skills-portfolio'
@@ -3024,7 +3032,7 @@ export function LearningWindow() {
     ? adjacentOutlinePage(reviewPages, displayedSceneId, -1) !== undefined
     : isReviewing
       ? currentReviewIndex > 0
-      : progress.sceneHistory.length > 0)
+      : reviewSceneTrail.length > 0)
   const openPreviousPage = () => {
     if (!canOpenPreviousPage) return
     clearPageOverlays()
@@ -3032,7 +3040,7 @@ export function LearningWindow() {
       setOutlineSceneId(adjacentOutlinePage(reviewPages, displayedSceneId, -1) ?? outlineSceneId)
       return
     }
-    setReviewHistoryIndex(isReviewing ? currentReviewIndex - 1 : progress.sceneHistory.length - 1)
+    setReviewHistoryIndex(isReviewing ? currentReviewIndex - 1 : reviewSceneTrail.length - 1)
   }
   const openNextReviewPage = () => {
     if (!isReviewing) return
@@ -3044,7 +3052,7 @@ export function LearningWindow() {
       return
     }
     const nextIndex = currentReviewIndex + 1
-    setReviewHistoryIndex(nextIndex < progress.sceneHistory.length ? nextIndex : null)
+    setReviewHistoryIndex(nextIndex < reviewSceneTrail.length ? nextIndex : null)
   }
   const reviewNextLabel = outlineSceneId !== null && !adjacentOutlinePage(reviewPages, displayedSceneId, 1)
     ? 'Về trang đang học'

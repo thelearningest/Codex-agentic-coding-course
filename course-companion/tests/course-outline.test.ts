@@ -1,7 +1,46 @@
 import { describe, expect, it } from 'vitest'
 import type { LessonId, PracticeCompletionReceipt, SceneId } from '../shared/contracts'
-import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages } from '../shared/course/outline'
+import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages, reviewTrail } from '../shared/course/outline'
 import { portfolioModuleDefinitions } from '../shared/course/registry'
+
+describe('review trail for Previous and Continue', () => {
+  const next = (pairs: Record<string, string>) => (sceneId: SceneId) => pairs[sceneId] as SceneId | undefined
+  const currentModuleTwoOrder = next({
+    'module-2-prd-definition': 'module-2-prd-review-workflow',
+    'module-2-prd-review-workflow': 'module-2-prd-sample-prompt',
+    'module-2-prd-sample-prompt': 'module-2-prd-agent-workflow',
+    'module-2-prd-agent-workflow': 'module-2-implementation-plan-intro',
+    'module-2-implementation-plan-intro': 'module-2-portfolio-folder'
+  })
+
+  it('keeps a history that already follows the current page order', () => {
+    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-sample-prompt']
+    expect(reviewTrail(history, 'module-2-prd-agent-workflow', currentModuleTwoOrder)).toEqual(history)
+  })
+
+  it('shows a page added after the learner had already passed that point', () => {
+    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-agent-workflow', 'module-2-implementation-plan-intro']
+    expect(reviewTrail(history, 'module-2-portfolio-folder', currentModuleTwoOrder)).toEqual([
+      'module-2-prd-definition',
+      'module-2-prd-review-workflow',
+      'module-2-prd-sample-prompt',
+      'module-2-prd-agent-workflow',
+      'module-2-implementation-plan-intro'
+    ])
+  })
+
+  it('fills a gap between the last visited page and the current learning page', () => {
+    expect(reviewTrail(['module-2-prd-review-workflow'], 'module-2-prd-agent-workflow', currentModuleTwoOrder))
+      .toEqual(['module-2-prd-review-workflow', 'module-2-prd-sample-prompt'])
+  })
+
+  it('keeps the visited path when the current order does not lead to the next visited page', () => {
+    const history: SceneId[] = ['module-1-codex-orientation', 'module-1-codex-model-intro']
+    const branch = next({ 'module-1-codex-orientation': 'module-1-agents-intro', 'module-1-agents-intro': 'module-1-skills-intro' })
+    expect(reviewTrail(history, 'module-1-codex-effort-speed', branch)).toEqual(history)
+    expect(reviewTrail(history, 'module-1-codex-effort-speed', next({}))).toEqual(history)
+  })
+})
 
 describe('course outline coverage and reading order', () => {
   it('exposes release completion for review only after the same course earned its reviewed return', () => {

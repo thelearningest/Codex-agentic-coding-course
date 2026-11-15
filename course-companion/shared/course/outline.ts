@@ -57,6 +57,31 @@ export function outlineSectionIndex(sections: readonly OutlineSection[], pages: 
   return -1
 }
 
+// Previous/Continue review walks the saved history. Pages added to the course
+// after the learner passed that point are inserted only when the current page
+// order leads from one visited page to the next one; other paths stay as visited.
+export function reviewTrail(
+  history: readonly SceneId[],
+  currentSceneId: SceneId,
+  nextPageOf: (sceneId: SceneId) => SceneId | undefined,
+  maxInsertedPages = 12
+): SceneId[] {
+  const visited = new Set<SceneId>([...history, currentSceneId])
+  const trail: SceneId[] = []
+  history.forEach((sceneId, index) => {
+    trail.push(sceneId)
+    const target = history[index + 1] ?? currentSceneId
+    const inserted: SceneId[] = []
+    let next = nextPageOf(sceneId)
+    while (next && next !== target && !visited.has(next) && inserted.length < maxInsertedPages) {
+      inserted.push(next)
+      next = nextPageOf(next)
+    }
+    if (next === target) trail.push(...inserted)
+  })
+  return trail
+}
+
 export function adjacentOutlinePage(pages: readonly SceneId[], sceneId: SceneId, direction: -1 | 1): SceneId | undefined {
   const index = pages.indexOf(sceneId)
   return index < 0 ? undefined : pages[index + direction]
