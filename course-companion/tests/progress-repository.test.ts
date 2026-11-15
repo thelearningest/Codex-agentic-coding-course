@@ -186,7 +186,7 @@ describe('ProgressRepository', () => {
     })
   })
 
-  it('keeps progress paused on the reactivated fifth Module 1 question', async () => {
+  it('moves progress from a retired fifth Module 1 question to the first unanswered remaining question', async () => {
     const directory = await temporaryDirectory()
     const repository = new ProgressRepository(directory)
     const started = await repository.save(moduleOneStart)
@@ -214,14 +214,50 @@ describe('ProgressRepository', () => {
       'utf8'
     )
 
-    await expect(repository.load()).resolves.toMatchObject({
+    const loaded = await repository.load()
+    expect(loaded).toMatchObject({
       status: 'returning',
       progress: {
         currentCourseLessonId: 'm1-assessment',
         checkpointId: 'm1-mastery',
-        sceneId: 'module-1-final-5',
-        sceneHistory: ['intro-visual-onboarding', 'module-1-final-4', 'module-1-final-5']
+        // Questions 1 and 2 are kept; the former fifth question is now third.
+        sceneId: 'module-1-final-3',
+        sceneHistory: ['intro-visual-onboarding', 'module-1-final-4']
       }
+    })
+    if (loaded.status !== 'returning') throw new Error('Expected returning progress')
+    expect(loaded.progress.decisions).toMatchObject({
+      'assessment:m1-q1': 'correct:0',
+      'assessment:m1-q2': 'correct:0'
+    })
+    expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q3')
+    expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q4')
+  })
+
+  it('moves a completed old Module 1 review on a retired question page to the summary', async () => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save(moduleOneStart)
+    await writeFile(join(directory, 'learner-state.json'), `${JSON.stringify({
+      ...started,
+      currentCourseLessonId: 'm1-assessment',
+      checkpointId: 'm1-mastery',
+      sceneId: 'module-1-final-6',
+      sceneHistory: [...started.sceneHistory, 'module-1-final-5', 'module-1-final-6'],
+      decisions: {
+        ...started.decisions,
+        'assessment:m1-q1': 'correct:0',
+        'assessment:m1-q2': 'correct:0',
+        'assessment:m1-q3': 'correct:0',
+        'assessment:m1-q4': 'correct:0',
+        'assessment:m1-q5-agents': 'correct:0',
+        'assessment:m1-q6-skills': 'correct:0'
+      }
+    }, null, 2)}\n`, 'utf8')
+
+    await expect(repository.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: { sceneId: 'module-1-final-summary', sceneHistory: ['intro-visual-onboarding'] }
     })
   })
 

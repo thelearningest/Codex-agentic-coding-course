@@ -140,11 +140,11 @@ Approve for me và Full access đang tắt. Metadata đến từ đúng task và
 
 Teacher nói: "Bạn đã thiết lập Codex và kiểm tra bằng chứng thật. Bây giờ, bốn
 câu ôn tập sẽ giúp bạn giải thích, áp dụng và phân tích những gì vừa học. Bạn
-cần đạt ít nhất năm câu để hoàn thành Module 1."
+cần đạt ít nhất ba câu để hoàn thành Module 1."
 
-[Dùng đủ sáu câu trong `course/quizzes/module-1.quiz.json`. Mở Assessment State
+[Dùng đủ bốn câu trong `course/quizzes/module-1.quiz.json`. Mở Assessment State
 cho từng câu và hỏi từng câu một. Chỉ hiện phản hồi, lời giải cùng nguồn sau khi
-Learner đã trả lời. Nếu chưa đạt 5/6, cho làm lại bài ôn tập. Khi đạt, lưu
+Learner đã trả lời. Nếu chưa đạt 3/4, cho làm lại bài ôn tập. Khi đạt, lưu
 checkpoint `m1-mastery`.]
 
 ## Bước 6 — Hoàn thành Module 1 (`m1-complete`)

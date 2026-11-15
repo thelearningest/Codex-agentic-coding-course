@@ -734,7 +734,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await capture(page, 'module-1-final-questions.png')
   await answerAssessmentGroup(page, 'setup-final-assessment')
 
-  await page.getByText(/Bạn đạt 6\/6 câu/).waitFor()
+  await page.getByText(/Bạn đạt 4\/4 câu/).waitFor()
   await capture(page, 'module-1-final-review.png')
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.locator('main[data-scene-id="module-1-complete"]').waitFor()
@@ -1649,7 +1649,7 @@ try {
   assert.ok(persisted.sceneHistory.length > 10)
   assert.equal(persisted.decisions.portfolioPlanningPractice, 'simulated-five-document-review')
   assert.equal(persisted.decisions.setupPractice, 'teacher-reviewed-setup')
-  assert.equal(persisted.decisions.setupMastery, 'passed-five-of-six')
+  assert.equal(persisted.decisions.setupMastery, 'passed-three-of-four')
   assert.equal(persisted.decisions.masteryEvidence, undefined)
   assert.equal(
     Object.entries(persisted.decisions).filter(

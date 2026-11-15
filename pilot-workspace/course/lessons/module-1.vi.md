@@ -175,11 +175,11 @@ Nếu chưa đạt, mình sẽ chỉ rõ mục cần sửa để bạn nộp l�
 
 ## Bài ôn tập cuối Module 1
 
-Sau khi Practice được duyệt, bạn sẽ trả lời sáu câu ôn tập. Các câu hỏi yêu cầu
+Sau khi Practice được duyệt, bạn sẽ trả lời bốn câu ôn tập. Các câu hỏi yêu cầu
 bạn giải thích, áp dụng hoặc phân tích kiến thức trong một tình huống cụ thể.
 Mỗi lượt chỉ hiện một câu. Lời giải và nguồn sẽ xuất hiện sau khi bạn trả lời.
 
-Bạn cần đạt ít nhất 5/6 câu để hoàn thành Module 1. Nếu chưa đạt, bạn có thể làm
+Bạn cần đạt ít nhất 3/4 câu để hoàn thành Module 1. Nếu chưa đạt, bạn có thể làm
 lại bài ôn tập sau khi xem phản hồi.
 
 ## Tiêu chí hoàn thành
@@ -192,7 +192,7 @@ Bạn hoàn thành Module 1 khi:
 - dùng cấu hình Sol, High và Standard cho ContentPilot,
 - nộp đủ hai ảnh trong đúng task Codex, và
 - được mình duyệt bằng chứng, và
-- đạt ít nhất 5/6 câu trong bài ôn tập cuối Module 1.
+- đạt ít nhất 3/4 câu trong bài ôn tập cuối Module 1.
 
 ## Nguồn và lựa chọn mình đưa ra
 

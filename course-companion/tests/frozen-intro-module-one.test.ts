@@ -5,13 +5,13 @@ import { describe, expect, it } from 'vitest'
 
 const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/lessons/intro.vi.md': '85b293c5ecf0d07f5aba6ad00181be185f4def7da0faaadcde40aaaf01b39ed9',
-  '../pilot-workspace/course/lessons/module-1.vi.md': '8c8adc34e580f6af82ebe026a0a8e55849746b2d16890671a8f81bff4ec2a386',
+  '../pilot-workspace/course/lessons/module-1.vi.md': 'd4def3a31e2e2898c11344cf7cedb3c0b821fb64591b5de9b7b2d012ae31b776',
   '../pilot-workspace/course/lesson-scripts/intro.script.vi.md': 'ac50c545ed4c301b7fee15f5277d7b482fef34c980d4102513c1fd2cf9a54d82',
-  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '6b19558a8304779118dd79eff491d48441070fddddba0ec67d5be89b5ebb8fdf',
+  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '5a9d549daf5fae827f7be1efc7d9658e640dde90b93a4715b4b4897eebfac0c8',
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
-  '../pilot-workspace/course/prompts/start-module-1.vi.md': '67edac770b9f1f3b9a309e639c5e5b9d8534cc108957a228354f0b5eb1e3c3ab',
+  '../pilot-workspace/course/prompts/start-module-1.vi.md': 'ddc99dba0bd0763810363db2075d45155782122294036dc158198fc55f5eb0bb',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',
-  '../pilot-workspace/course/quizzes/module-1.quiz.json': '0223603f1976dac6273ffa62705b97c27ef5b7d673f647c174d5f34aef5c5412',
+  '../pilot-workspace/course/quizzes/module-1.quiz.json': 'ac1d6bbd0ee9b1d31282980413b5a91eb4da3d5d1cb134fc6f2bd0dffb4e2ed7',
   '../pilot-workspace/course/practices/m1-codex-safe-setup.json': 'e38108154ecab20070d2820b1ec8118c0383dd727d267ff02bcea8f9660cad65',
   'content/practices/m1-codex-safe-setup.json': 'a93062fa4386ac54e085b31cfb9a26690d03ba79f2a8810f2b4991d2b04d0d28',
   '../pilot-workspace/course/codex-setup/app.js': '76ee417775f75c302be3758c31442564dbc6371e83ae8942b2c87baccfd7424d',
@@ -65,7 +65,7 @@ describe('frozen introduction and approved Module 1', () => {
       scenes.indexOf("'module-1-complete': {")
     )
     expect(digest(assessment)).toBe('e9569f7111a13d7db61fef221f3a85a436f29899494ece43dc9ced61bde46b65')
-    expect(digest(scenes)).toBe('0b7dc0e3780aabeabdedf92c13732c965f5a48c39314337370e89fc6b068d9ec')
+    expect(digest(scenes)).toBe('17047f25ac9dbeb586b66f10ecd79373f2000f820f87b71b3eb74c3b569ac282')
     expect(scenes).toContain("dialogue: 'Trong khoá học này, bạn sẽ được học cách dùng coding agents thông qua một dự án thực hành: Xây Portfolio cá nhân.'")
     expect(scenes).toContain("dialogue: 'Cuối khoá này, bạn sẽ có một web portfolio thật để có thể gửi cho nhà tuyển dụng.'")
     expect(scenes).toContain("dialogue: 'Những kỹ năng bạn học được trong khoá này không chỉ giúp bạn xây Portfolio, mà còn trang bị cho bạn kiến thức để tạo bất kỳ công cụ nào bạn muốn với AI'")

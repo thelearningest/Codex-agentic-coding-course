@@ -462,18 +462,18 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     totalSteps: 6,
     lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
     mission: 'Ôn tập cuối Module 1',
-    objective: 'Sẵn sàng cho 6 câu ôn tập',
+    objective: 'Sẵn sàng cho 4 câu ôn tập',
     panelLabel: 'PRACTICE ĐÃ ĐƯỢC DUYỆT',
     panelStatus: 'ĐÃ ĐẠT · TIẾP TỤC ÔN TẬP',
     tone: 'good',
-    request: 'Sáu câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
+    request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
       { label: 'MODEL', value: '5.6 Sol · High', ready: true },
       { label: 'SPEED', value: 'Standard', ready: true },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
     ],
     dialogue: 'Bây giờ hãy cùng nhau trả lời các câu hỏi ôn tập để củng cố kiến thức vừa học nhen!',
-    choices: [{ label: 'Bắt đầu 6 câu ôn tập', next: 'module-1-final-1', primary: true, decision: { key: 'setupPractice', value: 'teacher-reviewed-setup' } }],
+    choices: [{ label: 'Bắt đầu 4 câu ôn tập', next: 'module-1-final-1', primary: true, decision: { key: 'setupPractice', value: 'teacher-reviewed-setup' } }],
     showTitle: false,
     showPanel: false
   },
@@ -1060,7 +1060,7 @@ const scenes = {
     mission: 'Kết quả kiểm tra thiết lập Codex',
     objective: 'Đối chiếu kết quả trước khi hoàn thành',
     panelLabel: 'KẾT QUẢ',
-    panelStatus: '6 CÂU · MỐC ĐẠT 5/6',
+    panelStatus: '4 CÂU · MỐC ĐẠT 3/4',
     tone: 'neutral',
     request: 'Mỗi câu đúng hoặc tự đối chiếu đạt được tính một điểm.',
     evidence: [],
@@ -1290,8 +1290,6 @@ const courseLessonPages = {
     ['module-1-final-2'],
     ['module-1-final-3'],
     ['module-1-final-4'],
-    ['module-1-final-5'],
-    ['module-1-final-6'],
     ['module-1-final-summary'],
     ['module-1-complete']
   ],
@@ -3419,7 +3417,7 @@ export function LearningWindow() {
                       label: scene.lessonId === 'module-1' ? 'Hoàn thành Module 1' : 'Hoàn thành Module 2',
                       next: scene.lessonId === 'module-1' ? 'module-1-complete' : 'module-2-complete',
                       decision: scene.lessonId === 'module-1'
-                        ? { key: 'setupMastery', value: 'passed-five-of-six' }
+                        ? { key: 'setupMastery', value: 'passed-three-of-four' }
                         : { key: 'masteryEvidence', value: 'artifacts-approved-and-aligned' }
                     })
                   : void retryFinalAssessment()}

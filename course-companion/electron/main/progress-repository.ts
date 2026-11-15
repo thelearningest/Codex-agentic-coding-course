@@ -49,6 +49,11 @@ const RETIRED_MODULE_ONE_SCENES = new Set([
   'module-1-project-setup'
 ])
 const RETIRED_MODULE_ONE_ASSESSMENT_SCENES = new Set<string>()
+// The Module 1 review keeps four questions; the former questions 3 and 4 and
+// their fifth and sixth question pages are retired.
+const MODULE_ONE_MASTERY_QUESTION_IDS = ['m1-q1', 'm1-q2', 'm1-q5-agents', 'm1-q6-skills'] as const
+const RETIRED_MODULE_ONE_MASTERY_QUESTION_IDS = new Set(['m1-q3', 'm1-q4'])
+const RETIRED_MODULE_ONE_QUESTION_SCENES = new Set(['module-1-final-5', 'module-1-final-6'])
 const RETIRED_MODULE_TWO_PLAN_SCENES = new Set([
   'module-2-plan-example',
   'module-2-plan-requirements',
@@ -229,6 +234,36 @@ function redirectRetiredModuleOneReferences(raw: Record<string, unknown>): Recor
     decisions: isRecord(raw.decisions)
       ? Object.fromEntries(Object.entries(raw.decisions).filter(([key]) => key !== 'modelChoice'))
       : raw.decisions
+  }
+}
+
+function redirectRetiredModuleOneAssessment(raw: Record<string, unknown>): Record<string, unknown> {
+  const isRetiredAnswerKey = (key: string) => key.startsWith('assessment:')
+    && RETIRED_MODULE_ONE_MASTERY_QUESTION_IDS.has(key.slice('assessment:'.length))
+  const hasRetiredAnswer = isRecord(raw.decisions) && Object.keys(raw.decisions).some(isRetiredAnswerKey)
+  const isRetiredPage = typeof raw.sceneId === 'string' && RETIRED_MODULE_ONE_QUESTION_SCENES.has(raw.sceneId)
+  const hasRetiredHistory = Array.isArray(raw.sceneHistory) && raw.sceneHistory.some(
+    (sceneId) => typeof sceneId === 'string' && RETIRED_MODULE_ONE_QUESTION_SCENES.has(sceneId)
+  )
+  if (!hasRetiredAnswer && !isRetiredPage && !hasRetiredHistory) return raw
+  const decisions = isRecord(raw.decisions)
+    ? Object.fromEntries(Object.entries(raw.decisions).filter(([key]) => !isRetiredAnswerKey(key)))
+    : raw.decisions
+  // A learner part-way through the old six-question review resumes at the
+  // first remaining question still unanswered, or at the summary.
+  const isOnQuestionPage = typeof raw.sceneId === 'string' && /^module-1-final-[0-9]+$/.test(raw.sceneId)
+  const resumesReview = isOnQuestionPage && (hasRetiredAnswer || isRetiredPage)
+  const firstUnanswered = MODULE_ONE_MASTERY_QUESTION_IDS.findIndex((questionId) =>
+    !(isRecord(decisions) && typeof decisions[`assessment:${questionId}`] === 'string'))
+  return {
+    ...raw,
+    sceneId: resumesReview
+      ? firstUnanswered >= 0 ? `module-1-final-${firstUnanswered + 1}` : 'module-1-final-summary'
+      : raw.sceneId,
+    sceneHistory: Array.isArray(raw.sceneHistory)
+      ? raw.sceneHistory.filter((sceneId) => typeof sceneId !== 'string' || !RETIRED_MODULE_ONE_QUESTION_SCENES.has(sceneId))
+      : raw.sceneHistory,
+    decisions
   }
 }
 
@@ -708,7 +743,7 @@ function migrateLearnerProgress(value: unknown): LearnerProgress | null {
 
   if (schemaVersion === LEARNER_STATE_SCHEMA_VERSION && courseVersion === COURSE_VERSION) {
     const redirected = redirectRetiredModuleThreeReferences(
-      redirectRetiredModuleTwoReferences(redirectRetiredModuleOneReferences(raw))
+      redirectRetiredModuleTwoReferences(redirectRetiredModuleOneAssessment(redirectRetiredModuleOneReferences(raw)))
     )
     const compatible = {
       ...redirected,

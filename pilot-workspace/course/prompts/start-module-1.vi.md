@@ -17,7 +17,7 @@ Phần cuối phải mở Practice `m1-codex-safe-setup`. Learner nộp hai ản
 đúng task Codex. Triết chỉ duyệt Practice sau khi bằng chứng còn mới và xác
 nhận đủ năm thiết lập. Không dùng nút tự xác nhận thay cho đánh giá của Triết.
 
-Sau khi Practice được duyệt, dùng đủ sáu câu trong
+Sau khi Practice được duyệt, dùng đủ bốn câu trong
 `course/quizzes/module-1.quiz.json` làm bài ôn tập cuối Module 1. Hỏi từng câu
 một và chỉ hiện phản hồi sau khi Learner đã trả lời. Learner cần đạt ít nhất
-5/6 câu trước khi hoàn thành Module 1.
+3/4 câu trước khi hoàn thành Module 1.

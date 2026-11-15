@@ -131,6 +131,19 @@ not brought over; Practice, assessment and every page are unchanged. Typecheck,
 lint, 797 unit tests, build and `npm run test:electron` passed. Final app
 review remains `pending`.
 
+Same branch, 15 November 2026: the home page no longer crashes when saved
+progress is on `module-1-setup-checklist` (it uses the preceding page's
+position, as the lesson view already did). At the owner's explicit request the
+Module 1 review drops questions `m1-q3` (Full access) and `m1-q4` (Sol vs
+Luna); four questions remain and the pass mark is 3/4. Pages
+`module-1-final-5` and `module-1-final-6` are retired, and saved progress on a
+retired page or with retired answers resumes at the first unanswered remaining
+question or the summary (migration taken from `codex/module-1-checklist`).
+Only question counts and the pass mark changed in the lesson, Teacher script,
+start prompt, delivery contract and mastery rubric; Practice is unchanged.
+With `m1-q4` gone the review has no short-answer question, while the rubric
+still mentions explaining a written answer; that wording awaits owner review.
+
 ### Continuation banner and Module 2 quiz-blocker feedback — 29 October 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
