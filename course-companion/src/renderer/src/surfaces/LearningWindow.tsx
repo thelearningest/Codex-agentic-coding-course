@@ -1754,6 +1754,7 @@ function GuidanceLessonBoard({
               <span>CURRENT REPO</span>
               <code>AGENTS.md</code>
               <p>Chỉ áp dụng cho dự án hiện tại.</p>
+              <p>Ở Module 2, Course Companion sẽ tạo sẵn một tệp <code>AGENTS.md</code> cho thư mục portfolio của bạn.</p>
             </article>
           </div>
         ) : kind === 'skills' ? (

@@ -79,7 +79,10 @@ describe('PortfolioWorkspaceRepository', () => {
     await repository.selectPath(request, workspace)
     await expect(readFile(join(workspace, 'AGENTS.md'), 'utf8')).rejects.toMatchObject({ code: 'ENOENT' })
 
-    await repository.confirmPlanning(request)
+    await expect(repository.confirmPlanning(request)).resolves.toMatchObject({
+      status: 'ready',
+      agentsPath: join(await realpath(workspace), 'AGENTS.md')
+    })
     expect(await readFile(join(workspace, 'AGENTS.md'), 'utf8')).toBe(portfolioAgentsTemplate)
 
     await writeFile(join(workspace, 'AGENTS.md'), '# Quy tắc người học đã sửa\n', 'utf8')
@@ -94,7 +97,9 @@ describe('PortfolioWorkspaceRepository', () => {
     await repository.confirmPlanning(request)
     await rm(join(workspace, 'AGENTS.md'))
 
-    await expect(repository.load(request)).resolves.toMatchObject({ status: 'ready' })
+    const loaded = await repository.load(request)
+    expect(loaded).toMatchObject({ status: 'ready' })
+    expect(loaded).not.toHaveProperty('agentsPath')
     await expect(readFile(join(workspace, 'AGENTS.md'), 'utf8')).rejects.toMatchObject({ code: 'ENOENT' })
   })
 

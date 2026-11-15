@@ -68,6 +68,13 @@ export function PortfolioWorkspaceStatusPanel({
         </div>
       ) : null}
 
+      {isReady && view.agentsPath ? (
+        <div className="portfolio-workspace-ready">
+          <span>✓</span>
+          <div><strong>Đã tạo AGENTS.md</strong><p>Đây là luật làm việc của khoá học này, Codex sẽ dựa vào đây để hướng dẫn bạn.</p></div>
+        </div>
+      ) : null}
+
       {view.status === 'awaiting-confirmation' ? (
         <p className="portfolio-workspace-consent">
           Bước tiếp theo sẽ tạo thư mục <code>planning</code> và tệp <code>AGENTS.md</code> chứa quy tắc cho Codex. Chưa có tệp ứng dụng nào được tạo.

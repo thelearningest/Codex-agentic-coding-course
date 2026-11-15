@@ -19,6 +19,13 @@ describe('portfolio workspace picker', () => {
     expect(source).not.toContain('pilot-workspace')
   })
 
+  it('announces the course AGENTS.md only when the ready workspace has one', async () => {
+    const source = await readFile(join(process.cwd(), 'src', 'renderer', 'src', 'components', 'PortfolioWorkspacePicker.tsx'), 'utf8')
+    expect(source).toContain('{isReady && view.agentsPath ? (')
+    expect(source).toContain('<strong>Đã tạo AGENTS.md</strong>')
+    expect(source).toContain('Đây là luật làm việc của khoá học này, Codex sẽ dựa vào đây để hướng dẫn bạn.')
+  })
+
   it('provides distinct recovery, ready, focus, and narrow-layout states', async () => {
     const css = await readFile(join(process.cwd(), 'src', 'renderer', 'src', 'styles.css'), 'utf8')
     expect(css).toContain('.portfolio-workspace-picker.is-missing')

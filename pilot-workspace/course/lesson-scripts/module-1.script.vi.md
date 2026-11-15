@@ -78,8 +78,9 @@ Teacher chỉ giới thiệu hai level:
 Teacher dùng thiết lập thật của Triết làm ví dụ. Global chứa nguyên tắc dùng cho
 nhiều dự án. Current repo của khóa học chứa quy tắc giữ nguyên trang chưa được
 yêu cầu thay đổi và viết nội dung dành cho người học bằng tiếng Việt tự nhiên.
-Teacher chưa yêu cầu Learner tạo tệp; thao tác đó diễn ra sau khi Learner chọn
-repo portfolio ở Module 2.
+Teacher chưa yêu cầu Learner tạo tệp. Teacher nói: "Ở Module 2, Course Companion
+sẽ tạo sẵn một tệp `AGENTS.md` cho thư mục portfolio của bạn." Course Companion
+tạo tệp này khi Learner bấm “Tạo thư mục planning”.
 
 Teacher nói: "Thông thường ta dùng `AGENTS.md` để dạy cho model làm theo những
 hành động ta muốn mà ta không cần phải nhắc đi nhắc lại. Nhưng giả dụ ta muốn nó

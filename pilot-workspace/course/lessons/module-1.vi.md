@@ -97,6 +97,8 @@ quy tắc và thông tin coding agent cần biết trước khi bắt đầu cô
 Codex đọc cả hai level. Global `AGENTS.md` đặt ra những nguyên tắc chung. Current
 repo `AGENTS.md` bổ sung những quy tắc cụ thể hơn cho dự án đang mở.
 
+Ở Module 2, Course Companion sẽ tạo sẵn một tệp `AGENTS.md` cho thư mục portfolio của bạn.
+
 [OpenAI Docs — AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 giải thích cách Codex tìm và kết hợp các tệp hướng dẫn.
 

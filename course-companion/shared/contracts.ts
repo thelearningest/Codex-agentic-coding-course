@@ -1262,6 +1262,7 @@ export type PortfolioWorkspaceView = {
   selectedPath?: string
   folderName?: string
   planningPath?: string
+  agentsPath?: string
   observedAt: string
   message: string
   canChoose: boolean

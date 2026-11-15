@@ -102,6 +102,17 @@ function errorCode(error: unknown): string | undefined {
   return isRecord(error) && typeof error.code === 'string' ? error.code : undefined
 }
 
+async function existingAgentsFile(canonicalPath: string): Promise<string | undefined> {
+  const agentsPath = join(canonicalPath, portfolioAgentsFileName)
+  try {
+    const info = await lstat(agentsPath)
+    return info.isFile() && !info.isSymbolicLink() ? agentsPath : undefined
+  } catch (error) {
+    if (errorCode(error) === 'ENOENT') return undefined
+    throw error
+  }
+}
+
 function validateRequest(request: PortfolioWorkspaceRequest): void {
   if (!isRecord(request) || !SAFE_ID.test(String(request.courseRunId))) {
     throw new PortfolioWorkspaceError('invalid-course-run', 'Không thể xác định hành trình học hiện tại.')
@@ -199,6 +210,7 @@ export class PortfolioWorkspaceRepository {
       return this.view(request.courseRunId, 'ready', {
         canonicalPath,
         planningPath,
+        agentsPath: await existingAgentsFile(canonicalPath),
         message: 'Portfolio đã sẵn sàng cho phần lập kế hoạch.'
       })
     })
@@ -312,6 +324,7 @@ export class PortfolioWorkspaceRepository {
       return this.view(courseRunId, 'ready', {
         canonicalPath,
         planningPath,
+        agentsPath: await existingAgentsFile(canonicalPath),
         message: 'Portfolio đã sẵn sàng cho phần lập kế hoạch.'
       })
     } catch (error) {
@@ -337,6 +350,7 @@ export class PortfolioWorkspaceRepository {
     options: {
       canonicalPath?: string
       planningPath?: string
+      agentsPath?: string
       message?: string
     } = {}
   ): PortfolioWorkspaceView {
@@ -351,6 +365,7 @@ export class PortfolioWorkspaceRepository {
           }
         : {}),
       ...(options.planningPath ? { planningPath: options.planningPath } : {}),
+      ...(options.agentsPath ? { agentsPath: options.agentsPath } : {}),
       observedAt: this.now().toISOString(),
       message: options.message ?? 'Chọn một thư mục trống dành riêng cho portfolio.',
       canChoose: status !== 'ready',

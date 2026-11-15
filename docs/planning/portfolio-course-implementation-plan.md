@@ -49,6 +49,23 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Learners told about the course AGENTS.md, 15 November 2026
+
+Implementation: `implemented` on branch `portfolio-agents-md`, with
+owner-approved wording. After **Tạo thư mục planning**, the folder picker
+shows "Đã tạo AGENTS.md — Đây là luật làm việc của khoá học này, Codex sẽ
+dựa vào đây để hướng dẫn bạn." only when the portfolio root actually holds
+a regular `AGENTS.md` file (`agentsPath` on the workspace view), so older
+workspaces never see a false notice. The Module 1 "Hai level AGENTS.md"
+page, the Module 1 Pilot lesson and Teacher script now say Course
+Companion will create that file in Module 2; the script no longer says
+the learner creates it. Frozen Module 1 digests were updated for these
+two approved files.
+
+Verification: typecheck, lint, build and `test:electron` `passed`; the
+same 79 unrelated unit failures remain. Both pages were inspected at
+1180×780; the notice and the added line fit without moving navigation.
+
 ### Module 2 sample-prompt pages removed, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`. At the owner's
