@@ -70,7 +70,7 @@ export function PortfolioWorkspaceStatusPanel({
 
       {view.status === 'awaiting-confirmation' ? (
         <p className="portfolio-workspace-consent">
-          Bước tiếp theo sẽ tạo thư mục <code>planning</code>. Chưa có tệp ứng dụng nào được tạo.
+          Bước tiếp theo sẽ tạo thư mục <code>planning</code> và tệp <code>AGENTS.md</code> chứa quy tắc cho Codex. Chưa có tệp ứng dụng nào được tạo.
         </p>
       ) : null}
 

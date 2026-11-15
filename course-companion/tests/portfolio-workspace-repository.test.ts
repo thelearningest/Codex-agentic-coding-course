@@ -19,6 +19,7 @@ import {
   PortfolioWorkspaceRepository,
   windowsPathOperations
 } from '../electron/main/portfolio-workspace-repository'
+import { portfolioAgentsTemplate } from '../shared/portfolio-agents-template'
 
 const roots: string[] = []
 const request = { courseRunId: 'course-202608140001' }
@@ -70,6 +71,31 @@ describe('PortfolioWorkspaceRepository', () => {
       'selectedAt',
       'planningApprovedAt'
     ])
+  })
+
+  it('creates AGENTS.md with planning and never overwrites an existing copy', async () => {
+    const { courseRoot, dataDirectory, workspace } = await fixture()
+    const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    await repository.selectPath(request, workspace)
+    await expect(readFile(join(workspace, 'AGENTS.md'), 'utf8')).rejects.toMatchObject({ code: 'ENOENT' })
+
+    await repository.confirmPlanning(request)
+    expect(await readFile(join(workspace, 'AGENTS.md'), 'utf8')).toBe(portfolioAgentsTemplate)
+
+    await writeFile(join(workspace, 'AGENTS.md'), '# Quy tắc người học đã sửa\n', 'utf8')
+    await repository.confirmPlanning(request)
+    expect(await readFile(join(workspace, 'AGENTS.md'), 'utf8')).toBe('# Quy tắc người học đã sửa\n')
+  })
+
+  it('does not add AGENTS.md to an existing workspace when it is loaded', async () => {
+    const { courseRoot, dataDirectory, workspace } = await fixture()
+    const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    await repository.selectPath(request, workspace)
+    await repository.confirmPlanning(request)
+    await rm(join(workspace, 'AGENTS.md'))
+
+    await expect(repository.load(request)).resolves.toMatchObject({ status: 'ready' })
+    await expect(readFile(join(workspace, 'AGENTS.md'), 'utf8')).rejects.toMatchObject({ code: 'ENOENT' })
   })
 
   it('resumes the exact approved path after relaunch without indexing learner files', async () => {

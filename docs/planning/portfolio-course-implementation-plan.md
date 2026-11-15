@@ -49,6 +49,29 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Module 2 rules moved into the portfolio AGENTS.md, 15 November 2026
+
+Implementation: `implemented` on branch `portfolio-agents-md`. When the
+learner confirms **Tạo thư mục planning**, Course Companion also writes
+`AGENTS.md` at the portfolio root (`shared/portfolio-agents-template.ts`). It
+never overwrites an existing copy and is not added to existing workspaces on
+load, because the Module 3 application fingerprint covers root files. The
+Module 2 start prompt keeps its approved first paragraph and ends with
+"Hãy làm theo AGENTS.md trong thư mục này."; the folder, package, approval
+and submission rules now live in `AGENTS.md`. The picker consent line names
+the new file. The owner approved the direction and the drafted wording.
+
+Verification: typecheck, lint and build `passed`. Unit tests: the three new
+or rewritten checks pass. 79 failures in
+`portfolio-module-completion-service`, `portfolio-package-review` and
+`portfolio-release-package` also fail identically without this change.
+`test:electron` is `blocked` before Module 2: in `completeSetupModule`, the
+HUD header intercepts the **← Trang trước** click during Module 1 outline
+navigation, so the new `['AGENTS.md', 'planning']` assertion has not run.
+Learners whose workspace already exists keep no `AGENTS.md`; decide whether
+they need a fallback. Next: repair the Module 1 navigation failure, rerun
+`test:electron`, then rehearse Module 2 in Codex with the short prompt.
+
 ### Reviewing completed modules from Home Base, 15 November 2026
 
 Foundation navigation: `implemented`. Completed earlier modules open at their

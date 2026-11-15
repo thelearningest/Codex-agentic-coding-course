@@ -16,6 +16,7 @@ import type {
   PortfolioWorkspaceRequest,
   PortfolioWorkspaceView
 } from '../../shared/contracts'
+import { portfolioAgentsFileName, portfolioAgentsTemplate } from '../../shared/portfolio-agents-template'
 
 const SAFE_ID = /^[A-Za-z0-9_-]{1,160}$/
 const STATE_SCHEMA_VERSION = 1
@@ -166,7 +167,7 @@ export class PortfolioWorkspaceRepository {
       const entries = (await readdir(canonicalPath)).filter((entry) => entry !== '.DS_Store')
       const planningPath = join(canonicalPath, 'planning')
 
-      if (!record.planningApprovedAt && entries.some((entry) => entry !== 'planning')) {
+      if (!record.planningApprovedAt && entries.some((entry) => entry !== 'planning' && entry !== portfolioAgentsFileName)) {
         throw new PortfolioWorkspaceError(
           'not-empty',
           'Thư mục này đã có nội dung khác. Hãy chọn một thư mục trống dành riêng cho portfolio.'
@@ -184,6 +185,13 @@ export class PortfolioWorkspaceRepository {
       } catch (error) {
         if (errorCode(error) !== 'ENOENT') throw error
         await mkdir(planningPath)
+      }
+
+      // Codex reads AGENTS.md from the portfolio root. Never overwrite a learner-edited copy.
+      try {
+        await writeFile(join(canonicalPath, portfolioAgentsFileName), portfolioAgentsTemplate, { encoding: 'utf8', flag: 'wx' })
+      } catch (error) {
+        if (errorCode(error) !== 'EEXIST') throw error
       }
 
       record.planningApprovedAt = this.now().toISOString()

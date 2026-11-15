@@ -5,6 +5,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { moduleTwoStartPrompt } from '../shared/module-two-start-prompt'
+import { portfolioAgentsTemplate } from '../shared/portfolio-agents-template'
 import { portfolioPackageArtifactPaths } from '../shared/contracts'
 import { PracticeStartPrompt } from '../src/renderer/src/components/PracticeStartPrompt'
 import { PracticeDefinitionRepository } from '../electron/main/practice-definition-repository'
@@ -13,13 +14,21 @@ import { PORTFOLIO_BUILD_INSTRUCTIONS } from '../electron/main/portfolio-build-i
 import { portfolioReleaseInstructions } from '../electron/main/portfolio-release-instructions'
 
 describe('Module 2 learner-owned start prompt', () => {
-  it('specifies the selected portfolio root, five separate contract paths and learner approval', () => {
-    for (const path of portfolioPackageArtifactPaths) expect(moduleTwoStartPrompt).toContain(path)
-    expect(moduleTwoStartPrompt).toContain('Mọi đường dẫn bên dưới đều tính từ thư mục portfolio đó')
-    expect(moduleTwoStartPrompt).toContain('năm tài liệu riêng biệt')
-    expect(moduleTwoStartPrompt).toContain('Không tạo task hoặc thư mục portfolio mới')
-    expect(moduleTwoStartPrompt).toContain('chờ tôi đọc, duyệt PRD cùng kế hoạch triển khai hiện tại')
-    expect(moduleTwoStartPrompt).toContain('chờ tôi đồng ý trước khi đổi tên, di chuyển, xóa hay ghi đè')
+  it('keeps the learner request short and defers package rules to the portfolio AGENTS.md', () => {
+    expect(moduleTwoStartPrompt).toContain('chỉ tạo hoặc cập nhật tài liệu trong thư mục planning')
+    expect(moduleTwoStartPrompt.endsWith('Hãy làm theo AGENTS.md trong thư mục này.')).toBe(true)
+    for (const path of portfolioPackageArtifactPaths) expect(moduleTwoStartPrompt).not.toContain(path)
+  })
+
+  it('specifies the selected portfolio root, five separate contract paths and learner approval in AGENTS.md', () => {
+    for (const path of portfolioPackageArtifactPaths) expect(portfolioAgentsTemplate).toContain(path)
+    expect(portfolioAgentsTemplate).toContain('Mọi đường dẫn bên dưới đều tính từ thư mục này')
+    expect(portfolioAgentsTemplate).toContain('năm tài liệu riêng biệt')
+    expect(portfolioAgentsTemplate).toContain('Không tạo task hoặc thư mục portfolio mới')
+    expect(portfolioAgentsTemplate).toContain('chờ người học đọc, duyệt PRD cùng kế hoạch triển khai hiện tại')
+    expect(portfolioAgentsTemplate).toContain('Chờ người học đồng ý trước khi đổi tên, di chuyển, xóa hay ghi đè')
+    expect(portfolioAgentsTemplate).toContain('không tự phê duyệt hoặc tuyên bố Practice đã hoàn thành')
+    expect(portfolioAgentsTemplate).not.toContain('chưa viết code')
   })
 
   it('preserves the exact course prompt in a collapsed disclosure with an always-available copy action', () => {
