@@ -2230,7 +2230,9 @@ function PixelAppShell({
 }: PixelAppShellProps) {
   const [confirmReset, setConfirmReset] = useState(false)
   const scene = scenes[progress.sceneId]
-  const learningPosition = learningPositionByScene[progress.sceneId]
+  const learningPosition = learningPositionByScene[
+    progress.sceneId === 'module-1-setup-checklist' ? 'module-1-skills-portfolio' : progress.sceneId
+  ]
   const completed = new Set(progress.completedCheckpointIds)
   if (progress.sceneId === 'module-1-complete' || progress.sceneId === 'module-2-complete') {
     completed.add(progress.checkpointId)
