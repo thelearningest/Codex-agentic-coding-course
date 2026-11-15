@@ -7,31 +7,29 @@ describe('review trail for Previous and Continue', () => {
   const next = (pairs: Record<string, string>) => (sceneId: SceneId) => pairs[sceneId] as SceneId | undefined
   const currentModuleTwoOrder = next({
     'module-2-prd-definition': 'module-2-prd-review-workflow',
-    'module-2-prd-review-workflow': 'module-2-prd-sample-prompt',
-    'module-2-prd-sample-prompt': 'module-2-prd-agent-workflow',
+    'module-2-prd-review-workflow': 'module-2-prd-agent-workflow',
     'module-2-prd-agent-workflow': 'module-2-implementation-plan-intro',
     'module-2-implementation-plan-intro': 'module-2-portfolio-folder'
   })
 
   it('keeps a history that already follows the current page order', () => {
-    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-sample-prompt']
-    expect(reviewTrail(history, 'module-2-prd-agent-workflow', currentModuleTwoOrder)).toEqual(history)
+    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-agent-workflow']
+    expect(reviewTrail(history, 'module-2-implementation-plan-intro', currentModuleTwoOrder)).toEqual(history)
   })
 
   it('shows a page added after the learner had already passed that point', () => {
-    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-agent-workflow', 'module-2-implementation-plan-intro']
+    const history: SceneId[] = ['module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-implementation-plan-intro']
     expect(reviewTrail(history, 'module-2-portfolio-folder', currentModuleTwoOrder)).toEqual([
       'module-2-prd-definition',
       'module-2-prd-review-workflow',
-      'module-2-prd-sample-prompt',
       'module-2-prd-agent-workflow',
       'module-2-implementation-plan-intro'
     ])
   })
 
   it('fills a gap between the last visited page and the current learning page', () => {
-    expect(reviewTrail(['module-2-prd-review-workflow'], 'module-2-prd-agent-workflow', currentModuleTwoOrder))
-      .toEqual(['module-2-prd-review-workflow', 'module-2-prd-sample-prompt'])
+    expect(reviewTrail(['module-2-prd-review-workflow'], 'module-2-implementation-plan-intro', currentModuleTwoOrder))
+      .toEqual(['module-2-prd-review-workflow', 'module-2-prd-agent-workflow'])
   })
 
   it('keeps the visited path when the current order does not lead to the next visited page', () => {

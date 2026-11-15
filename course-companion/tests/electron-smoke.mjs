@@ -31,7 +31,7 @@ const releaseQuiz = JSON.parse(
   await readFile(join(process.cwd(), '..', 'pilot-workspace', 'course', 'quizzes', 'module-4.quiz.json'), 'utf8')
 )
 const approvedModuleTwoOpening = 'Sau khi hoàn thành module 1, hy vọng các bạn đã hiểu hơn về cách sử dụng Codex. Tiếp theo, chúng ta sẽ cùng tìm hiểu về cách planning khi sử dụng Coding agents. Nhiều bạn mới bắt đầu code với AI thường bỏ qua phần lên kế hoạch mà nhảy thẳng vào phần thực thi.\n\n Các bạn ấy nghĩ rằng mình đang tiết kiệm thời gian, nhưng thực chất các bạn đang lầm. Nếu có một kế hoạch tốt trước khi bắt đầu xây sản phẩm. Bạn sẽ tiết kiệm được biết bao thời gian debug và sửa lại từ đầu vì không đúng ý. Tin mình đi, mình đã phạm phải sai lầm này và đã phải trả giá.'
-const approvedImplementationPlanIntro = 'Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.\n\nImplementation plan về căn bản sẽ viết ra những bước chi tiết để coding agent có thể hiện thực hoá PRD. Bạn có thể hiểu nếu PRD là bản kế hoạch tổng quan, thì implementation plan sẽ ghi chi tiết từng bước để thực hiện kế hoạch đó.\n\nThông thường một implementation plan sẽ được chia ra thành nhiều giai đoạn. Mỗi giai đoạn sẽ có tiêu chí hoàn thành rõ ràng.\n\nThường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo rồi duyệt là được.'
+const approvedImplementationPlanIntro = 'Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.\n\nImplementation plan về căn bản sẽ viết ra những bước chi tiết để coding agent có thể hiện thực hoá PRD. Bạn có thể hiểu nếu PRD là bản kế hoạch tổng quan, thì implementation plan sẽ ghi chi tiết từng bước để thực hiện kế hoạch đó.\n\nThông thường một implementation plan sẽ được chia ra thành nhiều giai đoạn. Mỗi giai đoạn sẽ có tiêu chí hoàn thành rõ ràng.\n\nThường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo rồi duyệt là được.\n\nPrompt mẫu sẽ được cung cấp ở phần thực hành cuối module.'
 const approvedPracticeTransitionCopy = 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi. Trước khi bấm chuyển sang Codex để thực hành, hãy copy prompt ở gốc trên bên phải để tẹo nữa paste vào Codex nha'
 const approvedPortfolioPracticePrompt = [
   'Tôi muốn xây dựng một portfolio cá nhân nhưng chưa biết nên bắt đầu từ đâu. Hãy giúp tôi lập kế hoạch từ đầu bằng cách phỏng vấn tôi từng câu một. Trước tiên, hãy tìm hiểu mục tiêu của portfolio, người tôi muốn thuyết phục, nội dung tôi có thể đưa vào và phiên bản đầu tiên nên gồm những gì. Nếu tôi chưa chắc về câu trả lời, hãy đưa ra một vài lựa chọn dễ hiểu để tôi cân nhắc. Sau mỗi phần quan trọng, hãy tóm tắt những gì đã thống nhất và chờ tôi xác nhận trước khi tiếp tục. Trong quá trình này, chỉ tạo hoặc cập nhật tài liệu trong thư mục planning; chưa viết code, cài gói phụ thuộc hay tạo ứng dụng.',
@@ -45,7 +45,7 @@ const designReferenceLinks = [
   ['Mobbin', 'https://mobbin.com/'],
   ['Pinterest', 'https://www.pinterest.com/']
 ]
-async function openModuleTwoPractice(page, stepsRemaining = 7) {
+async function openModuleTwoPractice(page, stepsRemaining = 5) {
   for (let index = 0; index < stepsRemaining; index += 1) {
     await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }
@@ -1380,11 +1380,6 @@ try {
   assert.equal(await firstWindows.learningPage.locator('.pixel-lesson-visual img').getAttribute('data-fit'), 'contain')
   await capture(firstWindows.learningPage, 'module-2-prd-review-workflow.png')
   await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await firstWindows.learningPage.locator('main[data-scene-id="module-2-prd-sample-prompt"]').waitFor()
-  assert.equal(await firstWindows.learningPage.locator('.pixel-copy-prompt').count(), 1)
-  assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'SAO CHÉP PROMPT', exact: true }).count(), 1)
-  await capture(firstWindows.learningPage, 'module-2-prd-sample-prompt.png')
-  await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await firstWindows.learningPage.getByLabel('Hai nguồn tham khảo thiết kế', { exact: true }).waitFor()
   assert.equal(await firstWindows.learningPage.locator('.pixel-scene-title').count(), 0)
   assert.equal(await firstWindows.learningPage.locator('.pixel-consequence').count(), 0)
@@ -1436,11 +1431,6 @@ try {
     await capture(firstWindows.learningPage, 'module-2-implementation-plan-combined-390px.png')
     await firstWindows.learningPage.setViewportSize({ width: 1180, height: 780 })
   }
-  await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await firstWindows.learningPage.locator('main[data-scene-id="module-2-implementation-plan-sample-prompt"]').waitFor()
-  assert.equal(await firstWindows.learningPage.locator('.pixel-copy-prompt').count(), 1)
-  assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'SAO CHÉP PROMPT', exact: true }).count(), 1)
-  await capture(firstWindows.learningPage, 'module-2-implementation-plan-sample-prompt.png')
   await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await firstWindows.learningPage.getByRole('heading', { name: 'Chọn nơi lưu portfolio', exact: true }).waitFor()
   assert.equal(await firstWindows.learningPage.getByText(approvedPracticeTransitionCopy, { exact: true }).count(), 0)

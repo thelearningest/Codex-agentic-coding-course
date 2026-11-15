@@ -301,6 +301,41 @@ describe('ProgressRepository', () => {
     })
   })
 
+  it.each([
+    ['module-2-prd-sample-prompt', 'module-2-prd-agent-workflow'],
+    ['module-2-implementation-plan-sample-prompt', 'module-2-portfolio-folder']
+  ])('redirects saved progress from the removed %s page to %s', async (retiredSceneId, destination) => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save({
+      currentLessonId: 'module-2',
+      currentCourseLessonId: 'm2-portfolio-brief',
+      checkpointId: 'm2-portfolio-brief',
+      sceneId: 'module-2-prd-review-workflow',
+      sceneHistory: ['module-2-portfolio-workspace', 'module-2-prd-definition'],
+      completedCheckpointIds: [],
+      decisions: {}
+    })
+    await writeFile(
+      join(directory, 'learner-state.json'),
+      `${JSON.stringify({
+        ...started,
+        sceneId: retiredSceneId,
+        sceneHistory: [...started.sceneHistory, 'module-2-prd-review-workflow', 'module-2-prd-sample-prompt']
+      }, null, 2)}\n`,
+      'utf8'
+    )
+
+    await expect(repository.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: {
+        checkpointId: 'm2-portfolio-brief',
+        sceneId: destination,
+        sceneHistory: ['module-2-portfolio-workspace', 'module-2-prd-definition', 'module-2-prd-review-workflow']
+      }
+    })
+  })
+
   it('redirects saved progress from the retired one-task page to the five-stage map', async () => {
     const directory = await temporaryDirectory()
     const repository = new ProgressRepository(directory)

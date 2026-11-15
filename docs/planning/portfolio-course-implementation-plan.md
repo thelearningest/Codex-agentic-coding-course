@@ -49,6 +49,24 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Module 2 sample-prompt pages removed, 15 November 2026
+
+Implementation: `implemented` on branch `portfolio-agents-md`. At the owner's
+explicit request, the pages `module-2-prd-sample-prompt` and
+`module-2-implementation-plan-sample-prompt` were removed: their copy
+buttons sat before portfolio-folder selection and invited learners to run
+Codex early, outside the chosen folder. The implementation-plan intro now
+ends with the owner-approved sentence "Prompt mẫu sẽ được cung cấp ở phần
+thực hành cuối module."; the Teacher script quotes it and no longer
+describes the removed pages. Saved progress on either page resumes at the
+next page (`module-2-prd-agent-workflow` or `module-2-portfolio-folder`).
+
+Verification: typecheck, lint, build and `test:electron` `passed`; new
+redirect tests pass; the same 79 unrelated unit failures remain. The intro
+page was inspected at 1180×780: the added paragraph fits and Continue stays
+visible. At 390px the plan board overlaps the intro copy, identically
+without this change; that narrow-layout issue is separate.
+
 ### Module 2 rules moved into the portfolio AGENTS.md, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`. When the

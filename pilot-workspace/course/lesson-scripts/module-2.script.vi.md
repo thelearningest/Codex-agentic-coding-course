@@ -40,17 +40,6 @@ Teacher hướng dẫn quy trình bốn bước:
 Teacher phải nói rõ rằng coding agent hỗ trợ phân tích và soạn thảo, còn Learner
 giữ quyền quyết định mục tiêu, người dùng, phạm vi và tiêu chí chấp nhận.
 
-Sau trang quy trình bốn bước, Course Companion có một trang prompt mẫu kèm nút
-“SAO CHÉP PROMPT”. Khi Learner hỏi nên giao việc tạo PRD cho coding agent thế
-nào, Teacher dẫn Learner dùng đúng prompt mẫu này và thay phần trong ngoặc vuông
-bằng ý tưởng của mình:
-
-> Tôi muốn viết PRD cho dự án mình đang làm: [mô tả ngắn ý tưởng của bạn]. Hãy
-> phỏng vấn tôi từng câu một để làm rõ những gì PRD cần có. Đừng tự quyết định
-> thay tôi những điểm chính; chỗ nào chưa rõ thì hỏi lại. Khi đủ thông tin, hãy
-> soạn bản nháp PRD, chỉ ra những điểm còn mơ hồ và tiếp tục hỏi cho đến khi tôi
-> xác nhận đồng ý. Chưa viết code trước khi tôi duyệt PRD.
-
 ## Phần 4 — Đọc một implementation plan mẫu
 
 Teacher mở phần bằng nguyên văn lời dẫn của tác giả:
@@ -66,25 +55,16 @@ Teacher mở phần bằng nguyên văn lời dẫn của tác giả:
 >
 > Thường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo
 > rồi duyệt là được.
+>
+> Prompt mẫu sẽ được cung cấp ở phần thực hành cuối module.
 
 Teacher nói rõ đây là portfolio giả lập của Mai. Ví dụ chỉ giúp Learner nhận ra
 format. Learner không phải đọc code hoặc dùng lại nội dung của Mai.
 
-Teacher dùng một trang để đọc plan mẫu: lời dẫn đã duyệt nằm bên trái, còn plan mẫu đầy
+Teacher dùng một trang duy nhất: lời dẫn đã duyệt nằm bên trái, còn plan mẫu đầy
 đủ cùng tiêu chí hoàn thành nằm bên phải. Teacher không đặt câu hỏi, không kiểm
 tra trí nhớ và không yêu cầu Learner giải thích chi tiết kỹ thuật. Câu hỏi chỉ
 xuất hiện ở phần kiểm tra cuối bài.
-
-Sau trang đọc plan mẫu, Course Companion có một trang prompt mẫu kèm nút
-“SAO CHÉP PROMPT” để Learner tạo implementation plan từ PRD đã duyệt. Teacher dẫn
-Learner dùng đúng prompt này và thay phần trong ngoặc vuông bằng đường dẫn tới
-file PRD của mình:
-
-> Dựa trên PRD đã duyệt trong [đường dẫn tới file PRD của bạn], hãy tạo
-> implementation plan cho dự án này. Chỉ dùng PRD làm nguồn phạm vi; đừng tự thêm
-> tính năng ngoài PRD. Chia plan thành nhiều giai đoạn nhỏ, mỗi giai đoạn ghi rõ
-> việc cần làm, tiêu chí hoàn thành và cách kiểm tra. Chỗ nào PRD chưa rõ thì hỏi
-> tôi thay vì tự đoán. Chưa viết code trước khi tôi duyệt implementation plan.
 
 ## Phần 5 — Thực hành: Lập kế hoạch cho portfolio
 

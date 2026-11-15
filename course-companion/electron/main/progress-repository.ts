@@ -88,6 +88,8 @@ const RETIRED_MODULE_TWO_PRACTICE_SETUP_SCENES = new Set([
 const RETIRED_MODULE_TWO_SCENES = new Set([
   'module-2-prd-anatomy',
   'module-2-prd-introduction',
+  'module-2-prd-sample-prompt',
+  'module-2-implementation-plan-sample-prompt',
   ...RETIRED_MODULE_TWO_PLAN_SCENES,
   ...RETIRED_MODULE_TWO_PRACTICE_SETUP_SCENES,
   'module-2-mastery-scenario-evidence',
@@ -291,6 +293,10 @@ function redirectRetiredModuleTwoReferences(raw: Record<string, unknown>): Recor
       ? 'module-2-prd-review-workflow'
       : raw.sceneId === 'module-2-prd-introduction'
         ? 'module-2-prd-agent-workflow'
+        : raw.sceneId === 'module-2-prd-sample-prompt'
+        ? 'module-2-prd-agent-workflow'
+        : raw.sceneId === 'module-2-implementation-plan-sample-prompt'
+        ? 'module-2-portfolio-folder'
         : typeof raw.sceneId === 'string' && RETIRED_MODULE_TWO_PLAN_SCENES.has(raw.sceneId)
           ? 'module-2-implementation-plan-intro'
           : typeof raw.sceneId === 'string' && RETIRED_MODULE_TWO_SCENES.has(raw.sceneId)

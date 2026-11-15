@@ -148,10 +148,8 @@ describe('portfolio course registry', () => {
       'module-2-portfolio-workspace',
       'module-2-prd-definition',
       'module-2-prd-review-workflow',
-      'module-2-prd-sample-prompt',
       'module-2-prd-agent-workflow',
       'module-2-implementation-plan-intro',
-      'module-2-implementation-plan-sample-prompt',
       'module-2-portfolio-folder',
       'module-2-portfolio-practice',
       'module-2-portfolio-mastery',
@@ -162,18 +160,16 @@ describe('portfolio course registry', () => {
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-definition')?.nextSceneId)
       .toBe('module-2-prd-review-workflow')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-review-workflow')?.nextSceneId)
-      .toBe('module-2-prd-sample-prompt')
-    expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-sample-prompt')?.nextSceneId)
       .toBe('module-2-prd-agent-workflow')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-agent-workflow')?.nextSceneId)
       .toBe('module-2-implementation-plan-intro')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-implementation-plan-intro')?.nextSceneId)
-      .toBe('module-2-implementation-plan-sample-prompt')
-    expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-implementation-plan-sample-prompt')?.nextSceneId)
       .toBe('module-2-portfolio-folder')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-portfolio-folder')?.nextSceneId)
       .toBe('module-2-portfolio-practice')
     for (const retiredSceneId of [
+      'module-2-prd-sample-prompt',
+      'module-2-implementation-plan-sample-prompt',
       'module-2-plan-example',
       'module-2-plan-requirements',
       'module-2-plan-steps',
