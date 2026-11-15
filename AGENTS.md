@@ -1,5 +1,10 @@
 # Repository Guidance
 
+## Approval before taking action
+
+- Before running commands or editing files, explain what you plan to do and wait for the user's explicit approval. This applies to read-only commands and small edits as well.
+- When the user asks how to fix a problem, explain the proposed fix first. Wait for approval before implementing it.
+
 ## Read this handoff first
 
 - Before reviewing this integration or starting follow-up work, read [Practice and Teacher handoff for triet-v3-planning](docs/planning/practice-teacher-handoff-triet-v3-2026-09-12.md) first. It explains what changed, what to preserve, what was tested, and which decisions remain open. Then follow the scoped instructions below.
@@ -13,14 +18,14 @@
 
 ## Consequential decisions
 
-- Resolve small, reversible details from repository evidence or a safe default.
+- Within the approved scope, resolve small, reversible details from repository evidence or a safe default.
 - For consequential product, curriculum, architecture, or workflow choices, explain why the decision matters, recommend a direction, describe meaningful alternatives and tradeoffs, and state which downstream choices it settles.
 - Group linked choices into one decision packet and ask only one packet at a time. Escalate scope, learner outcomes, cost, safety, external effects, or difficult reversals separately.
 
 ## Trivial-edit fast path
 
 - Treat an edit as trivial when the user specifies an exact file, value, or otherwise unambiguous change of only a few reversible lines; the change does not affect security, persisted data, schemas, migrations, dependencies, or external systems; and the user has not requested broader verification.
-- Make a trivial edit directly without proposing a plan or requesting approval. Inspect the target before editing and review only the scoped diff afterward.
+- Once the user approves a trivial edit, inspect the target, make the requested change, and review only the scoped diff.
 - Do not run the full test suite, build, Electron verification, screenshot testing, planning-ledger synchronization, or checkpoint commit for a trivial edit unless the user requests it or a narrow syntax check is clearly necessary.
 - When a trivial edit changes visible behavior and the user says they will verify it, leave runtime verification to the user and state explicitly that it was not run.
 

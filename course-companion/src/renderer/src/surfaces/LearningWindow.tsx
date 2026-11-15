@@ -2199,6 +2199,22 @@ function TeacherOverlay({ onClose, practiceMode = false }: TeacherOverlayProps) 
   )
 }
 
+function RoadmapStage({ children, status, className, onReview }: {
+  children: ReactNode
+  status: string
+  className: string
+  onReview?: () => void
+}) {
+  if (onReview) {
+    return (
+      <button className={`pixel-roadmap-stage ${className}`} type="button" onClick={onReview}>
+        {children}<em>{status}</em>
+      </button>
+    )
+  }
+  return <article className={className}>{children}<em>{status}</em></article>
+}
+
 type PixelAppShellProps = {
   progress: LearnerProgress
   runtime: RuntimeInfo | null
@@ -2206,6 +2222,7 @@ type PixelAppShellProps = {
   settings: AppSettings
   teacherOpen: boolean
   onNavigate: (destination: AppDestination) => void
+  onReviewModule: (moduleId: Exclude<LessonId, 'intro'>) => void
   onOpenTeacher: () => void
   onCloseTeacher: () => void
   onQuit: () => void
@@ -2220,6 +2237,7 @@ function PixelAppShell({
   settings,
   teacherOpen,
   onNavigate,
+  onReviewModule,
   onOpenTeacher,
   onCloseTeacher,
   onQuit,
@@ -2303,27 +2321,39 @@ function PixelAppShell({
                   <span>01</span><div><small>MODULE 1 · {moduleOneLessonCount} BÀI HỌC</small><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleOneLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleOneComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <article className={moduleOneMigrated ? 'is-migrated' : 'is-complete'}>
-                  <span>01</span><div><small>MODULE 1 · {moduleOneLessonCount} BÀI HỌC</small><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>{moduleOneMigrated ? 'Tiến độ Planning cũ được giữ nguyên; học phần setup không được tự đánh dấu hoàn thành.' : 'Bạn đã hoàn tất nền tảng làm việc với Codex.'}</p></div><em>{moduleOneMigrated ? 'ĐÃ CHUYỂN TIẾP' : 'HOÀN THÀNH'}</em>
-                </article>
+                <RoadmapStage
+                  className={moduleOneMigrated ? 'is-migrated' : 'is-complete'}
+                  status={moduleOneMigrated ? 'ĐÃ CHUYỂN TIẾP' : 'HOÀN THÀNH'}
+                  onReview={moduleOneMigrated ? undefined : () => onReviewModule('module-1')}
+                >
+                  <span>01</span><div><small>MODULE 1 · {moduleOneLessonCount} BÀI HỌC</small><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>{moduleOneMigrated ? 'Tiến độ Planning cũ được giữ nguyên; học phần setup không được tự đánh dấu hoàn thành.' : 'Bạn đã hoàn tất nền tảng làm việc với Codex.'}</p></div>
+                </RoadmapStage>
               )}
               {currentModuleId === 'module-2' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleTwoComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
                   <span>02</span><div><small>MODULE 2 · {moduleTwoLessonCount} BÀI HỌC</small><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <article className={moduleTwoComplete ? 'is-complete' : 'is-locked'}>
-                  <span>02</span><div><small>MODULE 2 · {moduleTwoLessonCount} BÀI HỌC</small><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Hoàn thành Module 1 để mở phần Planning.'}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}</em>
-                </article>
+                <RoadmapStage
+                  className={moduleTwoComplete ? 'is-complete' : 'is-locked'}
+                  status={moduleTwoComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
+                  onReview={moduleTwoComplete ? () => onReviewModule('module-2') : undefined}
+                >
+                  <span>02</span><div><small>MODULE 2 · {moduleTwoLessonCount} BÀI HỌC</small><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Hoàn thành Module 1 để mở phần Planning.'}</p></div>
+                </RoadmapStage>
               )}
               {currentModuleId === 'module-3' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleThreeComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
                   <span>03</span><div><small>MODULE 3 · ĐIỂM SẴN SÀNG</small><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <article className={moduleThreeComplete ? 'is-complete' : 'is-locked'}>
-                  <span>03</span><div><small>MODULE 3</small><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Hoàn thành gate bằng chứng và mastery của Module 2 để mở.'}</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}</em>
-                </article>
+                <RoadmapStage
+                  className={moduleThreeComplete ? 'is-complete' : 'is-locked'}
+                  status={moduleThreeComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
+                  onReview={moduleThreeComplete ? () => onReviewModule('module-3') : undefined}
+                >
+                  <span>03</span><div><small>MODULE 3</small><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Hoàn thành gate bằng chứng và mastery của Module 2 để mở.'}</p></div>
+                </RoadmapStage>
               )}
               {futureModules.map((title, index) => currentModuleId === `module-${index + 4}` ? (
                 <button className={`pixel-roadmap-stage is-current${completed.has('m4-complete') ? ' is-complete' : ''}`} type="button" key={title} onClick={() => onNavigate('lesson')}>
@@ -2913,6 +2943,16 @@ export function LearningWindow() {
     )
   }
 
+  const clearPageOverlays = () => {
+    setApprovalFocus(null)
+    setVisualExpanded(false)
+    setSecondaryVisualExpanded(false)
+    setPracticeBriefOpen(false)
+    setPracticeFullOpen(false)
+    setTeacherOpen(false)
+    setError('')
+  }
+
   if (destination !== 'lesson') {
     return (
       <PixelAppShell
@@ -2924,6 +2964,12 @@ export function LearningWindow() {
         onNavigate={(nextDestination) => {
           setTeacherOpen(false)
           setDestination(nextDestination)
+        }}
+        onReviewModule={(moduleId) => {
+          clearPageOverlays()
+          setReviewHistoryIndex(null)
+          setOutlineSceneId(courseOutline[moduleId][0]!.startSceneId)
+          setDestination('lesson')
         }}
         onOpenTeacher={() => setTeacherOpen(true)}
         onCloseTeacher={() => setTeacherOpen(false)}
@@ -2954,15 +3000,6 @@ export function LearningWindow() {
   const outlineModuleLabel = scene.lessonId === 'intro'
     ? 'GIỚI THIỆU'
     : `MODULE ${scene.lessonId.slice(-1)}`
-  const clearPageOverlays = () => {
-    setApprovalFocus(null)
-    setVisualExpanded(false)
-    setSecondaryVisualExpanded(false)
-    setPracticeBriefOpen(false)
-    setPracticeFullOpen(false)
-    setTeacherOpen(false)
-    setError('')
-  }
   const closeOutline = () => {
     if (outlineRef.current) {
       outlineRef.current.open = false
@@ -3328,7 +3365,7 @@ export function LearningWindow() {
         className={isVercelTutorial ? 'pixel-vercel-tutorial-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
         {isAssessmentQuestionPage || isVercelTutorial ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
-        {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' ? (
+        {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
           <PortfolioWorkspacePicker
             courseRunId={progress.courseRunId}
             onContinue={() => void advanceToScene('module-2-portfolio-practice', progress.decisions)}
@@ -3356,6 +3393,14 @@ export function LearningWindow() {
                 ? <HighlightedDialogue dialogue={scene.dialogue ?? ''} highlightTerms={scene.highlightTerms} />
               : scene.dialogue}</p>
         )}
+        {isReviewing && assessmentQuestion ? (
+          <article className="pixel-assessment-question">
+            <p>{assessmentQuestion.prompt}</p>
+            {assessmentQuestion.type === 'multiple-choice' ? (
+              <ol type="A">{assessmentQuestion.choices.map((choice) => <li key={choice}>{choice}</li>)}</ol>
+            ) : null}
+          </article>
+        ) : null}
         {displayedSceneId === 'module-3-debugging-intro' && portfolioPlanningHandoff ? (
           <details className="pixel-planning-handoff">
             <summary>{`Module 2 đã bàn giao ${portfolioPlanningHandoff.moduleThreeInput.artifactReferences.length} artifact hiện tại trong workspace ${portfolioPlanningHandoff.moduleThreeInput.workspacePath}.`}</summary>
