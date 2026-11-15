@@ -49,6 +49,42 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Portfolio project and Practice video integration into main — 15 November 2026
+
+The owner explicitly requested publishing both feature sets and merging them
+into `main`. The integration preserves current main at `be32963`, including the
+Model/Effort/Speed lesson design, four-question Module 1 review, progress
+migration and review-result styling. The shared visible-scene helper resolves
+the overlapping saved-Practice repair. All 61 scene definitions from current
+main remain present. Preservation hashes cover the combined, authorized copy;
+main's four-question assessment source is retained.
+
+The current video is version `1.2.0` (2:38). Its transcript disclosure is removed
+as requested; embedded and optional external captions remain. Authoring text is
+retained as source. Automatic registration, readable new chat titles and the
+four required settings are included in the same delivery.
+
+Fresh integrated typecheck/build, lint, 824 unit tests (three existing skips),
+nine startup checks, course Electron smoke, Teacher chat and the full disposable
+Modules 2–4 portfolio journey passed. The first video check paused on a recorded
+native window-hide event; an isolated retry timed out taking a screenshot.
+The test now explicitly restores its own window before screenshots and resumed
+playback, and resumes from the saved timeline only after a recorded native-hide
+interruption. It retains the deliberate native-hide pause assertion and every
+viewing, confirmation and Practice check. A feedback screenshot encountered the
+same native-window issue, so that test also restores its own window before
+capture. Final full-video and compact/full feedback reruns both passed, including
+desktop/narrow layouts. Full lint and focused lint of the adjusted harnesses
+passed. Verification is `passed`; implementation is `implemented`. The owner
+authorized publication and merge into `main`; final learner acceptance remains
+pending. Next permitted action is publishing the reviewed commits and merging
+the pull request.
+
+Logs are ignored under `.superpowers/qa/features-merge-*`. Personal learner
+state, raw recordings and temporary workspaces are excluded from the index.
+Merge authorization does not grant beginner-pilot, native macOS or overall
+course acceptance.
+
 ### Automatic portfolio project and Practice setup — 15 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
@@ -239,6 +275,70 @@ profiles, not the learner's normal profile or a live deployment. These checks
 do not grant beginner-pilot, native macOS, runtime or overall course acceptance.
 The previously recorded assessment outline-preview presentation gap remains
 open. The ledger-only delivery record does not change verified runtime code.
+
+### Module 1 Model, Effort and Speed presentation — 4 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / preserved Module 1 theory pages | `implemented` | `passed` for typecheck, lint, 797 unit tests, nine startup checks, production build and the Electron smoke/Teacher/Practice suites described below | Mockup and integration explicitly approved; final app review `pending` | `pending` | Review the integrated lesson in the normal app with the current learner progress preserved. |
+
+The existing `module-1-codex-model-intro` and `module-1-codex-effort-speed`
+pages now display the owner-supplied menu image on the left, with arrows and
+highlights for the selected explanation on the right. The first page contains
+Overview and Model; the second contains Effort and Speed. Local topic switches
+do not save progress or award checkpoints. All scene IDs, course pages,
+assessment questions, Practice rules and navigation destinations are preserved.
+
+The approved personal Model explanation, exact Effort/Speed wording and OpenAI
+reference button are synchronized with the runnable lesson and Teacher script.
+Redundant captions and eyebrow text are absent; the owner also requested removal
+of the Overview footer's “Làm quen với ba mục” label. Screenshot pixels remain
+unchanged. Frozen-content hashes changed only for the three approved content
+files; the frozen scene inventory remains unchanged.
+
+Verification: typecheck, lint, 797 unit tests and nine startup checks passed.
+Unit fixtures required `TMPDIR=/private/tmp` on macOS to avoid a noncanonical
+temporary-path mismatch. Production build and Electron smoke passed, including
+exact displayed copy, highlight selection, local-topic progress invariance,
+back/forward review, and desktop/narrow layout checks. Visual inspection covered
+1024px, 1440px and 390px windows; the narrow content scroll was repaired and the
+reference link was confirmed reachable above the footer. The final full `npm run test:electron` run, including Teacher chat, Practice
+guide and review-feedback suites, passed. An earlier optional Teacher screenshot
+timed out; the subsequent full run completed successfully. These use disposable profiles
+and simulated AI responses, not learner or live AI acceptance.
+
+Local evidence: `/tmp/model-tests-canonical.log`, `/tmp/model-lint.log`,
+`/tmp/model-final-electron.log`, `/tmp/model-other-electron.log`, and
+`/private/tmp/model-controls-qa/`. The earlier, separately requested Practice
+resume fix remains outside this UI checkpoint. Existing live learner progress
+is retained. Overall Foundation and module acceptance gates remain unchanged.
+
+Port to `main`, 15 November 2026 (owner-requested, design only): branch
+`codex/model-controls-design` brings over `1e8bd82`, the four cross-page tabs
+from `decd352` with the working navigation wiring from
+`codex/module-1-checklist`, and that branch's Effort/Speed footer-stability fix.
+The Module 1 self-check checklist and the 6→4 quiz reduction were deliberately
+not brought over; Practice, assessment and every page are unchanged. Typecheck,
+lint, 797 unit tests, build and `npm run test:electron` passed. Final app
+review remains `pending`.
+
+Same branch, 15 November 2026: the home page no longer crashes when saved
+progress is on `module-1-setup-checklist` (it uses the preceding page's
+position, as the lesson view already did). At the owner's explicit request the
+Module 1 review drops questions `m1-q3` (Full access) and `m1-q4` (Sol vs
+Luna); four questions remain and the pass mark is 3/4. Pages
+`module-1-final-5` and `module-1-final-6` are retired, and saved progress on a
+retired page or with retired answers resumes at the first unanswered remaining
+question or the summary (migration taken from `codex/module-1-checklist`).
+Only question counts and the pass mark changed in the lesson, Teacher script,
+start prompt, delivery contract and mastery rubric; Practice is unchanged.
+With `m1-q4` gone the review has no short-answer question; at the owner's
+request the rubric no longer asks for a written explanation, and choice A of
+`m1-q6-skills` now reads “Tạo một Skill với tệp SKILL.md.” The review result
+pages centre their message and use a compact continue button.
+Commit `31c524a` left the smoke test expecting six questions; the follow-up
+commit corrects it to four. Typecheck, lint, 798 unit tests, build and
+`npm run test:electron` then passed. Final app review remains `pending`.
 
 ### Continuation banner and Module 2 quiz-blocker feedback — 29 October 2026
 

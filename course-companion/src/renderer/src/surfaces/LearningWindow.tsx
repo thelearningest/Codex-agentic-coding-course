@@ -25,7 +25,8 @@ import buildQuiz from '../../../../../pilot-workspace/course/quizzes/module-3.qu
 import releaseQuiz from '../../../../../pilot-workspace/course/quizzes/module-4.quiz.json'
 import teacherImage from '../assets/teacher-triet.png'
 import m1ApprovalMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/approval-menu.png'
-import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-setup/images/model-settings.png'
+import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-setup/images/model-controls.png'
+import { ModelLessonBoard, type ModelLessonTopic } from '../components/ModelLessonBoard'
 import m1SlashCommandsImage from '../../../../../pilot-workspace/course/codex-setup/images/slash-commands.png'
 import m1AtMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/at-menu.png'
 import m1UnderstandCodexImage from '../assets/lesson-visuals/m1-understand-codex.webp'
@@ -459,18 +460,18 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     totalSteps: 6,
     lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
     mission: 'Ôn tập cuối Module 1',
-    objective: 'Sẵn sàng cho 6 câu ôn tập',
+    objective: 'Sẵn sàng cho 4 câu ôn tập',
     panelLabel: 'PRACTICE ĐÃ ĐƯỢC DUYỆT',
     panelStatus: 'ĐÃ ĐẠT · TIẾP TỤC ÔN TẬP',
     tone: 'good',
-    request: 'Sáu câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
+    request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
       { label: 'EFFORT', value: 'High', ready: true },
       { label: 'SPEED', value: 'Standard', ready: true },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
     ],
     dialogue: 'Bây giờ hãy cùng nhau trả lời các câu hỏi ôn tập để củng cố kiến thức vừa học nhen!',
-    choices: [{ label: 'Bắt đầu 6 câu ôn tập', next: 'module-1-final-1', primary: true, decision: { key: 'setupPractice', value: 'teacher-reviewed-setup' } }],
+    choices: [{ label: 'Bắt đầu 4 câu ôn tập', next: 'module-1-final-1', primary: true, decision: { key: 'setupPractice', value: 'teacher-reviewed-setup' } }],
     showTitle: false,
     showPanel: false
   },
@@ -1057,7 +1058,7 @@ const scenes = {
     mission: 'Kết quả kiểm tra thiết lập Codex',
     objective: 'Đối chiếu kết quả trước khi hoàn thành',
     panelLabel: 'KẾT QUẢ',
-    panelStatus: '6 CÂU · MỐC ĐẠT 5/6',
+    panelStatus: '4 CÂU · MỐC ĐẠT 3/4',
     tone: 'neutral',
     request: 'Mỗi câu đúng hoặc tự đối chiếu đạt được tính một điểm.',
     evidence: [],
@@ -1174,11 +1175,11 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
   },
   'module-1-codex-model-intro': {
     image: m1ModelSettingsImage,
-    alt: 'Menu Codex hiển thị Model 5.6 Sol, Effort High và Speed Standard'
+    alt: 'Menu Codex với GPT-6 Astra, High, thanh trượt và biểu tượng tia sét'
   },
   'module-1-codex-effort-speed': {
     image: m1ModelSettingsImage,
-    alt: 'Menu Codex hiển thị Model 5.6 Sol, Effort High và Speed Standard'
+    alt: 'Menu Codex với GPT-6 Astra, High, thanh trượt và biểu tượng tia sét'
   },
   'module-1-codex-slash-commands': {
     image: m1SlashCommandsImage,
@@ -1287,8 +1288,6 @@ const courseLessonPages = {
     ['module-1-final-2'],
     ['module-1-final-3'],
     ['module-1-final-4'],
-    ['module-1-final-5'],
-    ['module-1-final-6'],
     ['module-1-final-summary'],
     ['module-1-complete']
   ],
@@ -1633,89 +1632,9 @@ const modelLessonBoardByScene: Partial<Record<SceneId, ModelLessonBoardKind>> = 
   'module-1-codex-effort-speed': 'settings'
 }
 
-function ModelLessonBoard({
-  busy,
-  canOpenPreviousPage,
-  kind,
-  nextLabel,
-  onBack,
-  onExpand,
-  onNext,
-  visual
-}: {
-  busy: boolean
-  canOpenPreviousPage: boolean
-  kind: ModelLessonBoardKind
-  nextLabel: string
-  onBack: () => void
-  onExpand: () => void
-  onNext: () => void
-  visual: LessonVisual
-}) {
-  const titleId = `model-lesson-${kind}`
-
-  return (
-    <section className={`pixel-model-board is-${kind}`} aria-labelledby={titleId}>
-      <div className="pixel-model-board__copy">
-        <header>
-          <h1 id={titleId}>{kind === 'models' ? 'Chọn cách Codex xử lý công việc' : 'Effort và Speed'}</h1>
-          {kind === 'models' ? <p>Ở góc dưới bên phải, ngay cạnh nút microphone, bạn sẽ thấy một menu xổ xuống. Menu này có ba mục: Model, Effort và Speed.</p> : null}
-        </header>
-        {kind === 'settings' ? (
-          <div className="pixel-model-board__tradeoffs">
-            <section>
-              <h2>Effort</h2>
-              <p><strong>Light</strong> phù hợp việc nhỏ. <strong>Medium</strong> là mức cân bằng. <strong>High</strong> phù hợp việc có nhiều bước. <strong>Extra High</strong> và <strong>Ultra</strong> dành cho tác vụ khó hơn.</p>
-              <aside>Trong những lần mình thử, <strong>Extra High</strong> không tạo khác biệt đủ lớn cho đa số công việc hằng ngày. Tác vụ lại mất nhiều thời gian hơn.</aside>
-            </section>
-            <section>
-              <h2>Speed</h2>
-              <p>OpenAI cho biết <strong>Fast</strong> có thể tăng tốc 1,5 lần. Với GPT-5.6, chế độ này dùng credit ở mức 2,5 lần <strong>Standard</strong>.</p>
-              <aside>Trong những lần mình thử, <strong>Fast</strong>  thường chỉ nhanh hơn <strong>Standard</strong> khoảng 0,5 giây. Mức chênh này không đủ lớn để mình chọn <strong>Fast</strong> làm mặc định.</aside>
-            </section>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="pixel-model-board__media">
-        {kind === 'models' ? (
-          <div className="pixel-model-board__models">
-            <article>
-              <span>ASTRA</span>
-              <div><h2>GPT-6 Astra</h2><p>Dòng có năng lực cao nhất, phù hợp với công việc chuyên môn phức tạp.</p><small>Thường dùng: thiết kế kiến trúc, nghiên cứu sâu hoặc xử lý yêu cầu còn mơ hồ.</small></div>
-            </article>
-            <article>
-              <span>TERRA</span>
-              <div><h2>GPT-5.6 Terra</h2><p>Tiết kiệm hơn Sol nhưng vẫn đáp ứng tốt công việc hằng ngày.</p><small>Ví dụ: trả lời tin nhắn khách hàng theo hướng dẫn đã có.</small></div>
-            </article>
-            <article>
-              <span>LUNA</span>
-              <div><h2>GPT-5.6 Luna</h2><p>Thông thường mình không dùng Luna quá nhiều.</p><small>Theo hiểu biết của mình, Luna có thể làm sub-agent. Đây là một agent nhỏ do agent lớn gọi ra để xử lý phần việc ít phức tạp hơn. Chẳng hạn, khi GPT-5.6 Sol sửa một tính năng, Sol có thể gọi Luna khảo sát codebase trước.</small></div>
-            </article>
-          </div>
-        ) : (
-          <>
-            <figure>
-              <LessonVisualMedia activeFocus={null} isApprovalTour={false} visual={visual} />
-              <button aria-label="Phóng to ảnh minh họa" className="pixel-visual-expand" type="button" onClick={onExpand}>PHÓNG TO</button>
-            </figure>
-            <div className="pixel-model-board__recommendation">
-              <small>CẤU HÌNH MÌNH ĐỀ XUẤT</small>
-              <strong>GPT-6 Astra · High · Standard</strong>
-              <p>Nếu lo tốn token, bạn có thể dùng GPT-5.6 Sol.</p>
-            </div>
-          </>
-        )}
-      </div>
-
-      <img className="pixel-model-board__teacher" src={teacherImage} alt="Triết, giáo viên đồng hành" />
-
-      <footer className="pixel-model-board__actions">
-        <button className="pixel-page-back" disabled={!canOpenPreviousPage} type="button" onClick={onBack}>← Trang trước</button>
-        <button className="pixel-choice is-primary" disabled={busy} type="button" onClick={onNext}>{busy ? 'Đang lưu checkpoint…' : nextLabel}</button>
-      </footer>
-    </section>
-  )
+const modelLessonSceneByKind: Record<ModelLessonBoardKind, SceneId> = {
+  models: 'module-1-codex-model-intro',
+  settings: 'module-1-codex-effort-speed'
 }
 
 type GuidanceLessonBoardKind = 'agents' | 'skills' | 'skills-portfolio'
@@ -2518,6 +2437,7 @@ export function LearningWindow() {
   const [visualExpanded, setVisualExpanded] = useState(false)
   const [secondaryVisualExpanded, setSecondaryVisualExpanded] = useState(false)
   const [appSettings, setAppSettings] = useState<AppSettings>(defaultAppSettings)
+  const [modelLessonEntry, setModelLessonEntry] = useState<{ sceneId: SceneId, topic: ModelLessonTopic } | null>(null)
   const practiceAdvanceRef = useRef<Promise<LearnerProgress> | null>(null)
 
   useEffect(() => {
@@ -3301,14 +3221,19 @@ export function LearningWindow() {
 
       {modelLessonBoardKind && lessonVisual ? (
         <ModelLessonBoard
+          key={displayedSceneId}
           busy={busy}
           canOpenPreviousPage={canOpenPreviousPage}
+          initialTopic={modelLessonEntry?.sceneId === displayedSceneId ? modelLessonEntry.topic : undefined}
           kind={modelLessonBoardKind}
           nextLabel={isReviewing ? reviewNextLabel : yellowChoiceLabel(scene.choices[0] ?? { label: 'Tiếp tục', primary: true })}
-          visual={lessonVisual}
-          onBack={openPreviousPage}
-          onExpand={() => setVisualExpanded(true)}
-          onNext={() => {
+          onBack={(topic) => {
+            setModelLessonEntry(topic ? { sceneId: modelLessonSceneByKind.models, topic } : null)
+            openPreviousPage()
+          }}
+          onInitialTopicApplied={() => setModelLessonEntry(null)}
+          onNext={(topic) => {
+            setModelLessonEntry(topic ? { sceneId: modelLessonSceneByKind.settings, topic } : null)
             if (isReviewing) {
               openNextReviewPage()
               return
@@ -3378,7 +3303,7 @@ export function LearningWindow() {
       <section
         aria-label={isVercelTutorial ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
         aria-labelledby={isAssessmentQuestionPage || isVercelTutorial ? undefined : 'teacherName'}
-        className={isVercelTutorial ? 'pixel-vercel-tutorial-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
+        className={isVercelTutorial ? 'pixel-vercel-tutorial-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
         {isAssessmentQuestionPage || isVercelTutorial ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
         {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' ? (
@@ -3470,7 +3395,7 @@ export function LearningWindow() {
                       label: scene.lessonId === 'module-1' ? 'Hoàn thành Module 1' : 'Hoàn thành Module 2',
                       next: scene.lessonId === 'module-1' ? 'module-1-complete' : 'module-2-complete',
                       decision: scene.lessonId === 'module-1'
-                        ? { key: 'setupMastery', value: 'passed-five-of-six' }
+                        ? { key: 'setupMastery', value: 'passed-three-of-four' }
                         : { key: 'masteryEvidence', value: 'artifacts-approved-and-aligned' }
                     })
                   : void retryFinalAssessment()}

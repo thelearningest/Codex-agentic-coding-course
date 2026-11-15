@@ -35,62 +35,29 @@ hành động có rủi ro. Tự động duyệt không làm thay đổi ranh gi
 [OpenAI Docs — Sandboxing and approvals](https://learn.chatgpt.com/docs/sandboxing)
 giải thích sự khác nhau giữa ranh giới truy cập và chính sách xin phép.
 
-## Model: chọn theo loại công việc
+## Model
 
-Codex cho bạn chọn các model ngôn ngữ lớn, thường được gọi là LLM:
+Hiện tại, model của OpenAI có bốn dòng chính: Astra, Sol, Terra và Luna.
 
-| Model | Điểm mạnh | Ví dụ phù hợp |
-|---|---|---|
-| **GPT-6 Astra** | Dòng có năng lực cao nhất cho công việc chuyên môn phức tạp | Lên kiến trúc ứng dụng, nghiên cứu sâu, xử lý yêu cầu còn mơ hồ |
-| **Terra** | Tiết kiệm hơn Sol nhưng vẫn đáp ứng tốt công việc hằng ngày | Trả lời tin nhắn khách hàng theo hướng dẫn đã có |
-| **Luna** | Thông thường mình không dùng trực tiếp; theo hiểu biết của mình, model này có thể làm sub-agent | GPT-5.6 Sol gọi Luna khảo sát codebase trước khi sửa một tính năng |
+Thú thực, mình thấy khá khó để phân biệt khi nào nên dùng model nào. Với các công việc thông thường hằng ngày, mình thường dùng Sol.
 
-Tên model không phải cấp độ mà người học phải vượt qua. Bạn chọn model theo độ
-khó, độ rõ của yêu cầu và chi phí chấp nhận được.
+Khi cần làm việc phức tạp hơn, chẳng hạn lên kế hoạch trước khi xây dựng ứng dụng, mình sẽ chuyển sang Astra.
 
-OpenAI mô tả Terra là lựa chọn cân bằng giữa năng lực và chi phí. Luna hướng đến
-các tác vụ cần tiết kiệm chi phí hoặc xử lý số lượng lớn. Tài liệu cũng cho biết
-GPT-5.6 có thể điều phối nhiều sub-agent. Tuy nhiên, ví dụ Sol gọi Luna khảo sát
-codebase là cách mình hiểu và minh họa cơ chế này. OpenAI Docs không nêu riêng
-quy trình đó.
+Mình chỉ dùng Terra làm sub-agent, tức trợ lý AI phụ, để xử lý những việc nhỏ như tìm kiếm trong mã nguồn của dự án.
 
-[OpenAI Docs — GPT-5.6 Terra](https://developers.openai.com/api/docs/models/gpt-5.6-terra),
-[GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna) và
-[hướng dẫn chọn model](https://developers.openai.com/api/docs/guides/latest-model)
-cung cấp mô tả chính thức.
+Mình hầu như không dùng Luna. Nhưng mình nghĩ dòng này có thể hữu ích với các công ty lớn muốn phục vụ AI cho hàng triệu người và cần giảm chi phí.
 
-## Reasoning effort: model dành bao nhiêu công sức để suy luận?
+[Xem cách giải thích cụ thể của OpenAI](https://learn.chatgpt.com/docs/models?surface=app)
 
-Reasoning effort điều chỉnh lượng công sức model dành cho việc phân tích trước
-khi trả lời:
+## Effort
 
-- **Light** phù hợp với việc nhỏ và đã rõ.
-- **Medium** cân bằng tốc độ với độ sâu.
-- **High** phù hợp với việc có nhiều bước hoặc cần kiểm tra kỹ.
-- **Extra High** và **Ultra** dành cho những nhiệm vụ rất khó. Chúng thường mất
-  nhiều thời gian hơn.
+Nhìn chung, effort càng cao thì model AI càng dành nhiều thời gian để suy nghĩ, từ đó làm việc chất lượng hơn. Tuy nhiên kèm theo đó thì nó cũng làm việc lâu hơn và cũng đốt nhiều tiền hơn.
 
-Ultra có thể chia việc cho nhiều subagent. Hãy hình dung subagent như các thành
-viên phụ trong một nhóm: mỗi người xử lý một phần rồi tổng hợp lại. Người mới
-chưa cần dùng cách này cho ContentPilot.
+Cá nhân mình thường dùng Medium hoặc high, medium cho các tác vụ thông thường và high cho những tác vụ cần chi tiết như tạo plan, mình thường không bao giờ dùng Extra High vì chậm mà cũng không cần thiết. Bạn nên tự thử các mức effort để chọn xem mức nào phù hợp với tác vụ mà bạn muốn. Không phải cứ chọn Extra High là model tự động thông minh hơn. Đôi khi chọn Extra High khiến model overthink và đưa ra những lựa chọn ngu không cần thiết.
 
-Trong những lần mình thử nghiệm, Extra High không tạo khác biệt đủ lớn cho đa
-số công việc hằng ngày. Tác vụ lại mất nhiều thời gian hơn. Vì vậy, mình không
-khuyên bạn dùng Extra High hoặc Ultra trong Module 1.
+## Speed
 
-[OpenAI Docs — Model guidance](https://developers.openai.com/api/docs/guides/latest-model)
-khuyên dùng High hoặc Extra High khi thử nghiệm cho thấy chất lượng tăng rõ.
-
-## Speed: Standard hay Fast?
-
-OpenAI cho biết Fast có thể tăng tốc 1,5 lần. Với GPT-5.6, chế độ này dùng
-credit ở mức 2,5 lần Standard khi bạn đăng nhập Codex bằng ChatGPT.
-
-Trong những lần mình thử nghiệm, Fast thường chỉ nhanh hơn Standard khoảng
-0,5 giây. Mức chênh này không đủ lớn để mình chọn Fast làm mặc định.
-
-[OpenAI Docs — Speed](https://learn.chatgpt.com/docs/agent-configuration/speed)
-giải thích tốc độ và mức dùng credit của hai chế độ.
+Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast. Ngốn tiền và usage kinh khủng
 
 ## Lệnh `/` và `@`: mở nhanh chức năng cần dùng
 
@@ -208,11 +175,11 @@ Nếu chưa đạt, mình sẽ chỉ rõ mục cần sửa để bạn nộp l�
 
 ## Bài ôn tập cuối Module 1
 
-Sau khi Practice được duyệt, bạn sẽ trả lời sáu câu ôn tập. Các câu hỏi yêu cầu
+Sau khi Practice được duyệt, bạn sẽ trả lời bốn câu ôn tập. Các câu hỏi yêu cầu
 bạn giải thích, áp dụng hoặc phân tích kiến thức trong một tình huống cụ thể.
 Mỗi lượt chỉ hiện một câu. Lời giải và nguồn sẽ xuất hiện sau khi bạn trả lời.
 
-Bạn cần đạt ít nhất 5/6 câu để hoàn thành Module 1. Nếu chưa đạt, bạn có thể làm
+Bạn cần đạt ít nhất 3/4 câu để hoàn thành Module 1. Nếu chưa đạt, bạn có thể làm
 lại bài ôn tập sau khi xem phản hồi.
 
 ## Tiêu chí hoàn thành
@@ -225,7 +192,7 @@ Bạn hoàn thành Module 1 khi:
 - dùng cấu hình Sol, High và Standard cho ContentPilot,
 - nộp đủ hai ảnh trong đúng task Codex, và
 - được mình duyệt bằng chứng, và
-- đạt ít nhất 5/6 câu trong bài ôn tập cuối Module 1.
+- đạt ít nhất 3/4 câu trong bài ôn tập cuối Module 1.
 
 ## Nguồn và lựa chọn mình đưa ra
 

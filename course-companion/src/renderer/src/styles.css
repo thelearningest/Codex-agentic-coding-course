@@ -1768,6 +1768,33 @@ button:focus-visible {
   width: auto;
 }
 
+/* Review result pages: centred message with a compact continue button. */
+.pixel-dialogue.is-assessment-summary .pixel-speaker,
+.pixel-dialogue.is-assessment-summary .pixel-assessment-summary,
+.pixel-dialogue.is-assessment-summary .pixel-summary-navigation,
+.pixel-dialogue.is-assessment-summary .pixel-lesson-actions.is-paired {
+  justify-content: center;
+}
+
+.pixel-dialogue.is-assessment-summary > p {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.pixel-dialogue.is-assessment-summary .pixel-summary-navigation > .pixel-page-back {
+  margin: 0;
+}
+
+.pixel-dialogue.is-assessment-summary .pixel-lesson-actions.is-paired .pixel-choices {
+  flex: 0 0 auto;
+}
+
+.pixel-dialogue.is-assessment-summary .pixel-summary-navigation > .pixel-choice,
+.pixel-dialogue.is-assessment-summary .pixel-lesson-actions.is-paired .pixel-choice {
+  width: 240px;
+  text-align: center;
+}
+
 @media (min-width: 821px) {
   .pixel-learning-shell.has-module-two-visual-dialogue {
     padding: 92px 5vw 22px;

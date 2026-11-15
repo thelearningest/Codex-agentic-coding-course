@@ -142,6 +142,11 @@ try {
       if (verdict === 'error') assert.match(feedback.text, /Simulated review failure/)
       else if (verdict === 'needs-work') assert.match(feedback.text, /Simulated review result/)
       else assert.match(feedback.text, /Làm tốt lắm/)
+      await app.evaluate(({ BrowserWindow }) => {
+        const window = BrowserWindow.getAllWindows()[0]
+        window.restore(); window.show(); window.focus()
+      })
+      await page.waitForFunction(() => !globalThis.document.hidden)
       await page.screenshot({ path: join(screenshots, `${embedded ? 'full' : 'compact'}-${verdict}.png`), animations: 'disabled' })
       // A background refresh of the same result must preserve the reader's place.
       if (verdict !== 'error') {

@@ -2,14 +2,14 @@
   "schemaVersion": "1.1.0",
   "moduleId": "module-1",
   "title": "Bài ôn tập cuối Module 1 — Làm việc với Codex",
-  "passingScore": 5,
+  "passingScore": 3,
   "delivery": {
     "mode": "one-question-at-a-time",
     "doNotStackQuestions": true,
     "feedbackTiming": "Chỉ hiện phản hồi, lời giải và nguồn sau khi Learner đã trả lời câu hiện tại.",
     "sourcePolicy": "Mỗi lời giải phải dùng nguồn được ghi trong câu hỏi.",
     "shortAnswerPolicy": "Learner phải giải thích bằng lời riêng; không chấp nhận chỉ sao chép câu trong bài học.",
-    "retryPolicy": "Learner cần đạt ít nhất 5/6 câu. Nếu chưa đạt, cho làm lại bài ôn tập trước khi hoàn thành Module 1."
+    "retryPolicy": "Learner cần đạt ít nhất 3/4 câu. Nếu chưa đạt, cho làm lại bài ôn tập trước khi hoàn thành Module 1."
   },
   "questions": [
     {
@@ -53,44 +53,6 @@
       }
     },
     {
-      "id": "m1-q3",
-      "type": "multiple-choice",
-      "bloomLevel": 3,
-      "bloomLabel": "Vận dụng",
-      "prompt": "Một task Codex chỉ cần đọc hai ảnh đã nằm trong workspace nhưng lại yêu cầu bật Full access. Cách xử lý nào phù hợp nhất?",
-      "choices": [
-        "Giữ Full access tắt, xem lý do xin quyền và yêu cầu Codex làm việc trong phạm vi hẹp hơn nếu có thể.",
-        "Bật Full access vì mọi yêu cầu từ Codex đều cần quyền này.",
-        "Duyệt ngay mà không đọc vì task chỉ kiểm tra ảnh.",
-        "Tắt sandbox vĩnh viễn để lần sau không bị gián đoạn."
-      ],
-      "answerIndex": 0,
-      "explanation": "Quyền truy cập phải phù hợp với mục đích và phạm vi công việc. Một tác vụ đọc ảnh trong workspace chưa tự tạo ra lý do để gỡ các ranh giới bảo vệ thông thường.",
-      "source": {
-        "label": "OpenAI Docs — Sandboxing and approvals",
-        "url": "https://learn.chatgpt.com/docs/sandboxing",
-        "basis": "Tài liệu phân biệt sandbox với approval policy và mô tả Full access là chế độ không còn ranh giới tệp hoặc mạng thông thường."
-      }
-    },
-    {
-      "id": "m1-q4",
-      "type": "short-answer",
-      "bloomLevel": 3,
-      "bloomLabel": "Vận dụng",
-      "prompt": "Bạn cần chọn giữa 5.6 Sol và 5.6 Luna cho hai nhiệm vụ. Nhiệm vụ thứ nhất là xác định cấu trúc và câu chuyện cho một portfolio khi yêu cầu còn nhiều điểm chưa rõ. Nhiệm vụ thứ hai là chuyển 100 mô tả dự án sang một mẫu đã duyệt với đầu ra cố định. Bạn chọn model nào cho từng nhiệm vụ? Hãy giải thích dựa trên tính chất của công việc.",
-      "explanation": "5.6 Sol phù hợp với nhiệm vụ portfolio còn mơ hồ vì công việc cần phân tích, phán đoán và hoàn thiện chất lượng. 5.6 Luna phù hợp với 100 mô tả có mẫu và đầu ra cố định vì đây là công việc rõ ràng, lặp lại và có khối lượng lớn.",
-      "expectedSignals": [
-        "Chọn 5.6 Sol cho nhiệm vụ portfolio còn mơ hồ",
-        "Chọn 5.6 Luna cho nhiệm vụ chuyển 100 mô tả theo mẫu đã duyệt",
-        "Giải thích Sol phù hợp với việc mở, cần phân tích hoặc phán đoán; Luna phù hợp với việc rõ, lặp lại hoặc có khối lượng lớn"
-      ],
-      "source": {
-        "label": "OpenAI Docs — Models",
-        "url": "https://learn.chatgpt.com/docs/models",
-        "basis": "Tài liệu khuyên dùng Sol cho công việc phức tạp, mở và cần thêm phân tích hoặc phán đoán; dùng Luna cho công việc cụ thể, lặp lại, khối lượng lớn khi đã biết kết quả tốt trông như thế nào."
-      }
-    },
-    {
       "id": "m1-q5-agents",
       "type": "multiple-choice",
       "bloomLevel": 3,
@@ -117,7 +79,7 @@
       "bloomLabel": "Vận dụng",
       "prompt": "Bạn có một quy trình chuyên biệt để viết nội dung portfolio. Quy trình gồm hướng dẫn, tài liệu tham khảo và một số bước kiểm tra, đồng thời sẽ được dùng lại khi task phù hợp. Cách đóng gói nào phù hợp nhất?",
       "choices": [
-        "Tạo một Skill với tệp SKILL.md và thêm tài nguyên hỗ trợ khi cần.",
+        "Tạo một Skill với tệp SKILL.md.",
         "Đưa toàn bộ quy trình vào AGENTS.md để Codex luôn tải mọi chi tiết.",
         "Dán lại toàn bộ quy trình vào từng task và không lưu thành tài nguyên dùng lại.",
         "Bật Fast để Codex tự tạo lại cùng một quy trình cho mỗi task."

@@ -24,35 +24,36 @@ Teacher nói: "Ở góc dưới bên phải, ngay cạnh nút microphone, bạn 
 Model, Effort và Speed. Model chọn dòng model phù hợp với công việc. Effort điều
 chỉnh lượng công sức dành cho phân tích. Speed chọn tốc độ xử lý."
 
-Teacher nói: "GPT-6 Astra có năng lực cao nhất cho công việc chuyên
-môn phức tạp. Nếu lo tốn token, bạn có thể dùng GPT-5.6 Sol.
-Terra tiết kiệm hơn Sol nhưng vẫn đáp ứng tốt công việc hằng ngày.
-Ví dụ, bạn có thể dùng Terra để trả lời tin nhắn khách hàng theo hướng dẫn đã
-có."
+### Model
 
-Teacher nói: "Thông thường mình không dùng Luna quá nhiều. Theo hiểu biết của
-mình, Luna có thể làm sub-agent. Đây là một agent nhỏ do agent lớn gọi ra để xử
-lý phần việc ít phức tạp hơn. Chẳng hạn, khi GPT-5.6 Sol sửa một tính năng, Sol
-có thể gọi Luna khảo sát codebase trước."
+Teacher nói: "Hiện tại, model của OpenAI có bốn dòng chính: Astra, Sol, Terra và Luna."
 
-Teacher nói: "Light phù hợp việc nhỏ. Medium là mức cân bằng. High phù hợp việc
-nhiều bước. Extra High và Ultra dành cho nhiệm vụ khó hơn. Trong những lần mình
-thử, Extra High không tạo khác biệt đủ lớn cho đa số công việc hằng ngày. Tác vụ
-lại mất nhiều thời gian hơn."
+Teacher nói: "Thú thực, mình thấy khá khó để phân biệt khi nào nên dùng model nào. Với các công việc thông thường hằng ngày, mình thường dùng Sol."
 
-Teacher nói: "OpenAI cho biết Fast có thể tăng tốc 1,5 lần. Với GPT-5.6, chế độ
-này dùng credit ở mức 2,5 lần Standard. Trong những lần mình thử, Fast thường
-chỉ nhanh hơn Standard khoảng 0,5 giây. Vì vậy, mình không chọn Fast làm mặc
-định."
+Teacher nói: "Khi cần làm việc phức tạp hơn, chẳng hạn lên kế hoạch trước khi xây dựng ứng dụng, mình sẽ chuyển sang Astra."
+
+Teacher nói: "Mình chỉ dùng Terra làm sub-agent, tức trợ lý AI phụ, để xử lý những việc nhỏ như tìm kiếm trong mã nguồn của dự án."
+
+Teacher nói: "Mình hầu như không dùng Luna. Nhưng mình nghĩ dòng này có thể hữu ích với các công ty lớn muốn phục vụ AI cho hàng triệu người và cần giảm chi phí."
+
+[Xem cách giải thích cụ thể của OpenAI](https://learn.chatgpt.com/docs/models?surface=app)
+
+### Effort
+
+Teacher nói: "Nhìn chung, effort càng cao thì model AI càng dành nhiều thời gian để suy nghĩ, từ đó làm việc chất lượng hơn. Tuy nhiên kèm theo đó thì nó cũng làm việc lâu hơn và cũng đốt nhiều tiền hơn."
+
+Teacher nói: "Cá nhân mình thường dùng Medium hoặc high, medium cho các tác vụ thông thường và high cho những tác vụ cần chi tiết như tạo plan, mình thường không bao giờ dùng Extra High vì chậm mà cũng không cần thiết. Bạn nên tự thử các mức effort để chọn xem mức nào phù hợp với tác vụ mà bạn muốn. Không phải cứ chọn Extra High là model tự động thông minh hơn. Đôi khi chọn Extra High khiến model overthink và đưa ra những lựa chọn ngu không cần thiết."
+
+### Speed
+
+Teacher nói: "Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast. Ngốn tiền và usage kinh khủng"
 
 Teacher nói: "Trong ô soạn tin, dấu `/` mở danh sách lệnh nhanh. `/status` cho
 bạn xem mức sử dụng context của cuộc trò chuyện. `/goal` đặt một mục tiêu bền
 vững để Codex tiếp tục theo đuổi qua nhiều lượt. Dấu `@` mở thêm các nguồn và
 công cụ mà bạn có thể đưa vào cuộc trò chuyện."
 
-[Trình bày toàn bộ phần Model, Effort, Speed và cấu hình đề xuất trên một màn
-hình lớn. Đặt nội dung cạnh ảnh `model-settings.png`. Teacher Triết chỉ xuất
-hiện như một nhân vật nhỏ ở góc, không có nhãn.]
+[Giữ hai trang học hiện có. Trang đầu có Tổng quan và Model; trang kế tiếp có Effort và Speed. Đặt ảnh `model-controls.png` bên trái, nội dung bên phải. Dùng mũi tên và highlight để chỉ vị trí tương ứng trên ảnh, không thêm chữ chú thích ở cột ảnh.]
 
 [Dừng chờ Learner xem phần giới thiệu Codex, màn hình Model, Effort, Speed và
 các lệnh nhanh.
@@ -139,11 +140,11 @@ Approve for me và Full access đang tắt. Metadata đến từ đúng task và
 
 Teacher nói: "Bạn đã thiết lập Codex và kiểm tra bằng chứng thật. Bây giờ, bốn
 câu ôn tập sẽ giúp bạn giải thích, áp dụng và phân tích những gì vừa học. Bạn
-cần đạt ít nhất năm câu để hoàn thành Module 1."
+cần đạt ít nhất ba câu để hoàn thành Module 1."
 
-[Dùng đủ sáu câu trong `course/quizzes/module-1.quiz.json`. Mở Assessment State
+[Dùng đủ bốn câu trong `course/quizzes/module-1.quiz.json`. Mở Assessment State
 cho từng câu và hỏi từng câu một. Chỉ hiện phản hồi, lời giải cùng nguồn sau khi
-Learner đã trả lời. Nếu chưa đạt 5/6, cho làm lại bài ôn tập. Khi đạt, lưu
+Learner đã trả lời. Nếu chưa đạt 3/4, cho làm lại bài ôn tập. Khi đạt, lưu
 checkpoint `m1-mastery`.]
 
 ## Bước 6 — Hoàn thành Module 1 (`m1-complete`)

@@ -31,8 +31,7 @@ Learner pass Module 1 khi đạt tất cả điều kiện:
 - `artifacts/codex-setup-checklist.md` tồn tại, có nội dung và được Learner duyệt.
 - Learner đã duyệt nội dung trong khối `Learner-editable preferences` của
   `AGENTS.md` trước khi Codex sửa file.
-- Learner đạt ít nhất 5/6 câu trong quiz Module 1 và giải thích câu trả lời
-  tự luận bằng lời của mình.
+- Learner đạt ít nhất 3/4 câu trong quiz Module 1.
 
 ## Kỹ năng cốt lõi của Module 2
 

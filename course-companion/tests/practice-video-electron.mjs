@@ -53,12 +53,20 @@ async function openBrief() {
 }
 async function checkLayout(width, name) {
   await page.setViewportSize({ width, height: 780 })
+  await showLearningWindow()
   assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
   const confirm = page.getByRole('button', { name: /Tôi đã xem hết|Đã xác nhận/ })
   await confirm.scrollIntoViewIfNeeded()
   const bounds = await confirm.boundingBox()
   assert.ok(bounds && bounds.x >= 0 && bounds.x + bounds.width <= width + 1 && bounds.y >= 0 && bounds.y + bounds.height <= 781)
   await page.screenshot({ path: join(shots, name) })
+}
+async function showLearningWindow() {
+  await app.evaluate(({ BrowserWindow }, url) => {
+    const target = BrowserWindow.getAllWindows().find(w => w.webContents.getURL() === url)
+    target.restore(); target.show(); target.focus()
+  }, page.url())
+  await page.waitForFunction(() => !globalThis.document.hidden)
 }
 async function playVideo(video, rate = 2) {
   const result = await video.evaluate(async (v, playbackRate) => {
@@ -175,10 +183,30 @@ try {
     globalThis.document.addEventListener('visibilitychange', () => record('visibilitychange'))
     globalThis.courseCompanion.onPracticeVideoHidden(() => record('native-hidden'))
   })
+  await showLearningWindow()
   await playVideo(video)
   console.log('Video check: restored playback started')
-  // Play the remaining media timeline through at a supported rate.
-  await page.waitForFunction(() => globalThis.document.querySelector('video')?.ended, undefined, { timeout: Math.ceil(manifest.durationSeconds / 2 + 45) * 1000 })
+  // Play the complete remaining timeline. A native desktop minimize can pause
+  // this interactive test window; resume only a recorded native-hide pause,
+  // without seeking, seeding coverage or tolerating unexplained player pauses.
+  const playbackDeadline = Date.now() + Math.ceil(manifest.durationSeconds / 2 + 45) * 1000
+  let resumedHideAt = 0
+  let playbackEnded = false
+  while (Date.now() < playbackDeadline) {
+    const state = await video.evaluate(v => ({
+      ended: v.ended, paused: v.paused,
+      hiddenAt: globalThis.practiceVideoEvents?.findLast(event => event.type === 'native-hidden')?.at ?? 0
+    }))
+    if (state.ended) { playbackEnded = true; break }
+    if (state.paused && state.hiddenAt > resumedHideAt) {
+      resumedHideAt = state.hiddenAt
+      await showLearningWindow()
+      await playVideo(video)
+      console.log('Video check: resumed actual playback after native desktop hide')
+    }
+    await delay(300)
+  }
+  assert.equal(playbackEnded, true, 'The complete actual media timeline must finish within the playback deadline')
   await page.waitForFunction(() => ![...globalThis.document.querySelectorAll('button')].find(b => b.textContent.includes('Tôi đã xem hết'))?.disabled)
   assert.equal(await start.isDisabled(), true, 'Watching alone never confirms or starts Practice')
   assert.equal(await page.evaluate(() => globalThis.courseCompanion.hasActivePractice()), false)
