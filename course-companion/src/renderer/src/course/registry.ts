@@ -21,6 +21,7 @@ const rendererModules = [
         ['module-2-portfolio-workspace'],
         ['module-2-prd-definition'],
         ['module-2-prd-review-workflow'],
+        ['module-2-prd-sample-prompt'],
         ['module-2-prd-agent-workflow'],
         ['module-2-implementation-plan-intro'],
         ['module-2-portfolio-folder'],

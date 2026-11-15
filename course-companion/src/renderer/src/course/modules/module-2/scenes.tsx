@@ -89,7 +89,20 @@ const instructionalScenes = {
       { label: '4 · DUYỆT', value: 'Chỉ chuyển sang plan khi bạn đồng ý' }
     ],
     dialogue: 'Bạn có thể yêu cầu coding agent phỏng vấn mình từng câu, soạn bản nháp PRD rồi tự rà soát những điểm còn mơ hồ. Tuy nhiên, agent không được tự quyết định những điểm chính trong PRD thay bạn. Bạn cần prompt cho agents hỏi bạn cho đến khi nào cả hai đồng ý với nhau mới thôi. Sau khi PRD được duyệt, agent mới chuyển từng yêu cầu thành các bước triển khai nhỏ có cách kiểm tra.',
-    choices: [{ label: 'Xem năm giai đoạn', next: 'module-2-prd-agent-workflow', primary: true }]
+    choices: [{ label: 'Xem năm giai đoạn', next: 'module-2-prd-sample-prompt', primary: true }]
+  },
+  'module-2-prd-sample-prompt': {
+    lessonId: 'module-2', checkpointId: 'm2-portfolio-brief', step: 1, totalSteps: 5,
+    lessonLabel: 'MODULE 2 · PLANNING VÀ PRD', mission: 'Tạo và review PRD cùng coding agent',
+    objective: 'Để AI hỗ trợ mà không giao luôn quyền quyết định', panelLabel: 'PROMPT MẪU',
+    panelStatus: 'SAO CHÉP · DÁN VÀO CODEX', tone: 'neutral',
+    request: '', evidence: [],
+    dialogue: 'Một prompt mẫu bạn có thể gửi cho coding agent là:',
+    choices: [{ label: 'Xem năm giai đoạn', next: 'module-2-prd-agent-workflow', primary: true }],
+    copyPrompt: 'Tôi muốn viết PRD cho dự án mình đang làm: [mô tả ngắn ý tưởng của bạn]. Hãy phỏng vấn tôi từng câu một để làm rõ những gì PRD cần có. Đừng tự quyết định thay tôi những điểm chính; chỗ nào chưa rõ thì hỏi lại. Khi đủ thông tin, hãy soạn bản nháp PRD, chỉ ra những điểm còn mơ hồ và tiếp tục hỏi cho đến khi tôi xác nhận đồng ý. Chưa viết code trước khi tôi duyệt PRD.',
+    copyPromptTitle: 'Tạo PRD cùng coding agent',
+    showTitle: false,
+    showPanel: false
   },
   'module-2-prd-agent-workflow': {
     lessonId: 'module-2', checkpointId: 'm2-portfolio-brief', step: 1, totalSteps: 5,
