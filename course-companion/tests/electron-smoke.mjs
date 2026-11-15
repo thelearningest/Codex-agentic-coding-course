@@ -1441,6 +1441,11 @@ try {
     await firstWindows.learningPage.setViewportSize({ width: 1180, height: 780 })
   }
   await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
+  await firstWindows.learningPage.locator('main[data-scene-id="module-2-implementation-plan-sample-prompt"]').waitFor()
+  assert.equal(await firstWindows.learningPage.locator('.pixel-copy-prompt').count(), 1)
+  assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'SAO CHÉP PROMPT', exact: true }).count(), 1)
+  await capture(firstWindows.learningPage, 'module-2-implementation-plan-sample-prompt.png')
+  await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await firstWindows.learningPage.getByRole('heading', { name: 'Chọn nơi lưu portfolio', exact: true }).waitFor()
   assert.equal(await firstWindows.learningPage.getByText(approvedPracticeTransitionCopy, { exact: true }).count(), 0)
   await capture(firstWindows.learningPage, 'module-2-portfolio-workspace-boundary.png')

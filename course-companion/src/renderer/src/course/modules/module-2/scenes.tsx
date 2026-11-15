@@ -130,7 +130,20 @@ const instructionalScenes = {
     request: 'Implementation plan ghi chi tiết các bước coding agent cần thực hiện để hiện thực hoá PRD.',
     evidence: [],
     dialogue: 'Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.\n\nImplementation plan về căn bản sẽ viết ra những bước chi tiết để coding agent có thể hiện thực hoá PRD. Bạn có thể hiểu nếu PRD là bản kế hoạch tổng quan, thì implementation plan sẽ ghi chi tiết từng bước để thực hiện kế hoạch đó.\n\nThông thường một implementation plan sẽ được chia ra thành nhiều giai đoạn. Mỗi giai đoạn sẽ có tiêu chí hoàn thành rõ ràng.\n\nThường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo rồi duyệt là được.',
+    choices: [{ label: 'Tiếp tục tới Practice', next: 'module-2-implementation-plan-sample-prompt', primary: true }],
+    showPanel: false
+  },
+  'module-2-implementation-plan-sample-prompt': {
+    lessonId: 'module-2', checkpointId: 'm2-portfolio-brief', step: 1, totalSteps: 5,
+    lessonLabel: 'MODULE 2 · IMPLEMENTATION PLAN', mission: 'Từ PRD đến implementation plan',
+    objective: 'Implementation plan là gì?', panelLabel: 'PROMPT MẪU',
+    panelStatus: 'SAO CHÉP · DÁN VÀO CODEX', tone: 'neutral',
+    request: '', evidence: [],
+    dialogue: 'Một prompt mẫu bạn có thể gửi cho coding agent để tạo implementation plan là:',
     choices: [{ label: 'Tiếp tục tới Practice', next: 'module-2-portfolio-folder', primary: true }],
+    copyPrompt: 'Dựa trên PRD đã duyệt trong [đường dẫn tới file PRD của bạn], hãy tạo implementation plan cho dự án này. Chỉ dùng PRD làm nguồn phạm vi; đừng tự thêm tính năng ngoài PRD. Chia plan thành nhiều giai đoạn nhỏ, mỗi giai đoạn ghi rõ việc cần làm, tiêu chí hoàn thành và cách kiểm tra. Chỗ nào PRD chưa rõ thì hỏi tôi thay vì tự đoán. Chưa viết code trước khi tôi duyệt implementation plan.',
+    copyPromptTitle: 'Tạo implementation plan cùng coding agent',
+    showTitle: false,
     showPanel: false
   },
   'module-2-portfolio-folder': {
