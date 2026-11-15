@@ -49,6 +49,17 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Reviewing completed modules from Home Base, 15 November 2026
+
+Foundation navigation: `implemented`. Completed earlier modules open at their
+first outline page. The learner can browse the module and return to the saved
+lesson through the outline. Question previews show the prompt and choices,
+and the portfolio-folder preview displays the lesson text.
+
+Verification: `passed` for typecheck and lint under the renderer UI gate.
+Desktop verification is pending. The next check is to open Module 1 from a
+Module 2 roadmap, browse its lessons, then resume at the saved Module 2 page.
+
 ### Main integration verification — 15 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
