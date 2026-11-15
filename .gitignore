@@ -43,3 +43,6 @@ course-companion/*.tsbuildinfo
 **/portfolio-workspaces*.json*
 **/companion-state*.json*
 **/activity-log.jsonl*
+
+# Personal launch checklist.
+/todo.html
