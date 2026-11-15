@@ -31,3 +31,15 @@ course-companion/*.tsbuildinfo
 
 # Optional retained artifacts from developer-only Practice rehearsals.
 .practice-test-artifacts/
+
+# Personal Course Companion profiles and temporary learner state.
+**/learner-state.json*
+**/learner-state.backup.json*
+**/practice-runs*.json*
+**/practice-guide-state*.json*
+**/teacher-chat*.jsonl*
+**/teacher-memory*.json*
+**/executor-activity*.json*
+**/portfolio-workspaces*.json*
+**/companion-state*.json*
+**/activity-log.jsonl*

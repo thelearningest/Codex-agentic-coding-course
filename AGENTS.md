@@ -30,6 +30,23 @@
 - Run the required full test suite, build, Electron verification, planning-ledger synchronization, and any eligible checkpoint commit once after the coherent batch is complete. This does not apply to an edit that qualifies for the trivial-edit fast path.
 - Verify a change separately when it is unrelated, high-risk, must be delivered independently, or focused evidence shows that earlier full verification is necessary.
 - Never use batching to skip required final verification or postpone a failing focused check.
+
+## Keep published course source clean
+
+- Never commit personal learner progress, Teacher history or memory, Practice runs,
+  local app profiles, completed learner submissions, QA waivers or temporary test
+  workspaces. Keep canonical blank templates and deliberately named test fixtures.
+- Run desktop rehearsals and documentation captures with a disposable
+  `COURSE_COMPANION_USER_DATA_DIR`; do not reset the normal learner profile to make
+  a test or screenshot start at the introduction.
+- Before each commit or push, run `node scripts/check-clean-course-source.mjs`
+  after staging the intended files. It checks the Git index, including newly
+  staged files, for private state and test residue.
+- A new checkout on the same computer and OS account can resume the existing
+  Course Companion profile stored in the operating system's application-data
+  directory. That is separate from Git. Do not delete local progress or alter
+  normal resume behavior unless the user explicitly requests a reset.
+
 ## Implementation-plan synchronization
 
 - Treat `docs/planning/portfolio-course-implementation-plan.md` as part of the definition of done for work that implements, verifies, changes, or blocks a numbered checkpoint or acceptance gate.

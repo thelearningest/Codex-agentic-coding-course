@@ -1,4 +1,11 @@
-.course/learner-state.json
+.course/*
+!.course/learner-state.example.json
+# Learner-authored outputs stay local; the shipped templates remain tracked.
+artifacts/quest-card.md
+artifacts/codex-setup-checklist.md
+artifacts/module-1-evidence.md
+artifacts/PRD.md
+artifacts/implementation-plan.md
 contentpilot/node_modules/
 contentpilot/.next/
 contentpilot/out/

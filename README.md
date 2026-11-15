@@ -17,6 +17,8 @@ tiếp theo.
 Portfolio là nơi để bắt đầu. Điều bạn mang theo sau khóa học còn là một cách
 làm việc có thể áp dụng khi muốn xây một công cụ hay ứng dụng nhỏ khác.
 
+[Xem cách thiết lập và bắt đầu học](#thiết-lập-và-bắt-đầu-học)
+
 > [!NOTE]
 > **Khóa học đang trong giai đoạn hoàn thiện.** Hiện có phần giới thiệu và bốn
 > module, cùng trình khởi động cho Windows và macOS. Luồng học trên Windows đã
@@ -37,12 +39,42 @@ flowchart LR
 Mỗi module có phần giải thích, ví dụ và bài thực hành để bạn thử ngay điều
 vừa học.
 
-| Chặng học | Bạn sẽ làm gì? |
-| --- | --- |
-| **Module 1 — Làm quen với Codex** | Hiểu cách giao việc, chọn model, nhận biết quyền hành động, dùng `AGENTS.md` và Skills; kiểm tra thiết lập Codex trước khi thực hành tiếp. |
-| **Module 2 — Lên kế hoạch portfolio** | Chọn người xem, sắp xếp tư liệu, tìm hướng thiết kế và cùng Codex viết tài liệu yêu cầu sản phẩm (PRD) cùng kế hoạch triển khai. Bạn duyệt kế hoạch trước khi xây. |
-| **Module 3 — Xây và kiểm chứng** | Tiếp tục từ kế hoạch đã duyệt, xây từng phần, mở website trên máy để xem, đề xuất cải thiện và luyện cách tìm, sửa rồi kiểm tra lại một lỗi. Bạn cũng làm quen với Git và GitHub để lưu lại các phiên bản. |
-| **Module 4 — Đưa portfolio lên mạng** | Cùng Codex phát hành lên Vercel, kiểm tra website ở kích thước máy tính và điện thoại, rồi xác nhận đường link sẵn sàng để chia sẻ. |
+Các GIF bên dưới được ghi trực tiếp từ Course Companion trong một hồ sơ
+minh họa riêng. Phản hồi hỏi đáp và kết quả review được mô phỏng để giới
+thiệu cách dùng, không phải bài nộp của người học thật.
+
+### Module 1 — Làm quen với Codex
+
+Bạn sẽ hiểu cách giao việc, chọn model, nhận biết quyền hành động, dùng
+`AGENTS.md` và Skills; kiểm tra thiết lập Codex trước khi thực hành tiếp.
+Khi Codex đề xuất một thao tác, bạn biết mình cần xem gì trước khi đồng ý.
+
+![Các trang bài học Module 1 giới thiệu Codex, quyền hành động và cách chọn model](docs/assets/readme/module-1-codex.gif)
+
+### Module 2 — Lên kế hoạch portfolio
+
+Bạn chọn người xem, sắp xếp tư liệu, tìm hướng thiết kế và cùng Codex viết
+tài liệu yêu cầu sản phẩm (PRD) cùng kế hoạch triển khai. Bạn duyệt kế hoạch
+trước khi xây, để cả hai cùng hiểu portfolio cần làm được những gì.
+
+![Các trang Module 2 giải thích vì sao cần planning, PRD và cách duyệt yêu cầu cùng coding agent](docs/assets/readme/module-2-planning.gif)
+
+### Module 3 — Xây và kiểm chứng
+
+Từ kế hoạch đã duyệt, bạn xây từng phần, mở website trên máy để xem và đề
+xuất cải thiện. Khi gặp lỗi, bạn luyện cách mô tả điều đang xảy ra, cùng
+Codex tìm nguyên nhân rồi kiểm tra lại. Bạn cũng làm quen với Git và GitHub
+để lưu lại các phiên bản.
+
+![Bài học Module 3 chuyển từ cách debug sang ví dụ lỗi hiển thị và cách trao đổi với Codex](docs/assets/readme/module-3-debugging.gif)
+
+### Module 4 — Đưa portfolio lên mạng
+
+Bạn cùng Codex phát hành lên Vercel, kiểm tra website ở kích thước máy tính
+và điện thoại, rồi xác nhận đường link sẵn sàng để chia sẻ. Phần giải thích
+về hosting và video hướng dẫn giúp bạn hình dung bước này trước khi tự làm.
+
+![Module 4 giới thiệu hosting và video hướng dẫn đưa portfolio lên Vercel](docs/assets/readme/module-4-publishing.gif)
 
 Riêng Module 2, bạn sẽ hoàn thiện một gói gồm **năm tài liệu**: bản mô tả
 portfolio, danh sách tư liệu và bằng chứng, định hướng tham chiếu, PRD và kế
@@ -61,10 +93,14 @@ tiếp với Codex; bảng hướng dẫn, checklist và nút **Cần gợi ý?*
 bước tiếp theo khi cần. Hướng dẫn Practice ở Module 1 có thể tạm dừng, tiếp
 tục hoặc xem lại.
 
+![Hỏi Teacher một câu về việc duyệt kế hoạch và theo dõi phản hồi mô phỏng trong cửa sổ đồng hành](docs/assets/readme/teacher-companion.gif)
+
 Khi sẵn sàng, bạn nộp kết quả để Teacher xem xét bằng chứng. Nếu còn thiếu,
 bạn sẽ nhận phản hồi về phần cần bổ sung và có thể sửa rồi nộp lại. Nếu đạt,
 bạn quay về bài học để tiếp tục. Bạn vẫn là người duyệt kế hoạch, chấp nhận
 website và quyết định nội dung nào được đưa lên mạng.
+
+![Màn hình Practice hiển thị hướng dẫn, checklist và kết quả review mô phỏng của bài thực hành Module 1](docs/assets/readme/practice-review.gif)
 
 Bạn có thể dừng giữa chừng và quay lại sau. Course Companion lưu tiến độ trên
 máy để bạn tiếp tục từ bước đang học.
@@ -176,6 +212,8 @@ hướng dẫn bạn chuyển sang Codex để thực hành.
   nhận xét; bạn làm việc với Codex để thay đổi dự án.
 - Cấu hình không chứa bí mật và tiến độ học được lưu trên máy của bạn.
 - Khi mở lại, ứng dụng kiểm tra bản lưu và đưa bạn về đúng bước đang học.
+- Một bản tải khóa học mới trên cùng máy và tài khoản hệ điều hành vẫn dùng
+  tiến độ đã lưu trước đó. Tải lại repository không đặt lại hồ sơ học tập.
 
 ## Khi cần trợ giúp
 
@@ -213,6 +251,8 @@ need to read them to begin.
   maps current behavior, planned behavior, and historical references.
 - [Interactive team workload map](docs/planning/team-workload-map.html) records
   the current collaboration boundaries.
+- [README media capture notes](docs/assets/readme/README.md) document the original
+  GIFs, static screenshots, demo boundaries and copywriting reference.
 
 From the repository root, `$start-course-lesson` and `$course-teacher` delegate
 to the skills inside `pilot-workspace/`. They do not fall back to historical
