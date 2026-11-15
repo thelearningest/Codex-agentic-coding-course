@@ -143,6 +143,9 @@ Only question counts and the pass mark changed in the lesson, Teacher script,
 start prompt, delivery contract and mastery rubric; Practice is unchanged.
 With `m1-q4` gone the review has no short-answer question, while the rubric
 still mentions explaining a written answer; that wording awaits owner review.
+Commit `31c524a` left the smoke test expecting six questions; the follow-up
+commit corrects it to four. Typecheck, lint, 798 unit tests, build and
+`npm run test:electron` then passed. Final app review remains `pending`.
 
 ### Continuation banner and Module 2 quiz-blocker feedback — 29 October 2026
 

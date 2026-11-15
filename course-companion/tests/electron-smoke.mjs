@@ -725,7 +725,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   const assessmentQuestions = page.locator('.pixel-assessment-question')
   await assessmentQuestions.first().waitFor()
-  assert.equal(await assessmentQuestions.count(), 6)
+  assert.equal(await assessmentQuestions.count(), 4)
   const moduleOneAssessment = page.getByRole('region', { name: 'Câu hỏi Module 1', exact: true })
   assert.equal(await moduleOneAssessment.locator('.pixel-speaker').count(), 0)
   assert.equal(await moduleOneAssessment.getByText('Bạn có thể xem toàn bộ câu hỏi trước khi nộp.', { exact: true }).count(), 0)
