@@ -1,3 +1,6 @@
+import { PracticeVideoRepository } from './practice-video-repository'
+import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
+import { practiceVideoPracticeId, type PracticeVideoUpdate } from '../../shared/practice-video'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -128,6 +131,7 @@ const practiceDefinitionRepository = new PracticeDefinitionRepository(
   pilotPracticeDefinitionsDirectory()
 )
 let companionAlwaysOnTop = true
+const practiceVideoRepository = new PracticeVideoRepository(app.getPath('userData'))
 const progressRepository = new ProgressRepository(app.getPath('userData'))
 const courseRoot = process.env.COURSE_COMPANION_WORKSPACE_ROOT || resolve(app.getAppPath(), '..')
 const practiceGuideDefinitionRepository = new PracticeGuideDefinitionRepository(practiceGuidesDirectory())
@@ -150,6 +154,14 @@ const practiceWorkspaceResolver = new PracticeWorkspaceResolver(courseRoot, asyn
     courseRunId: progress.progress.courseRunId
   })
   return workspace.status === 'ready' ? workspace.selectedPath ?? null : null
+}, async (expectedRoot) => {
+  const loaded = await progressRepository.load()
+  if (loaded.status !== 'returning' && loaded.status !== 'recovered') throw new Error('Course progress unavailable')
+  const workspace = await portfolioWorkspaceRepository.load({ courseRunId: loaded.progress.courseRunId })
+  if (workspace.status !== 'ready' || workspace.selectedPath !== expectedRoot) throw new Error('Portfolio workspace unavailable')
+  const ready = await ensurePortfolioCodexProject({ courseRunId: workspace.courseRunId, expectedPath: workspace.selectedPath })
+  if (!ready.codexProject || ready.codexProjectError) throw new Error('Portfolio Codex project unavailable')
+  return ready.codexProject.id
 })
 const useTestCodexGateway = !app.isPackaged && process.env.COURSE_COMPANION_FAKE_CODEX === '1'
 const presentTestTeacherAsLive = useTestCodexGateway && process.env.COURSE_COMPANION_FAKE_TEACHER_LIVE_MODE === '1'
@@ -163,7 +175,9 @@ const practiceSnapshotLifecycle = new AppServerLifecycle(
   () => practiceSnapshotClient.start(),
   () => practiceSnapshotClient.stop()
 )
-const executorBootstrapClient = new CodexAppServerClient()
+const executorBootstrapClient = new CodexAppServerClient({ experimentalApi: true })
+const portfolioProjectClient = new CodexAppServerClient({ experimentalApi: true })
+let portfolioProjectClientStarted = false
 let executorBootstrapStart: Promise<void> | null = null
 
 async function ensureAppServer(): Promise<void> {
@@ -220,6 +234,32 @@ const executorBootstrapGateway = useTestCodexGateway
       },
       close: closeExecutorBootstrap
     }
+const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGateway
+  ? { request: (method, params) => appServerGateway.request(method, params) }
+  : {
+      async request(method, params) {
+        if (!portfolioProjectClientStarted) {
+          await portfolioProjectClient.start()
+          portfolioProjectClientStarted = true
+        }
+        return portfolioProjectClient.request(method, params)
+      },
+      async close() {
+        portfolioProjectClientStarted = false
+        await portfolioProjectClient.stop()
+      }
+    })
+
+async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
+  const workspace = await portfolioWorkspaceRepository.load({ courseRunId: request.courseRunId })
+  if (workspace.status !== 'ready' || workspace.selectedPath !== request.expectedPath) return workspace
+  try {
+    const project = await portfolioCodexProjects.ensure(request.expectedPath, workspace.codexProject?.id)
+    return await portfolioWorkspaceRepository.saveCodexProject(request, project)
+  } catch {
+    return { ...workspace, codexProjectError: 'Chưa thêm được portfolio vào Codex. Hãy mở hoặc cập nhật Codex rồi thử lại.' }
+  }
+}
 const openExecutorChat = useTestCodexGateway
   ? async (): Promise<void> => undefined
   : async (url: string): Promise<void> => {
@@ -479,6 +519,14 @@ function openNewWindowsInDefaultBrowser(targetWindow: BrowserWindow): void {
   })
 }
 
+function notifyVideoWhenWindowHidden(window: BrowserWindow): void {
+  const notify = () => {
+    if (!window.webContents.isDestroyed()) window.webContents.send('course:practice-video-hidden')
+  }
+  window.on('hide', notify)
+  window.on('minimize', notify)
+}
+
 function createMainWindow(): BrowserWindow {
   const window = new BrowserWindow({
     width: 1180,
@@ -496,6 +544,7 @@ function createMainWindow(): BrowserWindow {
     }
   })
 
+  notifyVideoWhenWindowHidden(window)
   openNewWindowsInDefaultBrowser(window)
   window.once('ready-to-show', () => window.show())
 
@@ -546,6 +595,7 @@ function createCompanionWindow(mode: CompanionMode): BrowserWindow {
     }
   })
 
+  notifyVideoWhenWindowHidden(window)
   applyCompanionTopmost(window)
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 
@@ -837,10 +887,21 @@ function registerIpcHandlers(): void {
       portfolioWorkspaceFailure(request, error))
   })
 
-  ipcMain.handle('course:confirm-portfolio-planning', (_event, request: PortfolioWorkspaceRequest) => {
+  ipcMain.handle('course:confirm-portfolio-planning', async (_event, request: PortfolioWorkspaceRequest) => {
     if (!isPortfolioWorkspaceRequest(request)) throw new Error('Invalid portfolio workspace request')
-    return portfolioWorkspaceRepository.confirmPlanning(request).catch((error) =>
+    const workspace = await portfolioWorkspaceRepository.confirmPlanning(request).catch((error) =>
       portfolioWorkspaceFailure(request, error))
+    return workspace.status === 'ready' && workspace.selectedPath
+      ? ensurePortfolioCodexProject({ ...request, expectedPath: workspace.selectedPath }) : workspace
+  })
+
+  ipcMain.handle('course:ensure-portfolio-codex-project', (_event, request: unknown) => {
+    if (!isRecord(request) || Object.keys(request).length !== 2
+      || !isPortfolioWorkspaceRequest({ courseRunId: request.courseRunId })
+      || typeof request.expectedPath !== 'string' || !request.expectedPath) {
+      throw new Error('Invalid portfolio Codex project request')
+    }
+    return ensurePortfolioCodexProject({ courseRunId: String(request.courseRunId), expectedPath: request.expectedPath })
   })
 
   ipcMain.handle('course:load-practice-workspace', (_event, identity) => (
@@ -856,9 +917,21 @@ function registerIpcHandlers(): void {
     Boolean((await practiceRunRepository.load()).activeRun)
   ))
 
+  const currentVideoCourseRun = async () => {
+    const loaded = await progressRepository.load()
+    if (loaded.status !== 'returning' && loaded.status !== 'recovered') throw new Error('Course progress unavailable')
+    return loaded.progress.courseRunId
+  }
+  const requireVideoReceipt = async () => {
+    if (!(await practiceVideoRepository.load(await currentVideoCourseRun())).confirmed) throw new Error('Practice video confirmation required')
+  }
+  ipcMain.handle('course:load-practice-video', async () => practiceVideoRepository.load(await currentVideoCourseRun()))
+  ipcMain.handle('course:update-practice-video', async (_event, request: PracticeVideoUpdate) => practiceVideoRepository.update(await currentVideoCourseRun(), request))
+
   ipcMain.handle('course:start-practice', async (_event, request: PracticeStartRequest) => {
     const previousRun = (await practiceRunRepository.load()).activeRun
     if (!isPracticeStartRequest(request)) throw new Error('Invalid Practice start request')
+    if (request.practiceId === practiceVideoPracticeId) await requireVideoReceipt()
     const view = await practiceCoordinator.startNew(request)
     const activeRun = (await practiceRunRepository.load()).activeRun
     if (activeRun) await teacherService.activatePracticeRun(activeRun.runId)
@@ -870,6 +943,8 @@ function registerIpcHandlers(): void {
   })
 
   ipcMain.handle('course:resume-practice', async (_event, identity) => {
+    const active = (await practiceRunRepository.load()).activeRun
+    if ((isRecord(identity) ? identity.practiceId : active?.practiceId) === practiceVideoPracticeId) await requireVideoReceipt()
     const view = await practiceCoordinator.resume(isRecord(identity) ? {
       practiceId: String(identity.practiceId),
       practiceVersion: String(identity.practiceVersion)
@@ -890,7 +965,9 @@ function registerIpcHandlers(): void {
   })
 
   ipcMain.handle('course:retry-practice-switch', async () => {
-    const previousRun = (await practiceRunRepository.load()).activeRun
+    const previous = await practiceRunRepository.load()
+    const previousRun = previous.activeRun
+    if (previous.pendingTransition?.practiceId === practiceVideoPracticeId) await requireVideoReceipt()
     const view = await practiceCoordinator.retry()
     const activeRun = (await practiceRunRepository.load()).activeRun
     if (activeRun) await teacherService.activatePracticeRun(activeRun.runId)
@@ -1091,6 +1168,7 @@ app.on('before-quit', () => {
   isQuitting = true
   void appServerClient.stop()
   void practiceSnapshotClient.stop()
+  void portfolioProjectClient.stop()
   void closeExecutorBootstrap()
   removeTeacherConnection()
   void teacherService.dispose()

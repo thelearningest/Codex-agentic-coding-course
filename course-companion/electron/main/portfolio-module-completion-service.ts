@@ -141,7 +141,8 @@ export class PortfolioModuleCompletionService {
         artifacts, approval, submission: { runId: active.runId, generation: active.generation,
           sourceDigest: approval.sourceDigest, reviewDigest: active.reviewResult.sourceDigest, reviewedAt: active.reviewResult.reviewedAt },
         task: { runId: active.runId, threadId: active.binding.threadId, workspaceRoot: active.binding.workspaceRoot,
-          name: active.binding.name, createdAt: active.binding.createdAt },
+          name: active.binding.name, createdAt: active.binding.createdAt,
+          ...(active.binding.projectId ? { projectId: active.binding.projectId } : {}) },
         mastery: { questionIds: [...masteryQuestionIds], answerDigest: digest(JSON.stringify(masteryAnswers)) },
         summary, moduleThreeInput: { workspacePath: active.binding.workspaceRoot, artifactReferences: artifacts }
       }

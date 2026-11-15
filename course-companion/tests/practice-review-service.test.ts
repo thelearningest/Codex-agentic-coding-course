@@ -181,7 +181,7 @@ async function harness(
 }
 
 describe('Module 1 Practice review service', () => {
-  it('passes only all five fresh values and persists the approved task configuration', async () => {
+  it('passes only all four required fresh values and persists the observed task configuration', async () => {
     const { progress, runs, service, releaseCount } = await harness()
 
     const response = await service.review()
@@ -209,7 +209,6 @@ describe('Module 1 Practice review service', () => {
   })
 
   it.each([
-    ['Model', { model: { protocolValue: 'gpt-5.6-terra', label: '5.6 Terra' } }],
     ['Effort', { reasoningEffort: { protocolValue: 'medium', label: 'Medium' } }],
     ['Speed', { serviceTier: { protocolValue: 'fast', label: 'Fast' } }],
     ['Approval', { approvalPolicy: { protocolValue: 'never', label: 'Never' } }],
@@ -227,6 +226,15 @@ describe('Module 1 Practice review service', () => {
       expect.objectContaining({ explanation: expect.stringContaining(label) })
     ]))
     await expect(service.passedCompletion()).rejects.toThrow()
+  })
+
+  it.each(['gpt-5.6-terra', 'gpt-6-astra', 'another-model', null])('accepts model %s without weakening the other checks', async (model) => {
+    const { service } = await harness(configuration({ model: { protocolValue: model, label: model } }))
+    const response = await service.review()
+    expect(response.workspace.review?.status).toBe('passed')
+    expect(response.workspace.review?.result?.criteria).toHaveLength(4)
+    const receipt = await service.passedCompletion()
+    expect(receipt.approvedConfiguration?.model).toBe(model ?? undefined)
   })
 
   it.each([
@@ -275,7 +283,7 @@ describe('Module 1 Practice review service', () => {
 
     setConfiguration(configuration({
       eventTimestampMs: 2,
-      model: { protocolValue: 'gpt-5.6-terra', label: '5.6 Terra' }
+      reasoningEffort: { protocolValue: 'medium', label: 'Medium' }
     }))
     await expect(service.returnPassedPractice()).rejects.toThrow('chưa được Triết xác nhận')
 

@@ -30,6 +30,10 @@ function normalize(payload: unknown, eventTimestampMs = 10) {
 }
 
 describe('Codex configuration normalizer', () => {
+  it.each(['gpt-6-astra', 'unknown-model', null])('does not require a recognized model: %s', (model) => {
+    expect(normalize(startPayload({ model })).freshness).toBe('fresh')
+  })
+
   it('normalizes all five passing values and treats null service tier as Standard', () => {
     const result = normalize(startPayload())
 

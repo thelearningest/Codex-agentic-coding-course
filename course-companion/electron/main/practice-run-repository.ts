@@ -39,6 +39,7 @@ export type ExecutorChatBinding = {
   workspaceRoot: string
   createdAt: string
   configuration?: import('../../shared/contracts').CodexTaskConfigurationSnapshot
+  projectId?: string
 }
 
 export type PracticeRunRecord = {
@@ -213,6 +214,7 @@ function isBinding(value: unknown): value is ExecutorChatBinding {
     typeof value.workspaceRoot === 'string' &&
     value.workspaceRoot.length > 0 &&
     isIso(value.createdAt) &&
+    (value.projectId === undefined || (typeof value.projectId === 'string' && ID.test(value.projectId))) &&
     (value.configuration === undefined || (isCodexTaskConfigurationSnapshot(value.configuration)
       && value.configuration.runId === value.runId
       && value.configuration.threadId === value.threadId))

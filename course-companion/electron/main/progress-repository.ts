@@ -444,6 +444,7 @@ function isPortfolioPackageHandoff(value: Record<string, unknown>): boolean {
   if (typeof workspace.canonicalPath !== 'string' || !isAbsolute(workspace.canonicalPath)
     || !DIGEST.test(String(workspace.identityDigest)) || task.workspaceRoot !== workspace.canonicalPath
     || !SAFE_ID.test(String(task.threadId)) || !SAFE_ID.test(String(task.runId))
+    || (task.projectId !== undefined && (typeof task.projectId !== 'string' || !SAFE_ID.test(task.projectId)))
     || typeof task.name !== 'string' || !task.name.trim() || task.name.length > 500 || !isIsoDate(task.createdAt)) return false
   if (!Array.isArray(artifacts) || artifacts.length !== portfolioPackageArtifactPaths.length
     || !artifacts.every((artifact) => isRecord(artifact) && hasExactKeys(artifact, ['path', 'digest'])

@@ -35,13 +35,15 @@ let workspace
 let pending
 let fixtureId = 0
 let listener = () => {}
-let holdGuide = false
-let releaseGuide
+let holdStartup = false
+let releaseStartup
 window.courseCompanion = {
-  loadCompanionState: async () => ({ mode: 'expanded', conversation: { messages: [], recovered: false }, teacher: { connection: 'simulated', memory: 'ready' } }),
+  loadCompanionState: async () => {
+    if (holdStartup) await new Promise(resolve => { releaseStartup = resolve })
+    return { mode: 'expanded', conversation: { messages: [], recovered: false }, teacher: { connection: 'simulated', memory: 'ready' } }
+  },
   loadPracticeWorkspace: async () => structuredClone(workspace),
   getRuntimeInfo: async () => ({ testFixturesEnabled: false }),
-  loadPracticeGuide: async () => holdGuide ? new Promise(resolve => { releaseGuide = resolve }) : null,
   loadPracticeState: async () => ({ missionId: 'feedback-fixture', status: 'idle' }),
   loadProgress: async () => ({ status: 'returning', progress: { courseRunId: 'fixture-course', currentLessonId: 'module-3', checkpointId: 'm3-build', sceneId: 'fixture' } }),
   onPracticeWorkspaceChanged: callback => { listener = callback; return () => { listener = () => {} } },
@@ -56,8 +58,8 @@ window.courseCompanion = {
 window.feedbackFixture = {
   mount(embedded, restoreSavedReview = false) {
     const savedReview = restoreSavedReview ? structuredClone(workspace.review) : null
-    holdGuide = restoreSavedReview
-    releaseGuide = null
+    holdStartup = restoreSavedReview
+    releaseStartup = null
     fixtureId++
     pending = null
     workspace = {
@@ -77,8 +79,8 @@ window.feedbackFixture = {
       <TeacherWorkspace key={fixtureId} embedded={embedded} onClose={() => {}} />
     </main>)
   },
-  isGuidePending() { return Boolean(releaseGuide) },
-  releaseGuide() { holdGuide = false; releaseGuide(null); releaseGuide = null },
+  isStartupPending() { return Boolean(releaseStartup) },
+  releaseStartup() { holdStartup = false; releaseStartup(); releaseStartup = null },
   settle(verdict) {
     if (!pending) throw new Error('No pending fixture review')
     if (verdict === 'error') {
@@ -97,7 +99,7 @@ window.feedbackFixture = {
 }
 ` },
   outfile: join(root, 'fixture.js'), bundle: true, platform: 'browser', format: 'iife', jsx: 'automatic',
-  loader: { '.png': 'dataurl', '.woff': 'dataurl', '.woff2': 'dataurl' }, logLevel: 'silent'
+  loader: { '.png': 'dataurl', '.jpg': 'dataurl', '.mp4': 'file', '.vtt': 'file', '.woff': 'dataurl', '.woff2': 'dataurl' }, logLevel: 'silent'
 })
 
 let app
@@ -140,6 +142,11 @@ try {
       if (verdict === 'error') assert.match(feedback.text, /Simulated review failure/)
       else if (verdict === 'needs-work') assert.match(feedback.text, /Simulated review result/)
       else assert.match(feedback.text, /Làm tốt lắm/)
+      await app.evaluate(({ BrowserWindow }) => {
+        const window = BrowserWindow.getAllWindows()[0]
+        window.restore(); window.show(); window.focus()
+      })
+      await page.waitForFunction(() => !globalThis.document.hidden)
       await page.screenshot({ path: join(screenshots, `${embedded ? 'full' : 'compact'}-${verdict}.png`), animations: 'disabled' })
       // A background refresh of the same result must preserve the reader's place.
       if (verdict !== 'error') {
@@ -154,9 +161,9 @@ try {
         // The real IPC loader can publish workspace before the rest of startup
         // resolves. Do not consume the focus request while only a loader exists.
         await page.evaluate(embedded => globalThis.feedbackFixture.mount(embedded, true), embedded)
-        await page.waitForFunction(() => globalThis.feedbackFixture.isGuidePending())
+        await page.waitForFunction(() => globalThis.feedbackFixture.isStartupPending())
         await page.getByText('Đang tải không gian của Triết…', { exact: true }).waitFor()
-        await page.evaluate(() => globalThis.feedbackFixture.releaseGuide())
+        await page.evaluate(() => globalThis.feedbackFixture.releaseStartup())
         await page.waitForFunction(() => globalThis.document.activeElement?.matches('.practice-review-result'))
       }
       await page.emulateMedia({ reducedMotion: 'no-preference' })

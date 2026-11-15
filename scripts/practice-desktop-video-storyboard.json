@@ -1,0 +1,107 @@
+{
+  "videoId": "module-1-practice",
+  "version": "1.2.0",
+  "language": "vi-VN",
+  "voice": "vi-VN-NamMinhNeural",
+  "fps": 30,
+  "playbackOrder": [
+    "01-handoff",
+    "02-desktop-orientation",
+    "04-task-and-prompt",
+    "05-progress-and-hint",
+    "06-effort",
+    "07-speed",
+    "08-approval-and-access",
+    "09-first-review",
+    "10-repair-and-recheck",
+    "03-window-controls",
+    "11-replay-and-resume",
+    "12-save-and-return"
+  ],
+  "scenes": [
+    {
+      "id": "01-handoff",
+      "title": "Chuyển từ bài học sang Practice",
+      "capture": "01-handoff.mp4",
+      "text": "Từ bài học, bấm Chuyển sang Codex để thực hành. Xem hết video, xác nhận đã hiểu, rồi bấm Bắt đầu thực hành. Đoạn chờ trong ví dụ được cắt ngắn.",
+      "record": "Begin on the actual preceding lesson scene. Click its existing handoff control and show the entire introduction. Show the watched/confirmed controls in the disposable recording course; do not play the whole tutorial recursively. Explain the omitted wait in the narration and captions, without a top banner. End with the start click and its resulting window transition in the same take."
+    },
+    {
+      "id": "02-desktop-orientation",
+      "title": "Codex và cửa sổ Triết",
+      "capture": "02-desktop-orientation.mp4",
+      "text": "Đây là task Codex và cửa sổ Triết của bài. Task là cuộc trò chuyện dành riêng cho Practice. Bạn thao tác trong Codex; Triết hướng dẫn và kiểm tra tiến độ.",
+      "record": "Show full native Codex window chrome, actual linked Practice chat and floating Teacher together for at least five seconds before any zoom. Identify the real task title. Open the Teacher bubble if needed. Do not use a browser facsimile, fixture task link or composited Codex screenshot."
+    },
+    {
+      "id": "03-window-controls",
+      "title": "Sắp xếp cửa sổ để dễ thao tác",
+      "capture": "03-window-controls.mp4",
+      "text": "Triết che chỗ cần bấm thì kéo cửa sổ sang bên. Thu nhỏ về bong bóng rồi bấm để mở lại. Nút toàn màn hình giúp đọc rõ hơn; đóng để quay lại. Bài đang làm vẫn được giữ.",
+      "record": "Demonstrate native drag, minimize to bubble, reopen, expand to full Teacher and close back to the compact Teacher. Keep Codex recognizable in the wide shots. Use actual accessible labels for controls, never invent icons or menu paths."
+    },
+    {
+      "id": "04-task-and-prompt",
+      "title": "Làm trong đúng task",
+      "capture": "04-task-and-prompt.mp4",
+      "text": "Chat Module 1 bắt đầu trống là bình thường; hướng dẫn nằm trong Triết. Nếu lạc sang chat khác, bấm Mở lại task Codex, rồi mở lại bong bóng Triết. Giữ nguyên task này khi sửa bài.",
+      "record": "Use a second empty demo chat only if needed to visibly demonstrate returning to the bound chat. Expand actual start prompt and copy it if present. Do not send a duplicate kickoff or imply prompt copying is mandatory. Show composer and linked chat name in context."
+    },
+    {
+      "id": "05-progress-and-hint",
+      "title": "Đọc bước tiếp theo và tìm trợ giúp",
+      "capture": "05-progress-and-hint.mp4",
+      "text": "Đọc bước Tiếp theo. Mở Xem tất cả các bước và chọn từng mục để xem chi tiết. Chưa biết làm gì thì bấm Cần gợi ý, đọc hướng dẫn rồi tự thực hiện trong Codex.",
+      "record": "Open all-steps disclosure, expand an actual step, collapse it, request a real hint on the dedicated demo Practice and read its result. Do not depict simulated evidence as live. Hold the next-action region and progress count clearly."
+    },
+    {
+      "id": "06-effort",
+      "title": "Cài đặt 1 · Effort High",
+      "capture": "06-effort.mp4",
+      "text": "Mở vùng tên Model và mức suy luận cạnh ô nhắn. Model do bạn tự chọn. Kéo thanh Effort đến High. Trong ví dụ, Minh tạm để Medium để xem cách Triết chỉ ra mục cần sửa.",
+      "record": "Observe the installed native UI first and open its actual controls. Show the current Model and Effort menu with the full task visible before/after zoom. Deliberately leave one non-High Effort in this demo task for the later repair. Do not change any personal chat or global account setting."
+    },
+    {
+      "id": "07-speed",
+      "title": "Cài đặt 2 · Speed Standard",
+      "capture": "07-speed.mp4",
+      "text": "Với Speed, tắt biểu tượng tia sét để dùng Standard. Nếu đã đúng, giữ nguyên; bạn không cần bật Fast để làm giống video.",
+      "record": "Open actual Speed menu and select Standard in the same dedicated task. Show selected state and return to a wide Codex + Teacher view."
+    },
+    {
+      "id": "08-approval-and-access",
+      "title": "Cài đặt 3 và 4 · Approval và Full access",
+      "capture": "08-approval-and-access.mp4",
+      "text": "Mở phần quyền bên trái ô nhắn. Chọn Approve for me. Dấu tích nằm ở đây; Full access không được chọn, tức là đang tắt. Không bật Full access.",
+      "record": "Record only the dedicated demo task's actual permissions controls, with user's authorization for this Practice configuration. Show Approval selection and Full access visibly off. Never toggle Full access on. Observe actual installed labels; reconcile any UI/contract mismatch before recording narration."
+    },
+    {
+      "id": "09-first-review",
+      "title": "Nhờ Triết kiểm tra và đọc kết quả",
+      "capture": "09-first-review.mp4",
+      "text": "Bấm Cập nhật và kiểm tra tiến độ. Triết đọc cài đặt trong task đã liên kết. Minh còn để Effort Medium, nên dòng Tiếp theo yêu cầu chọn High rồi kiểm tra lại. Các mục đã đúng không cần làm lại.",
+      "record": "Capture a real review of the linked demo task with the deliberate Effort mismatch and the other three requirements satisfied. Keep enough wait footage to truthfully label any time compression. Show criterion feedback and next step. No fixture/synthetic passed or mismatch screen."
+    },
+    {
+      "id": "10-repair-and-recheck",
+      "title": "Sửa đúng mục rồi kiểm tra lại",
+      "capture": "10-repair-and-recheck.mp4",
+      "text": "Trong cùng task, đổi Effort sang High rồi nhờ Triết kiểm tra lần nữa. Nếu báo Chưa thể xác minh, mở đúng task, chọn lại cài đặt chưa đọc được rồi thử lại. Đổi cài đặt chưa tự cập nhật kết quả.",
+      "record": "In the same continuous take, correct native Effort to High and request a fresh actual review. Show the passing result from that review. Mention unavailable evidence without fabricating that error on screen; only show it if genuinely observed in this demo."
+    },
+    {
+      "id": "11-replay-and-resume",
+      "title": "Xem lại hướng dẫn khi cần",
+      "capture": "11-replay-and-resume.mp4",
+      "text": "Cần xem lại, mở Xem lại video hướng dẫn Practice trong Triết. Bạn có thể tạm dừng hoặc mở toàn màn hình. Nếu rời ứng dụng khi chưa xong, dùng Tiếp tục Practice để trở lại đúng bài.",
+      "record": "Show replay disclosure and real video controls without recursively replaying the whole guide. Pause and close replay. Keep the active task and result unchanged. Demonstrate existing resume only if it can be done without resetting or replacing the demo Practice."
+    },
+    {
+      "id": "12-save-and-return",
+      "title": "Lưu kết quả và quay lại bài học",
+      "capture": "12-save-and-return.mp4",
+      "text": "Khi cả bốn yêu cầu đã đạt, bấm Lưu kết quả và quay lại khóa học. Chờ trang bài học tiếp theo hiện ra. Đến lượt bạn: làm từng bước, xin gợi ý khi cần, nhờ Triết kiểm tra rồi lưu kết quả.",
+      "record": "Show genuine fresh passed review, enabled existing save/return control, click and actual destination lesson scene. Finish on the real page, with a short readable recap overlay. Never seed a pass or bypass review for the recording."
+    }
+  ]
+}

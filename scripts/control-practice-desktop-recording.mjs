@@ -1,0 +1,103 @@
+// Control only the disposable Course Companion created by the recording harness.
+import { createRequire } from 'node:module'
+import { readFile, writeFile } from 'node:fs/promises'
+import { join, resolve } from 'node:path'
+const root = resolve(import.meta.dirname, '..')
+const require = createRequire(join(root, 'course-companion/package.json'))
+const session = JSON.parse(await readFile(join(root, '.superpowers/qa/practice-desktop-v2/recording-session.json'), 'utf8'))
+if (!session.profile.includes('practice-desktop-recording-')) throw new Error('Recording profile required')
+const port = Number((await readFile(join(session.profile, 'DevToolsActivePort'), 'utf8')).split('\n')[0])
+if (!Number.isInteger(port) || port < 1024) throw new Error('Invalid disposable debugging port')
+const browser = await require('playwright-core').chromium.connectOverCDP(`http://127.0.0.1:${port}`)
+const pages = browser.contexts().flatMap(context => context.pages())
+const request = JSON.parse(process.argv[2])
+const page = pages.find(item => item.url().includes(request.surface === 'companion' ? '#/companion' : '#/learning'))
+if (!page?.url().startsWith('file:///') || !page.url().includes('/course-companion/out/renderer/')) throw new Error('Expected recording course only')
+if (request.action === 'teacher') await page.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
+else if (request.action === 'compact') await page.evaluate(() => globalThis.courseCompanion.setCompanionMode('compact'))
+else if (request.action === 'full') await page.evaluate(() => globalThis.courseCompanion.showFullTeacher())
+else if (request.action === 'status') console.log(await page.locator('body').innerText())
+else if (request.action === 'click') {
+  const target = request.selector ? page.locator(request.selector) : page.getByRole(request.role ?? 'button', { name: request.name, exact: true })
+  await target.click({ timeout: 10000 })
+}
+else if (request.action === 'review') console.log(JSON.stringify(await page.evaluate(() => globalThis.courseCompanion.reviewPractice())))
+else if (request.action === 'help-demo') {
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const log = action => console.log(JSON.stringify({ action, at: new Date().toISOString() }))
+  await page.locator('.practice-compact-details > summary').click(); log('all-steps')
+  await pause(1800)
+  await page.locator('.practice-compact-checklist button').first().click(); log('step-detail')
+  await pause(3500)
+  await page.getByRole('button', { name: 'Cần gợi ý cho Practice?', exact: true }).click(); log('request-hint')
+  await page.locator('.practice-hint, .practice-hint-error').waitFor({ timeout: 90000 }); log('hint-result')
+  await pause(6000)
+  const close = page.getByRole('button', { name: 'Đóng gợi ý', exact: true })
+  if (await close.isVisible()) await close.click()
+  await page.locator('.practice-compact-details > summary').click()
+  await page.locator('.practice-video-replay > summary').click(); log('replay-open')
+  await page.locator('video').waitFor()
+  await page.locator('video').evaluate(video => { video.currentTime = 0; return video.play() })
+  await pause(3000)
+  await page.locator('video').evaluate(video => video.pause()); log('replay-pause')
+  await pause(2000)
+  await page.locator('.practice-video-replay > summary').click(); log('replay-close')
+}
+else if (request.action === 'state') console.log(JSON.stringify(await page.evaluate(() => globalThis.courseCompanion.loadPracticeWorkspace())))
+else if (request.action === 'prepare-intro') {
+  const saved = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
+  await page.evaluate(progress => globalThis.courseCompanion.saveProgress({ ...progress,
+    currentLessonId: 'module-1', currentCourseLessonId: 'm1-agents-and-skills',
+    checkpointId: 'm1-agents-and-skills', sceneId: 'module-1-skills-portfolio' }), saved.progress)
+  const manifest = JSON.parse(await readFile(join(root, 'course-companion/shared/practice-video-manifest.json'), 'utf8'))
+  const receipt = JSON.stringify([{ courseRunId: saved.progress.courseRunId, videoId: manifest.videoId,
+    version: manifest.version, watched: manifest.durationSeconds, position: manifest.durationSeconds, confirmed: false }])
+  for (const name of ['practice-video.json', 'practice-video.backup.json']) await writeFile(join(session.profile, name), receipt)
+  await page.reload()
+  await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
+  await page.getByRole('button', { name: /MODULE 1.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).waitFor()
+  console.log('Ready at the actual handoff control; only disposable recording progress was rewound')
+}
+else if (request.action === 'intro-demo') {
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const log = action => console.log(JSON.stringify({ action, at: new Date().toISOString() }))
+  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click(); log('move-to-practice')
+  await page.locator('.practice-video-guide').waitFor()
+  await pause(2400)
+  const confirm = page.getByRole('button', { name: 'Tôi đã xem hết và hiểu cách thực hành', exact: true })
+  await confirm.scrollIntoViewIfNeeded(); log('watch-complete-controls')
+  await pause(2600)
+  await confirm.click(); log('explicit-confirmation')
+  const start = page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true })
+  await start.scrollIntoViewIfNeeded()
+  await pause(3200)
+  if (request.start) { await start.click(); log('start-practice') }
+}
+else if (request.action === 'replay-resume-demo') {
+  const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const log = action => console.log(JSON.stringify({ action, at: new Date().toISOString() }))
+  await page.locator('.practice-video-replay > summary').click(); log('replay-open')
+  const video = page.locator('.practice-video-guide video')
+  await video.scrollIntoViewIfNeeded()
+  await video.evaluate(el => { for (const track of el.textTracks) track.mode = 'disabled' })
+  await pause(1500)
+  await page.locator('.practice-video-guide').getByRole('button', { name: 'Xem lại', exact: true }).click(); log('play')
+  if (request.seek) await video.evaluate((el, time) => { el.currentTime = time }, request.seek)
+  await pause(2000)
+  await video.evaluate(el => el.requestFullscreen()); log('video-fullscreen')
+  await pause(2500)
+  await page.evaluate(() => document.exitFullscreen())
+  await video.evaluate(el => el.pause()); log('pause')
+  await pause(2000)
+  await page.locator('.practice-video-replay > summary').click()
+  await page.getByRole('button', { name: 'Đóng Triết', exact: true }).click()
+  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
+  const resume = page.getByRole('button', { name: 'Tiếp tục Practice', exact: true })
+  await resume.scrollIntoViewIfNeeded(); log('resume-visible')
+  await pause(3500)
+  if (request.resume !== false) { await resume.click(); log('resume-same-practice') }
+}
+else if (request.action === 'close') await page.evaluate(() => globalThis.courseCompanion.quitApp())
+else throw new Error('Unsupported recording command')
+await browser.close().catch(() => {})

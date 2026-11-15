@@ -43,6 +43,53 @@ afterEach(async () => {
 })
 
 describe('PortfolioWorkspaceRepository', () => {
+  it('persists verified registration only for the ready folder and retains it across relaunch', async () => {
+    const { courseRoot, dataDirectory, workspace } = await fixture()
+    const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    await repository.selectPath(request, workspace)
+    const identity = { ...request, expectedPath: await realpath(workspace) }
+    const project = { id: 'portfolio-project-1', name: 'Portfolio của tôi' }
+    expect((await repository.saveCodexProject(identity, project)).status).toBe('awaiting-confirmation')
+    await repository.confirmPlanning(request)
+    expect((await repository.load(request)).codexProject).toBeUndefined()
+    const registered = await repository.saveCodexProject(identity, project)
+    expect(registered.codexProject).toMatchObject({ ...project, registeredAt: expect.any(String) })
+    const resumed = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    expect((await resumed.load(request)).codexProject).toEqual(registered.codexProject)
+    expect((await resumed.saveCodexProject(identity, project)).codexProject).toEqual(registered.codexProject)
+    expect((await resumed.confirmPlanning(request)).codexProject).toEqual(registered.codexProject)
+  })
+
+  it('rejects stale project bindings and clears registration when another folder is selected', async () => {
+    const { root, courseRoot, dataDirectory, workspace } = await fixture()
+    const other = join(root, 'Other portfolio')
+    await mkdir(other)
+    const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    const project = { id: 'portfolio-project-1', name: 'Portfolio của tôi' }
+    await repository.selectPath(request, workspace)
+    await repository.confirmPlanning(request)
+    await expect(repository.saveCodexProject({ ...request, expectedPath: other }, project))
+      .rejects.toMatchObject({ code: 'path-changed' })
+    await expect(repository.saveCodexProject({ courseRunId: 'other-course', expectedPath: workspace }, project))
+      .rejects.toMatchObject({ code: 'path-changed' })
+    await repository.saveCodexProject({ ...request, expectedPath: await realpath(workspace) }, project)
+    await repository.selectPath(request, other)
+    expect((await repository.confirmPlanning(request)).codexProject).toBeUndefined()
+  })
+
+  it('does not record a project for a folder that disappeared', async () => {
+    const { root, courseRoot, dataDirectory, workspace } = await fixture()
+    const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot)
+    await repository.selectPath(request, workspace)
+    await repository.confirmPlanning(request)
+    const expectedPath = await realpath(workspace)
+    await rename(workspace, join(root, 'moved'))
+    const missing = await repository.saveCodexProject({ ...request, expectedPath }, { id: 'project-1', name: 'Portfolio' })
+    expect(missing.status).toBe('missing')
+    const stored = JSON.parse(await readFile(join(dataDirectory, 'portfolio-workspaces.json'), 'utf8'))
+    expect(stored.workspaces[request.courseRunId].codexProject).toBeUndefined()
+  })
+
   it('persists one canonical path and waits for confirmation before creating planning', async () => {
     const { courseRoot, dataDirectory, workspace } = await fixture()
     const repository = new PortfolioWorkspaceRepository(dataDirectory, courseRoot, () =>

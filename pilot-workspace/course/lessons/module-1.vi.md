@@ -141,36 +141,36 @@ cấu trúc và cách Codex dùng skill.
 Mình chọn cấu hình này cho dự án thực hành ContentPilot. Đây không phải thiết
 lập mặc định của mọi tài khoản Codex:
 
-- Model: **GPT-6 Astra**, có thể dùng **GPT-5.6 Sol** nếu lo tốn token
+- Model: **Tự chọn**, không dùng để đánh giá Practice
 - Effort: **High**
 - Speed: **Standard**
 - Approval: **Approve for me**
 - Full access: **Tắt**
 
-Astra và High cho người học thêm khoảng trống khi yêu cầu còn mới. Standard giữ
+High cho người học thêm khoảng trống khi yêu cầu còn mới. Standard giữ
 mức sử dụng hợp lý trong quá trình học. Approve for me giữ nhịp học. Việc tắt
 Full access giữ ranh giới an toàn.
 
 ## Practice cuối Module 1
 
-Bạn sẽ mở một task Codex riêng và chỉnh trực tiếp năm thiết lập
-của task: Model, Effort, Speed, Approval và Full access. Bạn không cần chụp ảnh,
+Bạn sẽ mở một task Codex riêng và chỉnh trực tiếp bốn thiết lập
+của task: Effort, Speed, Approval và Full access. Model do bạn tự chọn. Bạn không cần chụp ảnh,
 đính kèm tệp hay yêu cầu Codex lập báo cáo.
 
 Course Companion chỉ đọc metadata cấu hình hiệu lực của đúng task Codex đang
-được liên kết. Ứng dụng hiển thị năm giá trị được phát hiện, độ mới và mục nào
+được liên kết. Ứng dụng hiển thị bốn giá trị được phát hiện, độ mới và mục nào
 chưa khớp; ứng dụng không tự thay đổi cài đặt của bạn.
 
 Course Companion không gửi task hay lệnh nào vào Codex trước khi cấu hình
 đạt. Cơ chế này không chặn việc bạn tự nhập vào Codex, vì vậy ở bước thiết lập
-hãy chỉ đổi năm cài đặt rồi quay lại chọn **Yêu cầu Triết duyệt tiến độ**.
+hãy chỉ đổi bốn cài đặt rồi quay lại chọn **Yêu cầu Triết duyệt tiến độ**.
 
 > Hãy kiểm tra cấu hình trong hai ảnh. Chỉ quan sát, không thay đổi cài đặt.
-> Báo cáo dưới tiêu đề `Verification`, gồm Model, Effort, Speed, Approval và
+> Báo cáo dưới tiêu đề `Verification`, gồm Effort, Speed, Approval và
 > trạng thái Full access. Cảnh báo nếu có mục nào khác cấu hình Triết khuyên dùng.
 
 Sau đó, quay lại Course Companion và chọn **Yêu cầu Triết duyệt tiến độ**.
-Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ năm mục.
+Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ bốn mục.
 Nếu chưa đạt, mình sẽ chỉ rõ mục cần sửa để bạn nộp lại.
 
 ## Bài ôn tập cuối Module 1

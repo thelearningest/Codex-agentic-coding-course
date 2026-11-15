@@ -1,5 +1,6 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { createHash } from 'node:crypto'
 import type {
   CodexConnectionListener,
   CodexNotification,
@@ -21,6 +22,7 @@ type TestThread = {
   turns: Array<{ id: string; status: string; items: unknown[] }>
   configurationExercise: boolean
   configurationStage: number
+  projectId?: string
 }
 
 type TestCodexGatewayOptions = {
@@ -41,6 +43,8 @@ function effectiveThread(thread: TestThread): Record<string, unknown> {
 
 export class TestCodexGateway implements CodexRequestClient {
   private readonly threads = new Map<string, TestThread>()
+  private readonly projects = new Map<string, { id: string; name: string; roots: Array<{ path: string }> }>()
+  private failProjectRead = process.env.COURSE_COMPANION_FAKE_PROJECT_FAILURE_ONCE === '1'
   private readonly notificationListeners = new Set<CodexNotificationListener>()
   private failTeacherTurn = process.env.COURSE_COMPANION_FAKE_TEACHER_FAIL_ONCE === '1'
   private readonly connectionListeners = new Set<CodexConnectionListener>()
@@ -68,6 +72,18 @@ export class TestCodexGateway implements CodexRequestClient {
   }
 
   async request(method: string, params: Record<string, unknown> = {}): Promise<unknown> {
+    if (method === 'project/list') return { data: [...this.projects.values()], nextCursor: null }
+    if (method === 'project/create') {
+      const id = 'simulated-project-' + createHash('sha256').update(String(params.idempotencyKey)).digest('hex').slice(0, 16)
+      if (!this.projects.has(id)) this.projects.set(id, { id, name: String(params.name), roots: params.roots as Array<{ path: string }> })
+      return { project: this.projects.get(id) }
+    }
+    if (method === 'project/read') {
+      if (this.failProjectRead) { this.failProjectRead = false; throw new Error('Simulated project connection failure') }
+      const project = this.projects.get(String(params.projectId))
+      if (!project) throw new Error('Unknown simulated project')
+      return { project }
+    }
     if (method === 'model/list') {
       return {
         data: [
@@ -125,7 +141,8 @@ export class TestCodexGateway implements CodexRequestClient {
         sandbox,
         turns: [],
         configurationExercise,
-        configurationStage: configurationExercise && this.configurationReady ? 5 : 0
+        configurationStage: configurationExercise && this.configurationReady ? 5 : 0,
+        ...(typeof params.projectId === 'string' ? { projectId: params.projectId } : {})
       }
       this.threads.set(id, thread)
       return effectiveThread(thread)
@@ -142,6 +159,11 @@ export class TestCodexGateway implements CodexRequestClient {
     if (method === 'thread/name/set') {
       thread.name = typeof params.name === 'string' ? params.name : undefined
       return {}
+    }
+    if (method === 'thread/metadata/update') {
+      if (!this.projects.has(String(params.projectId))) throw new Error('Unknown simulated project')
+      thread.projectId = String(params.projectId)
+      return { thread }
     }
     if (method === 'thread/read') {
       // The learner-directed continuation no longer sends an automatic turn.

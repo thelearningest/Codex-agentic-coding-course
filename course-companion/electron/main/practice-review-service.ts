@@ -27,14 +27,6 @@ import { portfolioActivityUnavailable } from './portfolio-activity-availability'
 
 const configurationChecks = [
   {
-    field: 'model',
-    criterionId: 'model-matches',
-    label: 'Model',
-    expected: 'gpt-5.6-sol',
-    expectedLabel: '5.6 Sol',
-    action: 'Trong task Codex, mở bộ chọn Model và chọn 5.6 Sol.'
-  },
-  {
     field: 'reasoningEffort',
     criterionId: 'effort-matches',
     label: 'Effort',
@@ -104,7 +96,7 @@ function evaluateConfiguration(
     verdict: passed ? 'passed' : 'needs-work',
     criteria,
     summary: passed
-      ? 'Triết đã xác minh trực tiếp: cả năm thiết lập của task đều khớp cấu hình khuyến nghị.'
+      ? 'Triết đã xác minh trực tiếp: cả bốn thiết lập của task đều khớp cấu hình khuyến nghị.'
       : 'Triết chưa thể xác nhận cấu hình an toàn vì còn giá trị chưa khớp hoặc chưa xác minh được.',
     reviewedAt,
     sourceDigest: reviewSourceDigest({
@@ -124,7 +116,6 @@ function configurationIdentity(
   return JSON.stringify({
     freshness: configuration.freshness,
     connection: configuration.connection,
-    model: configuration.model,
     reasoningEffort: configuration.reasoningEffort,
     serviceTier: configuration.serviceTier,
     approvalPolicy: configuration.approvalPolicy,
@@ -382,7 +373,7 @@ export class PracticeReviewService {
               ? 'Năm tài liệu đã được kiểm tra cấu trúc, phạm vi và nội dung; PRD và kế hoạch được người học duyệt trên phiên bản hiện tại.'
               : definition.evidenceProfile === 'planning-package'
               ? 'Triết đã duyệt semantic PRD, implementation plan, alignment, phạm vi và quyền sở hữu của người học trên đúng hai digest hiện tại.'
-              : 'Triết đã xác minh đủ năm thiết lập Codex bắt buộc từ metadata hiệu lực của đúng task.',
+              : 'Triết đã xác minh đủ bốn thiết lập Codex bắt buộc từ metadata hiệu lực của đúng task.',
             destination: structuredClone(definition.completionDestination),
             ...(portfolioPackage ? { submissionDigest: envelope.portfolioPackage!.evidenceDigest } : {}),
             ...((envelope.portfolioPackage?.kind === 'build' || envelope.portfolioPackage?.kind === 'release')
@@ -393,7 +384,8 @@ export class PracticeReviewService {
                     schemaVersion: 1 as const,
                     sourcePracticeId: 'm1-codex-safe-setup' as const,
                     sourcePracticeVersion: definition.version,
-                    model: 'gpt-5.6-sol' as const,
+                    ...(envelope.configuration.model.protocolValue
+                      ? { model: envelope.configuration.model.protocolValue } : {}),
                     reasoningEffort: 'high' as const,
                     serviceTier: 'standard' as const,
                     approvedAt: reviewedAt

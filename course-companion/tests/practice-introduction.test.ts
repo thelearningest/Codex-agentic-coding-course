@@ -6,8 +6,19 @@ import { PracticeIntroduction } from '../src/renderer/src/components/PracticeInt
 import { getPracticeIntroduction } from '../src/renderer/src/components/practice-introduction-copy'
 
 describe('beginner Practice introductions', () => {
+  it.each(['m2-portfolio-planning', 'm3-portfolio-build', 'm4-portfolio-release'])(
+    'keeps %s in the same project and existing linked task', (id) => {
+      const html = renderToStaticMarkup(createElement(PracticeIntroduction, {
+        introduction: getPracticeIntroduction(id)!, showReference: false, children: null
+      }))
+      expect(html).toContain('Course Companion dùng cùng project Codex đã tạo ở Module 2')
+      expect(html).toContain('mở đúng task portfolio cho bạn')
+      expect(getPracticeIntroduction('m1-codex-safe-setup')!.portfolioProject).toBeUndefined()
+    }
+  )
+
   it.each([
-    ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 5],
+    ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 4],
     ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 5],
     ['m3-portfolio-build', 'Xây portfolio theo kế hoạch', 3],
     ['m4-portfolio-release', 'Đưa portfolio lên mạng', 1]

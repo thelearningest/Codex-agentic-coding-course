@@ -55,12 +55,15 @@ export class ExecutorChatCoordinator {
     approvedConfiguration?: ApprovedCodexConfiguration
   }): Promise<ExecutorChatBinding> {
     const workspaceRoot = await this.workspaces.resolve(input.definition.workspaceKind)
+    const projectId = await this.workspaces.resolveProjectId?.(input.definition.workspaceKind, workspaceRoot)
     const plan = buildPracticeTaskStartPlan({
       ...input,
       workspaceRoot
     })
     return this.withBootstrap(async () => {
-      const started = await this.client.request('thread/start', plan.startParams)
+      const started = await this.client.request('thread/start', {
+        ...plan.startParams, ...(projectId ? { projectId } : {})
+      })
       const effective = parseEffectivePracticeTask(started)
       if (!THREAD_ID.test(effective.threadId)) {
         throw new Error('Codex created an invalid Executor chat')
@@ -72,6 +75,9 @@ export class ExecutorChatCoordinator {
         samePath,
         approvedConfiguration: input.approvedConfiguration
       })
+      if (projectId && (!isRecord(started) || !isRecord(started.thread) || started.thread.projectId !== projectId)) {
+        throw new Error('Codex created the task outside the portfolio project')
+      }
       const threadId = effective.threadId
       const name = plan.name
       await this.client.request('thread/name/set', { threadId, name })
@@ -81,6 +87,7 @@ export class ExecutorChatCoordinator {
         threadId,
         name,
         workspaceRoot,
+        ...(projectId ? { projectId } : {}),
         createdAt: observed.toISOString(),
         configuration: normalizeCodexTaskConfiguration({
           runId: input.runId,
@@ -104,6 +111,7 @@ export class ExecutorChatCoordinator {
     if (!THREAD_ID.test(binding.threadId) || !samePath(binding.workspaceRoot, workspaceRoot)) {
       throw new Error('Invalid Executor chat binding')
     }
+    const projectId = await this.workspaces.resolveProjectId?.(definition.workspaceKind, workspaceRoot)
     await this.withBootstrap(async () => {
       const learnerDirected = definition.practiceId === 'm2-portfolio-planning'
         || (definition.practiceId === 'm3-portfolio-build' && definition.version === '2.0.0')
@@ -113,6 +121,14 @@ export class ExecutorChatCoordinator {
         workspaceRoot,
         definition.taskPolicy === 'safe-workspace-write' && !learnerDirected
       )
+      if (projectId && thread.projectId !== projectId) {
+        await this.client.request('thread/metadata/update', { threadId: binding.threadId, projectId })
+        const assigned = await this.client.request('thread/read', { threadId: binding.threadId, includeTurns: false })
+        if (!isRecord(assigned) || !isRecord(assigned.thread) || assigned.thread.id !== binding.threadId
+          || !samePath(assigned.thread.cwd, workspaceRoot) || assigned.thread.projectId !== projectId) {
+          throw new Error('Codex could not verify portfolio task membership')
+        }
+      }
       // Portfolio work is directed in desktop by the learner. A second server
       // must only verify the saved binding, never acquire its writer or send work.
       if (learnerDirected) return

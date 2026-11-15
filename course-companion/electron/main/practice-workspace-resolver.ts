@@ -10,13 +10,19 @@ function isContained(root: string, candidate: string): boolean {
 
 export type PracticeWorkspaceResolverPort = {
   resolve: (kind: PracticeWorkspaceKind) => Promise<string>
+  resolveProjectId?: (kind: PracticeWorkspaceKind, workspaceRoot?: string) => Promise<string | undefined>
 }
 
 export class PracticeWorkspaceResolver implements PracticeWorkspaceResolverPort {
   constructor(
     private readonly courseRoot: string,
-    private readonly loadPortfolioPath?: () => Promise<string | null>
+    private readonly loadPortfolioPath?: () => Promise<string | null>,
+    private readonly loadPortfolioProjectId?: (expectedRoot: string) => Promise<string>
   ) {}
+
+  async resolveProjectId(kind: PracticeWorkspaceKind, workspaceRoot?: string): Promise<string | undefined> {
+    return kind === 'learner-portfolio' ? this.loadPortfolioProjectId?.(workspaceRoot ?? await this.resolve(kind)) : undefined
+  }
 
   async resolve(kind: PracticeWorkspaceKind): Promise<string> {
     if (kind === 'learner-portfolio') {

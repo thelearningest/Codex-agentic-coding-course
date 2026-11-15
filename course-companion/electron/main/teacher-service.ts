@@ -137,7 +137,6 @@ export class TeacherService {
       const configuration = activity.configuration
       const configurationMatches = configuration
         ? [
-            configuration.model.protocolValue === 'gpt-5.6-sol',
             configuration.reasoningEffort.protocolValue === 'high',
             configuration.serviceTier.protocolValue === 'standard',
             configuration.approvalPolicy.protocolValue === 'on-request',
@@ -146,7 +145,7 @@ export class TeacherService {
         : []
       const firstConfigurationMismatch = configurationMatches.findIndex((matches) => !matches)
       const configurationTarget = active.evidenceProfile === 'codex-task-configuration'
-        ? active.checklist[
+        ? active.checklist.filter((step) => step.id !== 'set-model')[
             configuration?.freshness === 'fresh'
               ? firstConfigurationMismatch === -1
                 ? active.checklist.length - 1

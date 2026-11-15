@@ -5,7 +5,7 @@
 
 ## Cấu hình đã duyệt
 
-- Model: 5.6 Sol
+- Model: tự chọn, không dùng để đánh giá
 - Effort: High
 - Speed: Standard
 - Approval: Approve for me

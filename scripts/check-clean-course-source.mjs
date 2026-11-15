@@ -11,8 +11,8 @@ const cleanExample = 'pilot-workspace/.course/learner-state.example.json'
 const sourceDocuments = new Set([cleanExample,
   'prototypes/mvp-0.5-pedagogy-kernel/schemas/learner-state.schema.json'])
 const localDirectories = /(^|\/)(?:node_modules|\.superpowers|\.worktrees|\.practice-test-artifacts)(\/|$)/
-const temporaryProfiles = /(^|\/)(?:readme-course-demo-|course-companion-electron-|course-teacher-chat-|practice-guide-electron-|portfolio-package-electron-)[^/]*(\/|$)/
-const runtimeState = /^(?:learner-state|practice-runs|practice-guide-state|teacher-memory|executor-activity|portfolio-workspaces|companion-state)(?:\.[\w-]+)?\.json(?:\.tmp.*)?$|^(?:teacher-chat|activity-log)(?:\.[\w-]+)?\.jsonl(?:\.tmp.*)?$/i
+const temporaryProfiles = /(^|\/)(?:readme-course-demo-|course-companion-electron-|course-teacher-chat-|practice-guide-electron-|practice-video-electron-|practice-video-capture-|portfolio-package-electron-)[^/]*(\/|$)/
+const runtimeState = /^(?:learner-state|practice-runs|practice-guide-state|practice-video|teacher-memory|executor-activity|portfolio-workspaces|companion-state)(?:\.[\w-]+)?\.json(?:\.tmp.*)?$|^(?:teacher-chat|activity-log)(?:\.[\w-]+)?\.jsonl(?:\.tmp.*)?$/i
 const learnerOutputs = /^pilot-workspace\/artifacts\/(?:quest-card|codex-setup-checklist|module-1-evidence|PRD|implementation-plan)\.md$/
 const forbidden = paths.filter(path => {
   if (sourceDocuments.has(path)) return false

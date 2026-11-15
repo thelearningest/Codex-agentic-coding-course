@@ -12,16 +12,15 @@ const definition: PracticeDefinition = {
   version: '2.0.0',
   checkpointId: 'm1-setup-checklist',
   objective: 'Thiết lập Codex an toàn.',
-  expectedOutcome: 'Năm cấu hình được xác nhận.',
+  expectedOutcome: 'Bốn cấu hình được xác nhận.',
   workspaceKind: 'pilot-workspace',
   taskPolicy: 'inherit-configuration-only',
   evidenceProfile: 'codex-task-configuration',
   checklist: [
-    { id: 'open-task', title: 'Mở task', dependsOn: [] },
-    { id: 'set-model', title: 'Đặt model', dependsOn: ['open-task'] },
-    { id: 'set-permissions', title: 'Đặt quyền', dependsOn: ['set-model'] },
-    { id: 'review', title: 'Xem cấu hình', dependsOn: ['set-permissions'] },
-    { id: 'teacher-review', title: 'Nhờ Triết duyệt', dependsOn: ['review'] }
+    { id: 'set-effort', title: 'Chọn Effort High', dependsOn: [] },
+    { id: 'set-speed', title: 'Chọn Speed Standard', dependsOn: ['set-effort'] },
+    { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-speed'] },
+    { id: 'disable-full-access', title: 'Tắt Full access', dependsOn: ['set-approval'] }
   ],
   criteria: [],
   completionDestination: {
@@ -61,16 +60,16 @@ const context = {
 }
 
 describe('CodexConfigurationEvidenceAdapter', () => {
-  it('emits bounded structured evidence for all five configuration settings', async () => {
+  it('emits bounded structured evidence for the four required configuration settings', async () => {
     const adapter = new CodexConfigurationEvidenceAdapter({ current: async () => activity() })
     const result = await adapter.collect(context)
 
     expect(result.freshness).toBe('fresh')
-    expect(result.evidence).toHaveLength(5)
+    expect(result.evidence).toHaveLength(4)
     expect(result.configuration?.model.label).toBe('5.6 Sol')
     expect(result.sourceDigest).toMatch(/^[a-f0-9]{64}$/)
     expect(result.steps.map((step) => step.status)).toEqual([
-      'completed', 'completed', 'completed', 'completed', 'completed'
+      'completed', 'completed', 'completed', 'completed'
     ])
   })
 

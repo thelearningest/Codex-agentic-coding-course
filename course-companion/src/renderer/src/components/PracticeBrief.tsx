@@ -1,3 +1,4 @@
+import { PracticeVideoGuide } from './PracticeVideoGuide'
 import { useEffect, useState } from 'react'
 import type { PracticeIdentity, PracticeWorkspaceView } from '../../../../shared/contracts'
 import { PracticeProgress } from './PracticeProgress'
@@ -40,6 +41,8 @@ export function PracticeBrief({
   const [returnBusy, setReturnBusy] = useState(false)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [error, setError] = useState('')
+  const [videoReceipt, setVideoReceipt] = useState<{ confirmed: boolean; courseRunId: string } | null>(null)
+  const videoLocked = identity.practiceId === 'm1-codex-safe-setup' && (!videoReceipt?.confirmed || videoReceipt.courseRunId !== courseRunId)
 
   const load = async () => {
     try {
@@ -69,7 +72,7 @@ export function PracticeBrief({
   }, [identity])
 
   const start = async () => {
-    if (!workspace || busy) return
+    if (!workspace || busy || videoLocked) return
     if (workspace.activePractice && !switchOpen) {
       setSwitchOpen(true)
       return
@@ -92,7 +95,7 @@ export function PracticeBrief({
   }
 
   const resume = async () => {
-    if (!workspace || busy) return
+    if (!workspace || busy || videoLocked) return
     setBusy(true)
     setError('')
     try {
@@ -186,14 +189,15 @@ export function PracticeBrief({
     && workspace.activePractice.practiceVersion === identity.practiceVersion
   const preferResume = Boolean(introduction && hasRequestedPractice && workspace.capabilities.canResume)
   const resumeButton = workspace.capabilities.canResume ? (
-    <button className={preferResume ? 'is-primary' : undefined} type="button" disabled={busy || switching} onClick={() => void resume()}>
+    <button className={preferResume ? 'is-primary' : undefined} type="button" disabled={busy || switching || videoLocked} onClick={() => void resume()}>
       Tiếp tục Practice
     </button>
   ) : null
   const controls = <>
+    {videoLocked ? <p>Hãy xem hết video và xác nhận để tiếp tục thực hành.</p> : null}
     <div className="practice-brief-actions">
       {preferResume ? resumeButton : null}
-      <button className={preferResume ? undefined : 'is-primary'} type="button" disabled={busy || switching} onClick={() => void start()}>
+      <button className={preferResume ? undefined : 'is-primary'} type="button" disabled={busy || switching || videoLocked} onClick={() => void start()}>
         {busy ? 'Đang chuẩn bị…' : introduction && !hasRequestedPractice ? 'Bắt đầu thực hành' : 'Bắt đầu Practice mới'}
       </button>
       {!preferResume ? resumeButton : null}
@@ -222,6 +226,7 @@ export function PracticeBrief({
       <section className="practice-brief-card" aria-labelledby="practiceObjective">
         {introduction ? (
           <PracticeIntroduction introduction={introduction} showReference={!hasRequestedPractice}>
+            {identity.practiceId === 'm1-codex-safe-setup' ? <PracticeVideoGuide key={courseRunId} onConfirmed={(confirmed, receiptRunId) => setVideoReceipt({ confirmed, courseRunId: receiptRunId })} /> : null}
             {controls}
           </PracticeIntroduction>
         ) : <>

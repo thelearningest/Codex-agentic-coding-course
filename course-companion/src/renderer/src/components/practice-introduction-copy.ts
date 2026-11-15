@@ -2,6 +2,7 @@ export type Introduction = {
   title: string
   purpose: string
   context: string
+  portfolioProject?: boolean
   steps: readonly string[]
   referenceTitle: string
   referenceNote?: string
@@ -9,7 +10,6 @@ export type Introduction = {
 }
 
 const settings = [
-  ['Model', '5.6 Sol', 'Mô hình AI được dùng trong task.'],
   ['Effort', 'High', 'Mức độ suy luận của Codex khi xử lý yêu cầu.'],
   ['Speed', 'Standard', 'Chế độ tốc độ xử lý của task.'],
   ['Approval', 'Approve for me', 'Cách Codex xử lý yêu cầu phê duyệt hành động.'],
@@ -23,13 +23,14 @@ const introductions: Record<string, Introduction> = {
     context: 'Task là cuộc trò chuyện với Codex dành riêng cho bài thực hành này.',
     steps: [
       'Mở task thực hành trong Codex.',
-      'Kiểm tra năm cài đặt theo hướng dẫn bên dưới.',
+      'Kiểm tra bốn cài đặt theo hướng dẫn bên dưới. Bạn tự chọn Model phù hợp.',
       'Nhờ Triết kiểm tra kết quả. Nếu cần sửa, bạn tiếp tục trong cùng task.'
     ],
-    referenceTitle: 'Xem năm cài đặt cần kiểm tra',
+    referenceTitle: 'Xem bốn cài đặt cần kiểm tra',
     reference: settings
   },
   'm2-portfolio-planning': {
+    portfolioProject: true,
     title: 'Lập kế hoạch cho portfolio',
     purpose: 'Bạn sẽ biến ý tưởng portfolio thành một kế hoạch rõ ràng trước khi xây website.',
     context: 'Bạn làm việc trong một task Codex và thư mục portfolio đã chọn. Phần này chỉ lập kế hoạch, chưa viết code hay đưa website lên mạng.',
@@ -49,6 +50,7 @@ const introductions: Record<string, Introduction> = {
     ]
   },
   'm3-portfolio-build': {
+    portfolioProject: true,
     title: 'Xây portfolio theo kế hoạch',
     purpose: 'Bạn sẽ điều phối Codex xây từng phần của website, tự xem kết quả và quyết định cần sửa gì.',
     context: 'Tiếp tục task Codex và thư mục portfolio từ Module 2.',
@@ -66,6 +68,7 @@ const introductions: Record<string, Introduction> = {
     ]
   },
   'm4-portfolio-release': {
+    portfolioProject: true,
     title: 'Đưa portfolio lên mạng',
     purpose: 'Bạn sẽ có đường link để chia sẻ portfolio và biết cách kiểm tra website trên máy tính và điện thoại.',
     context: 'Tiếp tục task Codex và thư mục portfolio từ Module 3. Bạn tự đăng nhập, cấp quyền và quyết định phát hành.',
