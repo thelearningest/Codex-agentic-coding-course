@@ -141,8 +141,10 @@ retired page or with retired answers resumes at the first unanswered remaining
 question or the summary (migration taken from `codex/module-1-checklist`).
 Only question counts and the pass mark changed in the lesson, Teacher script,
 start prompt, delivery contract and mastery rubric; Practice is unchanged.
-With `m1-q4` gone the review has no short-answer question, while the rubric
-still mentions explaining a written answer; that wording awaits owner review.
+With `m1-q4` gone the review has no short-answer question; at the owner's
+request the rubric no longer asks for a written explanation, and choice A of
+`m1-q6-skills` now reads “Tạo một Skill với tệp SKILL.md.” The review result
+pages centre their message and use a compact continue button.
 Commit `31c524a` left the smoke test expecting six questions; the follow-up
 commit corrects it to four. Typecheck, lint, 798 unit tests, build and
 `npm run test:electron` then passed. Final app review remains `pending`.

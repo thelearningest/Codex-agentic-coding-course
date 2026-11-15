@@ -79,7 +79,7 @@
       "bloomLabel": "Vận dụng",
       "prompt": "Bạn có một quy trình chuyên biệt để viết nội dung portfolio. Quy trình gồm hướng dẫn, tài liệu tham khảo và một số bước kiểm tra, đồng thời sẽ được dùng lại khi task phù hợp. Cách đóng gói nào phù hợp nhất?",
       "choices": [
-        "Tạo một Skill với tệp SKILL.md và thêm tài nguyên hỗ trợ khi cần.",
+        "Tạo một Skill với tệp SKILL.md.",
         "Đưa toàn bộ quy trình vào AGENTS.md để Codex luôn tải mọi chi tiết.",
         "Dán lại toàn bộ quy trình vào từng task và không lưu thành tài nguyên dùng lại.",
         "Bật Fast để Codex tự tạo lại cùng một quy trình cho mỗi task."

@@ -11,7 +11,7 @@ const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': 'ddc99dba0bd0763810363db2075d45155782122294036dc158198fc55f5eb0bb',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',
-  '../pilot-workspace/course/quizzes/module-1.quiz.json': 'ac1d6bbd0ee9b1d31282980413b5a91eb4da3d5d1cb134fc6f2bd0dffb4e2ed7',
+  '../pilot-workspace/course/quizzes/module-1.quiz.json': '695fc00f447b386fe247380863d42671d1a9f6e7e5acafe900b306e35660b174',
   '../pilot-workspace/course/practices/m1-codex-safe-setup.json': 'e38108154ecab20070d2820b1ec8118c0383dd727d267ff02bcea8f9660cad65',
   'content/practices/m1-codex-safe-setup.json': 'a93062fa4386ac54e085b31cfb9a26690d03ba79f2a8810f2b4991d2b04d0d28',
   '../pilot-workspace/course/codex-setup/app.js': '76ee417775f75c302be3758c31442564dbc6371e83ae8942b2c87baccfd7424d',
