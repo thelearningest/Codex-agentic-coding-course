@@ -85,6 +85,52 @@ do not grant beginner-pilot, native macOS, runtime or overall course acceptance.
 The previously recorded assessment outline-preview presentation gap remains
 open. The ledger-only delivery record does not change verified runtime code.
 
+### Module 1 Model, Effort and Speed presentation — 4 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / preserved Module 1 theory pages | `implemented` | `passed` for typecheck, lint, 797 unit tests, nine startup checks, production build and the Electron smoke/Teacher/Practice suites described below | Mockup and integration explicitly approved; final app review `pending` | `pending` | Review the integrated lesson in the normal app with the current learner progress preserved. |
+
+The existing `module-1-codex-model-intro` and `module-1-codex-effort-speed`
+pages now display the owner-supplied menu image on the left, with arrows and
+highlights for the selected explanation on the right. The first page contains
+Overview and Model; the second contains Effort and Speed. Local topic switches
+do not save progress or award checkpoints. All scene IDs, course pages,
+assessment questions, Practice rules and navigation destinations are preserved.
+
+The approved personal Model explanation, exact Effort/Speed wording and OpenAI
+reference button are synchronized with the runnable lesson and Teacher script.
+Redundant captions and eyebrow text are absent; the owner also requested removal
+of the Overview footer's “Làm quen với ba mục” label. Screenshot pixels remain
+unchanged. Frozen-content hashes changed only for the three approved content
+files; the frozen scene inventory remains unchanged.
+
+Verification: typecheck, lint, 797 unit tests and nine startup checks passed.
+Unit fixtures required `TMPDIR=/private/tmp` on macOS to avoid a noncanonical
+temporary-path mismatch. Production build and Electron smoke passed, including
+exact displayed copy, highlight selection, local-topic progress invariance,
+back/forward review, and desktop/narrow layout checks. Visual inspection covered
+1024px, 1440px and 390px windows; the narrow content scroll was repaired and the
+reference link was confirmed reachable above the footer. The final full `npm run test:electron` run, including Teacher chat, Practice
+guide and review-feedback suites, passed. An earlier optional Teacher screenshot
+timed out; the subsequent full run completed successfully. These use disposable profiles
+and simulated AI responses, not learner or live AI acceptance.
+
+Local evidence: `/tmp/model-tests-canonical.log`, `/tmp/model-lint.log`,
+`/tmp/model-final-electron.log`, `/tmp/model-other-electron.log`, and
+`/private/tmp/model-controls-qa/`. The earlier, separately requested Practice
+resume fix remains outside this UI checkpoint. Existing live learner progress
+is retained. Overall Foundation and module acceptance gates remain unchanged.
+
+Port to `main`, 15 November 2026 (owner-requested, design only): branch
+`codex/model-controls-design` brings over `1e8bd82`, the four cross-page tabs
+from `decd352` with the working navigation wiring from
+`codex/module-1-checklist`, and that branch's Effort/Speed footer-stability fix.
+The Module 1 self-check checklist and the 6→4 quiz reduction were deliberately
+not brought over; Practice, assessment and every page are unchanged. Typecheck,
+lint, 797 unit tests, build and `npm run test:electron` passed. Final app
+review remains `pending`.
+
 ### Continuation banner and Module 2 quiz-blocker feedback — 29 October 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

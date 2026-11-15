@@ -26,7 +26,8 @@ import buildQuiz from '../../../../../pilot-workspace/course/quizzes/module-3.qu
 import releaseQuiz from '../../../../../pilot-workspace/course/quizzes/module-4.quiz.json'
 import teacherImage from '../assets/teacher-triet.png'
 import m1ApprovalMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/approval-menu.png'
-import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-setup/images/model-settings.png'
+import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-setup/images/model-controls.png'
+import { ModelLessonBoard, type ModelLessonTopic } from '../components/ModelLessonBoard'
 import m1SlashCommandsImage from '../../../../../pilot-workspace/course/codex-setup/images/slash-commands.png'
 import m1AtMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/at-menu.png'
 import m1UnderstandCodexImage from '../assets/lesson-visuals/m1-understand-codex.webp'
@@ -1176,11 +1177,11 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
   },
   'module-1-codex-model-intro': {
     image: m1ModelSettingsImage,
-    alt: 'Menu Codex hiển thị Model 5.6 Sol, Effort High và Speed Standard'
+    alt: 'Menu Codex với GPT-6 Astra, High, thanh trượt và biểu tượng tia sét'
   },
   'module-1-codex-effort-speed': {
     image: m1ModelSettingsImage,
-    alt: 'Menu Codex hiển thị Model 5.6 Sol, Effort High và Speed Standard'
+    alt: 'Menu Codex với GPT-6 Astra, High, thanh trượt và biểu tượng tia sét'
   },
   'module-1-codex-slash-commands': {
     image: m1SlashCommandsImage,
@@ -1635,89 +1636,9 @@ const modelLessonBoardByScene: Partial<Record<SceneId, ModelLessonBoardKind>> = 
   'module-1-codex-effort-speed': 'settings'
 }
 
-function ModelLessonBoard({
-  busy,
-  canOpenPreviousPage,
-  kind,
-  nextLabel,
-  onBack,
-  onExpand,
-  onNext,
-  visual
-}: {
-  busy: boolean
-  canOpenPreviousPage: boolean
-  kind: ModelLessonBoardKind
-  nextLabel: string
-  onBack: () => void
-  onExpand: () => void
-  onNext: () => void
-  visual: LessonVisual
-}) {
-  const titleId = `model-lesson-${kind}`
-
-  return (
-    <section className={`pixel-model-board is-${kind}`} aria-labelledby={titleId}>
-      <div className="pixel-model-board__copy">
-        <header>
-          <h1 id={titleId}>{kind === 'models' ? 'Chọn cách Codex xử lý công việc' : 'Effort và Speed'}</h1>
-          {kind === 'models' ? <p>Ở góc dưới bên phải, ngay cạnh nút microphone, bạn sẽ thấy một menu xổ xuống. Menu này có ba mục: Model, Effort và Speed.</p> : null}
-        </header>
-        {kind === 'settings' ? (
-          <div className="pixel-model-board__tradeoffs">
-            <section>
-              <h2>Effort</h2>
-              <p><strong>Light</strong> phù hợp việc nhỏ. <strong>Medium</strong> là mức cân bằng. <strong>High</strong> phù hợp việc có nhiều bước. <strong>Extra High</strong> và <strong>Ultra</strong> dành cho tác vụ khó hơn.</p>
-              <aside>Trong những lần mình thử, <strong>Extra High</strong> không tạo khác biệt đủ lớn cho đa số công việc hằng ngày. Tác vụ lại mất nhiều thời gian hơn.</aside>
-            </section>
-            <section>
-              <h2>Speed</h2>
-              <p>OpenAI cho biết <strong>Fast</strong> có thể tăng tốc 1,5 lần. Với GPT-5.6, chế độ này dùng credit ở mức 2,5 lần <strong>Standard</strong>.</p>
-              <aside>Trong những lần mình thử, <strong>Fast</strong>  thường chỉ nhanh hơn <strong>Standard</strong> khoảng 0,5 giây. Mức chênh này không đủ lớn để mình chọn <strong>Fast</strong> làm mặc định.</aside>
-            </section>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="pixel-model-board__media">
-        {kind === 'models' ? (
-          <div className="pixel-model-board__models">
-            <article>
-              <span>ASTRA</span>
-              <div><h2>GPT-6 Astra</h2><p>Dòng có năng lực cao nhất, phù hợp với công việc chuyên môn phức tạp.</p><small>Thường dùng: thiết kế kiến trúc, nghiên cứu sâu hoặc xử lý yêu cầu còn mơ hồ.</small></div>
-            </article>
-            <article>
-              <span>TERRA</span>
-              <div><h2>GPT-5.6 Terra</h2><p>Tiết kiệm hơn Sol nhưng vẫn đáp ứng tốt công việc hằng ngày.</p><small>Ví dụ: trả lời tin nhắn khách hàng theo hướng dẫn đã có.</small></div>
-            </article>
-            <article>
-              <span>LUNA</span>
-              <div><h2>GPT-5.6 Luna</h2><p>Thông thường mình không dùng Luna quá nhiều.</p><small>Theo hiểu biết của mình, Luna có thể làm sub-agent. Đây là một agent nhỏ do agent lớn gọi ra để xử lý phần việc ít phức tạp hơn. Chẳng hạn, khi GPT-5.6 Sol sửa một tính năng, Sol có thể gọi Luna khảo sát codebase trước.</small></div>
-            </article>
-          </div>
-        ) : (
-          <>
-            <figure>
-              <LessonVisualMedia activeFocus={null} isApprovalTour={false} visual={visual} />
-              <button aria-label="Phóng to ảnh minh họa" className="pixel-visual-expand" type="button" onClick={onExpand}>PHÓNG TO</button>
-            </figure>
-            <div className="pixel-model-board__recommendation">
-              <small>CẤU HÌNH MÌNH ĐỀ XUẤT</small>
-              <strong>GPT-6 Astra · High · Standard</strong>
-              <p>Nếu lo tốn token, bạn có thể dùng GPT-5.6 Sol.</p>
-            </div>
-          </>
-        )}
-      </div>
-
-      <img className="pixel-model-board__teacher" src={teacherImage} alt="Triết, giáo viên đồng hành" />
-
-      <footer className="pixel-model-board__actions">
-        <button className="pixel-page-back" disabled={!canOpenPreviousPage} type="button" onClick={onBack}>← Trang trước</button>
-        <button className="pixel-choice is-primary" disabled={busy} type="button" onClick={onNext}>{busy ? 'Đang lưu checkpoint…' : nextLabel}</button>
-      </footer>
-    </section>
-  )
+const modelLessonSceneByKind: Record<ModelLessonBoardKind, SceneId> = {
+  models: 'module-1-codex-model-intro',
+  settings: 'module-1-codex-effort-speed'
 }
 
 type GuidanceLessonBoardKind = 'agents' | 'skills' | 'skills-portfolio'
@@ -2521,6 +2442,7 @@ export function LearningWindow() {
   const [secondaryVisualExpanded, setSecondaryVisualExpanded] = useState(false)
   const [appSettings, setAppSettings] = useState<AppSettings>(defaultAppSettings)
   const [practiceGuide, setPracticeGuide] = useState<PracticeGuideView | null>(null)
+  const [modelLessonEntry, setModelLessonEntry] = useState<{ sceneId: SceneId, topic: ModelLessonTopic } | null>(null)
   const practiceAdvanceRef = useRef<Promise<LearnerProgress> | null>(null)
 
   useEffect(() => {
@@ -3321,14 +3243,19 @@ export function LearningWindow() {
 
       {modelLessonBoardKind && lessonVisual ? (
         <ModelLessonBoard
+          key={displayedSceneId}
           busy={busy}
           canOpenPreviousPage={canOpenPreviousPage}
+          initialTopic={modelLessonEntry?.sceneId === displayedSceneId ? modelLessonEntry.topic : undefined}
           kind={modelLessonBoardKind}
           nextLabel={isReviewing ? reviewNextLabel : yellowChoiceLabel(scene.choices[0] ?? { label: 'Tiếp tục', primary: true })}
-          visual={lessonVisual}
-          onBack={openPreviousPage}
-          onExpand={() => setVisualExpanded(true)}
-          onNext={() => {
+          onBack={(topic) => {
+            setModelLessonEntry(topic ? { sceneId: modelLessonSceneByKind.models, topic } : null)
+            openPreviousPage()
+          }}
+          onInitialTopicApplied={() => setModelLessonEntry(null)}
+          onNext={(topic) => {
+            setModelLessonEntry(topic ? { sceneId: modelLessonSceneByKind.settings, topic } : null)
             if (isReviewing) {
               openNextReviewPage()
               return

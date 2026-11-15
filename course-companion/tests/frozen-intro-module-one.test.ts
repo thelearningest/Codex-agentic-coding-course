@@ -5,9 +5,9 @@ import { describe, expect, it } from 'vitest'
 
 const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/lessons/intro.vi.md': '85b293c5ecf0d07f5aba6ad00181be185f4def7da0faaadcde40aaaf01b39ed9',
-  '../pilot-workspace/course/lessons/module-1.vi.md': 'fa3977e398d091cd4c5662086999488963b273db1c3f2f8f5fb9b5622e783704',
+  '../pilot-workspace/course/lessons/module-1.vi.md': '8c8adc34e580f6af82ebe026a0a8e55849746b2d16890671a8f81bff4ec2a386',
   '../pilot-workspace/course/lesson-scripts/intro.script.vi.md': 'ac50c545ed4c301b7fee15f5277d7b482fef34c980d4102513c1fd2cf9a54d82',
-  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '5ad1d3f50dfea652f79c7c7700a2c7e6bdb1b50dd5007f692cb1289d794c835c',
+  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '6b19558a8304779118dd79eff491d48441070fddddba0ec67d5be89b5ebb8fdf',
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': '67edac770b9f1f3b9a309e639c5e5b9d8534cc108957a228354f0b5eb1e3c3ab',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',
@@ -15,7 +15,7 @@ const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/practices/m1-codex-safe-setup.json': 'e38108154ecab20070d2820b1ec8118c0383dd727d267ff02bcea8f9660cad65',
   'content/practices/m1-codex-safe-setup.json': 'a93062fa4386ac54e085b31cfb9a26690d03ba79f2a8810f2b4991d2b04d0d28',
   '../pilot-workspace/course/codex-setup/app.js': '76ee417775f75c302be3758c31442564dbc6371e83ae8942b2c87baccfd7424d',
-  '../pilot-workspace/course/codex-setup/images/SOURCES.md': '22d0b74bcef710bb411938ae98d4905ba782af85471d7c03bd9b0885800af3e8',
+  '../pilot-workspace/course/codex-setup/images/SOURCES.md': 'f3473e33efcce6da9841b5d8bf21147d67b886437ce79140d417fcf2b3b0d2b3',
   '../pilot-workspace/course/codex-setup/images/approval-menu.png': 'aa54394758b3d17e9c67aeeaa8ea93090ef7bc2f01f3d5990986c9ea280581f6',
   '../pilot-workspace/course/codex-setup/images/at-menu.png': '6225554b00c737ae4dc6ad17bb0a608ec0a14cf977674c963b5a765f73ac5091',
   '../pilot-workspace/course/codex-setup/images/model-settings.png': '02ee7752a4cb5870408b1e6b11998db3c55021a446a2e44b0f2a618c7ffb9134',

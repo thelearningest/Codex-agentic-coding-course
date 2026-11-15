@@ -11,3 +11,9 @@ năm 2026. Ảnh được chụp trực tiếp từ menu thiết lập trong ứ
 
 Ảnh chỉ dùng để giúp người học nhận biết đúng vị trí và nội dung cần nộp trong
 Practice. Ảnh không chứa dữ liệu cá nhân hoặc nội dung dự án.
+
+## Model, Effort and Speed controls — 4 November 2026
+
+- `model-controls.png`: original screenshot supplied by the course owner for the approved Module 1 mockup.
+- Screenshot pixels are preserved; arrows and highlights are rendered separately.
+- Used on the existing model introduction and effort/speed pages.
