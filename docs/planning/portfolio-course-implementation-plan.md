@@ -49,6 +49,28 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
 
+### Portfolio AGENTS.md covers Modules 2–4, 15 November 2026
+
+Implementation: `implemented` on branch `portfolio-agents-md`. The owner
+chose to write the file once, at Module 2 folder confirmation, rather than
+update it in later modules. The template keeps its existing text verbatim and
+adds owner-approved wording: a "Cách dùng tệp này" section telling Codex to
+follow only the current module's section (named by the Course Companion
+instructions in the task; Module 2 when none is named and no application code
+exists; otherwise ask the learner), plus "Module 3: xây website" and "Module
+4: đưa portfolio lên mạng" sections. Because nothing rewrites the file after
+Module 2, the Module 3 application fingerprint and the Module 4 clean-commit
+release check are unaffected. The detailed Practice instructions sent by
+Course Companion in Modules 3 and 4 are unchanged.
+
+Verification: the new heading-order and scoping test plus the existing
+template, workspace-repository and picker tests pass (29); typecheck and lint
+`passed`. The full unit suite, build and `test:electron` were not run, because
+the file-writing path is unchanged. Workspaces created earlier on this branch
+keep the previous template, since the file is never overwritten. Next:
+rehearse Modules 2 and 3 in Codex and confirm Codex applies only the current
+module's section.
+
 ### Learners told about the course AGENTS.md, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`, with
@@ -225,6 +247,20 @@ pages centre their message and use a compact continue button.
 Commit `31c524a` left the smoke test expecting six questions; the follow-up
 commit corrects it to four. Typecheck, lint, 798 unit tests, build and
 `npm run test:electron` then passed. Final app review remains `pending`.
+
+On 15 November 2026 the owner requested removal of the blank Module 1 page
+after the assessment result. The result is now page 6/6. Continuing after a
+pass records completion and opens the roadmap with Module 2 ready. Reviewing
+the last page returns directly to the current lesson. Existing saves on the
+removed page resume at the Module 2 opening, and older review histories omit
+the retired page.
+
+Implementation is `implemented`. Scoped verification `passed` for typecheck,
+lint, build, progress and outline tests, and both navigation paths in Electron
+with disposable profiles. Full-suite verification `failed` on the quiz file
+digest and portfolio review/completion tests. The Electron smoke run completed
+the Module 1 flow and later timed out looking for “Thoát ứng dụng”. Final app
+review and pilot acceptance remain pending.
 
 ### Continuation banner and Module 2 quiz-blocker feedback — 29 October 2026
 
@@ -2600,12 +2636,13 @@ my-portfolio/
   deployment/
   src/                  # created in Module 3
   public/               # created in Module 3
-  AGENTS.md              # created in Module 3
+  AGENTS.md              # written by Course Companion in Module 2
   README.md              # created in Module 3
   package.json           # created in Module 3
 ```
 
-Module 2 creates only `planning/` content. “Create from scratch” in Module 3
+Module 2 creates only `planning/` content and the Course Companion-written
+root `AGENTS.md`. “Create from scratch” in Module 3
 means that no application source, dependency manifest, design system, portfolio
 component, or deployment configuration exists before the learner approves the
 scaffold. The presence of approved planning artifacts does not make the app a
@@ -4423,8 +4460,8 @@ remain unchanged.
    result, verification, network access, and approval needs.
 3. After approval, create only React, TypeScript, Vite, a dependency lockfile,
    development/typecheck/lint/build/preview commands, ordinary entry files, a
-   neutral page, minimal readable styles, `.gitignore`, `README.md`, and scoped
-   `AGENTS.md`.
+   neutral page, minimal readable styles, `.gitignore` and `README.md`. The
+   root `AGENTS.md` already exists from Module 2 and is not rewritten.
 4. Define `npm run check` as typecheck, lint, and production build in a clear
    order. Preserve individual commands for diagnosis.
 5. Do not create portfolio sections, final design tokens, optional libraries,

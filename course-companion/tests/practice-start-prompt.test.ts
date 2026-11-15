@@ -31,6 +31,19 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(portfolioAgentsTemplate).not.toContain('chưa viết code')
   })
 
+  it('scopes each module section of AGENTS.md to the current module only', () => {
+    const headings = ['## Cách dùng tệp này', '## Thư mục làm việc', '## Tài liệu và dữ liệu',
+      '## Module 2: gói kế hoạch', '## Module 3: xây website', '## Module 4: đưa portfolio lên mạng']
+    const positions = headings.map((heading) => portfolioAgentsTemplate.indexOf(heading))
+    expect(positions.every((position) => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+    expect(portfolioAgentsTemplate).toContain('Chỉ làm theo mục của module hiện tại và bỏ qua các mục module khác')
+    expect(portfolioAgentsTemplate).toContain('Nếu chỉ dẫn không nêu module và thư mục chưa có mã ứng dụng, đó là Module 2')
+    expect(portfolioAgentsTemplate).toContain('Không thêm backend, dịch vụ xử lý dữ liệu hay triển khai lên hosting trong Module 3')
+    expect(portfolioAgentsTemplate).toContain('chờ người học đồng ý cho đúng hành động đó')
+    expect(portfolioAgentsTemplate).toContain('Không tự mua tên miền hay dịch vụ')
+  })
+
   it('preserves the exact course prompt in a collapsed disclosure with an always-available copy action', () => {
     const html = renderToStaticMarkup(createElement(PracticeStartPrompt, { practiceId: 'm2-portfolio-planning' }))
     expect(html).toContain(`<p>${moduleTwoStartPrompt}</p>`)
