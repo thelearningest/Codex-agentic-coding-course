@@ -45,7 +45,7 @@ const designReferenceLinks = [
   ['Mobbin', 'https://mobbin.com/'],
   ['Pinterest', 'https://www.pinterest.com/']
 ]
-async function openModuleTwoPractice(page, stepsRemaining = 5) {
+async function openModuleTwoPractice(page, stepsRemaining = 7) {
   for (let index = 0; index < stepsRemaining; index += 1) {
     await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }

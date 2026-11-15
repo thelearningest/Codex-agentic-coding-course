@@ -65,12 +65,20 @@ Verification: typecheck, lint and build `passed`. Unit tests: the three new
 or rewritten checks pass. 79 failures in
 `portfolio-module-completion-service`, `portfolio-package-review` and
 `portfolio-release-package` also fail identically without this change.
-`test:electron` is `blocked` before Module 2: in `completeSetupModule`, the
-HUD header intercepts the **← Trang trước** click during Module 1 outline
-navigation, so the new `['AGENTS.md', 'planning']` assertion has not run.
+`test:electron` `passed` (smoke, Teacher chat, Practice guide and review
+feedback), including the new `['AGENTS.md', 'planning']` folder check.
+
+Two regressions from earlier 15 November commits were repaired to reach
+that result. The navigation-only Module 1 completion page rendered its
+**← Trang trước** and **Mở Module 2** buttons under the HUD, so they were
+not visible or clickable; they now sit at the bottom of the stage where
+dialogue actions sit on other pages (inspected at 1180×748 and 1440×900).
+The smoke test also still clicked **Tiếp tục** five times to reach the
+portfolio-folder page; the two sample-prompt pages make it seven.
+
 Learners whose workspace already exists keep no `AGENTS.md`; decide whether
-they need a fallback. Next: repair the Module 1 navigation failure, rerun
-`test:electron`, then rehearse Module 2 in Codex with the short prompt.
+they need a fallback. Next: rehearse Module 2 in Codex with the short prompt
+and confirm Codex reads the generated `AGENTS.md`.
 
 ### Reviewing completed modules from Home Base, 15 November 2026
 
