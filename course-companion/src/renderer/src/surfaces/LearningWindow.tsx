@@ -494,7 +494,6 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'CẤU HÌNH', value: 'Đã được Triết duyệt', ready: true },
       { label: 'BƯỚC TIẾP', value: 'Planning, PRD và prompt', ready: true }
     ],
-    dialogue: 'Module 2 sẽ dùng nền tảng này để xác định người xem, kiểm kê bằng chứng và lập kế hoạch portfolio của bạn trước khi viết code.',
     choices: [{ label: 'Mở Module 2', next: 'module-2-portfolio-workspace', afterSave: 'home', primary: true }]
   },
   'module-2-why-planning': {
@@ -3111,6 +3110,7 @@ export function LearningWindow() {
   const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
+  const navigationOnly = isVercelTutorial || displayedSceneId === 'module-1-complete'
   const canExpandLessonVisual = scene.lessonId !== 'intro'
   const canShowSceneMedia = !assessmentQuestion && !scene.assessmentSummary
   const usesPairedLessonNavigation = isReviewing || (!assessmentQuestion && !scene.assessmentSummary)
@@ -3368,12 +3368,12 @@ export function LearningWindow() {
       ) : null}
 
       <section
-        aria-label={isVercelTutorial ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
-        aria-labelledby={isAssessmentQuestionPage || isVercelTutorial ? undefined : 'teacherName'}
-        className={isVercelTutorial ? 'pixel-vercel-tutorial-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
+        aria-label={navigationOnly ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
+        aria-labelledby={isAssessmentQuestionPage || navigationOnly ? undefined : 'teacherName'}
+        className={navigationOnly ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
-        {isAssessmentQuestionPage || isVercelTutorial ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
-        {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
+        {isAssessmentQuestionPage || navigationOnly ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
+        {isAssessmentQuestionPage || navigationOnly ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
           <PortfolioWorkspacePicker
             courseRunId={progress.courseRunId}
             onContinue={() => void advanceToScene('module-2-portfolio-practice', progress.decisions)}

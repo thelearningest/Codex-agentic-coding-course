@@ -1961,14 +1961,14 @@ button:focus-visible {
   background: #000;
 }
 
-.pixel-vercel-tutorial-navigation {
+.pixel-lesson-navigation {
   position: relative;
   z-index: 5;
   width: min(100%, 1100px, max(560px, calc((100vh - 260px) * 16 / 9)));
   flex: 0 0 auto;
 }
 
-.pixel-vercel-tutorial-navigation .pixel-lesson-actions.is-paired {
+.pixel-lesson-navigation .pixel-lesson-actions.is-paired {
   position: static;
   margin: 0;
   align-items: center;
@@ -1976,7 +1976,7 @@ button:focus-visible {
   gap: 24px;
 }
 
-.pixel-vercel-tutorial-navigation .pixel-choice {
+.pixel-lesson-navigation .pixel-choice {
   width: min(240px, 100%);
   text-align: center;
 }
