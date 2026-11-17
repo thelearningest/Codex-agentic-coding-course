@@ -1,4 +1,5 @@
 import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
+import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -231,6 +232,9 @@ const executorBootstrapGateway = useTestCodexGateway
       },
       close: closeExecutorBootstrap
     }
+const codexDataDirectory = process.env.CODEX_HOME?.trim()
+  ? resolve(process.env.CODEX_HOME)
+  : join(app.getPath('home'), '.codex')
 const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGateway
   ? { request: (method, params) => appServerGateway.request(method, params) }
   : {
@@ -245,13 +249,19 @@ const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGate
         portfolioProjectClientStarted = false
         await portfolioProjectClient.stop()
       }
-    })
+    }, useTestCodexGateway ? {
+      find: (root) => (appServerGateway as TestCodexGateway).findDesktopProject(root),
+      open: (root) => (appServerGateway as TestCodexGateway).openDesktopProject(root)
+    } : new CodexDesktopProjectRegistry(codexDataDirectory, async (url) => {
+      await resolveCodexRuntimeCommand()
+      await shell.openExternal(url)
+    }))
 
 async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
   const workspace = await portfolioWorkspaceRepository.load({ courseRunId: request.courseRunId })
   if (workspace.status !== 'ready' || workspace.selectedPath !== request.expectedPath) return workspace
   try {
-    const project = await portfolioCodexProjects.ensure(request.expectedPath, workspace.codexProject?.id)
+    const project = await portfolioCodexProjects.ensure(request.expectedPath)
     return await portfolioWorkspaceRepository.saveCodexProject(request, project)
   } catch {
     return { ...workspace, codexProjectError: 'Chưa thêm được portfolio vào Codex. Hãy mở hoặc cập nhật Codex rồi thử lại.' }
@@ -276,9 +286,6 @@ const persistedPracticeActivity = {
     return activeRun ? activityRepository.load(activeRun.runId) : null
   }
 }
-const codexDataDirectory = process.env.CODEX_HOME?.trim()
-  ? resolve(process.env.CODEX_HOME)
-  : join(app.getPath('home'), '.codex')
 const taskMetadataReader = new CodexTaskMetadataReader(
   join(codexDataDirectory, 'state_5.sqlite'),
   join(codexDataDirectory, 'sessions')

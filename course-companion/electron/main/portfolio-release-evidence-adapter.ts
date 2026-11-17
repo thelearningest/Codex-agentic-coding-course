@@ -10,7 +10,7 @@ import { readPortfolioReleaseGit } from './portfolio-release-git'
 const hash = (value: string | Uint8Array) => createHash('sha256').update(value).digest('hex')
 const iso = (value: unknown): value is string => typeof value === 'string' && Number.isFinite(Date.parse(value))
 const object = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === 'object' && !Array.isArray(value)
-const keys = (value: Record<string, unknown>, expected: string[]) => Object.keys(value).length === expected.length && expected.every((key) => key in value)
+const keys = (value: Record<string, unknown>, expected: string[]) => expected.every((key) => Object.hasOwn(value, key))
 const text = (value: unknown, minimum = 1, maximum = 4000): value is string => typeof value === 'string' && value.trim().length >= minimum && value.length <= maximum
 
 function sharingUrl(value: unknown): string {
@@ -34,18 +34,18 @@ export function parsePortfolioDeploymentRecord(value: unknown): PortfolioDeploym
   const validation = value.validation
   const publication = value.publication
   if (!object(deployment) || !keys(deployment, ['url', 'provider', 'deploymentId', 'sourceRevision', 'buildStatus', 'deployedAt'])
-    || !text(deployment.url, 1, 2048) || deployment.provider !== 'vercel' || !text(deployment.deploymentId, 1, 200)
+    || !text(deployment.url, 1, 2048) || typeof deployment.provider !== 'string' || deployment.provider.trim().toLowerCase() !== 'vercel' || !text(deployment.deploymentId, 1, 200)
     || !/^[a-zA-Z0-9_./:-]+$/.test(deployment.deploymentId)
     || typeof deployment.sourceRevision !== 'string' || deployment.sourceRevision.toLowerCase() !== String(value.sourceRevision).toLowerCase()
-    || deployment.buildStatus !== 'ready' || !iso(deployment.deployedAt)) throw new Error('Invalid deployment evidence')
+    || typeof deployment.buildStatus !== 'string' || deployment.buildStatus.trim().toLowerCase() !== 'ready' || !iso(deployment.deployedAt)) throw new Error('Invalid deployment evidence')
   const url = sharingUrl(deployment.url)
   if (!object(validation) || !keys(validation, ['checkedAt', 'command', 'passed', 'desktop', 'mobile', 'limitations'])
     || !iso(validation.checkedAt) || Date.parse(validation.checkedAt) < Date.parse(deployment.deployedAt)
-    || validation.command !== 'npm run check' || validation.passed !== true
+    || !text(validation.command) || validation.passed !== true
     || !Array.isArray(validation.limitations) || validation.limitations.length > 20 || !validation.limitations.every((item) => text(item, 1, 500))) throw new Error('Invalid validation evidence')
   for (const viewport of [validation.desktop, validation.mobile]) {
     if (!object(viewport) || !keys(viewport, ['url', 'observations']) || sharingUrl(viewport.url) !== url
-      || !text(viewport.observations, 20)) throw new Error('Missing concrete browser observations')
+      || !text(viewport.observations)) throw new Error('Missing concrete browser observations')
   }
   if (!object(publication) || !keys(publication, ['learnerApproved', 'observedPublicAccess'])
     || publication.learnerApproved !== true || publication.observedPublicAccess !== true) throw new Error('Missing reported publication decision')
@@ -53,7 +53,7 @@ export function parsePortfolioDeploymentRecord(value: unknown): PortfolioDeploym
   return { ...value,
     moduleThreeSourceCheckpoint: String(value.moduleThreeSourceCheckpoint).toLowerCase(),
     sourceRevision: String(value.sourceRevision).toLowerCase(),
-    deployment: { ...deployment, url, sourceRevision: deployment.sourceRevision.toLowerCase() },
+    deployment: { ...deployment, url, provider: 'vercel', buildStatus: 'ready', sourceRevision: deployment.sourceRevision.toLowerCase() },
     validation: { ...validation,
       desktop: { ...(validation.desktop as object), url },
       mobile: { ...(validation.mobile as object), url } }

@@ -59,6 +59,7 @@ try {
     await panel.getByRole('button', { name: 'Thử lại', exact: true }).waitFor()
     assert.equal(await thinking.count(), 0)
     await page.setViewportSize({ width: 390, height: 844 })
+    await page.bringToFront()
     await panel.getByRole('button', { name: 'Thử lại', exact: true }).click()
     await thinking.waitFor()
     assert.equal(await panel.locator('.pixel-chat-message.is-learner').count(), 1)

@@ -46,9 +46,93 @@ and must never be inferred from a passing automated check.
 |---|---|---|---|---|---|
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
-| Module 2 | `in-progress` overall — five-document Practice is implemented, including Finder-metadata handling and original-task continuity; incoming theory/mastery preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | `pending` overall; prior five-document design/migration approvals remain recorded, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance; hand courseapp student findings to its owner. |
-| Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
-| Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
+| Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 3 | `implemented` — v2 Practice, flexible AI assessment, complete source fingerprints and task-acceptance freshness; course scenes/questions preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | v2 design/implementation approved 13 September; expanded validity repairs requested 17 November; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance. |
+| Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Main synchronization, 18 November 2026
+
+Implementation: `implemented`. The merge combines local course and Teacher
+launcher changes with the incoming Codex project-registration and Practice
+validation repairs through `7fe183a`. The owner explicitly chose the screenshot
+guide and removal of the conflicting video assets. The short Module 2 prompt
+continues to point to the existing portfolio AGENTS.md. Both branches' planning
+records are retained. Lesson scene and navigation definitions match the local
+pre-merge baseline.
+
+Verification: `passed` for the complete merge gate. Typecheck, lint, build,
+875 unit tests and nine startup checks passed. On macOS the test invocation
+uses `TMPDIR=/private/tmp` to avoid the `/var` symlink alias. The two Module 1
+content digests now reflect the existing link-label change in `5db0057`.
+The Electron palette check recognizes the already-approved CSS illustration
+and its selected-step border. The full Electron smoke, Teacher chat, screenshot
+guide and review-feedback suites passed with disposable profiles, including
+desktop and narrow layouts.
+
+A read-only collection of the reported learner workspace found all five
+documents ready with no structural issues. This establishes readiness for
+content review, not an AI verdict or learner acceptance. Next permitted action:
+check the staged source, commit the merge and push main as requested, then
+obtain live learner review. Owner and pilot runtime acceptance remain pending.
+
+### Practice content validity and issue #9 — 17 November 2026
+
+- Scope: M2.4/M2.6 and the current Module 3/4 Practice review gates. The owner
+  requested fixing issue #9, simple document feedback, AI content assessment,
+  and a delegated audit/repair of similar brittle gates across Practice.
+- Implementation: `implemented`. Module 2 now sends readable nonempty documents
+  to the existing live AI reviewer after current learner approval. Heading
+  keywords, section counts, exact REQ/AC syntax and static requirement matching
+  no longer reject submissions. The reviewer accepts equivalent prose, lists,
+  tables, descriptive references and bounded unknowns, while assessing actual
+  coverage, consistency, validation, honest evidence and scope.
+- Feedback: show the number of required documents actually read, one actionable
+  issue at its file, and whether content review is pending. Do not show the
+  synthetic all-unverifiable result as five content failures or a misleading
+  zero-step count. Actual AI needs-work feedback remains visible.
+- Audit: Module 3/4 repairs remove formatting and command-spelling gates,
+  defer content adequacy to AI, and keep independently read source identity,
+  task binding, approval, publication consent and external verification checks.
+  Task report candidates can reach semantic review without matching the
+  activity observer's keyword extractor; a candidate is not proof of a check.
+- Module 3 accepts prose/list/table records, bounded deferred work, equivalent
+  scripts/toolchains and source layouts, including plain HTML without Node.
+  Configuration and file inventory reach AI as bounded untrusted evidence.
+  File modification times alone no longer prove validation stale; actual byte
+  changes still invalidate approval. Module 4 accepts actual equivalent check
+  commands, concise concrete observations, extra metadata and equivalent case
+  in provider/status values while retaining required release identities.
+- Verification: `passed` for the final Windows batch: typecheck, lint, build,
+  865 unit tests (three existing skips), nine startup checks, Electron smoke,
+  Teacher chat, Practice video, review feedback and the disposable Module
+  2→3→4 journey. Desktop and 320px document feedback were visually inspected
+  without overflow. Tests cover flexible document formats, actual AI verdict
+  propagation, missing/empty files, absent application evidence, current
+  approval, source changes, task identity and bounded metadata persistence.
+  AI outcomes and deployment responses in these tests are simulated.
+- Verification repairs: an empty virtual source inventory needed a nonzero
+  evidence-text size to satisfy persistence; oversized metadata is bounded in
+  UTF-8 bytes and explicitly marked incomplete. The final full unit rerun
+  passed after those corrections. An initial Module 1 smoke timeout passed
+  unchanged on rerun. Chat Retry after resizing required bringing the test
+  window to the foreground; no product assertion was weakened. Practice video
+  passed unchanged in isolation after a playback pause; the displayed seek
+  warning came from its intentional earlier seek test, not proof of a product
+  defect. No video behavior or test was changed.
+- Preservation: no lesson scene, route, quiz, progress reset, learner submission,
+  schema migration or personal profile change. Older Practice versions retain
+  their historical rules and migrate through the existing v2 path. Module 1
+  continues to compare actual normalized configuration facts.
+- Remaining gaps: automated review fixtures do not establish live AI judgment
+  quality, beginner acceptance or native macOS behavior. Overall module owner
+  and pilot acceptance remain pending. The separate mastery-response length
+  policy is outside this Practice-review repair.
+- Delivery authorization: on 17 November the owner explicitly requested
+  committing and pushing these verified fixes. This authorizes repository
+  publication, not learner/pilot acceptance or application deployment.
+- Next permitted action: stage the scoped repair, pass the clean-course-source
+  index check, commit and push to the current branch, then obtain live learner
+  review. No GitHub issue comment or closure is included in this delivery.
 
 ### Module 1 Practice entry, 17 November 2026
 
@@ -226,7 +310,8 @@ the overlapping saved-Practice repair. All 61 scene definitions from current
 main remain present. Preservation hashes cover the combined, authorized copy;
 main's four-question assessment source is retained.
 
-The current video is version `1.2.0` (2:38). Its transcript disclosure is removed
+The merge shipped video version `1.2.0` (2:38); the owner-script `1.3.0` revision
+is recorded below. Its transcript disclosure is removed
 as requested; embedded and optional external captions remain. Authoring text is
 retained as source. Automatic registration, readable new chat titles and the
 four required settings are included in the same delivery.
@@ -299,6 +384,92 @@ Final logs remain ignored under `.superpowers/qa/portfolio-project-final-*`.
 Normal learner profiles, portfolio contents and existing chat titles were not
 reset or modified by verification. No commit, push or release was performed.
 Live learner/AI quality and native-platform acceptance remain separate.
+
+### Desktop portfolio project registration repair — 17 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 / M2.5 / M3.8 / M4.8 — visible desktop project registration | `implemented` | `passed` for the Windows checks below | Existing automatic-project scope retained; final runtime acceptance remains `pending` | `pending` | Continue the owner's manual test from saved progress; retain native macOS and learner acceptance gates. |
+
+The live Windows test disproved the earlier assumption that a successful
+`project/create`/`project/read` establishes a visible Codex desktop project.
+The prior protocol and simulated Electron results remain valid for their
+tested surfaces, but did not verify the desktop sidebar. Course Companion had
+reported readiness for a backend-only project while the portfolio chat remained
+outside a desktop project.
+
+The repair uses Codex's native folder-opening deep link for registration,
+read-only desktop registry and desktop/server ID mapping verification, and
+backend primary-root readback. Missing or unsupported desktop registration
+blocks readiness. Existing desktop projects are reused; preparing an older
+portfolio task repairs and persists its project metadata without changing the
+thread, workspace, approval or review evidence. No course copy or scenes change.
+
+The native link was observed to add the selected folder to the real desktop
+project list. The existing portfolio conversation was attached through the
+desktop's project-management tool, then its mapped backend membership was
+aligned and independently re-read through App Server. The exact original
+thread and folder were preserved; no prompt was sent. Course Companion was
+restarted with the final build, and the learner-state file hash was unchanged.
+
+Final verification passed: typecheck, lint, production build, 831 unit tests
+(three existing skips across 97 files), all nine startup checks, the full
+Electron smoke/Teacher chat/video/review-feedback suites, and the disposable
+Modules 2–4 portfolio journey. Regression checks reject backend-only readiness,
+wait for desktop readback, reuse distinct desktop/server IDs, and preserve a
+concurrent learner update while saving repaired project metadata. The first
+sandboxed full run failed on filesystem restrictions and default-worker
+timeouts; the final two-worker run outside the sandbox passed without changing
+assertions or timeouts. Logs remain ignored under
+`.superpowers/qa/desktop-project-repair-*`.
+
+Desktop registry readback depends on the installed Codex registry format;
+unsupported formats fail registration rather than claiming success. Native
+macOS behavior, live beginner review quality and owner/pilot acceptance remain
+open. No acceptance is inferred from simulated Electron results. The owner
+requested pushing this repair to `main` on 17 November 2026; code delivery does
+not establish owner or pilot acceptance.
+
+### Owner-authored Practice video revision — 17 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 — owner-script video, version `1.3.0` | `implemented` | `passed` — media integrity, full decoding, typecheck, lint, 25 focused checks, build and actual full-media Electron playback/confirmation/handoff | Replacement narration, scene order, highlights and Microsoft synthesis authorized; owner reviewed the result, said “looks good” and explicitly requested pushing to `main` on 17 November 2026 | `pending` | Continue real beginner and native-platform rehearsals with the approved video; no further visual-approval gate remains for this version. |
+
+The owner supplied new Vietnamese narration and requested adapting the video,
+then asked for highlights showing where to look in each scene. The new local
+asset is 100.511667 seconds (1:40), with a greeting, five scenes split into ten
+narration segments, a closing, 23 embedded two-line caption cues and 20 contextual
+gold highlights. Each spoken target is highlighted individually, including the
+new chat, Mở Triết, review, Medium, next action, hints, passed result, return and
+icon/window tips. The additional icon-position recording uses a disposable
+profile and real native window movement, without synthetic UI motion.
+
+The requested placeholder is filled with `Cập nhật và kiểm tra tiến độ`; the
+return action is identified as `Lưu kết quả và quay lại khóa học`. The narration
+says checking work in the bound chat rather than promising to read an unbounded
+entire transcript. The old spoken video-watching instructions, detailed settings
+tutorial and replay/resume digressions are removed from this edit. The actual
+application pages, four assessed settings, viewing gate and explicit
+confirmation remain unchanged.
+
+Technical evidence is under `.superpowers/qa/practice-desktop-v2/owner-*`.
+Script/word-boundary/WebVTT integrity, non-overlapping marks, H.264/AAC at
+1920 × 1080 / 30 fps and full decoding passed; all marks and final captions were
+visually sampled. Typecheck, lint, production build and 25 focused video and
+Module 1 renderer tests passed. The established media-only gate applies; the
+broader unrelated regression suite is not part of this revision. Owner visual
+acceptance was given on 17 November; real beginner and native macOS acceptance
+remain separate. Concurrent desktop
+project-registration work is preserved and is not included in this media scope.
+
+The final disposable Electron check passed actual full-media playback, seek
+prevention, native-hide pause and restart persistence, separate confirmation,
+failed-save retry, manual handoff, replay without Practice writes, reviewed
+return and desktop/narrow controls. The video-specific result is saved in
+`owner-electron.log`. No personal learner profile was reset and no application
+page or scene was removed. The owner approved the video and authorized its
+commit and push to `main` on 17 November 2026.
 
 ### Module 1 Practice video and guide replacement — 15 November 2026
 
@@ -3479,15 +3650,20 @@ I1–I6 are implemented.
 3. Limit write scope to the five approved planning documents and bounded
    reference screenshots.
 4. Extend planning evidence collection to validate:
-   - required sections and artifact digests;
+   - readable nonempty required files and artifact digests;
    - the approved plain-language evidence labels and privacy/permission review;
    - learner-owned or externally sourced references, optional useful
      screenshots, and explicit unknown-rights boundaries;
    - PRD scope and acceptance criteria;
-   - one-to-one requirement-validation coverage inside the implementation plan;
+   - semantic coverage of every requirement inside the implementation plan;
    - phased plan dependencies, non-goals, and the absence of a Module 2
      implementation task;
    - learner approval of the current versions.
+   As authorized on 17 November 2026, AI assesses content meaning across
+   arbitrary document layouts and wording. Static checks must not require
+   heading names/counts, exact keywords or REQ/AC naming conventions. Stable
+   descriptive requirement references and shared validation are acceptable
+   when every required outcome remains unambiguously covered.
 5. On submission, Course Companion inspects the current five documents and
    records explicit learner approval of the current PRD and plan before AI
    review. A needs-work result keeps the same task available for revision;

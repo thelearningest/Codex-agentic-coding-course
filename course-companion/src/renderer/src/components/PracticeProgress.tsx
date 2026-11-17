@@ -132,6 +132,13 @@ export function PracticeProgress({
   const [expandedCompactStepId, setExpandedCompactStepId] = useState<string | null>(null)
   const reviewStatus = workspace.review?.status
   const practicePassed = reviewStatus === 'passed' && workspace.review?.canReturn
+  const planningPackage = workspace.portfolioPackage
+    && (!workspace.portfolioPackage.kind || workspace.portfolioPackage.kind === 'planning')
+  const planningReviewPending = planningPackage
+    && (!workspace.portfolioPackage!.ready || !workspace.portfolioPackage!.approved)
+  const planningNextAction = workspace.portfolioPackage?.issues.length
+    ? 'Sửa các mục được ghi dưới tài liệu rồi kiểm tra lại.'
+    : 'Lưu đủ năm tài liệu rồi kiểm tra lại.'
   const reviewResult = workspace.review?.result
   const unresolvedCriterion = reviewResult?.criteria.find((criterion) => criterion.status !== 'satisfied')
   const nextChecklistStep = workspace.checklist.find((step) =>
@@ -143,6 +150,7 @@ export function PracticeProgress({
   const reviewNextAction = reviewStatus === 'passed'
     ? 'Quay lại khóa học để tiếp tục.'
     : needsPackageSubmission ? packageSubmissionLabel
+    : planningReviewPending ? planningNextAction
     : unresolvedCriterion
       ? criterionNextActions[unresolvedCriterion.criterionId] ?? unresolvedCriterion.explanation
       : nextChecklistStep?.reason
@@ -176,6 +184,7 @@ export function PracticeProgress({
   const compactNextAction = reviewStatus === 'passed'
     ? 'Quay lại khóa học để tiếp tục.'
     : needsPackageSubmission ? packageSubmissionLabel
+    : planningReviewPending ? planningNextAction
     : unresolvedCriterion && criterionNextActions[unresolvedCriterion.criterionId]
       ? criterionNextActions[unresolvedCriterion.criterionId]
       : workspace.portfolioPackage && unresolvedCriterion
@@ -233,7 +242,7 @@ export function PracticeProgress({
             <strong>{compactNextAction}</strong>
           </div>
         ) : null}
-        <div className="practice-compact-progress" role="status">
+        {!planningPackage ? <div className="practice-compact-progress" role="status">
           <div>
             <small>Tiến độ</small>
             <strong>{completedStepCount}/{workspace.checklist.length} bước đã xác minh</strong>
@@ -241,8 +250,8 @@ export function PracticeProgress({
           {!practicePassed ? <b className={`is-${reviewStatus ?? 'not-reviewed'}`}>
             {reviewStatus === 'needs-work' ? 'Cần bổ sung' : 'Chưa duyệt'}
           </b> : null}
-        </div>
-        {workspace.portfolioPackage && reviewStatus === 'needs-work' && reviewResult ? (
+        </div> : null}
+        {workspace.portfolioPackage && !planningReviewPending && reviewStatus === 'needs-work' && reviewResult ? (
           <section className="practice-review-result is-needs-work" tabIndex={-1} aria-label="Kết quả duyệt Practice">
             <p>{reviewResult.summary}</p>
             <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
@@ -313,7 +322,7 @@ export function PracticeProgress({
         ) : null}
       </div> : null}
 
-      {reviewStatus === 'passed' || reviewStatus === 'needs-work' ? (
+      {!planningReviewPending && (reviewStatus === 'passed' || reviewStatus === 'needs-work') ? (
         <ReviewContainer className={practicePassed ? 'practice-success-details' : `practice-review-result is-${reviewStatus}`} tabIndex={-1} role={practicePassed ? undefined : 'status'} aria-label="Kết quả duyệt Practice">
           {practicePassed ? <summary>Xem kết quả kiểm tra</summary> : null}
           <div>

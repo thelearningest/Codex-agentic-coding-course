@@ -120,7 +120,7 @@
       "acceptedEvidence": [
         "planning-artifact"
       ],
-      "assertion": "Assess stable REQ identifiers, useful testable acceptance criteria, feasibility, scope, responsive and accessibility behavior.",
+      "assertion": "Assess stable, unambiguous requirement references (IDs or descriptive names), useful testable acceptance criteria, feasibility, scope, responsive and accessibility behavior. A particular REQ-* naming convention is not required.",
       "freshness": "fresh"
     },
     {

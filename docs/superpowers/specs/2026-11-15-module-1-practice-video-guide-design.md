@@ -13,6 +13,46 @@ desktop revision below; the original media is not an accepted final guide.
 
 ## Requested concise edit — 15 November 2026
 
+### Owner-authored narration revision — 17 November 2026
+
+Status: `implemented`, verification `passed` for the established media-only
+gate. The bundled `1.3.0` asset is 100.511667 seconds (1:40), with ten narration
+segments, 23 caption cues and 20 gold highlights. Full decoding, script/caption
+and highlight integrity, typecheck, lint, 25 focused tests, production build and
+the actual full-media Electron playback/confirmation/handoff check passed.
+The owner reviewed the result, said “looks good” and explicitly requested
+pushing to `main` on 17 November 2026. Learner/native-platform acceptance remains
+pending.
+
+The owner supplied replacement Vietnamese narration and explicitly requested
+adapting the video to it, then requested contextual highlight marks throughout.
+This authorizes immediate implementation of that supplied design. Version
+`1.3.0` follows the owner's greeting, five scenes and closing: lesson handoff;
+the new native Codex chat and Mở Triết; progress checking, the genuine Medium
+example and hints; completed review and saved course return; then icon/window
+tips. Remove the old spoken video-watching instructions, separate settings
+tutorial, task recovery and replay/resume digressions from the media. Existing
+application pages, settings requirements and the viewing/confirmation gate remain.
+
+Fill the requested button placeholder with **Cập nhật và kiểm tra tiến độ** and
+identify **Lưu kết quả và quay lại khóa học** explicitly. Replace the claim of
+reading the entire chat with checking the work in the bound chat: review context
+is bounded and Module 1 independently evaluates task configuration. Preserve
+the owner's other narration apart from punctuation and Codex/UI capitalization.
+The owner explicitly authorized sending only the revised narration to the
+existing Microsoft speech service on 17 November; retain Nam Minh narration.
+
+Use a stationary desktop and one gold highlight at a time, aligned to the
+spoken target: handoff, chat title/composer, icon/open control, review, Medium,
+next action, hint and returned guidance, success/return, and window controls.
+Keep two-line embedded captions synchronized with regenerated speech. Use
+actual recordings for every UI view and outcome. Keep recordings and temporary
+profiles outside published source. The existing media-only acceptance gate
+continues: full decoding, script/caption and highlight integrity, typecheck,
+lint, focused Practice/video checks, build and full actual-media Electron
+playback/confirmation/handoff. Owner visual acceptance was given on 17 November;
+learner acceptance remains open.
+
 Status: `implemented`, verification `passed` for main behavior. The owner rejected the prominent
 chapter/wait banners and slow camera movement, then explicitly requested a
 2–3 minute guide. Version `1.2.0` supersedes the duration and camera choices below:

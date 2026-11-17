@@ -1,7 +1,7 @@
-import { createHash } from 'node:crypto'
-import { basename, isAbsolute, resolve } from 'node:path'
+import { isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { CodexRequestClient } from './executor-chat-coordinator'
+import type { CodexDesktopProjects } from './codex-desktop-project-registry'
 
 type Project = { id: string; name: string; roots: Array<{ path: string }> }
 
@@ -34,43 +34,40 @@ function matches(project: Project, root: string): boolean {
 export class PortfolioCodexProjectService {
   private queue: Promise<unknown> = Promise.resolve()
 
-  constructor(private readonly client: CodexRequestClient) {}
+  constructor(
+    private readonly client: CodexRequestClient,
+    private readonly desktop: CodexDesktopProjects,
+    private readonly discovery: {
+      attempts?: number
+      intervalMs?: number
+      wait?: (milliseconds: number) => Promise<void>
+    } = {}
+  ) {}
 
-  ensure(root: string, existingId?: string): Promise<{ id: string; name: string }> {
+  ensure(root: string): Promise<{ id: string; name: string }> {
     const operation = this.queue.then(async () => {
       try {
-        let target: Project | undefined
-        if (existingId) {
-          const read = await this.client.request('project/read', { projectId: existingId })
-          target = project(record(read) ? read.project : null)
-          if (target.id !== existingId || !matches(target, root)) throw new Error('Portfolio project root changed')
-        } else {
-          let cursor: string | null = null
-          const visited = new Set<string>()
-          do {
-            const page = await this.client.request('project/list', { cursor, limit: 100 })
-            if (!record(page) || !Array.isArray(page.data)
-              || (page.nextCursor !== null && typeof page.nextCursor !== 'string')) {
-              throw new Error('Codex returned an invalid project list')
-            }
-            target = page.data.map(project).find((candidate) => matches(candidate, root))
-            cursor = page.nextCursor
-            if (cursor && visited.has(cursor)) throw new Error('Codex project list did not advance')
-            if (cursor) visited.add(cursor)
-          } while (!target && cursor)
-          if (!target) {
-            const created = await this.client.request('project/create', {
-              name: basename(root),
-              roots: [{ path: root }],
-              idempotencyKey: 'course-portfolio-' + createHash('sha256').update(normalizedPath(root)).digest('hex')
-            })
-            target = project(record(created) ? created.project : null)
+        normalizedPath(root)
+        let target = await this.desktop.find(root)
+        if (!target) {
+          await this.desktop.open(root)
+          const wait = this.discovery.wait ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)))
+          for (let attempt = 0; attempt < (this.discovery.attempts ?? 60); attempt += 1) {
+            target = await this.desktop.find(root)
+            if (target) break
+            await wait(this.discovery.intervalMs ?? 500)
           }
         }
-        // Re-read durable registration before enabling Practice.
-        const read = await this.client.request('project/read', { projectId: target.id })
+        if (!target) throw new Error('Codex desktop project registration was not confirmed')
+        // The desktop ID and the server ID are different. Bind tasks to the
+        // server record mapped by the visible project, including legacy repair.
+        const read = await this.client.request('project/read', { projectId: target.serverId })
         const verified = project(record(read) ? read.project : null)
-        if (verified.id !== target.id || !matches(verified, root)) throw new Error('Portfolio project verification failed')
+        const registered = await this.desktop.find(root)
+        if (verified.id !== target.serverId || !matches(verified, root)
+          || registered?.id !== target.id || registered.serverId !== target.serverId) {
+          throw new Error('Portfolio project verification failed')
+        }
         return { id: verified.id, name: verified.name }
       } finally {
         await this.client.close?.()

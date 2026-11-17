@@ -73,6 +73,62 @@ async function archivedPassedFixture() {
 }
 
 describe('Module 3 plan-led build package', () => {
+  it.each([
+    'The learner inspected the first part, requested a clearer heading, and accepted the revision before continuing. The remaining blog is explicitly out of scope: TODO after the course.',
+    '| Work | Observation | Decision |\n| --- | --- | --- |\n| Project links | Alpha opened Beta; ID corrected and both links rechecked | Learner accepted in the bound task |',
+    '# Review\nA single section records the learner observation, bounded change and recheck. TBD: optional future analytics, excluded from this release.'
+  ])('sends flexible record content to AI instead of blocking on headings or placeholders', async (content) => {
+    const f = await fixture()
+    await writeFile(join(f.workspace, 'evidence/module-3/learning-record.md'), content)
+    expect((await f.collect()).portfolioBuild?.issues).toEqual([])
+    await f.approve()
+    f.setVerdict('needs-work')
+    const result = await f.service.review()
+    expect(f.envelopes.at(-1)?.portfolioPackage?.artifacts.find((artifact) => artifact.path.endsWith('learning-record.md'))?.content).toBe(content)
+    expect(result.workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
+    expect((await f.runs.load()).activeRun?.completion).toBeUndefined()
+  })
+
+  it('passes actual package configuration and alternate source layout to AI without assuming command spelling or order', async () => {
+    const f = await fixture()
+    await rm(join(f.workspace, 'src'), { recursive: true })
+    await rm(join(f.workspace, 'index.html'))
+    await mkdir(join(f.workspace, 'app'))
+    await writeFile(join(f.workspace, 'app/page.tsx'), 'export default function Portfolio() { return <main>Portfolio</main> }')
+    const packageConfiguration = { scripts: { start: 'next dev', check: 'node tools/validate.mjs' }, dependencies: { react: '19', next: '15', 'analytics-type-definitions': '1' } }
+    await writeFile(join(f.workspace, 'package.json'), JSON.stringify(packageConfiguration))
+    const validationPath = join(f.workspace, 'evidence/module-3/browser-validation.md')
+    await writeFile(validationPath, (await readFile(validationPath, 'utf8')) + '\nThe validation wrapper runs build, lint and TypeScript checks; these are simulated observations.')
+    const evidence = await f.collect()
+    expect(evidence.portfolioBuild?.issues).toEqual([])
+    const source = evidence.portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')
+    expect(source?.content).toContain('app/page.tsx')
+    expect(source?.content).toContain(JSON.stringify(packageConfiguration))
+    await f.approve()
+    await f.service.review()
+    expect(f.envelopes.at(-1)?.portfolioPackage?.artifacts.find((artifact) => artifact.path === 'application/source')?.content).toContain('node tools/validate.mjs')
+  })
+
+  it('still blocks whitespace-only records and malformed package configuration', async () => {
+    const f = await fixture()
+    await writeFile(join(f.workspace, 'evidence/module-3/learning-record.md'), '\uFEFF \r\n\t')
+    await writeFile(join(f.workspace, 'package.json'), 'null')
+    const issues = (await f.collect()).portfolioBuild?.issues
+    expect(issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: 'evidence/module-3/learning-record.md' }),
+      expect.objectContaining({ path: 'application/source' })
+    ]))
+  })
+
+  it('bounds large configuration evidence and identifies omitted content instead of corrupting persistence', async () => {
+    const f = await fixture()
+    await writeFile(join(f.workspace, 'package.json'), JSON.stringify({ dependencies: { example: 'x'.repeat(125000) } }))
+    const source = (await f.collect()).portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')
+    expect(Buffer.byteLength(source!.content!)).toBeLessThan(128 * 1024)
+    expect(source?.content).toContain('omitted information is unavailable, not evidence of success')
+    await expect(f.approve()).resolves.toBeDefined()
+  })
+
   it('supplies independently reconciled source evidence without changing canonical approval identities', async () => {
     const f = await fixture()
     await writeFile(join(f.workspace, '.gitignore'), 'node_modules\ndist\n')
@@ -102,9 +158,27 @@ describe('Module 3 plan-led build package', () => {
     await writeFile(join(f.workspace, 'src/main.tsx'), 'Changed website after validation')
     await utimes(join(f.workspace, 'src/main.tsx'), later, later)
     const changed = await f.collect()
-    expect(changed.portfolioBuild!.issues.some((issue) => issue.message.includes('Mã nguồn đã đổi'))).toBe(true)
+    expect(changed.sourceDigest).not.toBe(collected.sourceDigest)
     expect(changed.portfolioBuild!.artifacts.find((artifact) => artifact.path === 'application/source')!.content)
       .toContain('"status":"not-correlated"')
+    const refreshed = await f.coordinator.loadWorkspace({ practiceId: f.definition.practiceId, practiceVersion: f.definition.version })
+    expect(refreshed.portfolioPackage?.approved).toBe(false)
+    expect(refreshed.review?.status).toBe('not-reviewed')
+    expect(refreshed.completion).toBeUndefined()
+  })
+
+  it('does not treat filesystem timestamps as proof of stale browser validation', async () => {
+    const f = await fixture()
+    const before = await f.collect()
+    const later = new Date(Date.now() + 5000)
+    await utimes(join(f.workspace, 'src/main.tsx'), later, later)
+    const touched = await f.collect()
+    expect(touched.portfolioBuild?.issues).toEqual([])
+    expect(touched.sourceDigest).toBe(before.sourceDigest)
+    expect(touched.portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')?.content)
+      .toContain('these are not proof of stale validation')
+    await writeFile(join(f.workspace, 'src/main.tsx'), 'export const changed = true')
+    expect((await f.collect()).sourceDigest).not.toBe(before.sourceDigest)
   })
 
   it('requires a fresh review if the learner withdraws acceptance after the passed review', async () => {
@@ -173,7 +247,10 @@ describe('Module 3 plan-led build package', () => {
     const f = await fixture(); await f.approve(); f.activity.learnerAuthoredPrompts = []
     await expect(f.service.review()).rejects.toThrow('learner-authored')
     f.activity.learnerAuthoredPrompts = ['I accept']; f.activity.reportedVerificationEvidence = []
-    await expect(f.service.review()).rejects.toThrow('learner-authored')
+    f.setVerdict('needs-work')
+    expect((await f.service.review()).workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
+    expect(f.envelopes.at(-1)?.portfolioPackage?.taskEvidence?.reportedChecks).toEqual([])
+    expect((await f.runs.load()).activeRun?.completion).toBeUndefined()
   })
 
   it('keeps failed reviews in the original task and invalidates approval on application-only changes', async () => {
@@ -199,15 +276,46 @@ describe('Module 3 plan-led build package', () => {
     await expect(other.service.review()).rejects.toThrow('đã thay đổi')
   })
 
-  it('rejects missing records, unavailable source and symlinked evidence directories', async () => {
+  it('rejects missing records and symlinked evidence directories without guessing app validity from filenames', async () => {
     const f = await fixture(); await rm(join(f.workspace, 'evidence/module-3/learning-record.md'))
     expect((await f.collect()).portfolioBuild?.issues.some((issue) => issue.path.endsWith('learning-record.md'))).toBe(true)
     await rm(join(f.workspace, 'src'), { recursive: true })
-    expect((await f.collect()).portfolioBuild?.issues.some((issue) => issue.path === 'application/source')).toBe(true)
+    await rm(join(f.workspace, 'index.html'))
+    const source = (await f.collect()).portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')
+    expect(source?.content).toContain('"paths":["package.json"]')
     const linked = await fixture(); const outside = join(linked.root, 'outside'); await mkdir(outside)
     await rm(join(linked.workspace, 'evidence/module-3'), { recursive: true })
     await symlink(outside, join(linked.workspace, 'evidence/module-3'), 'junction')
     expect((await linked.collect()).portfolioBuild?.issues.filter((issue) => issue.path.startsWith('evidence/'))).toHaveLength(3)
+  })
+
+  it('allows a plain HTML portfolio without package.json to reach semantic review', async () => {
+    const f = await fixture()
+    await rm(join(f.workspace, 'package.json'))
+    await rm(join(f.workspace, 'src'), { recursive: true })
+    await writeFile(join(f.workspace, 'index.html'), '<!doctype html><title>Portfolio</title><main><h1>Designer</h1><a href="mailto:designer@example.com">Contact</a></main>')
+    const evidence = await f.collect()
+    expect(evidence.portfolioBuild?.issues).toEqual([])
+    const source = evidence.portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')
+    expect(source?.content).toContain('"paths":["index.html"]')
+    expect(source?.content).toContain('Not present. Assess whether build tooling is needed')
+    await f.approve()
+    await f.service.review()
+    expect(f.envelopes).toHaveLength(1)
+  })
+
+  it('lets AI reject an absent application rather than claiming a file inventory proves functionality', async () => {
+    const f = await fixture()
+    await rm(join(f.workspace, 'package.json'))
+    await rm(join(f.workspace, 'src'), { recursive: true })
+    await rm(join(f.workspace, 'index.html'))
+    const evidence = await f.collect()
+    expect(evidence.portfolioBuild?.issues).toEqual([])
+    expect(evidence.portfolioBuild?.artifacts.find((artifact) => artifact.path === 'application/source')?.content).toContain('"paths":[],"totalFiles":0')
+    await f.approve()
+    f.setVerdict('needs-work')
+    expect((await f.service.review()).workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
+    expect((await f.runs.load()).activeRun?.completion).toBeUndefined()
   })
 
   it('migrates a readable legacy attempt without deleting files or granting old approvals', async () => {

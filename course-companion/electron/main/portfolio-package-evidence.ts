@@ -91,133 +91,6 @@ function stageForPath(path: string): string {
   return 'implementation-contract'
 }
 
-function normalizeHeading(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .replace(/^\s*\d+(?:\.\d+)*\s*[).:\-–—]*\s*/, '')
-    .replace(/[^a-zA-Z0-9]+/g, ' ')
-    .trim()
-    .toLowerCase()
-}
-
-function markdownSections(content: string): Array<{ heading: string; body: string }> {
-  const headingPattern = /^ {0,3}(#{1,6})[ \t]+(.+?)\s*#*\s*$/gm
-  const headings = [...content.matchAll(headingPattern)].map((match) => ({
-    level: match[1]!.length,
-    heading: match[2]!.trim(),
-    bodyStart: (match.index ?? 0) + match[0].length,
-    headingStart: match.index ?? 0
-  }))
-  const candidates = headings.filter((heading) => heading.level >= 2)
-  const selected = candidates.length > 0 ? candidates : headings
-  return selected.map((heading) => {
-    const next = headings.find((candidate) =>
-      candidate.headingStart > heading.headingStart && candidate.level <= heading.level)
-    return {
-      heading: heading.heading,
-      body: content.slice(heading.bodyStart, next?.headingStart ?? content.length)
-        .replace(/^ {0,3}#{1,6}[ \t]+.*$/gm, '')
-        .trim()
-    }
-  })
-}
-
-function structuralDocumentIssues(artifact: TextArtifact): PortfolioPlanningIssue[] {
-  const sections = markdownSections(artifact.content)
-  if (sections.length < 2) {
-    return [issue(
-      stageForPath(artifact.path),
-      artifact.path,
-      'missing-section',
-      'Tài liệu cần được tổ chức thành ít nhất hai mục Markdown có nội dung.'
-    )]
-  }
-  const empty = sections.filter((section) => section.body.length === 0)
-  if (empty.length === 0) return []
-  return [issue(
-    stageForPath(artifact.path),
-    artifact.path,
-    'missing-section',
-    `Các mục Markdown sau đang trống: ${empty.map((section) => section.heading).join(', ')}.`
-  )]
-}
-
-function requirementIds(content: string): string[] {
-  return [...new Set(content.match(/\bREQ-[A-Za-z0-9][A-Za-z0-9_-]*\b/g) ?? [])].sort()
-}
-
-function requirementIssues(artifacts: Map<string, TextArtifact>): PortfolioPlanningIssue[] {
-  const issues: PortfolioPlanningIssue[] = []
-  const prd = artifacts.get('planning/PRD.md')
-  const plan = artifacts.get('planning/implementation-plan.md')
-  if (!prd) return issues
-
-  const prdIds = requirementIds(prd.content)
-  const prdHeadings = markdownSections(prd.content).map((section) => normalizeHeading(section.heading))
-  const hasAcceptanceCriteria = /\bAC-[A-Za-z0-9][A-Za-z0-9_-]*\b/.test(prd.content)
-    || prdHeadings.some((heading) => /(?:acceptance|accept criteria|tieu chi chap nhan|tieu chi nghiem thu|dieu kien chap nhan)/.test(heading))
-  if (prdIds.length === 0) {
-    issues.push(issue(
-      'portfolio-prd',
-      prd.path,
-      'requirement-coverage',
-      'PRD cần có ít nhất một mã yêu cầu ổn định theo dạng REQ-*.'
-    ))
-  }
-  if (!hasAcceptanceCriteria) {
-    issues.push(issue(
-      'portfolio-prd',
-      prd.path,
-      'requirement-coverage',
-      'PRD cần có tiêu chí chấp nhận nhận diện được bằng mục tương ứng hoặc mã AC-*.'
-    ))
-  }
-  if (!plan) return issues
-
-  const planIds = requirementIds(plan.content)
-  const missing = prdIds.filter((id) => !planIds.includes(id))
-  const unknown = planIds.filter((id) => !prdIds.includes(id))
-  if (missing.length > 0) {
-    issues.push(issue(
-      'implementation-contract',
-      plan.path,
-      'requirement-coverage',
-      `Kế hoạch chưa tham chiếu các yêu cầu hiện tại: ${missing.join(', ')}.`
-    ))
-  }
-  if (unknown.length > 0) {
-    issues.push(issue(
-      'implementation-contract',
-      plan.path,
-      'requirement-coverage',
-      `Kế hoạch tham chiếu mã yêu cầu không có trong PRD hiện tại: ${unknown.join(', ')}.`
-    ))
-  }
-  return issues
-}
-
-function planSectionIssues(artifacts: Map<string, TextArtifact>): PortfolioPlanningIssue[] {
-  const plan = artifacts.get('planning/implementation-plan.md')
-  if (!plan) return []
-  const headings = markdownSections(plan.content).map((section) => normalizeHeading(section.heading))
-  const expected: Array<{ label: string; pattern: RegExp }> = [
-    { label: 'các bước hoặc giai đoạn triển khai', pattern: /(?:\bstep\b|\bstage\b|\bphase\b|delivery|implementation sequence|cac buoc|giai doan|trinh tu)/ },
-    { label: 'phụ thuộc hoặc thứ tự thực hiện', pattern: /(?:depend|prerequisite|order|sequence|phu thuoc|dieu kien tien quyet|thu tu)/ },
-    { label: 'kiểm tra hoặc cách xác minh', pattern: /(?:check|validation|verification|verify|test|kiem tra|kiem chung|xac minh|nghiem thu)/ }
-  ]
-  return expected.flatMap(({ label, pattern }) => headings.some((heading) => pattern.test(heading))
-    ? []
-    : [issue(
-        'implementation-contract',
-        plan.path,
-        'missing-section',
-        `Kế hoạch cần có mục mô tả ${label}.`
-      )])
-}
-
 function cleanReferenceTarget(value: string): string {
   const trimmed = value.trim().replace(/^<|>$/g, '')
   const withoutTitle = trimmed.match(/^(\S+)/)?.[1] ?? trimmed
@@ -528,6 +401,9 @@ async function inspectTextArtifact(
   } catch {
     return { issue: issue(stageId, path, 'invalid-utf8', 'Tài liệu không phải UTF-8 hợp lệ.') }
   }
+  if (!content.trim()) {
+    return { issue: issue(stageId, path, 'empty', 'Tài liệu bắt buộc đang trống.') }
+  }
   return {
     artifact: {
       path,
@@ -713,8 +589,8 @@ export async function collectPortfolioPackage(
     if ('issue' in inspected) issues.push(inspected.issue)
     else artifacts.set(path, inspected.artifact)
   }
-  for (const artifact of artifacts.values()) issues.push(...structuralDocumentIssues(artifact))
-  issues.push(...requirementIssues(artifacts), ...planSectionIssues(artifacts))
+  // Content quality, organization and requirement coverage belong to the AI
+  // review of the current approved package, not a heading or keyword precheck.
 
   const reference = artifacts.get('planning/reference/reference.md')
   const imageReferences = reference ? resolveImageReferences(reference.content) : []

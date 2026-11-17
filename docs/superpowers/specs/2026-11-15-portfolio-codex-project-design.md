@@ -53,6 +53,29 @@ Preserve existing project names. Do not edit Codex's private storage or change
 Git. An unsupported runtime gets a retry/update error, not a manual success
 flag. No additional assessed completion criterion is introduced.
 
+### Desktop registration correction — 17 November 2026
+
+The owner's live Windows test showed that an App Server project is not by
+itself a visible Codex desktop project. The prior isolated protocol probe did
+not establish desktop registration. Keep the approved automatic folder-page
+flow, but open the native `codex://new?path=<encoded-folder>` link when the
+folder is missing from the desktop registry. This opens a composer without
+sending a prompt or creating a persisted conversation. Codex owns the project
+mutation; Course Companion never writes Codex's private state.
+
+Read the desktop registry and its local desktop-to-server project ID mapping,
+then verify that mapped server record and its primary root. Wait for durable
+registration after the native open acknowledgement. Unsupported or missing
+registry data cannot satisfy readiness. This readback depends on the installed
+desktop registry format and must fail closed if that format changes.
+
+Reuse existing desktop projects and their names. Older backend-only bindings
+are repaired to the visible project's server ID during preparation, retaining
+the exact portfolio thread, folder, approvals and evidence. Save the repaired
+binding for subsequent handoffs. Keep any old backend record rather than
+deleting projects or chats. Verification must distinguish actual desktop
+visibility from simulated Electron journeys and backend protocol checks.
+
 ## Verification
 
 Check registration reuse, persistence, stale paths, missing folders,

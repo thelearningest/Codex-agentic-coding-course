@@ -16,6 +16,42 @@ function workspace(): PracticeWorkspaceView {
 }
 
 describe('five-document Practice submission surface', () => {
+  it.each([false, true])('shows files read and the single blocker instead of five unreviewed failures in compact=%s', (compact) => {
+    const view = workspace()
+    const message = 'Kế hoạch cần mô tả phụ thuộc hoặc thứ tự thực hiện.'
+    view.portfolioPackage!.ready = false
+    view.portfolioPackage!.approved = false
+    view.portfolioPackage!.artifactPaths.push('planning/reference/screenshots/example.png')
+    view.portfolioPackage!.issues = [`planning/implementation-plan.md: ${message}`]
+    view.review!.status = 'needs-work'
+    view.review!.result = {
+      schemaVersion: 1, practiceId: 'm2-portfolio-planning', practiceVersion: '2.0.0', runId: 'run-1',
+      verdict: 'needs-work', summary: 'Gói planning chưa sẵn sàng.',
+      reviewedAt: '2026-11-17T00:00:00.000Z', sourceDigest: 'a'.repeat(64),
+      criteria: Array.from({ length: 5 }, (_, index) => ({
+        criterionId: `criterion-${index}`, status: 'unverifiable', evidenceRefs: [], explanation: message
+      }))
+    }
+    const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact }))
+    expect(html).toContain('Đã đọc 5/5 tài liệu.')
+    expect(html).toContain('Chưa duyệt nội dung.')
+    expect(html.split(message)).toHaveLength(2)
+    expect(html).not.toContain('bước đã xác minh')
+    expect(html).not.toContain('Kết quả theo từng tiêu chí')
+    expect(html).toMatch(/type="checkbox"[^>]*disabled=""/)
+    expect(html).toMatch(/disabled=""[^>]*>Duyệt và nộp gói planning/)
+  })
+
+  it('counts only documents actually read', () => {
+    const view = workspace()
+    view.portfolioPackage!.ready = false
+    view.portfolioPackage!.approved = false
+    view.portfolioPackage!.artifactPaths = portfolioPackageArtifactPaths.slice(0, 3)
+    const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact: true }))
+    expect(html).toContain('Đã đọc 3/5 tài liệu.')
+    expect(html).not.toContain('bước đã xác minh')
+  })
+
   it.each(['m2-portfolio-planning', 'm3-portfolio-build', 'm4-portfolio-release'])(
     'shows actual unmet review criteria in the compact panel for %s', (practiceId) => {
     const view = workspace()
@@ -63,11 +99,13 @@ describe('five-document Practice submission surface', () => {
     view.portfolioPackage!.approved = false
     view.review!.status = 'needs-work'
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact }))
-    expect(html).toMatch(/<strong>Duyệt và nộp gói planning<\/strong>/)
+    expect(html).toContain('Duyệt và nộp gói planning')
     expect(html).not.toContain('Hoàn thành bước hiện tại: Bản mô tả.')
     expect(html).not.toContain('checked=""')
-    if (compact) expect(html).toContain('0/1 bước đã xác minh')
-    else expect(html).toContain('<li class="is-current">')
+    expect(html).toContain('Đã đọc 5/5 tài liệu.')
+    expect(html).toContain('Chưa duyệt nội dung.')
+    expect(html).not.toContain('bước đã xác minh')
+    if (!compact) expect(html).toContain('<li class="is-current">')
   })
 
   it.each([false, true])('uses website acceptance and three supporting records for build v2 in compact=%s', (compact) => {
@@ -104,8 +142,7 @@ describe('five-document Practice submission surface', () => {
       expect(html).toContain('Xem tiến độ chi tiết')
       expect(html).not.toContain('<details class="practice-package-progress" open')
     }
-    if (compact) expect(html).toContain('Hoàn thành bước hiện tại: Bản mô tả.')
-    else expect(html).not.toContain('Hoàn thành bước hiện tại: Bản mô tả.')
+    expect(html).not.toContain('Hoàn thành bước hiện tại: Bản mô tả.')
   })
   it.each([false, true])('shows one explicit, initially unchecked approval in compact=%s', (compact) => {
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: workspace(), compact }))

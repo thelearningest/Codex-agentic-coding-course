@@ -136,6 +136,24 @@ describe('Module 1 Practice review context', () => {
 })
 
 describe('beginner portfolio review policy', () => {
+  it.each(['m3-portfolio-build', 'm4-portfolio-release'])(
+    'lets semantic review recognize bound-task reports without extractor keywords for %s', async (practiceId) => {
+      const version = practiceId === 'm3-portfolio-build' ? '2.0.0' : '1.0.0'
+      const definition = await new PracticeDefinitionRepository(join(process.cwd(), '../pilot-workspace/course/practices')).load(practiceId, version)
+      const observed = { ...activity(null), reportedVerificationEvidence: [], executorResponses: ['Les liens répondent correctement au clavier et la page reste lisible à 390 px.'] }
+      const input = { definition, run: { ...run, practiceId, practiceVersion: version }, activity: observed, generatedAt: timestamp }
+      const envelope = buildPracticeReviewEnvelope(input)
+      expect(envelope.evidence).toContainEqual(expect.objectContaining({
+        kind: 'executor-reported-verification', text: expect.stringContaining(observed.executorResponses[0]!)
+      }))
+      const prompt = buildPracticeReviewPrompt(envelope)
+      expect(prompt).toContain('not prevalidated checks')
+      expect(prompt).toContain('generic completion claim')
+      expect(buildPracticeReviewEnvelope({ ...input, activity: { ...observed, threadId: 'wrong-task' } }).evidence)
+        .not.toContainEqual(expect.objectContaining({ kind: 'executor-reported-verification' }))
+    }
+  )
+
   it.each([
     ['m2-portfolio-planning', '2.0.0', 'planning'],
     ['m3-portfolio-build', '2.0.0', 'build'],
@@ -158,5 +176,24 @@ describe('beginner portfolio review policy', () => {
     expect(prompt).toContain('Never pass fabricated evidence, stale source, a broken required outcome or missing publishing permission')
     for (const criterion of definition.criteria) expect(prompt).toContain(criterion.assertion)
     expect(envelope.portfolioPackage?.approved).toBe(false)
+    if (kind === 'planning') {
+      expect(prompt).toContain('Judge meaning, not formatting')
+      expect(prompt).toContain('arbitrary headings or no headings')
+      expect(prompt).toContain('stable IDs or unambiguous descriptive names')
+      expect(prompt).toContain('Do not demand invented dependencies')
+      expect(prompt).toContain('A ready package only means the files passed filesystem checks')
+      expect(prompt).toContain('absent meaningful validation')
+      expect(prompt).toContain('must still prevent a pass')
+      expect(prompt).toContain('A particular REQ-* naming convention is not required')
+    }
+    if (kind === 'build') {
+      expect(prompt).toContain('Judge build records by meaning')
+      expect(prompt).toContain('Honest TODOs, deferred scope and labelled placeholders')
+      expect(prompt).toContain('Do not infer successful execution from a script declaration')
+    }
+    if (kind === 'release') {
+      expect(prompt).toContain('Equivalent commands, different package managers, brief concrete observations')
+      expect(prompt).toContain('independently confirmed failures still block completion')
+    }
   })
 })

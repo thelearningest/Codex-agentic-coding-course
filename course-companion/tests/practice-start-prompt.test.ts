@@ -100,7 +100,14 @@ describe('Module 2 learner-owned start prompt', () => {
     const release = await definitions.load('m4-portfolio-release', '1.0.0')
     const checkpoint = `sha256:${'a'.repeat(64)}`
     expect(portfolioContinuationInstructions(build)).toContain(PORTFOLIO_BUILD_INSTRUCTIONS)
+    expect(PORTFOLIO_BUILD_INSTRUCTIONS).toContain('không phải khuôn mẫu bắt buộc')
+    expect(PORTFOLIO_BUILD_INSTRUCTIONS).toContain('Không bắt buộc tên hoặc số lượng đề mục')
+    expect(PORTFOLIO_BUILD_INSTRUCTIONS).not.toContain('check chạy typecheck rồi lint rồi build')
+    expect(build.criteria.find((criterion) => criterion.id === 'final-validation-current')?.assertion)
+      .toContain('equivalent command names, composition and tooling are acceptable')
     expect(portfolioContinuationInstructions(release, checkpoint)).toContain(portfolioReleaseInstructions(checkpoint))
+    expect(portfolioReleaseInstructions(checkpoint)).toContain('lệnh kiểm tra đã thực sự chạy')
+    expect(portfolioReleaseInstructions(checkpoint)).not.toContain('command: "npm run check"')
     expect(() => portfolioContinuationInstructions(release)).toThrow('verified Module 3 source checkpoint')
   })
 

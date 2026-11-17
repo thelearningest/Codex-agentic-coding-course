@@ -271,6 +271,29 @@ try {
     await mkdir(dirname(join(portfolio, path)), { recursive: true })
     await writeFile(join(portfolio, path), content, 'utf8')
   }
+  const planPath = join(portfolio, 'planning/implementation-plan.md')
+  const bodyDependencyPlan = '# Kế hoạch\n\n## Giai đoạn 1\nChuẩn bị nội dung cho REQ-HERO.\n\n## Giai đoạn 2\nPhụ thuộc vào việc duyệt giai đoạn 1. Bổ sung REQ-WORK-02.\n\n## Kiểm tra\nĐối chiếu hai yêu cầu trên trang.'
+  await writeFile(planPath, ' \n\t', 'utf8')
+  await compact.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
+  await compact.getByRole('button', { name: 'Cập nhật và kiểm tra tiến độ Practice', exact: true }).click()
+  await compact.getByText('Đã đọc 4/5 tài liệu. Chưa duyệt nội dung.', { exact: true }).waitFor()
+  const blocker = 'Tài liệu bắt buộc đang trống.'
+  assert.equal(await compact.getByText(blocker, { exact: true }).count(), 1)
+  assert.equal(await compact.getByText(/bước đã xác minh/).count(), 0)
+  assert.equal(await compact.getByRole('checkbox').isDisabled(), true)
+  for (const width of [380, 320]) {
+    await compact.setViewportSize({ width, height: 640 })
+    assert.equal(await compact.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+    await compact.locator('.practice-package-submission').scrollIntoViewIfNeeded()
+    await compact.screenshot({ path: join(screenshots, `portfolio-plan-blocker-${width}.png`), animations: 'disabled' })
+  }
+  await compact.getByRole('button', { name: 'Mở Triết toàn màn hình', exact: true }).click()
+  await page.getByText('Đã đọc 4/5 tài liệu. Chưa duyệt nội dung.', { exact: true }).waitFor()
+  assert.equal(await page.getByText(blocker, { exact: true }).count(), 1)
+  assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+  await page.locator('.practice-package-submission').scrollIntoViewIfNeeded()
+  await page.screenshot({ path: join(screenshots, 'portfolio-plan-blocker-desktop.png'), animations: 'disabled' })
+  await writeFile(planPath, bodyDependencyPlan, 'utf8')
   const originalPlanningNote = '# Original combined planning notes\n\nPreserve the learner interview.'
   await writeFile(join(portfolio, 'planning/portfolio-plan.md'), originalPlanningNote, 'utf8')
   const beforeRefresh = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8')).activeRun

@@ -856,7 +856,8 @@ async function capture(page, filename) {
     }
 
     for (const element of globalThis.document.querySelectorAll('body *')) {
-      if (element.closest('img, picture, video, canvas')) continue
+      // The approved CSS illustration has its own palette, like the screenshots.
+      if (element.closest('img, picture, video, canvas, .planning-guide .desk')) continue
       const style = globalThis.getComputedStyle(element)
       const rect = element.getBoundingClientRect()
       if (
@@ -869,6 +870,8 @@ async function capture(page, filename) {
 
       for (const property of colorProperties) {
         const value = style[property]
+        if (element.matches('.planning-guide .step[aria-current="step"] span')
+          && property.startsWith('border') && value === 'rgb(173, 149, 92)') continue
         const parsed = parseColor(value)
         if (!parsed) continue
         const family = classify(parsed)

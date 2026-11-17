@@ -5,9 +5,9 @@ import { describe, expect, it } from 'vitest'
 
 const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/lessons/intro.vi.md': '85b293c5ecf0d07f5aba6ad00181be185f4def7da0faaadcde40aaaf01b39ed9',
-  '../pilot-workspace/course/lessons/module-1.vi.md': '5010b56239d3586e5d9aa325d298a09971a1d9f02159542362f0dacf408447c8',
+  '../pilot-workspace/course/lessons/module-1.vi.md': '6a2938b18fef57ea960e2b15186b998c6b798e89019e9b1cefe131c26f0a4462',
   '../pilot-workspace/course/lesson-scripts/intro.script.vi.md': 'ac50c545ed4c301b7fee15f5277d7b482fef34c980d4102513c1fd2cf9a54d82',
-  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '94ec26355d346a549d788c38240ba99c2470ba6d457deb5b7723c7d3bdf63354',
+  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '007820fdef6c4e9fc0a560d217b788c9ee9d9e97919ba3c9b675a11985b696f3',
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': '3121227b2754738ae1e967a660c965d2e6d3a8994a031349963984d15d735653',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',

@@ -32,7 +32,7 @@ afterEach(async () => {
     rm(directory, { recursive: true, force: true })))
 })
 
-function reviewJson(envelope: PracticeReviewEnvelope, verdict: 'passed' | 'needs-work'): string {
+function reviewJson(envelope: PracticeReviewEnvelope, verdict: 'passed' | 'needs-work', failedCriterionId?: string): string {
   return JSON.stringify({
     schemaVersion: 1,
     practiceId: envelope.definition.practiceId,
@@ -40,7 +40,7 @@ function reviewJson(envelope: PracticeReviewEnvelope, verdict: 'passed' | 'needs
     runId: envelope.run.runId,
     verdict,
     criteria: envelope.definition.criteria.map((criterion, index) => {
-      const unsatisfied = verdict === 'needs-work' && index === 0
+      const unsatisfied = verdict === 'needs-work' && (failedCriterionId ? criterion.id === failedCriterionId : index === 0)
       const evidence = envelope.evidence.find((candidate) =>
         criterion.acceptedEvidence.includes(candidate.kind))
       return {
@@ -126,6 +126,7 @@ async function harness(options: {
 
   let currentActivity = portfolioPackageActivity()
   let evaluatorMode: 'passed' | 'needs-work' | 'malformed' | 'error' = 'passed'
+  let failedCriterionId: string | undefined
   let evaluatorCalls = 0
   let duringEvaluation: (() => Promise<void>) | undefined
   const activitySource = { async current() { return structuredClone(currentActivity) } }
@@ -175,7 +176,7 @@ async function harness(options: {
       await duringEvaluation?.()
       if (evaluatorMode === 'error') throw new Error('semantic review unavailable')
       if (evaluatorMode === 'malformed') return '{"verdict":"passed"}'
-      return reviewJson(envelope, evaluatorMode)
+      return reviewJson(envelope, evaluatorMode, failedCriterionId)
     }
   }
   const service = new PracticeReviewService(
@@ -231,7 +232,7 @@ async function harness(options: {
     workspaceRepository,
     observedEnvelopes,
     evaluatorCallCount: () => evaluatorCalls,
-    setEvaluatorMode: (mode: typeof evaluatorMode) => { evaluatorMode = mode },
+    setEvaluatorMode: (mode: typeof evaluatorMode, criterionId?: string) => { evaluatorMode = mode; failedCriterionId = criterionId },
     setActivity: (overrides: Parameters<typeof portfolioPackageActivity>[0]) => {
       currentActivity = portfolioPackageActivity(overrides)
     },
@@ -244,6 +245,49 @@ async function harness(options: {
 }
 
 describe('five-document portfolio package review', () => {
+  it.each([
+    ['valid prose', 'passed', undefined],
+    ['missing dependencies', 'needs-work', 'plan-phased-and-bounded'],
+    ['uncovered requirements', 'needs-work', 'requirements-covered-once'],
+    ['unverifiable acceptance criteria', 'needs-work', 'prd-semantic-contract']
+  ] as const)('honors a simulated semantic verdict for %s instead of formatting rules', async (_case, verdict, failedCriterion) => {
+    const test = await harness()
+    // Deliberately no headings, exact keywords or REQ/AC identifier syntax.
+    const prd = 'Giới thiệu: người xem đọc được tên và vai trò. Dự án: người xem mở được hai ví dụ được phép công bố. Liên hệ: dùng được bằng bàn phím trên điện thoại và máy tính.'
+    const plan = 'Chuẩn bị nội dung đã duyệt cho Giới thiệu; khi xong mới thêm Dự án và Liên hệ. Mở từng liên kết bằng bàn phím trên màn hình hẹp và rộng, lưu nhận xét để người học xem. Chưa tạo ứng dụng trong Module 2.'
+    await writeFile(join(test.workspaceRoot, 'planning/PRD.md'), prd)
+    await writeFile(join(test.workspaceRoot, 'planning/implementation-plan.md'), plan)
+    await test.refreshAndApprove()
+    test.setEvaluatorMode(verdict, failedCriterion)
+    const response = await test.service.review()
+    if ('error' in response) throw new Error('Expected a completed semantic review')
+    expect(test.evaluatorCallCount()).toBe(1)
+    expect(test.observedEnvelopes[0]?.portfolioPackage?.artifacts).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: 'planning/PRD.md', content: prd }),
+      expect.objectContaining({ path: 'planning/implementation-plan.md', content: plan })
+    ]))
+    expect(response.workspace.review).toMatchObject({ status: verdict, canReturn: verdict === 'passed' })
+    if (failedCriterion) {
+      expect(response.workspace.review?.result?.criteria).toContainEqual(expect.objectContaining({ criterionId: failedCriterion, status: 'unsatisfied' }))
+      expect((await test.runs.load()).activeRun?.completion).toBeUndefined()
+    }
+  })
+
+  it('reviews body-written dependencies only after current learner approval', async () => {
+    const test = await harness()
+    await writeFile(join(test.workspaceRoot, 'planning/implementation-plan.md'),
+      '# Kế hoạch\n\n## Giai đoạn 1\nChuẩn bị nội dung cho REQ-HERO.\n\n## Giai đoạn 2\nPhụ thuộc vào việc duyệt giai đoạn 1. Bổ sung REQ-WORK-02.\n\n## Kiểm tra\nĐối chiếu hai yêu cầu trên trang.')
+    await expect(test.service.review()).resolves.toMatchObject({
+      workspace: { portfolioPackage: { ready: true, approved: false }, review: { status: 'needs-work', canReturn: false } }
+    })
+    expect(test.evaluatorCallCount()).toBe(0)
+    await test.refreshAndApprove()
+    await expect(test.service.review()).resolves.toMatchObject({
+      workspace: { review: { status: 'passed', canReturn: true } }
+    })
+    expect(test.evaluatorCallCount()).toBe(1)
+  })
+
   it('sends the bounded contents of exactly five canonical documents to the semantic evaluator', async () => {
     const test = await harness({ approve: true })
 
