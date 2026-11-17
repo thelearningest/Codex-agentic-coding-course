@@ -4,14 +4,9 @@
   "version": "2.0.0",
   "checkpointId": "m1-setup-checklist",
   "objective": "Chứng minh Codex đã được thiết lập đúng cho dự án ContentPilot. Bạn sẽ dùng một task Codex để kiểm tra bằng chứng mà không thay đổi cài đặt.",
-  "expectedOutcome": "Một báo cáo dưới tiêu đề Verification trong đúng task Codex của bài thực hành. Báo cáo phải dựa trên hai ảnh được gửi trong task đó và xác nhận đủ năm thiết lập.",
+  "expectedOutcome": "Một báo cáo dưới tiêu đề Verification trong đúng task Codex của bài thực hành. Báo cáo phải dựa trên hai ảnh được gửi trong task đó và xác nhận đủ bốn thiết lập; Model do người học tự chọn.",
   "reportTitle": "Verification",
   "requiredSettings": [
-    {
-      "id": "model",
-      "label": "Model",
-      "value": "5.6 Sol"
-    },
     {
       "id": "effort",
       "label": "Effort",
@@ -44,7 +39,7 @@
     },
     {
       "id": "verify-settings",
-      "title": "Yêu cầu Codex chỉ quan sát và báo cáo đủ năm thiết lập"
+      "title": "Yêu cầu Codex chỉ quan sát và báo cáo đủ bốn thiết lập"
     },
     {
       "id": "review-evidence",
@@ -63,11 +58,11 @@
     },
     {
       "id": "screenshots-complete",
-      "description": "Có đủ hai ảnh: ảnh Model–Effort–Speed và ảnh Approval–Full access.",
+      "description": "Có đủ hai ảnh: ảnh Effort–Speed và ảnh Approval–Full access.",
       "required": true,
       "checklistStepId": "attach-settings",
       "acceptedEvidence": ["settings-screenshots"],
-      "assertion": "Two screenshots are attached: one shows Model, Effort, and Speed; the other shows Approval and Full access.",
+      "assertion": "Two screenshots are attached: one shows Effort and Speed; the other shows Approval and Full access. Model choice is not assessed.",
       "freshness": "fresh"
     },
     {
@@ -81,11 +76,11 @@
     },
     {
       "id": "verification-complete",
-      "description": "Báo cáo có tiêu đề Verification và ghi đủ năm giá trị yêu cầu.",
+      "description": "Báo cáo có tiêu đề Verification và ghi đủ bốn giá trị yêu cầu.",
       "required": true,
       "checklistStepId": "verify-settings",
       "acceptedEvidence": ["executor-reported-verification"],
-      "assertion": "A Verification section explicitly reports Model 5.6 Sol, Effort High, Speed Standard, Approval Approve for me, and Full access disabled.",
+      "assertion": "A Verification section explicitly reports Effort High, Speed Standard, Approval Approve for me, and Full access disabled. Any model is allowed.",
       "freshness": "fresh"
     },
     {
@@ -94,7 +89,7 @@
       "required": true,
       "checklistStepId": "review-evidence",
       "acceptedEvidence": ["executor-reported-verification", "teacher-assessment"],
-      "assertion": "All five reported settings match the required values; otherwise the assessment names each mismatched setting and does not pass the practice.",
+      "assertion": "All four reported settings match the required values; otherwise the assessment names each mismatched setting and does not pass the practice. Model choice never causes failure.",
       "freshness": "fresh"
     }
   ],

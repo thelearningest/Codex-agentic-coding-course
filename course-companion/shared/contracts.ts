@@ -1,3 +1,4 @@
+import type { PracticeVideoProgress, PracticeVideoUpdate } from './practice-video'
 import {
   portfolioCheckpointCourseLesson,
   portfolioCheckpointIds,
@@ -585,7 +586,7 @@ export type ApprovedCodexConfiguration = {
   schemaVersion: 1
   sourcePracticeId: 'm1-codex-safe-setup'
   sourcePracticeVersion: string
-  model: 'gpt-5.6-sol'
+  model?: string
   reasoningEffort: 'high'
   serviceTier: 'standard'
   approvedAt: string
@@ -959,7 +960,7 @@ export type PortfolioPackageHandoff = Omit<LegacyPortfolioPlanningHandoff, 'sche
   schemaVersion: 2
   approval: PortfolioPackageApproval
   submission: { runId: string; generation: number; sourceDigest: string; reviewDigest: string; reviewedAt: string }
-  task: { runId: string; threadId: string; name: string; workspaceRoot: string; createdAt: string }
+  task: { runId: string; threadId: string; name: string; workspaceRoot: string; createdAt: string; projectId?: string }
 }
 
 export type LegacyPortfolioPlanningHandoff = {
@@ -1261,14 +1262,26 @@ export type PortfolioWorkspaceView = {
   folderName?: string
   planningPath?: string
   agentsPath?: string
+  codexProject?: PortfolioCodexProject
+  codexProjectError?: string
   observedAt: string
   message: string
   canChoose: boolean
   canConfirmPlanning: boolean
 }
 
+export type PortfolioCodexProject = {
+  id: string
+  name: string
+  registeredAt: string
+}
+
 export type PortfolioWorkspaceRequest = {
   courseRunId: string
+}
+
+export type PortfolioCodexProjectRequest = PortfolioWorkspaceRequest & {
+  expectedPath: string
 }
 
 type PlanningActionIdentity = PracticeIdentity & {
@@ -1371,8 +1384,11 @@ export type CourseCompanionApi = {
   loadPortfolioWorkspace: (request: PortfolioWorkspaceRequest) => Promise<PortfolioWorkspaceView>
   choosePortfolioWorkspace: (request: PortfolioWorkspaceRequest) => Promise<PortfolioWorkspaceView>
   confirmPortfolioPlanning: (request: PortfolioWorkspaceRequest) => Promise<PortfolioWorkspaceView>
+  ensurePortfolioCodexProject: (request: PortfolioCodexProjectRequest) => Promise<PortfolioWorkspaceView>
   loadPracticeWorkspace: (identity?: PracticeIdentity) => Promise<PracticeWorkspaceView>
   hasActivePractice: () => Promise<boolean>
+  loadPracticeVideo: () => Promise<PracticeVideoProgress>
+  updatePracticeVideo: (request: PracticeVideoUpdate) => Promise<PracticeVideoProgress>
   startPractice: (request: PracticeStartRequest) => Promise<PracticeWorkspaceView>
   resumePractice: (identity?: PracticeIdentity) => Promise<PracticeWorkspaceView>
   openPracticeTask: (request: PracticeTaskOpenRequest) => Promise<void>
@@ -1390,6 +1406,7 @@ export type CourseCompanionApi = {
   updatePracticeGuide: (request: PracticeGuideUpdateRequest, context: PracticeGuideSurfaceContext)
     => Promise<PracticeGuideView | null>
   returnPassedPractice: () => Promise<void>
+  onPracticeVideoHidden: (callback: () => void) => () => void
   onPracticeWorkspaceChanged: (callback: () => void) => () => void
   onPracticeReturned: (callback: () => void) => () => void
   loadAppSettings: () => Promise<AppSettings>

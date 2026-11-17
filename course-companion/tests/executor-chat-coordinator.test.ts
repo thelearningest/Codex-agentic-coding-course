@@ -50,7 +50,7 @@ function effective(overrides: Record<string, unknown> = {}): Record<string, unkn
   }
 }
 
-function binding(name = 'Practice · Module 1 · m1-codex-safe-setup · 123456'): ExecutorChatBinding {
+function binding(name = 'Làm quen với Codex · Module 1'): ExecutorChatBinding {
   return {
     runId: 'run-123456',
     threadId: 'thread-target',
@@ -71,6 +71,34 @@ function coordinator(client: CodexRequestClient): ExecutorChatCoordinator {
 }
 
 describe('ExecutorChatCoordinator', () => {
+  it('creates a portfolio task in the verified project without sending a turn', async () => {
+    const calls: Array<[string, Record<string, unknown>]> = []
+    const client: CodexRequestClient = { async request(method, params = {}) {
+      calls.push([method, params])
+      return method === 'thread/start' ? effective({ thread: { id: 'thread-target', projectId: 'portfolio-project' } }) : {}
+    } }
+    const instance = new ExecutorChatCoordinator(client, {
+      resolve: async () => 'D:\\course\\pilot-workspace', resolveProjectId: async () => 'portfolio-project'
+    }, async () => undefined)
+    const task = await instance.createTarget({ runId: 'run-123456',
+      definition: { ...definition('safe-workspace-write'), practiceId: 'm2-portfolio-planning', workspaceKind: 'learner-portfolio' },
+      approvedConfiguration: approved })
+    expect(task).toMatchObject({ name: 'Portfolio của tôi', projectId: 'portfolio-project', threadId: 'thread-target' })
+    expect(calls[0]![1]).toHaveProperty('projectId', 'portfolio-project')
+    expect(calls.some(([method]) => method === 'turn/start')).toBe(false)
+  })
+
+  it('attaches the same legacy task to its project using metadata, without a writer or prompt', async () => {
+    const calls: string[] = []; let assigned = false
+    const instance = new ExecutorChatCoordinator({ async request(method) {
+      calls.push(method)
+      if (method === 'thread/metadata/update') { assigned = true; return {} }
+      return { thread: { id: 'thread-target', cwd: 'D:\\course\\pilot-workspace', projectId: assigned ? 'portfolio-project' : null } }
+    } }, { resolve: async () => 'D:\\course\\pilot-workspace', resolveProjectId: async () => 'portfolio-project' }, async () => undefined)
+    await instance.prepareTarget(binding(), { ...definition('safe-workspace-write'), practiceId: 'm2-portfolio-planning' }, approved)
+    expect(calls).toEqual(['thread/read', 'thread/metadata/update', 'thread/read'])
+  })
+
   it('creates a Practice-aware Module 1 task without configuration overrides', async () => {
     const calls: Array<[string, Record<string, unknown>]> = []
     const client: CodexRequestClient = {
@@ -105,7 +133,7 @@ describe('ExecutorChatCoordinator', () => {
     expect(calls[0]![1]).not.toHaveProperty('sandbox')
     expect(calls[1]).toEqual(['thread/name/set', {
       threadId: 'thread-target',
-      name: 'Practice · Module 1 · m1-codex-safe-setup · 123456'
+      name: 'Làm quen với Codex · Module 1'
     }])
   })
 
@@ -155,7 +183,7 @@ describe('ExecutorChatCoordinator', () => {
       sandbox: 'workspace-write',
       config: { model_reasoning_effort: 'high' }
     }])
-    expect(target.name).toBe('Practice · Module 2 · m2-planning-package · 123456')
+    expect(target.name).toBe('Xây dựng planning package · Module 2')
     expect(calls.filter(([method]) => method === 'turn/start')).toHaveLength(1)
   })
 

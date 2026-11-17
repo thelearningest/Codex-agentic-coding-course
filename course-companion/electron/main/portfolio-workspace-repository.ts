@@ -13,6 +13,8 @@ import {
 } from 'node:fs/promises'
 import { basename, dirname, isAbsolute, join, relative, resolve, sep, win32 } from 'node:path'
 import type {
+  PortfolioCodexProjectRequest,
+  PortfolioCodexProject,
   PortfolioWorkspaceRequest,
   PortfolioWorkspaceView
 } from '../../shared/contracts'
@@ -25,6 +27,8 @@ type WorkspaceRecord = {
   canonicalPath: string
   selectedAt: string
   planningApprovedAt: string | null
+  codexProjectConfirmedAt?: string
+  codexProject?: PortfolioCodexProject
 }
 
 type WorkspaceState = {
@@ -95,6 +99,14 @@ function isWorkspaceState(value: unknown): value is WorkspaceState {
     && (record.planningApprovedAt === null
       || (typeof record.planningApprovedAt === 'string'
         && !Number.isNaN(Date.parse(record.planningApprovedAt))))
+    && (record.codexProjectConfirmedAt === undefined
+      || (typeof record.codexProjectConfirmedAt === 'string'
+        && !Number.isNaN(Date.parse(record.codexProjectConfirmedAt))))
+    && (record.codexProject === undefined || (isRecord(record.codexProject)
+      && typeof record.codexProject.id === 'string' && SAFE_ID.test(record.codexProject.id)
+      && typeof record.codexProject.name === 'string' && record.codexProject.name.length > 0
+      && record.codexProject.name.length <= 500 && typeof record.codexProject.registeredAt === 'string'
+      && !Number.isNaN(Date.parse(record.codexProject.registeredAt))))
   )
 }
 
@@ -211,6 +223,7 @@ export class PortfolioWorkspaceRepository {
         canonicalPath,
         planningPath,
         agentsPath: await existingAgentsFile(canonicalPath),
+        codexProject: record.codexProject,
         message: 'Portfolio đã sẵn sàng cho phần lập kế hoạch.'
       })
     })
@@ -222,6 +235,26 @@ export class PortfolioWorkspaceRepository {
         rm(this.statePath, { force: true }),
         rm(this.temporaryPath, { force: true })
       ])
+    })
+  }
+
+  saveCodexProject(request: PortfolioCodexProjectRequest, project: { id: string; name: string }): Promise<PortfolioWorkspaceView> {
+    validateRequest(request)
+    if (!SAFE_ID.test(project.id) || !project.name.trim() || project.name.length > 500) {
+      throw new Error('Invalid Codex project binding')
+    }
+    return this.runExclusive(async () => {
+      const state = await this.readState()
+      const record = state.workspaces[request.courseRunId]
+      if (!record || request.expectedPath !== record.canonicalPath) {
+        throw new PortfolioWorkspaceError('path-changed', 'Thư mục portfolio đã thay đổi. Hãy kiểm tra lại đường dẫn.')
+      }
+      const inspected = await this.inspectRecord(request.courseRunId, record)
+      if (inspected.status !== 'ready') return inspected
+      record.codexProject = { ...project, registeredAt: record.codexProject?.id === project.id
+        ? record.codexProject.registeredAt : this.now().toISOString() }
+      await this.writeState(state)
+      return this.inspectRecord(request.courseRunId, record)
     })
   }
 
@@ -325,6 +358,7 @@ export class PortfolioWorkspaceRepository {
         canonicalPath,
         planningPath,
         agentsPath: await existingAgentsFile(canonicalPath),
+        codexProject: record.codexProject,
         message: 'Portfolio đã sẵn sàng cho phần lập kế hoạch.'
       })
     } catch (error) {
@@ -351,6 +385,7 @@ export class PortfolioWorkspaceRepository {
       canonicalPath?: string
       planningPath?: string
       agentsPath?: string
+      codexProject?: PortfolioCodexProject
       message?: string
     } = {}
   ): PortfolioWorkspaceView {
@@ -366,6 +401,7 @@ export class PortfolioWorkspaceRepository {
         : {}),
       ...(options.planningPath ? { planningPath: options.planningPath } : {}),
       ...(options.agentsPath ? { agentsPath: options.agentsPath } : {}),
+      ...(options.codexProject ? { codexProject: structuredClone(options.codexProject) } : {}),
       observedAt: this.now().toISOString(),
       message: options.message ?? 'Chọn một thư mục trống dành riêng cho portfolio.',
       canChoose: status !== 'ready',

@@ -17,6 +17,7 @@ const screenshots = resolve('../.superpowers/sdd/screenshots')
 const course = await createDisposablePracticeWorkspace({ repositoryRoot: resolve('..') })
 await Promise.all([mkdir(portfolio), mkdir(userData), mkdir(screenshots, { recursive: true })])
 const fixtureSource = await readFile('tests/fixtures/portfolio-package-fixture.ts', 'utf8')
+const practiceVideo = JSON.parse(await readFile('shared/practice-video-manifest.json', 'utf8'))
 const fixtureCode = fixtureSource.slice(fixtureSource.indexOf('export const portfolioPackageDocuments'), fixtureSource.indexOf('export async function writePortfolioPackage'))
 const compiled = ts.transpileModule(fixtureCode, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText
 const { portfolioPackageDocuments } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'))
@@ -43,7 +44,7 @@ try {
   app = await electron.launch({ executablePath: electronExecutable, args: [resolve('out/main/index.js')], env: {
     ...process.env, COURSE_COMPANION_USER_DATA_DIR: userData, COURSE_COMPANION_WORKSPACE_ROOT: course.root,
     COURSE_COMPANION_FAKE_CODEX: '1', COURSE_COMPANION_FAKE_CONFIGURATION_READY: '1',
-    COURSE_COMPANION_FAKE_RELEASE_EVIDENCE: '1',
+    COURSE_COMPANION_FAKE_RELEASE_EVIDENCE: '1', COURSE_COMPANION_FAKE_PROJECT_FAILURE_ONCE: '1',
     COURSE_COMPANION_TEST_PUBLIC_PORTFOLIO_URL: 'https://disposable-portfolio.vercel.app/',
     COURSE_COMPANION_FAKE_BUILD_EVIDENCE: '1',
     COURSE_COMPANION_FAKE_TEACHER_SUMMARY_DELAY_MS: '10000',
@@ -53,27 +54,68 @@ try {
   const page = app.windows().find((window) => window.url().includes('#/learning'))
     ?? await app.waitForEvent('window', { predicate: (window) => window.url().includes('#/learning') })
   await page.waitForLoadState('domcontentloaded')
-  await page.evaluate(async () => {
+  await page.evaluate(async (videoDuration) => {
     const api = globalThis.courseCompanion
     await api.saveProgress({ currentLessonId: 'module-1', currentCourseLessonId: 'm1-assessment',
       checkpointId: 'm1-setup-checklist', sceneId: 'module-1-setup-checklist', sceneHistory: [], completedCheckpointIds: [], decisions: {} })
+    // Explicit simulated introduction receipt for this unrelated portfolio journey.
+    const video = await api.loadPracticeVideo()
+    await api.updatePracticeVideo({ ...video, watched: videoDuration, position: videoDuration, confirmed: true })
     await api.startPractice({ practiceId: 'm1-codex-safe-setup', practiceVersion: '2.0.0', transfer: false })
     const reviewed = await api.reviewPractice()
     if ('error' in reviewed || reviewed.workspace.review?.status !== 'passed') throw new Error('Simulated Module 1 setup did not pass')
     await api.returnPassedPractice()
     await api.saveProgress({ currentLessonId: 'module-2', currentCourseLessonId: 'm2-portfolio-brief',
-      checkpointId: 'm2-portfolio-planning', sceneId: 'module-2-portfolio-practice', sceneHistory: [],
+      checkpointId: 'm2-portfolio-brief', sceneId: 'module-2-portfolio-folder', sceneHistory: [],
       completedCheckpointIds: ['m1-setup-checklist', 'm1-complete', 'm2-why-planning'], decisions: {} })
-    const loaded = await api.loadProgress()
-    const request = { courseRunId: loaded.progress.courseRunId }
-    await api.choosePortfolioWorkspace(request)
-    await api.confirmPortfolioPlanning(request)
+  }, practiceVideo.durationSeconds)
+  await page.reload()
+  await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
+  await page.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click()
+  assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
+  await page.getByRole('button', { name: 'Chọn thư mục', exact: true }).click()
+  assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
+  await page.getByRole('button', { name: 'Tạo thư mục planning', exact: true }).click()
+  await page.getByRole('heading', { name: 'Chưa kết nối được với Codex', exact: true }).waitFor()
+  const folderContinue = page.getByRole('button', { name: 'Tiếp tục với thư mục này', exact: true })
+  assert.equal(await folderContinue.isDisabled(), true)
+  assert.equal(await page.locator('.portfolio-codex-project input[type="checkbox"]').count(), 0)
+  assert.equal(await page.getByRole('button', { name: 'Sao chép đường dẫn', exact: true }).count(), 0)
+  await page.getByRole('button', { name: 'Thử kết nối lại với Codex', exact: true }).click()
+  await page.getByRole('heading', { name: 'Project Codex đã sẵn sàng', exact: true }).waitFor()
+  assert.equal(await folderContinue.isEnabled(), true)
+  const projectSetup = await page.evaluate(async () => {
+    const loaded = await globalThis.courseCompanion.loadProgress()
+    return globalThis.courseCompanion.loadPortfolioWorkspace({ courseRunId: loaded.progress.courseRunId })
+  })
+  assert.ok(projectSetup.codexProject?.id)
+  const selectedRoot = await page.locator('.portfolio-codex-project-path code').innerText()
+  assert.equal(projectSetup.selectedPath, selectedRoot)
+  for (const width of [1180, 390, 320]) {
+    await page.setViewportSize({ width, height: 844 })
+    assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+    await page.locator('.portfolio-codex-project').scrollIntoViewIfNeeded()
+    await page.screenshot({ path: join(screenshots, `portfolio-codex-project-${width}.png`), animations: 'disabled' })
+  }
+  await page.setViewportSize({ width: 1180, height: 780 })
+  await folderContinue.click()
+  await page.locator('main[data-scene-id="module-2-portfolio-practice"]').waitFor()
+  // Revisit/reload: verify and reuse the same project without manual setup.
+  await page.evaluate(async () => {
+    const loaded = await globalThis.courseCompanion.loadProgress()
+    await globalThis.courseCompanion.saveProgress({
+      ...loaded.progress, sceneId: 'module-2-portfolio-folder', checkpointId: 'm2-portfolio-brief'
+    })
   })
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
   await page.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('heading', { name: 'Project Codex đã sẵn sàng', exact: true }).waitFor()
+  assert.equal(await page.locator('.portfolio-codex-project input').count(), 0)
+  await folderContinue.click()
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   await page.getByRole('heading', { name: 'Lập kế hoạch cho portfolio', exact: true }).waitFor()
+  assert.equal(await page.getByText('Course Companion dùng cùng project Codex đã tạo ở Module 2', { exact: false }).count(), 1)
   assert.equal(await page.locator('.practice-brief-overlay .practice-progress').count(), 0)
   await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().find((window) => window.webContents.getURL().includes('#/learning'))?.show())
@@ -124,6 +166,8 @@ try {
   }
   await page.setViewportSize({ width: 1180, height: 780 })
   const taskBefore = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8')).activeRun
+  assert.equal(taskBefore.binding.name, 'Portfolio của tôi')
+  assert.equal(taskBefore.binding.projectId, projectSetup.codexProject.id)
   await compact.getByRole('button', { name: 'Mở lại task Codex của Practice này', exact: true }).focus()
   await compact.keyboard.press('Enter')
   await compact.locator('.pixel-teacher-launcher').waitFor()
@@ -512,6 +556,7 @@ try {
   await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()
   const releaseState = await waitForPracticeState((record) => record.activeRun?.practiceId === 'm4-portfolio-release', 'Release must continue the original task')
   assert.equal(releaseState.activeRun.binding.threadId, originalTask)
+  assert.equal(releaseState.activeRun.binding.projectId, projectSetup.codexProject.id)
   const deployedAt = new Date(Date.now() - 1000).toISOString()
   const deploymentRecord = { schemaVersion: 1,
     moduleThreeSourceCheckpoint: completedBuild.practiceCompletions.at(-1).portfolioBuildHandoff.sourceCheckpoint,
@@ -557,9 +602,13 @@ try {
   assert.ok(finalReleaseProgress.progress.completedCheckpointIds.includes('m4-complete'))
   assert.equal(finalReleaseProgress.progress.practiceCompletions.at(-1).practiceId, 'm4-portfolio-release')
   assert.ok(finalReleaseProgress.progress.completedCheckpointIds.includes('m2-why-planning'), 'Retired checkpoint history remains intact')
+  const retainedProjectSetup = await page.evaluate((courseRunId) =>
+    globalThis.courseCompanion.loadPortfolioWorkspace({ courseRunId }), finalReleaseProgress.progress.courseRunId)
+  assert.equal(retainedProjectSetup.codexProject.id, projectSetup.codexProject.id)
+  assert.equal(retainedProjectSetup.selectedPath, projectSetup.selectedPath)
   await page.locator('main[data-scene-id="module-4-complete"]').waitFor()
   await page.getByRole('button', { name: 'VIBECODING 101 VỀ HOME BASE', exact: true }).click()
-  assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '12/19 checkpoint · 63%', 'Home counts only current checkpoints; this fixture skips four early setup checkpoints, the planning introduction and the two Module 3 teaching checkpoints')
+  assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '13/19 checkpoint · 68%', 'Home counts only current checkpoints, including the folder setup now exercised by this journey; this fixture skips four early setup checkpoints and the two Module 3 teaching checkpoints')
   console.log('Module 4 Practice rehearsal: course-page entry, same task, real local Git revision, one record, simulated public URL/review, explicit approval, atomic return and desktop/narrow controls passed')
   console.log('Module 3 v2 rehearsal: three records, one website approval, simulated content review, original task, archived completion, five mastery answers and desktop/narrow layouts passed')
   console.log('Portfolio rehearsal: explicit approval, five-document simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and same-task Module 3 handoff passed')

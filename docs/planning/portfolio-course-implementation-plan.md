@@ -32,7 +32,7 @@
   preceding live acceptance, courseapp changes or graduation approval.
 - **Pacing rule:** Mastery-based and resumable; no fixed lesson duration or
   completion-time promise
-- **Practice project:** One learner-owned portfolio workspace shared by Modules
+- **Practice project:** One learner-owned portfolio workspace and Codex project shared by Modules
   2–4
 
 ## Progress ledger
@@ -48,6 +48,21 @@ and must never be inferred from a passing automated check.
 | Module 2 | `in-progress` overall — five-document Practice is implemented, including Finder-metadata handling and original-task continuity; incoming theory/mastery preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | `pending` overall; prior five-document design/migration approvals remain recorded, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance; hand courseapp student findings to its owner. |
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
+
+### Portfolio instructions and shared Codex project integration, 17 November 2026
+
+Implementation: `implemented`. Module 2 creates the portfolio instructions and
+registers the same workspace as a Codex project. Package review allows a regular
+`AGENTS.md` at the workspace root and still evaluates the five planning documents.
+Module 1 keeps the Practice video, revised quiz order, direct return to Home Base
+after mastery, and review navigation for completed modules.
+
+Verification: typecheck, lint, build, 839 unit tests, nine startup checks, and
+the Electron smoke, Teacher chat, video playback and Practice feedback suites
+passed on macOS. The simulated Modules 2–4 portfolio journey also passed,
+including package approval and review, same-task handoff and desktop and narrow
+layouts. Tests used disposable profiles and a canonical temporary path. The
+next acceptance step is a live learner rehearsal.
 
 ### Module 1 completion page removed and quiz answers reordered, 16 November 2026
 
@@ -163,6 +178,199 @@ and the portfolio-folder preview displays the lesson text.
 Verification: `passed` for typecheck and lint under the renderer UI gate.
 Desktop verification is pending. The next check is to open Module 1 from a
 Module 2 roadmap, browse its lessons, then resume at the saved Module 2 page.
+
+### Portfolio project and Practice video integration into main — 15 November 2026
+
+The owner explicitly requested publishing both feature sets and merging them
+into `main`. The integration preserves current main at `be32963`, including the
+Model/Effort/Speed lesson design, four-question Module 1 review, progress
+migration and review-result styling. The shared visible-scene helper resolves
+the overlapping saved-Practice repair. All 61 scene definitions from current
+main remain present. Preservation hashes cover the combined, authorized copy;
+main's four-question assessment source is retained.
+
+The current video is version `1.2.0` (2:38). Its transcript disclosure is removed
+as requested; embedded and optional external captions remain. Authoring text is
+retained as source. Automatic registration, readable new chat titles and the
+four required settings are included in the same delivery.
+
+Fresh integrated typecheck/build, lint, 824 unit tests (three existing skips),
+nine startup checks, course Electron smoke, Teacher chat and the full disposable
+Modules 2–4 portfolio journey passed. The first video check paused on a recorded
+native window-hide event; an isolated retry timed out taking a screenshot.
+The test now explicitly restores its own window before screenshots and resumed
+playback, and resumes from the saved timeline only after a recorded native-hide
+interruption. It retains the deliberate native-hide pause assertion and every
+viewing, confirmation and Practice check. A feedback screenshot encountered the
+same native-window issue, so that test also restores its own window before
+capture. Final full-video and compact/full feedback reruns both passed, including
+desktop/narrow layouts. Full lint and focused lint of the adjusted harnesses
+passed. Verification is `passed`; implementation is `implemented`. The owner
+authorized publication and merge into `main`; final learner acceptance remains
+pending. [PR #8](https://github.com/DiligentPenguinn/codex-content-creator-course/pull/8)
+merged both feature sets at `3a2a878`, and the local `main` checkout was
+fast-forwarded to that result. Next permitted action is owner review of the
+updated app; beginner-pilot, native macOS and overall acceptance gates remain.
+
+Logs are ignored under `.superpowers/qa/features-merge-*`. Personal learner
+state, raw recordings and temporary workspaces are excluded from the index.
+Merge authorization does not grant beginner-pilot, native macOS or overall
+course acceptance.
+
+### Automatic portfolio project and Practice setup — 15 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 / M2.5 / M3.8 / M4.8 — project registration, task names and setup requirements | `implemented` | `passed` for the Windows checks below | Automatic registration after folder confirmation, one shared portfolio project, readable chat names and free Model choice explicitly requested; final runtime acceptance remains `pending` | `pending` | Review the rebuilt app with learner-owned work; retain live beginner, native macOS and overall module acceptance gates. |
+
+After Module 2 folder confirmation, Course Companion automatically creates or
+reuses the Codex project for that exact portfolio root and verifies its durable
+registration before enabling Continue. The existing folder page remains in place;
+there is no manual project checkbox. Failed connections offer retry without
+claiming success. Project metadata is saved in app data and the same project ID
+and original task continue through Modules 2–4, including archived revision and
+the Module 4 release handoff. Existing projects keep their names. New chats use
+`Làm quen với Codex · Module 1` and `Portfolio của tôi`; internal IDs retain
+identity without random strings in visible titles. Existing chat titles remain.
+
+Module 1 now accepts any Model while retaining Effort High, Speed Standard,
+Approval Approve for me and Full access off. Review, configuration evidence,
+Teacher checks, runtime content, directly related Pilot source and the local
+video agree on these four requirements. Video buttons now use the course's
+black/gold styling and accessible desktop/narrow sizing. At the owner's later
+request, the transcript disclosure was removed; captions remain available.
+
+Verification for this coherent batch:
+
+- Typecheck, lint, production build, 823 unit tests (three existing skips across
+  96 files) and all nine startup checks passed.
+- Full Electron smoke, Teacher chat, actual local-video playback and deferred
+  review-feedback suites passed with disposable profiles.
+- The final disposable Modules 2–4 journey passed automatic registration,
+  simulated first-connection failure/retry, reload reuse, exact project/task
+  continuity, reviewed handoffs and desktop/390px/320px layout checks. The
+  journey caught an omitted project ID in the Module 2 completion handoff;
+  that propagation was repaired before the final passing run.
+- An isolated local Codex App Server probe verified actual project creation,
+  idempotent reuse, root readback, task assignment and metadata assignment
+  without AI turns or use of personal Codex projects. Experimental API support
+  is enabled for these dedicated connections.
+- Desktop and narrow screenshots were inspected. The final Continue-label
+  font adjustment received a fresh production build and portfolio journey.
+
+Final logs remain ignored under `.superpowers/qa/portfolio-project-final-*`.
+Normal learner profiles, portfolio contents and existing chat titles were not
+reset or modified by verification. No commit, push or release was performed.
+Live learner/AI quality and native-platform acceptance remain separate.
+
+### Module 1 Practice video and guide replacement — 15 November 2026
+
+The owner then requested a 2–3 minute edit and rejected the prominent top
+chapter/wait banners and slow zooms. Version `1.2.0` is `implemented`, verification
+`passed` for main behavior: the guide now uses a 430-word Vietnamese script, stationary desktop
+views and contextual highlights. All main features and the real correction,
+passing review and saved return remain. The opening and replay footage were
+refreshed in disposable profiles against the shorter media. The final duration
+is 157.879667 seconds (2:38), with 12 chapters and 30 embedded caption cues.
+Full media decoding, caption/script integrity, build/typecheck, lint, 29 focused
+tests and actual full-video Electron playback/confirmation/handoff passed.
+The Electron check also covers seek blocking, pause/hide/restart persistence,
+failed-save retry, manual start, replay without Practice changes and reviewed
+return. Evidence is in `.superpowers/qa/practice-desktop-v2/short-*`, including
+`short-final-electron.log`. No broader unrelated regression suite or additional
+manual layout audit was run; visual UI acceptance remains with the owner.
+
+Historical v2 evidence follows:
+
+The owner subsequently found the first video's teaching coverage insufficient
+and requested an actual desktop walkthrough: begin with the handoff click, show
+native Codex and the floating/windowed Teacher together, demonstrate the complete
+task, and use zooms, highlights and embedded captions. Media version `1.1.0` is
+`implemented`; final main-behavior verification is `passed`. The owner provided
+a separate clean native Codex window. Direct window capture recorded that demo
+and the disposable Teacher, including a real Medium → High correction, fresh
+passing review and saved return. The revised local movie is 301.545333 seconds
+(5:01), 1920 × 1080 at 30 fps, H.264/AAC, with Vietnamese Nam Minh narration,
+contextual zooms, highlights and 55 embedded caption cues of at most two lines.
+All 12 transcript chapters match the recording script. Optional external captions
+start disabled to avoid a duplicate caption overlay.
+
+The owner narrowed final acceptance checks to main behavior and will verify the
+visual UI. The revised production build/typecheck, lint and 29 focused tests
+passed, and the whole movie decoded successfully. Actual full local playback,
+versioned watch persistence, seek blocking, native hide pause, restart, separate
+confirmation, failed confirmation-save retry, manual handoff, replay without
+Practice writes, and review/return passed in the disposable Electron check.
+The first long run was paused at 0:52 without a decoding or renderer error;
+the diagnostic rerun passed without a production change. Evidence is in
+`.superpowers/qa/practice-desktop-v2/core-*`, especially `core-electron-retry.log`.
+Next permitted action is delivering the revised video and owner visual review;
+owner visual review, beginner rehearsal and native-platform acceptance remain
+separate. The broader v1 evidence below is historical and was not rerun for this
+media-only revision.
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 — concise native-desktop video, version `1.2.0` | `implemented` | `passed` — full decode, caption integrity, build/typecheck, lint, 29 focused tests and actual full-video Electron watch/confirmation/handoff check | 2–3 minute target, removal of banners and highlights preferred over slow zooms explicitly requested; final visual acceptance remains pending | `pending` | Deliver the 2:38 version for owner visual review. |
+| Foundation / I4 — v2 native-desktop video revision, version `1.1.0` | `implemented` | `passed` — build/typecheck, lint, 29 focused tests, full decoding, caption integrity and actual full-video Electron watch/confirmation/handoff check | Full desktop walkthrough and immediate implementation explicitly requested; owner will verify visual UI | `pending` | Deliver for owner visual review; learner/native-platform acceptance remains separate. |
+| Foundation / I4 — original v1 video gate/runtime (historical evidence) | `implemented` | `passed` for typecheck, lint, 823 unit tests (three existing skips), nine startup checks, build, full Electron suite, media decoding and desktop/narrow inspection | Video/design implementation approved explicitly, with no further confirmation; replacement of the old interactive guide explicitly requested | `pending` | Preserve the gate/runtime; use the v2 revision above for current media acceptance. |
+
+The original v1 Module 1 handoff page contained a locally bundled 2:41 Vietnamese
+walkthrough with narration, synchronized captions, transcript and native media
+controls. It follows one beginner through the linked task, required settings,
+window controls, checklist, hints, review, a correction and reviewed course
+return. The concurrent Model-policy change was preserved: Model is freely
+chosen and the video describes the four currently required settings.
+
+The old interactive tour no longer loads or renders on learning or Teacher
+surfaces. Full and compact Module 1 Practice instead offer video replay. Legacy
+tour history remains intact. Viewing does not review or complete Practice.
+Learners must watch the complete contiguous timeline and separately confirm;
+seeking to the end and an `ended` event alone do not unlock the handoff.
+Start/resume and switch retry also check the receipt in the main process.
+
+Viewing progress and confirmation live in Electron-owned `practice-video.json`
+with a recoverable backup, scoped to course run and video version. The player
+restores its saved position, pauses on native hide/minimize and unmount, supports
+replay and retries a failed confirmation save without losing completed viewing.
+Private-state ignore/index guards include these new receipts and test profiles.
+
+The saved `module-1-setup-checklist` route needed a bounded repair for this gate:
+Home/resume metadata now uses its visible lesson position and restored Practice
+explicitly resolves Module 1. The saved scene/checkpoint is preserved; reopening
+the introduction does not append a duplicate history entry.
+
+Verification recorded for this scope:
+
+- Actual full local-media playback in disposable Electron data passed with
+  seek prevention, native-window pause, close/reopen/restart persistence,
+  explicit confirmation, a real failed-write/retry, manual handoff, compact
+  replay, old-tour absence, review/return and desktop/390px/320px controls.
+- Eleven focused video/repository/renderer/resume-mapping checks passed.
+  The final complete Windows unit run passed 823 tests with three existing
+  skips across 96 test files. The earlier 815-test snapshot preceded the
+  concurrent project's additional coverage.
+- Nine startup checks, final production build/typecheck and lint passed.
+  Static review passed after repairing playback-rate coverage and resume bugs.
+- The 1920 × 1080, 24 fps H.264/AAC media decodes fully with FFmpeg. Its exact
+  duration is 161.302333 seconds. All seven narration chapters match the current
+  transcript; the full visual timeline and representative frames were inspected.
+- The final combined `npm run test:electron` passed: typecheck/build, course
+  smoke, Teacher chat, actual full video playback and deferred review feedback.
+  Long playback uses an isolated copy of the built app and decoding without
+  background throttling so unrelated builds/windows cannot interrupt the test;
+  native hide still exercises the real pause bridge. Earlier project API/type
+  mismatches were resolved by the separate task. The palette check also caught
+  one new confirmation-button color, corrected to the approved black palette.
+
+Local diagnostic and final-run evidence stays under the ignored
+`.superpowers/qa/practice-video/` directory. The complete app run is recorded in
+`final-electron.log`; the video-only run is `final-video.log`. The earlier
+sandbox unit attempt could not create Windows junctions/canonical paths and
+was repeated outside the sandbox; the later remaining failures during the
+Model-policy edit were resolved by that separate task before the 815-test pass.
+No normal learner profile, personal Codex task, learner answers or external
+portfolio was used or reset. No commit, push or release was performed.
 
 ### Main integration verification — 15 November 2026
 
@@ -3273,6 +3481,9 @@ artifact evidence.
 1. Build the Module 2 definition and scenes in its module package.
 2. Present five focused knowledge scenes followed by one technical
    portfolio-folder readiness boundary and the single real Practice entry.
+   After folder confirmation, automatically register or reuse its Codex project
+   and verify the exact root on that same boundary before allowing continuation.
+   Reuse its project ID and original portfolio task through Modules 2–4.
    Current repo `AGENTS.md` and stage setup belong to Executor Practice, not
    Course Companion slides.
 3. Update progress display, Practice launch/resume/revision recovery, quiz, and
@@ -3297,6 +3508,8 @@ artifact evidence.
   is the technical folder picker required by the workspace resolver.
 - Exactly five knowledge slides and one technical workspace picker precede the
   real Practice.
+- Automatic project registration, retry and revisit reuse preserve the selected
+  root and project identity; no manual project-confirmation checkbox is needed.
 - The PRD definition routes through coding-agent review directly to the
   visual-planning and implementation-plan knowledge slides; all retired
   PRD-anatomy, one-task and Practice-setup pages are unreachable.

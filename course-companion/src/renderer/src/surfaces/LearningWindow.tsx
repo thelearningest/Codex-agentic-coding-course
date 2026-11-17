@@ -1,3 +1,4 @@
+import { visibleLessonScene } from '../../../../shared/course/visible-scene'
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import {
   COURSE_VERSION,
@@ -12,8 +13,6 @@ import {
   type LessonId,
   type ProgressLoadResult,
   type ProgressUpdate,
-  type PracticeGuideUpdateRequest,
-  type PracticeGuideView,
   type RuntimeInfo,
   type SceneId
 } from '../../../../shared/contracts'
@@ -53,7 +52,6 @@ import m4PortfolioVideo from '../assets/lesson-visuals/module-4/vercel-portfolio
 import { PracticeBrief } from '../components/PracticeBrief'
 import { TeacherWorkspace } from '../components/TeacherWorkspace'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
-import { PracticeGuide } from '../components/PracticeGuide'
 import { PortfolioWorkspacePicker } from '../components/PortfolioWorkspacePicker'
 import { HighlightedDialogue } from '../components/HighlightedDialogue'
 import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages, reviewTrail } from '../../../../shared/course/outline'
@@ -447,11 +445,11 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'neutral',
     request: 'Bạn đổi cấu hình ngay trong task; Course Companion đọc metadata hiệu lực để Triết duyệt.',
     evidence: [
-      { label: 'MODEL', value: '5.6 Sol · High · Standard' },
+      { label: 'CẤU HÌNH', value: 'High · Standard' },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt' },
       { label: 'BẰNG CHỨNG', value: 'Metadata đúng task và còn mới' }
     ],
-    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn 5.6 Sol, High, Standard, Approve for me và tắt Full access. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp năm giá trị Course Companion đọc được.',
+    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn High, Standard, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp bốn giá trị Course Companion đọc được.',
     practice: setupPracticeDefinition,
     choices: [{ label: 'Sang Codex thiết lập cấu hình', action: 'practice', primary: true }]
   },
@@ -468,7 +466,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'good',
     request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
-      { label: 'MODEL', value: '5.6 Sol · High', ready: true },
+      { label: 'EFFORT', value: 'High', ready: true },
       { label: 'SPEED', value: 'Standard', ready: true },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
     ],
@@ -2075,7 +2073,7 @@ function EntryScreen({
   onCancelReset: () => void
 }) {
   const scene = progress ? scenes[progress.sceneId] : null
-  const learningPosition = progress ? learningPositionByScene[progress.sceneId] : null
+  const learningPosition = progress ? learningPositionByScene[visibleLessonScene(progress.sceneId)] : null
   const isWelcome = mode === 'welcome'
   const isConfirm = mode === 'reset-confirm' || mode === 'reset-required'
   const title = isWelcome
@@ -2231,9 +2229,7 @@ function PixelAppShell({
 }: PixelAppShellProps) {
   const [confirmReset, setConfirmReset] = useState(false)
   const scene = scenes[progress.sceneId]
-  const learningPosition = learningPositionByScene[
-    progress.sceneId === 'module-1-setup-checklist' ? 'module-1-skills-portfolio' : progress.sceneId
-  ]
+  const learningPosition = learningPositionByScene[visibleLessonScene(progress.sceneId)]
   const completed = new Set(progress.completedCheckpointIds)
   if (progress.sceneId === 'module-2-complete') {
     completed.add(progress.checkpointId)
@@ -2456,7 +2452,6 @@ export function LearningWindow() {
   const [visualExpanded, setVisualExpanded] = useState(false)
   const [secondaryVisualExpanded, setSecondaryVisualExpanded] = useState(false)
   const [appSettings, setAppSettings] = useState<AppSettings>(defaultAppSettings)
-  const [practiceGuide, setPracticeGuide] = useState<PracticeGuideView | null>(null)
   const [modelLessonEntry, setModelLessonEntry] = useState<{ sceneId: SceneId, topic: ModelLessonTopic } | null>(null)
   const practiceAdvanceRef = useRef<Promise<LearnerProgress> | null>(null)
 
@@ -2530,9 +2525,6 @@ export function LearningWindow() {
         const loadedProgress = await advanceFromCompletedPractice(loadResult.progress)
         setProgress(loadedProgress)
         if (loadedProgress.sceneId === 'module-1-setup-checklist') setPracticeBriefOpen(true)
-        if (api) {
-          setPracticeGuide(await api.loadPracticeGuide({ surface: 'learning' }))
-        }
         setRecovered(loadResult.status === 'recovered')
         setView('resume')
       } catch {
@@ -2562,8 +2554,6 @@ export function LearningWindow() {
           const loadResult = await window.courseCompanion?.loadProgress()
           if (!loadResult || (loadResult.status !== 'returning' && loadResult.status !== 'recovered')) return
           setProgress(loadResult.progress)
-          const guide = await window.courseCompanion?.loadPracticeGuide({ surface: 'learning' })
-          setPracticeGuide(guide ?? null)
           setPracticeBriefOpen(false)
           setPracticeFullOpen(false)
           setTeacherOpen(false)
@@ -2576,15 +2566,6 @@ export function LearningWindow() {
     })
     return () => unsubscribe?.()
   }, [])
-  const updatePracticeGuide = async (request: PracticeGuideUpdateRequest) => {
-    if (!window.courseCompanion) return
-    try {
-      setPracticeGuide(await window.courseCompanion.updatePracticeGuide(request, { surface: 'learning' }))
-    } catch {
-      // The lesson and its navigation remain authoritative if optional guidance fails.
-    }
-  }
-
   const persist = async (update: ProgressUpdate): Promise<LearnerProgress> => {
     const saved = window.courseCompanion
       ? await window.courseCompanion.saveProgress(update)
@@ -2619,7 +2600,6 @@ export function LearningWindow() {
       setProgress(null)
       setAppSettings(defaultAppSettings)
       setDestination('home')
-      setPracticeGuide(null)
       setTeacherOpen(false)
       setOutlineSceneId(null)
       setReviewHistoryIndex(null)
@@ -2851,6 +2831,7 @@ export function LearningWindow() {
     if (choice.action === 'practice') {
       const practiceScene = scenes[progress.sceneId]
       if (practiceScene.practice
+        || progress.sceneId === 'module-1-setup-checklist'
         || progress.sceneId === 'module-2-portfolio-practice'
         || progress.sceneId === 'module-3-portfolio-practice'
         || progress.sceneId === 'module-4-portfolio-practice') {
@@ -2859,7 +2840,7 @@ export function LearningWindow() {
         setReviewHistoryIndex(null)
         setError('')
         try {
-          if (choice.next) await advanceToScene(choice.next, progress.decisions)
+          if (choice.next && choice.next !== progress.sceneId) await advanceToScene(choice.next, progress.decisions)
           setPracticeBriefOpen(true)
         } catch {
           setError('Không thể lưu checkpoint này. Hãy thử lại trước khi tiếp tục.')
@@ -2975,12 +2956,10 @@ export function LearningWindow() {
     : reviewSceneTrail[reviewHistoryIndex]
   const isReviewing = outlineSceneId !== null || reviewingSceneId !== undefined
   const currentReviewIndex = reviewHistoryIndex ?? reviewSceneTrail.length
-  const displayedSceneId = outlineSceneId ?? reviewingSceneId
-    ?? (progress.sceneId === 'module-1-setup-checklist'
-      ? 'module-1-skills-portfolio'
-      : progress.sceneId)
+  const displayedSceneId = outlineSceneId ?? reviewingSceneId ?? visibleLessonScene(progress.sceneId)
   const scene = scenes[displayedSceneId]
-  const activePracticeDefinition = scenes[progress.sceneId].practice
+  const activePracticeDefinition = progress.sceneId === 'module-1-setup-checklist'
+    ? setupPracticeDefinition : scenes[progress.sceneId].practice
   const learningPosition = learningPositionByScene[displayedSceneId]
   const modulePages = (scene.lessonId === 'intro' ? ['intro-overview' as const] : moduleLessonIds[scene.lessonId])
     .flatMap((lessonId) => courseLessonPages[lessonId].flat())
@@ -3190,7 +3169,6 @@ export function LearningWindow() {
           title={scene.copyPromptTitle}
         />
       ) : null}
-      <PracticeGuide view={practiceGuide} onUpdate={updatePracticeGuide} />
       {assessmentQuestion || scene.assessmentSummary || usesLessonBoard || isVercelTutorial
         ? null
         : <img className="pixel-teacher-character" src={teacherImage} alt="Triết, giáo viên đồng hành" />}
@@ -3499,11 +3477,7 @@ export function LearningWindow() {
               : progress.sceneId === 'module-4-portfolio-practice'
                 ? { practiceId: 'm4-portfolio-release', practiceVersion: '1.0.0' }
               : { practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0' }}
-          courseRunId={progress.sceneId === 'module-2-portfolio-practice'
-            || progress.sceneId === 'module-3-portfolio-practice'
-            || progress.sceneId === 'module-4-portfolio-practice'
-            ? progress.courseRunId
-            : undefined}
+          courseRunId={progress.courseRunId}
           onClose={() => setPracticeBriefOpen(false)}
           onPortfolioComplete={async () => {
             const isModuleThree = progress.sceneId === 'module-3-portfolio-practice'

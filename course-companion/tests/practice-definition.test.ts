@@ -61,7 +61,6 @@ describe('Module 1 Practice definition', () => {
     expect(Object.fromEntries(
       practice.requiredSettings.map((setting) => [setting.label, setting.value])
     )).toEqual({
-      Model: '5.6 Sol',
       Effort: 'High',
       Speed: 'Standard',
       Approval: 'Approve for me',

@@ -6,8 +6,6 @@ import type {
   PlanningPracticeActionRequest,
   PracticeState,
   PracticeWorkspaceView,
-  PracticeGuideUpdateRequest,
-  PracticeGuideView,
   TeacherContext,
   TeacherMessage,
   TeacherRuntimeView,
@@ -16,7 +14,7 @@ import type {
 } from '../../../../shared/contracts'
 import teacherImage from '../assets/teacher-triet.png'
 import { PracticeProgress } from './PracticeProgress'
-import { PracticeGuide } from './PracticeGuide'
+import { PracticeVideoGuide } from './PracticeVideoGuide'
 import { practiceGuideAnchor } from './practice-guide-anchors'
 import { PracticeReturnAction } from './PracticeReturnAction'
 import { PracticeTaskLink } from './PracticeTaskLink'
@@ -122,10 +120,7 @@ export function TeacherWorkspace({
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false)
   const [workspaceRefreshing, setWorkspaceRefreshing] = useState(false)
   const [workspaceUnavailable, setWorkspaceUnavailable] = useState(false)
-  const [practiceGuide, setPracticeGuide] = useState<PracticeGuideView | null>(null)
-  const [guideOpen, setGuideOpen] = useState(embedded)
-  const [guideError, setGuideError] = useState('')
-  const guideRevision = useRef(0)
+  const [videoOpen, setVideoOpen] = useState(false)
   const [practiceBusy, setPracticeBusy] = useState(false)
   const [reviewBusy, setReviewBusy] = useState(false)
   const [hintBusy, setHintBusy] = useState(false)
@@ -149,12 +144,12 @@ export function TeacherWorkspace({
     if (workspaceIdentity.current !== identity) {
       setHint(null)
       setHintError('')
-      setGuideOpen(embedded)
+      setVideoOpen(false)
       setReturnBusy(false)
       workspaceIdentity.current = identity
     }
     setWorkspace(next)
-  }, [embedded])
+  }, [])
 
   useEffect(() => {
     if (!visible || (!hint && !hintError)) return
@@ -188,27 +183,9 @@ export function TeacherWorkspace({
     return () => { void window.courseCompanion?.setFullTeacherVisible(false) }
   }, [embedded])
 
-  const refreshPracticeGuide = useCallback(async () => {
-    if (!window.courseCompanion) return
-    const revision = ++guideRevision.current
-    try {
-      const next = await window.courseCompanion.loadPracticeGuide({ surface: embedded ? 'full' : 'compact' })
-      if (revision === guideRevision.current) {
-        setPracticeGuide(next)
-        setGuideError('')
-      }
-    } catch {
-      if (revision === guideRevision.current) setGuideError('Chưa thể tải hướng dẫn. Hãy thử mở lại; tiến độ Practice vẫn được giữ nguyên.')
-    }
-  }, [embedded])
-
   useEffect(() => {
     if (hint && practiceRef.current) practiceRef.current.scrollTop = 0
   }, [hint])
-
-  useEffect(() => {
-    if (!embedded && guideOpen && practiceRef.current) practiceRef.current.scrollTop = 0
-  }, [embedded, guideOpen, practiceGuide?.currentStageId])
 
   const refreshContext = useCallback(async () => {
     const progressResult = await window.courseCompanion?.loadProgress()
@@ -244,7 +221,6 @@ export function TeacherWorkspace({
         applyWorkspace(loadedWorkspace ?? null)
         setWorkspaceUnavailable(false)
         setTestFixturesEnabled(runtime?.testFixturesEnabled === true)
-        if (loadedWorkspace) await refreshPracticeGuide()
         setPractice(
           window.courseCompanion
             ? await window.courseCompanion.loadPracticeState()
@@ -264,7 +240,7 @@ export function TeacherWorkspace({
 
     void load()
     return () => { cancelled = true }
-  }, [embedded, visible, applyWorkspace, refreshContext, refreshPracticeGuide])
+  }, [embedded, visible, applyWorkspace, refreshContext])
 
   useEffect(() => {
     if (!visible || returnBusy || !window.courseCompanion) return
@@ -276,20 +252,12 @@ export function TeacherWorkspace({
             applyWorkspace(next)
             setWorkspaceUnavailable(false)
           }
-          await refreshPracticeGuide()
         } catch {
           setError('Không thể đồng bộ tiến độ Practice mới nhất. Kết quả đã lưu vẫn được giữ nguyên.')
         }
       })()
     })
-  }, [visible, returnBusy, applyWorkspace, refreshPracticeGuide])
-
-  useEffect(() => {
-    if (!visible || returnBusy) return
-    const refresh = () => void refreshPracticeGuide()
-    window.addEventListener('focus', refresh)
-    return () => window.removeEventListener('focus', refresh)
-  }, [visible, returnBusy, refreshPracticeGuide])
+  }, [visible, returnBusy, applyWorkspace])
 
   useEffect(() => {
     if (!visible || activeTab !== 'teacher' || busy) return
@@ -314,28 +282,6 @@ export function TeacherWorkspace({
 
 
 
-  const updatePracticeGuide = async (request: PracticeGuideUpdateRequest) => {
-    if (!window.courseCompanion) return
-    const revision = ++guideRevision.current
-    setGuideError('')
-    try {
-      const next = await window.courseCompanion.updatePracticeGuide(request, {
-        surface: embedded ? 'full' : 'compact',
-        activeTab
-      })
-      if (revision === guideRevision.current) setPracticeGuide(next)
-    } catch {
-      setGuideError('Chưa thể chuyển bước hướng dẫn. Hãy thử lại; tiến độ Practice vẫn được giữ nguyên.')
-    }
-  }
-
-  const openPracticeGuide = async () => {
-    setGuideOpen(true)
-    if (practiceGuide?.status === 'paused') await updatePracticeGuide({ type: 'resume' })
-    else if (practiceGuide?.status === 'skipped' || practiceGuide?.status === 'completed') await updatePracticeGuide({ type: 'replay' })
-    else await refreshPracticeGuide()
-    requestAnimationFrame(() => practiceRef.current?.scrollTo({ top: 0 }))
-  }
   useEffect(() => {
     if (!visible || activeTab !== 'teacher') return
     const previous = displayedChat.current
@@ -395,12 +341,6 @@ export function TeacherWorkspace({
       }
       applyWorkspace(reviewed.workspace)
       practiceRef.current?.scrollTo({ top: 0 })
-      {
-        const request = practiceGuide?.currentStageId === 'request-review'
-          ? { type: 'review-requested' as const, expectedStageId: 'request-review' }
-          : { type: 'start' as const }
-        await updatePracticeGuide(request)
-      }
     } catch {
       setError('Kh\u00f4ng th\u1ec3 duy\u1ec7t ti\u1ebfn \u0111\u1ed9 Practice. H\u00e3y th\u1eed l\u1ea1i.')
     } finally {
@@ -739,11 +679,11 @@ export function TeacherWorkspace({
             prompt={workspace.startPrompt}
             title={workspace.title}
           /> : null}
-          {!embedded && guideOpen ? (
-            <PracticeGuide view={practiceGuide} compact onUpdate={updatePracticeGuide}
-              onReview={reviewProgress} onReturn={returnToCourse}
-              actionBusy={!practiceGuide?.replay && (workspaceRefreshing || reviewBusy || returnBusy || hintBusy)}
-              actionError={guideError || (practiceGuide?.replay ? '' : error)} />
+          {workspace?.activePractice?.practiceId === 'm1-codex-safe-setup' ? (
+            <details key={`${workspace.activePractice.runId}:${workspace.activePractice.generation}`} className="practice-video-replay" onToggle={(event) => setVideoOpen(event.currentTarget.open)}>
+              <summary>Xem lại video hướng dẫn Practice</summary>
+              {videoOpen && visible ? <PracticeVideoGuide /> : null}
+            </details>
           ) : null}
           {error || workspace?.error ? <div className="pixel-chat-warning" role="alert">{error || workspace?.error} Kết quả gần nhất vẫn được giữ nguyên.</div> : null}
             {workspace ? (
@@ -885,21 +825,6 @@ export function TeacherWorkspace({
       )}
 
       {workspaceLoaded && !workspaceUnavailable && !practiceMode && error ? <div className="pixel-chat-error" role="alert">{error}</div> : null}
-      {practiceMode && ((practiceGuide && (!guideOpen || (!practiceGuide.replay
-        && (practiceGuide.status === 'skipped' || practiceGuide.status === 'completed')))) || (!practiceGuide && guideError)) ? (
-        <button className="practice-guide-replay" type="button" onClick={() => void openPracticeGuide()}>
-          {practiceGuide?.status === 'skipped' || practiceGuide?.status === 'completed' ? 'Xem lại hướng dẫn Practice' : 'Hướng dẫn Practice'}
-        </button>
-      ) : null}
-      {embedded ? <PracticeGuide
-        view={practiceGuide}
-        onUpdate={updatePracticeGuide}
-        onReview={reviewProgress}
-        onReturn={returnToCourse}
-        actionBusy={!practiceGuide?.replay && (workspaceRefreshing || reviewBusy || returnBusy || hintBusy)}
-        actionError={guideError || (practiceGuide?.replay ? '' : error)}
-      /> : null}
-
       {!embedded ? <footer>
         <button className="pixel-panel-quit" type="button" onClick={() => void window.courseCompanion?.quitApp()}>Thoát ứng dụng</button>
       </footer> : null}

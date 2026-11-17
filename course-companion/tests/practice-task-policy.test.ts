@@ -38,6 +38,15 @@ const approved: ApprovedCodexConfiguration = {
 }
 
 describe('Practice task policy', () => {
+  it.each(['gpt-6-astra', undefined])('accepts the learner model %s or inherits it when unavailable', (model) => {
+    const plan = buildPracticeTaskStartPlan({ runId: 'run-1', definition, workspaceRoot: 'D:\\course',
+      approvedConfiguration: { ...approved, model } })
+    if (model) expect(plan.startParams.model).toBe(model)
+    else expect(plan.startParams).not.toHaveProperty('model')
+    expect(plan.startParams).toMatchObject({ approvalPolicy: 'on-request', sandbox: 'workspace-write',
+      config: { model_reasoning_effort: 'high' } })
+  })
+
   it('requires a complete approved configuration for safe workspace-write', () => {
     expect(() => buildPracticeTaskStartPlan({
       runId: 'run-1', definition, workspaceRoot: 'D:\\course'

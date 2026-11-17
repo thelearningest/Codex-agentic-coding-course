@@ -16,7 +16,6 @@ type ConfigurationSource = {
 }
 
 const expected = {
-  model: 'gpt-5.6-sol',
   reasoningEffort: 'high',
   serviceTier: 'standard',
   approvalPolicy: 'on-request',
@@ -45,7 +44,6 @@ function stepStates(
 ): PracticeAdapterStepState[] {
   const checks = snapshot
     ? [
-        snapshot.model.protocolValue === expected.model,
         snapshot.reasoningEffort.protocolValue === expected.reasoningEffort,
         snapshot.serviceTier.protocolValue === expected.serviceTier,
         snapshot.approvalPolicy.protocolValue === expected.approvalPolicy,

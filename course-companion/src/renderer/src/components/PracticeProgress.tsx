@@ -39,7 +39,6 @@ const stepIcon = {
 } as const
 
 const configurationRows = [
-  { key: 'model', label: 'Model', expected: 'gpt-5.6-sol', expectedLabel: '5.6 Sol' },
   { key: 'reasoningEffort', label: 'Effort', expected: 'high', expectedLabel: 'High' },
   { key: 'serviceTier', label: 'Speed', expected: 'standard', expectedLabel: 'Standard' },
   { key: 'approvalPolicy', label: 'Approval', expected: 'on-request', expectedLabel: 'Approve for me' },
@@ -105,7 +104,6 @@ const portfolioIssueLabels: Record<string, string> = {
 }
 
 const criterionNextActions: Record<string, string> = {
-  'model-matches': 'Trong task Codex, chọn Model 5.6 Sol rồi duyệt lại.',
   'effort-matches': 'Trong task Codex, chọn Effort High rồi duyệt lại.',
   'speed-matches': 'Trong task Codex, chọn Speed Standard rồi duyệt lại.',
   'approval-matches': 'Trong task Codex, chọn Approve for me rồi duyệt lại.',
@@ -167,8 +165,8 @@ export function PracticeProgress({
     : configurationMismatches.length
       ? `Cần kiểm tra: ${configurationMismatches.map((row) => row.label).join(', ')}.`
       : reviewStatus === 'passed'
-        ? 'Năm cài đặt đang khớp.'
-        : 'Năm cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
+          ? 'Bốn cài đặt đang khớp.'
+          : 'Bốn cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
   const planning = workspace.planning
   const portfolioStages = workspace.portfolioPlanning ?? workspace.portfolioBuild
   const currentPlanningStep = workspace.checklist.find((step) =>
@@ -199,7 +197,6 @@ export function PracticeProgress({
     upcoming: 'Chưa đến lượt'
   } as const
   const compactConfigurationGuidance: Record<string, string> = {
-    'set-model': 'Mở bộ chọn Model trong task Codex và chọn 5.6 Sol.',
     'set-effort': 'Mở Effort trong task Codex và chọn High.',
     'set-speed': 'Mở Speed trong task Codex và chọn Standard.',
     'set-approval': 'Mở Approval trong task Codex và chọn Approve for me.',

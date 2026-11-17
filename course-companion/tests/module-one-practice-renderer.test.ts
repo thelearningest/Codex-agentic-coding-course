@@ -42,9 +42,9 @@ function workspace(
     phase: 'active',
     title: 'Thiết lập Codex an toàn',
     objective: 'Thiết lập Codex an toàn.',
-    expectedOutcome: 'Đủ năm giá trị.',
+    expectedOutcome: 'Đủ bốn giá trị.',
     checklist: [
-      { id: 'set-model', title: 'Chọn Model 5.6 Sol', status: 'current' }
+      { id: 'set-effort', title: 'Chọn Effort High', status: 'current' }
     ],
     review: { status: 'not-reviewed', canReview: true, canReturn: false },
     ...(config ? { configuration: config } : {}),
@@ -78,7 +78,7 @@ describe('Module 1 Practice renderer', () => {
     ), 'utf8')
     expect(source).toContain('PRACTICE · METADATA TRỰC TIẾP')
     expect(source).toContain('KHÔNG CẦN ẢNH CHỤP')
-    expect(source).toContain('Triết duyệt trực tiếp năm giá trị')
+    expect(source).toContain('Triết duyệt trực tiếp bốn giá trị')
     expect(source).not.toContain('PRACTICE · 2 ẢNH')
   })
 
@@ -93,10 +93,11 @@ describe('Module 1 Practice renderer', () => {
     ), 'utf8')
     expect(source).toContain('if (practiceScene.practice')
     expect(source).toContain("next: 'module-1-setup-checklist', action: 'practice'")
-    expect(source).toContain("if (choice.next) await advanceToScene(choice.next, progress.decisions)")
+    expect(source).toContain("if (choice.next && choice.next !== progress.sceneId) await advanceToScene(choice.next, progress.decisions)")
     expect(source).toContain("if (loadedProgress.sceneId === 'module-1-setup-checklist') setPracticeBriefOpen(true)")
     expect(source).toContain("progress.sceneId === 'module-1-setup-checklist'")
-    expect(source).toContain("? 'module-1-skills-portfolio'")
+    expect(source).toContain('visibleLessonScene(progress.sceneId)')
+    expect(source).toContain('? setupPracticeDefinition : scenes[progress.sceneId].practice')
     expect(source).not.toContain("'m1-assessment': [\n    ['module-1-setup-checklist']")
     expect(source).toContain('practiceVersion: activePracticeDefinition.version')
     expect(source).not.toContain('mock-completed')
@@ -116,18 +117,19 @@ describe('Module 1 Practice renderer', () => {
     expect(source).toContain('aria-live')
   })
 
-  it('shows all detected values and a fresh mismatch', () => {
+  it('shows the four required values and a fresh Effort mismatch without assessing Model', () => {
     const html = renderToStaticMarkup(createElement(PracticeProgress, {
       workspace: workspace(configuration({
-        model: { protocolValue: 'gpt-5.6-terra', label: '5.6 Terra' }
+        model: { protocolValue: 'gpt-6-astra', label: null },
+        reasoningEffort: { protocolValue: 'medium', label: 'Medium' }
       }))
     }))
     expect(html).toContain('Cấu hình task được phát hiện')
-    expect(html).toContain('5.6 Terra')
-    expect(html).toContain('Cần 5.6 Sol')
-    expect(html.match(/<dt>/g)).toHaveLength(5)
-    expect(html).toContain('Cần kiểm tra: Model.')
-    expect(html.indexOf('Cần kiểm tra: Model.')).toBeLessThan(html.indexOf('<details'))
+    expect(html).not.toContain('Cần 5.6 Sol')
+    expect(html.match(/<dt>/g)).toHaveLength(4)
+    expect(html).toContain('Cần kiểm tra: Effort.')
+    expect(html.indexOf('Cần kiểm tra: Effort.')).toBeLessThan(html.indexOf('<details'))
+    expect(html).not.toContain('<dt>Model</dt>')
     expect(html).toContain('data-practice-guide-anchor="configuration-evidence"')
     expect(html).not.toContain('<details open')
   })
@@ -244,14 +246,14 @@ describe('Module 1 Practice renderer', () => {
     }))
 
     expect(compact).toContain('0/1 bước đã xác minh')
-    expect(compact).toContain('Hoàn thành bước hiện tại: Chọn Model 5.6 Sol.')
+    expect(compact).toContain('Hoàn thành bước hiện tại: Chọn Effort High.')
     expect(compact.indexOf('aria-label="Hành động tiếp theo"')).toBeLessThan(compact.indexOf('practice-compact-progress'))
     expect(compact.indexOf('practice-compact-progress')).toBeLessThan(compact.indexOf('<details'))
     expect(compact).toContain('Tất cả các bước Practice')
     expect(compact).toContain('aria-expanded="false"')
     expect(compact).not.toContain('Mở bộ chọn Model trong task Codex')
     expect(compact).not.toContain('Thiết lập Codex an toàn.')
-    expect(compact).not.toContain('Đủ năm giá trị.')
+    expect(compact).not.toContain('Đủ bốn giá trị.')
     expect(compact).not.toContain('PRIVATE CRITERION EXPLANATION')
     expect(compact).not.toContain('PRIVATE REVIEW SUMMARY')
     expect(compact).not.toContain('Cấu hình task được phát hiện')

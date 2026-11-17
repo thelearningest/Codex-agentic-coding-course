@@ -49,6 +49,7 @@ export type CodexAppServerLaunchOptions = {
   command?: string
   env?: NodeJS.ProcessEnv
   clientName?: string
+  experimentalApi?: boolean
 }
 
 export type CodexClientError = Error & { code: string; detail?: string }
@@ -110,6 +111,7 @@ export class CodexAppServerClient {
     child.once('error', () => this.handleExit(child))
     try {
       await this.rawRequest('initialize', {
+        ...(this.launch.experimentalApi ? { capabilities: { experimentalApi: true } } : {}),
         clientInfo: {
           name: this.launch.clientName ?? 'content_builder_academy_course_companion',
           title: 'Content Builder Academy Course Companion',

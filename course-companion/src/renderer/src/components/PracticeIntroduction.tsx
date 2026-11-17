@@ -15,6 +15,12 @@ export function PracticeIntroduction({
       <h1 id="practiceObjective">{introduction.title}</h1>
       <p className="practice-setup-purpose">{introduction.purpose}</p>
       <p className="practice-setup-definition">{introduction.context}</p>
+      {introduction.portfolioProject ? (
+        <p className="practice-setup-definition">
+          Course Companion dùng cùng project Codex đã tạo ở Module 2 và mở đúng task portfolio cho bạn.
+          Tiếp tục dùng task này khi sửa hoặc nộp lại bài.
+        </p>
+      ) : null}
       <ol className="practice-setup-instructions" aria-label="Cách thực hành">
         {introduction.steps.map((step) => <li key={step}>{step}</li>)}
       </ol>

@@ -29,8 +29,10 @@ function moduleLabel(practiceId: string): string {
   return match ? 'Module ' + match[1] : 'Course'
 }
 
-export function practiceTaskName(definition: PracticeDefinition, runId: string): string {
-  return ['Practice', moduleLabel(definition.practiceId), definition.practiceId, runId.slice(-6)].join(' · ')
+export function practiceTaskName(definition: PracticeDefinition): string {
+  if (definition.workspaceKind === 'learner-portfolio') return 'Portfolio của tôi'
+  if (definition.practiceId === 'm1-codex-safe-setup') return 'Làm quen với Codex · Module 1'
+  return [definition.title, moduleLabel(definition.practiceId)].join(' · ')
 }
 
 export function isApprovedCodexConfiguration(
@@ -41,7 +43,8 @@ export function isApprovedCodexConfiguration(
     && value.sourcePracticeId === 'm1-codex-safe-setup'
     && typeof value.sourcePracticeVersion === 'string'
     && /^[0-9]+\.[0-9]+\.[0-9]+$/.test(value.sourcePracticeVersion)
-    && value.model === 'gpt-5.6-sol'
+    && (value.model === undefined || (typeof value.model === 'string'
+      && value.model.trim().length > 0 && value.model.length <= 160))
     && value.reasoningEffort === 'high'
     && value.serviceTier === 'standard'
     && typeof value.approvedAt === 'string'
@@ -59,7 +62,7 @@ export function buildPracticeTaskStartPlan(input: {
     ephemeral: false,
     serviceName: 'content_builder_academy_practice'
   }
-  const name = practiceTaskName(input.definition, input.runId)
+  const name = practiceTaskName(input.definition)
   if (input.definition.taskPolicy === 'inherit-configuration-only') {
     return { taskPolicy: input.definition.taskPolicy, name, startParams: common }
   }
@@ -71,7 +74,7 @@ export function buildPracticeTaskStartPlan(input: {
     name,
     startParams: {
       ...common,
-      model: input.approvedConfiguration.model,
+      ...(input.approvedConfiguration.model ? { model: input.approvedConfiguration.model } : {}),
       serviceTier: input.approvedConfiguration.serviceTier,
       approvalPolicy: 'on-request',
       sandbox: 'workspace-write',
@@ -122,7 +125,7 @@ export function validateEffectivePracticeTask(input: {
   const writableRoots = sandbox && Array.isArray(sandbox.writableRoots)
     ? sandbox.writableRoots
     : []
-  if (input.effective.model !== input.approvedConfiguration.model ||
+  if ((input.approvedConfiguration.model && input.effective.model !== input.approvedConfiguration.model) ||
     input.effective.reasoningEffort !== input.approvedConfiguration.reasoningEffort ||
     !standardTier(input.effective.serviceTier) ||
     input.effective.approvalPolicy !== 'on-request' ||

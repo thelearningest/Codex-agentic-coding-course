@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { PortfolioWorkspaceView } from '../../../../shared/contracts'
+import { PortfolioCodexProjectSetup } from './PortfolioCodexProjectSetup'
 
 function initialView(courseRunId: string): PortfolioWorkspaceView {
   return {
@@ -106,12 +107,20 @@ export function PortfolioWorkspacePicker({
 }) {
   const [view, setView] = useState<PortfolioWorkspaceView>(() => initialView(courseRunId))
   const [busy, setBusy] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     let active = true
     const load = async () => {
-      const loaded = await window.courseCompanion?.loadPortfolioWorkspace({ courseRunId })
-      if (active && loaded) setView(loaded)
+      let loaded = await window.courseCompanion?.loadPortfolioWorkspace({ courseRunId })
+      if (loaded?.status === 'ready' && loaded.selectedPath && window.courseCompanion) {
+        if (active) setView(loaded)
+        loaded = await window.courseCompanion.ensurePortfolioCodexProject({ courseRunId, expectedPath: loaded.selectedPath })
+      }
+      if (active && loaded) {
+        setView(loaded)
+        setError('')
+      }
       if (active) setBusy(false)
     }
     void load().catch(() => {
@@ -132,6 +141,7 @@ export function PortfolioWorkspacePicker({
   const choose = async () => {
     if (!window.courseCompanion) return
     setBusy(true)
+    setError('')
     try {
       setView(await window.courseCompanion.choosePortfolioWorkspace({ courseRunId }))
     } finally {
@@ -142,8 +152,32 @@ export function PortfolioWorkspacePicker({
   const confirm = async () => {
     if (!window.courseCompanion) return
     setBusy(true)
+    setError('')
     try {
       setView(await window.courseCompanion.confirmPortfolioPlanning({ courseRunId }))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const continueWithProject = async () => {
+    if (busy || view.status !== 'ready' || !view.selectedPath || !onContinue) return
+    if (!view.codexProject || view.codexProjectError) return
+    onContinue()
+  }
+
+  const retryProject = async () => {
+    if (busy || !view.selectedPath || !window.courseCompanion) return
+    setBusy(true)
+    setError('')
+    try {
+      const next = await window.courseCompanion.ensurePortfolioCodexProject({
+        courseRunId,
+        expectedPath: view.selectedPath
+      })
+      setView(next)
+    } catch {
+      setError('Chưa kết nối được với Codex. Hãy thử lại.')
     } finally {
       setBusy(false)
     }
@@ -157,8 +191,20 @@ export function PortfolioWorkspacePicker({
         onChoose={() => void choose()}
         onConfirm={() => void confirm()}
       />
+      {view.status === 'ready' && view.selectedPath ? (
+        <PortfolioCodexProjectSetup
+          key={view.selectedPath}
+          path={view.selectedPath}
+          project={view.codexProject}
+          error={view.codexProjectError || error}
+          busy={busy}
+          onRetry={() => void retryProject()}
+        />
+      ) : null}
+      {error ? <p className="portfolio-codex-project-error" role="alert">{error}</p> : null}
       {view.status === 'ready' && onContinue ? (
-        <button className="portfolio-workspace-continue" disabled={busy} type="button" onClick={onContinue}>
+        <button className="portfolio-workspace-continue" disabled={busy || !view.codexProject || Boolean(view.codexProjectError)}
+          type="button" onClick={() => void continueWithProject()}>
           Tiếp tục với thư mục này
         </button>
       ) : null}

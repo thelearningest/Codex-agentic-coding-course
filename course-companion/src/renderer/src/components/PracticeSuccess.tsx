@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 const outcomes: Record<string, string> = {
-  'm1-codex-safe-setup': 'Năm cài đặt Codex đã được xác minh.',
+  'm1-codex-safe-setup': 'Bốn cài đặt Codex đã được xác minh.',
   'm2-portfolio-planning': 'Kế hoạch portfolio của bạn đã được duyệt.',
   'm3-portfolio-build': 'Phiên bản portfolio hiện tại đã được duyệt.',
   'm4-portfolio-release': 'Portfolio trên mạng của bạn đã được duyệt.'

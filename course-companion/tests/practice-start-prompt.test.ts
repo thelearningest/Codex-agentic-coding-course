@@ -12,8 +12,18 @@ import { PracticeDefinitionRepository } from '../electron/main/practice-definiti
 import { portfolioContinuationInstructions } from '../electron/main/portfolio-continuation-instructions'
 import { PORTFOLIO_BUILD_INSTRUCTIONS } from '../electron/main/portfolio-build-instructions'
 import { portfolioReleaseInstructions } from '../electron/main/portfolio-release-instructions'
+import { practiceTaskName } from '../electron/main/practice-task-policy'
 
 describe('Module 2 learner-owned start prompt', () => {
+  it('uses one readable portfolio name throughout planning, building and release', async () => {
+    const definitions = new PracticeDefinitionRepository(join(process.cwd(), '../pilot-workspace/course/practices'))
+    for (const [id, version] of [
+      ['m2-portfolio-planning', '2.0.0'], ['m3-portfolio-build', '2.0.0'], ['m4-portfolio-release', '1.0.0']
+    ]) {
+      expect(practiceTaskName(await definitions.load(id!, version!))).toBe('Portfolio của tôi')
+    }
+  })
+
   it('keeps the learner request short and defers package rules to the portfolio AGENTS.md', () => {
     expect(moduleTwoStartPrompt).toContain('chỉ tạo hoặc cập nhật tài liệu trong thư mục planning')
     expect(moduleTwoStartPrompt.endsWith('Hãy làm theo AGENTS.md trong thư mục này.')).toBe(true)
@@ -93,7 +103,7 @@ describe('Module 2 learner-owned start prompt', () => {
     ])
     expect(brief).toContain('<PracticeStartPrompt practiceId={identity.practiceId} prompt={workspace.startPrompt} title={workspace.title} />')
     expect(teacher).toContain('practiceId={workspace.activePractice.practiceId}')
-    expect(teacher.indexOf('<PracticeStartPrompt')).toBeLessThan(teacher.indexOf('{!embedded && guideOpen ?'))
+    expect(teacher.indexOf('<PracticeStartPrompt')).toBeLessThan(teacher.indexOf('<PracticeProgress'))
     expect(component).toContain('navigator.clipboard.writeText(text)')
     expect(component).not.toContain('window.courseCompanion')
   })

@@ -1,0 +1,584 @@
+{
+  "01-handoff": {
+    "capture": "01-handoff-short.mp4",
+    "cuts": [
+      [
+        11.7,
+        17.3
+      ],
+      [
+        17.3,
+        21.7
+      ],
+      [
+        21.7,
+        23
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0,
+          2.2
+        ],
+        "rect": [
+          1305,
+          815,
+          490,
+          85
+        ]
+      },
+      {
+        "time": [
+          6,
+          7.6
+        ],
+        "rect": [
+          480,
+          590,
+          470,
+          80
+        ]
+      },
+      {
+        "time": [
+          10.1,
+          11.8
+        ],
+        "rect": [
+          334,
+          760,
+          255,
+          85
+        ]
+      }
+    ]
+  },
+  "02-desktop-orientation": {
+    "capture": "teacher-features.mp4",
+    "cuts": [
+      [
+        4.4,
+        10.4
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0,
+          3.5
+        ],
+        "rect": [
+          275,
+          175,
+          620,
+          75
+        ]
+      },
+      {
+        "time": [
+          4,
+          9
+        ],
+        "rect": [
+          1335,
+          115,
+          540,
+          135
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "04-task-and-prompt": {
+    "capture": "teacher-features.mp4",
+    "cuts": [
+      [
+        0,
+        4
+      ],
+      [
+        14.5,
+        20,
+        1.3
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          1,
+          3.7
+        ],
+        "rect": [
+          1350,
+          205,
+          500,
+          95
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "05-progress-and-hint": {
+    "capture": "05-help-replay.mp4",
+    "cuts": [
+      [
+        0,
+        2.5,
+        0.8
+      ],
+      [
+        2.5,
+        3.2,
+        0.5
+      ],
+      [
+        4.7,
+        5.25,
+        0.15
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0.5,
+          3.3
+        ],
+        "rect": [
+          1335,
+          490,
+          540,
+          470
+        ]
+      },
+      {
+        "time": [
+          4,
+          10
+        ],
+        "rect": [
+          1340,
+          350,
+          540,
+          610
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "06-effort": {
+    "capture": "settings-take.mp4",
+    "cuts": [
+      [
+        0,
+        4,
+        1.5
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        15,
+        20
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0.2,
+          2.5
+        ],
+        "rect": [
+          1175,
+          950,
+          310,
+          80
+        ]
+      },
+      {
+        "time": [
+          3,
+          6.5
+        ],
+        "rect": [
+          1180,
+          815,
+          190,
+          85
+        ]
+      },
+      {
+        "time": [
+          7,
+          12
+        ],
+        "rect": [
+          1045,
+          890,
+          400,
+          70
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "07-speed": {
+    "capture": "settings-and-review.mp4",
+    "cuts": [
+      [
+        7,
+        10
+      ],
+      [
+        15,
+        20
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0.5,
+          7.5
+        ],
+        "rect": [
+          1025,
+          800,
+          100,
+          100
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "08-approval-and-access": {
+    "capture": "settings-and-review.mp4",
+    "cuts": [
+      [
+        25,
+        28
+      ],
+      [
+        28,
+        36
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          3,
+          7
+        ],
+        "rect": [
+          490,
+          810,
+          600,
+          75
+        ]
+      },
+      {
+        "time": [
+          7.2,
+          11.5
+        ],
+        "rect": [
+          490,
+          885,
+          600,
+          80
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "09-first-review": {
+    "capture": "09-review-fix.mp4",
+    "cuts": [
+      [
+        8,
+        13
+      ],
+      [
+        24,
+        28
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          0,
+          3
+        ],
+        "rect": [
+          1345,
+          288,
+          540,
+          85
+        ]
+      },
+      {
+        "time": [
+          5.5,
+          12
+        ],
+        "rect": [
+          1345,
+          490,
+          530,
+          230
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "10-repair-and-recheck": {
+    "capture": "09-review-fix.mp4",
+    "cuts": [
+      [
+        35,
+        36
+      ],
+      [
+        62,
+        66
+      ],
+      [
+        72,
+        75
+      ],
+      [
+        86,
+        90
+      ]
+    ],
+    "highlights": [
+      {
+        "time": [
+          1.3,
+          4.8
+        ],
+        "rect": [
+          1045,
+          815,
+          400,
+          150
+        ]
+      },
+      {
+        "time": [
+          5.2,
+          8
+        ],
+        "rect": [
+          1345,
+          288,
+          540,
+          85
+        ]
+      },
+      {
+        "time": [
+          8.3,
+          13
+        ],
+        "rect": [
+          1335,
+          490,
+          540,
+          480
+        ]
+      }
+    ],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ]
+  },
+  "03-window-controls": {
+    "capture": "03-controls-combined.mp4",
+    "cuts": [
+      [
+        0,
+        19.2,
+        1.55
+      ]
+    ],
+    "highlights": [],
+    "privacy": [
+      [
+        0,
+        800,
+        260,
+        280
+      ]
+    ],
+    "compose": [
+      {
+        "capture": "03-window-controls-v2.mp4",
+        "cut": [
+          3,
+          9,
+          1.5
+        ]
+      },
+      {
+        "capture": "03-window-controls-v2.mp4",
+        "cut": [
+          11.5,
+          15.8,
+          1.5
+        ]
+      },
+      {
+        "capture": "03-window-controls-v2.mp4",
+        "cut": [
+          19,
+          24,
+          1.5
+        ]
+      },
+      {
+        "capture": "03-window-controls-v2.mp4",
+        "cut": [
+          25,
+          28,
+          1.5
+        ]
+      },
+      {
+        "capture": "full-teacher-return.mp4",
+        "cut": [
+          0,
+          3.5
+        ]
+      },
+      {
+        "capture": "full-teacher-return.mp4",
+        "cut": [
+          29.5,
+          33
+        ]
+      }
+    ]
+  },
+  "11-replay-and-resume": {
+    "capture": "11-replay-short.mp4",
+    "cuts": [
+      [
+        11,
+        13
+      ],
+      [
+        15,
+        20.5
+      ],
+      [
+        21.5,
+        23
+      ],
+      [
+        24,
+        28
+      ]
+    ],
+    "highlights": []
+  },
+  "12-save-and-return": {
+    "capture": "12-return-combined.mp4",
+    "cuts": [
+      [
+        0,
+        11,
+        1.3
+      ],
+      [
+        11,
+        13.7,
+        1.4
+      ],
+      [
+        13.7,
+        24.7,
+        2
+      ]
+    ],
+    "highlights": [],
+    "compose": [
+      {
+        "capture": "full-teacher-return.mp4",
+        "cut": [
+          47,
+          58
+        ]
+      },
+      {
+        "capture": "full-teacher-return.mp4",
+        "cut": [
+          58,
+          64.8,
+          2.5
+        ]
+      },
+      {
+        "capture": "12-course-destination.mp4",
+        "cut": [
+          0,
+          11
+        ]
+      }
+    ]
+  }
+}

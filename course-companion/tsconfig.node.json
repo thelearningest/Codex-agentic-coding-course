@@ -25,6 +25,7 @@
     "src/renderer/src/components/practice-introduction-copy.ts",
     "src/renderer/src/components/PracticeSuccess.tsx",
     "src/renderer/src/components/PortfolioPackageSubmission.tsx",
+    "src/renderer/src/components/PortfolioCodexProjectSetup.tsx",
     "src/renderer/src/components/PortfolioReleaseSubmission.tsx",
     "src/renderer/src/components/PracticeReturnAction.tsx",
     "src/renderer/src/components/TeacherMarkdown.tsx",

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import type { Stats } from 'node:fs'
 import { lstat, opendir, readFile, realpath } from 'node:fs/promises'
 import { isAbsolute, posix, relative, resolve, sep } from 'node:path'
+import { portfolioAgentsFileName } from '../../shared/portfolio-agents-template'
 import {
   portfolioPackageArtifactPaths,
   type PortfolioPlanningArtifactSnapshot,
@@ -627,7 +628,7 @@ async function scanWorkspace(
   allowedLegacy: ReadonlySet<string>,
   issues: PortfolioPlanningIssue[]
 ): Promise<string[]> {
-  const expectedFiles = new Set<string>(portfolioPackageArtifactPaths)
+  const expectedFiles = new Set<string>([...portfolioPackageArtifactPaths, portfolioAgentsFileName])
   const unexpected = new Set<string>()
   let visitedEntries = 0
   let exhausted = false

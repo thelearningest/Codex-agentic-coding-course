@@ -37,6 +37,8 @@ course-companion/*.tsbuildinfo
 **/learner-state.backup.json*
 **/practice-runs*.json*
 **/practice-guide-state*.json*
+**/practice-video.json*
+**/practice-video.backup.json*
 **/teacher-chat*.jsonl*
 **/teacher-memory*.json*
 **/executor-activity*.json*
