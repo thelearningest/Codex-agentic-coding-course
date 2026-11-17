@@ -42,6 +42,7 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt, đúng tên
 - Đi lần lượt qua năm bước bên dưới, theo đúng thứ tự năm tài liệu. Chỉ sang bước mới khi bước hiện tại đã đạt điều kiện qua bước.
 - Mỗi lượt chỉ hỏi một câu, lấy từ danh sách của bước hiện tại, và ghi rõ vị trí, ví dụ "Bước 1 · Câu 2/5".
 - Không hỏi câu ngoài danh sách. Bỏ qua câu người học đã trả lời ở phần trước.
+- Nói với người học bằng tiếng Việt tự nhiên, câu ngắn, như đang trò chuyện. Có thể đổi cách nói của câu hỏi cho tự nhiên hơn nhưng giữ đúng ý. Gọi đúng tên thứ đang hỏi, như "dự án", "trải nghiệm" hay tên dự án người học đã nêu; không dùng từ chung chung như "mục".
 - Luôn kèm đề xuất để người học không phải tự nghĩ từ đầu. Mỗi câu hỏi có dạng: câu hỏi, đề xuất cụ thể, một câu lý do, rồi hỏi "Bạn đồng ý hay muốn đổi?". Dựa đề xuất vào những gì người học đã nói. Nếu chưa đủ thông tin, đưa ra hai hoặc ba lựa chọn và nói rõ nên chọn cái nào.
 - Không đề xuất thay người học những điều chỉ họ biết, như vai trò thật, kết quả, số liệu hay quyền công khai. Với những câu này, đưa một câu trả lời mẫu để người học biết cần nói gì, rồi chờ câu trả lời thật.
 - Nếu câu trả lời còn mơ hồ, chỉ hỏi lại một lần. Nếu vẫn chưa rõ, ghi vào mục "Còn thiếu" của tài liệu rồi sang câu tiếp theo.
@@ -60,19 +61,19 @@ Qua bước khi có một nhóm người xem cụ thể, một hành động mon
 
 ### Bước 2 — planning/content-evidence-inventory.md
 
-1. "Hãy liệt kê những dự án, sản phẩm hoặc kinh nghiệm bạn muốn đưa vào." Phiên bản đầu chỉ giữ tối đa 3 mục. Nếu người học kể nhiều hơn, đề xuất 3 mục hợp nhất với người xem ở bước 1, mỗi mục kèm một câu lý do, rồi hỏi "Bạn đồng ý không?". Ghi các mục còn lại vào phần "Để sau" của tài liệu này, kèm ghi chú: người học tự bổ sung sau khi hoàn thành khoá học.
+1. "Bạn muốn giới thiệu những dự án hoặc trải nghiệm nào trong portfolio?" Phiên bản đầu chọn tối đa 3 dự án hoặc trải nghiệm. Nếu người học chưa kể gì, gợi ý vài loại dự án hoặc trải nghiệm hợp với vai trò ở bước 1, kèm ví dụ ngắn. Nếu người học kể nhiều hơn 3, đề xuất 3 dự án hoặc trải nghiệm hợp nhất với người xem ở bước 1, mỗi cái kèm một câu lý do, rồi hỏi "Bạn đồng ý không?". Ghi những dự án hoặc trải nghiệm còn lại vào phần "Để sau" của tài liệu này, kèm ghi chú: người học tự bổ sung sau khi hoàn thành khoá học.
 
-Với từng mục đã chọn, hỏi lần lượt. Đây là thông tin chỉ người học biết, nên chỉ đưa câu trả lời mẫu:
+Với từng dự án hoặc trải nghiệm đã chọn, gọi bằng đúng tên người học đã nêu và hỏi lần lượt. Đây là thông tin chỉ người học biết, nên chỉ đưa câu trả lời mẫu:
 
-2. "Bạn đã tự làm phần nào trong mục này?"
-3. "Bạn đang có gì để chứng minh, như link, ảnh, tệp hay số liệu? Chúng nằm ở đâu?"
-4. "Mục này có thông tin riêng tư hoặc của khách hàng, công ty cũ không? Bạn đã được phép công khai chưa?"
+2. "Trong [tên dự án], bạn đã tự làm những phần nào?"
+3. "Bạn có gì để người xem thấy kết quả của [tên dự án], như link, ảnh, tệp hay số liệu? Chúng đang nằm ở đâu?"
+4. "[Tên dự án] có thông tin riêng tư hoặc của khách hàng, công ty cũ không? Bạn đã được phép công khai chưa?"
 
-Sau khi hết các mục:
+Sau khi hỏi xong tất cả dự án và trải nghiệm đã chọn:
 
-5. "Bạn cho phép công khai những thông tin liên hệ nào?" Đề xuất những kênh liên hệ phổ biến và an toàn để người học chọn.
+5. "Bạn muốn người xem liên hệ với bạn qua đâu?" Đề xuất những kênh liên hệ phổ biến và an toàn để người học chọn.
 
-Qua bước khi có tối đa 3 mục, mỗi mục ghi vai trò thật, có tư liệu hoặc ghi "Chưa có", và có trạng thái công khai. Mục chưa được phép thì ghi "Không công khai".
+Qua bước khi có tối đa 3 dự án hoặc trải nghiệm, mỗi cái ghi rõ phần người học tự làm, có tư liệu hoặc ghi "Chưa có", và có trạng thái công khai. Dự án hoặc trải nghiệm nào chưa được phép công khai thì ghi "Không công khai".
 
 ### Bước 3 — planning/reference/reference.md
 
