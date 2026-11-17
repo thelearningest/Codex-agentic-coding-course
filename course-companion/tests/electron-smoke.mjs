@@ -32,7 +32,7 @@ const releaseQuiz = JSON.parse(
 )
 const approvedModuleTwoOpening = 'Sau khi hoàn thành module 1, hy vọng các bạn đã hiểu hơn về cách sử dụng Codex. Tiếp theo, chúng ta sẽ cùng tìm hiểu về cách planning khi sử dụng Coding agents. Nhiều bạn mới bắt đầu code với AI thường bỏ qua phần lên kế hoạch mà nhảy thẳng vào phần thực thi.\n\n Các bạn ấy nghĩ rằng mình đang tiết kiệm thời gian, nhưng thực chất các bạn đang lầm. Nếu có một kế hoạch tốt trước khi bắt đầu xây sản phẩm. Bạn sẽ tiết kiệm được biết bao thời gian debug và sửa lại từ đầu vì không đúng ý. Tin mình đi, mình đã phạm phải sai lầm này và đã phải trả giá.'
 const approvedImplementationPlanIntro = 'Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.\n\nImplementation plan về căn bản sẽ viết ra những bước chi tiết để coding agent có thể hiện thực hoá PRD. Bạn có thể hiểu nếu PRD là bản kế hoạch tổng quan, thì implementation plan sẽ ghi chi tiết từng bước để thực hiện kế hoạch đó.\n\nThông thường một implementation plan sẽ được chia ra thành nhiều giai đoạn. Mỗi giai đoạn sẽ có tiêu chí hoàn thành rõ ràng.\n\nThường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo rồi duyệt là được.\n\nPrompt mẫu sẽ được cung cấp ở phần thực hành cuối module.'
-const approvedPracticeTransitionCopy = 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi. Trước khi bấm chuyển sang Codex để thực hành, hãy copy prompt ở gốc trên bên phải để tẹo nữa paste vào Codex nha'
+const approvedPracticeTransitionCopy = 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi.'
 const approvedPortfolioPracticePrompt = [
   'Tôi muốn xây dựng một portfolio cá nhân nhưng chưa biết nên bắt đầu từ đâu. Hãy giúp tôi lập kế hoạch từ đầu bằng cách phỏng vấn tôi từng câu một. Trước tiên, hãy tìm hiểu mục tiêu của portfolio, người tôi muốn thuyết phục, nội dung tôi có thể đưa vào và phiên bản đầu tiên nên gồm những gì. Nếu tôi chưa chắc về câu trả lời, hãy đưa ra một vài lựa chọn dễ hiểu để tôi cân nhắc. Sau mỗi phần quan trọng, hãy tóm tắt những gì đã thống nhất và chờ tôi xác nhận trước khi tiếp tục. Trong quá trình này, chỉ tạo hoặc cập nhật tài liệu trong thư mục planning; chưa viết code, cài gói phụ thuộc hay tạo ứng dụng.',
   'Hãy làm theo AGENTS.md trong thư mục này.'
@@ -1486,51 +1486,32 @@ try {
     .waitFor()
   assert.equal(await learningPage.locator('.pixel-dialogue > p').textContent(), approvedModuleTwoOpening)
   await openModuleTwoPractice(learningPage)
-  await learningPage.locator('.pixel-copy-prompt').waitFor()
-  const promptBounds = await learningPage.locator('.pixel-copy-prompt').boundingBox()
-  const promptDialogueBounds = await learningPage.locator('.pixel-dialogue').boundingBox()
-  assert.ok(promptBounds)
-  assert.ok(promptDialogueBounds)
-  assert.ok(
-    promptDialogueBounds.y - (promptBounds.y + promptBounds.height) >= 16,
-    `Expected at least 16px between the portfolio prompt and Teacher panel, got ${JSON.stringify({ promptBounds, promptDialogueBounds })}`
-  )
+  assert.equal(await learningPage.locator('.pixel-copy-prompt').count(), 0)
+  assert.equal(await learningPage.locator('.pixel-dialogue > p').textContent(), approvedPracticeTransitionCopy)
   assert.equal(await learningPage.locator('.pixel-scene-title').count(), 0)
   assert.equal(await learningPage.locator('.pixel-consequence').count(), 0)
-  assert.equal(await learningPage.locator('.pixel-dialogue > p').textContent(), approvedPracticeTransitionCopy)
-  assert.equal(await learningPage.locator('.pixel-copy-prompt > p').textContent(), approvedPortfolioPracticePrompt)
-  await learningPage.getByRole('button', { name: 'SAO CHÉP PROMPT', exact: true }).click()
-  await learningPage.getByRole('button', { name: 'ĐÃ SAO CHÉP', exact: true }).waitFor()
-  const copiedPortfolioPrompt = await learningPage.evaluate(() => navigator.clipboard.readText())
-  assert.equal(copiedPortfolioPrompt.replace(/\r\n/g, '\n'), approvedPortfolioPracticePrompt)
-  await capture(learningPage, 'module-2-portfolio-practice-prompt.png')
-  if (screenshotDirectory) {
-    await learningPage.setViewportSize({ width: 390, height: 844 })
-    const promptNarrowWidths = await learningPage.evaluate(() => ({
-      body: globalThis.document.body.scrollWidth,
-      document: globalThis.document.documentElement.scrollWidth,
-      viewport: globalThis.innerWidth
-    }))
-    assert.equal(promptNarrowWidths.body, promptNarrowWidths.viewport)
-    assert.equal(promptNarrowWidths.document, promptNarrowWidths.viewport)
-    const promptNarrowBounds = await learningPage.locator('.pixel-copy-prompt').boundingBox()
-    const promptNarrowDialogueBounds = await learningPage.locator('.pixel-dialogue').boundingBox()
-    assert.ok(promptNarrowBounds)
-    assert.ok(promptNarrowDialogueBounds)
-    assert.ok(
-      promptNarrowDialogueBounds.y - (promptNarrowBounds.y + promptNarrowBounds.height) >= 10,
-      `Expected at least 10px between the narrow portfolio prompt and Teacher panel, got ${JSON.stringify({ promptNarrowBounds, promptNarrowDialogueBounds })}`
-    )
-    await learningPage.locator('.pixel-copy-prompt').scrollIntoViewIfNeeded()
-    await capture(learningPage, 'module-2-portfolio-practice-prompt-390px.png')
-    await learningPage.setViewportSize({ width: 1180, height: 780 })
-  }
   await learningPage
     .getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true })
     .click()
   await learningPage.locator('.practice-brief-overlay').waitFor()
   await learningPage.getByRole('heading', { name: 'Lập kế hoạch cho portfolio', exact: true }).waitFor()
   await learningPage.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).waitFor()
+  const guide = learningPage.locator('.planning-guide')
+  for (const title of ['Duyệt kế hoạch', 'Nộp bài', 'Trao đổi']) {
+    const step = guide.getByRole('button', { name: new RegExp(title) })
+    await step.click()
+    assert.equal(await step.getAttribute('aria-current'), 'step')
+  }
+  await guide.getByRole('button', { name: 'Sao chép prompt', exact: true }).click()
+  await guide.getByRole('button', { name: 'ĐÃ SAO CHÉP', exact: true }).waitFor()
+  const clipboard = await learningPage.evaluate(() => navigator.clipboard.readText())
+  assert.equal(clipboard.replace(/\r\n/g, '\n'), approvedPortfolioPracticePrompt)
+  if (screenshotDirectory) {
+    await learningPage.setViewportSize({ width: 390, height: 844 })
+    assert.ok(await guide.evaluate(el => el.scrollWidth <= el.clientWidth))
+    await capture(learningPage, 'module-2-portfolio-practice-brief-390px.png')
+    await learningPage.setViewportSize({ width: 1180, height: 780 })
+  }
   await capture(learningPage, 'module-2-portfolio-practice-brief.png')
   await learningPage.getByRole('button', { name: 'Đóng trang Practice', exact: true }).click()
 

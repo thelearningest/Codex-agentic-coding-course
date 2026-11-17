@@ -138,6 +138,18 @@ Verification: typecheck, lint, build and `test:electron` `passed`; the
 same 79 unrelated unit failures remain. Both pages were inspected at
 1180×780; the notice and the added line fit without moving navigation.
 
+### Module 2 illustrated Practice entry, 17 November 2026
+
+Implementation: `implemented` for the M2.4/M2.5 entry screen. The existing
+transition opens the three-step illustrated guide. Learners can copy the
+prompt in the guide and use the existing start or resume action. Active task
+help still offers the prompt. The scene inventory and submission gate are intact.
+
+Verification: `passed` for typecheck, lint and 48 focused tests. The Electron
+smoke assertions now check the prompt in the guide. Build, full suite and
+Electron were not run for this UI change. Next action: inspect the integrated
+screen at desktop and narrow widths; learner acceptance remains pending.
+
 ### Module 2 sample-prompt pages removed, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`. At the owner's

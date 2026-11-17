@@ -1,3 +1,4 @@
+import { PortfolioPlanningGuide } from './PortfolioPlanningGuide'
 import { PracticeScreenshotGuide } from './PracticeScreenshotGuide'
 import { useEffect, useState } from 'react'
 import type { PracticeIdentity, PracticeWorkspaceView } from '../../../../shared/contracts'
@@ -41,6 +42,7 @@ export function PracticeBrief({
   const [returnBusy, setReturnBusy] = useState(false)
   const [switchOpen, setSwitchOpen] = useState(false)
   const [error, setError] = useState('')
+  const planningPractice = identity.practiceId === 'm2-portfolio-planning'
   const setupPractice = identity.practiceId === 'm1-codex-safe-setup'
 
   const load = async () => {
@@ -214,19 +216,22 @@ export function PracticeBrief({
     {error || workspace.error ? <p className="practice-brief-error" role="alert">{error || workspace.error}</p> : null}
   </>
   return (
-    <main className={'practice-brief-overlay practice-workflow' + (introduction ? ' has-clear-introduction' : '') + (setupPractice ? ' has-screenshot-guide' : '')}>
+    <main className={'practice-brief-overlay practice-workflow' + (introduction ? ' has-clear-introduction' : '') + (planningPractice ? ' has-planning-guide' : '') + (setupPractice ? ' has-screenshot-guide' : '')}>
       <header className="practice-brief-header">
-        <button type="button" aria-label="Đóng trang Practice" onClick={onClose}>×</button>
+        {planningPractice ? <div className="planning-context"><strong>Module 2</strong> / Practice</div> : null}
+        <button type="button" aria-label="Đóng trang Practice" onClick={onClose}>{planningPractice ? '← Trang trước' : '×'}</button>
         {setupPractice && introduction ? (
           <div className="practice-module-context"><small>Module 1</small><span aria-hidden="true">/</span><h1 id="practiceObjective">{introduction.title}</h1></div>
-        ) : <>
+        ) : planningPractice ? null : <>
           <div><small>Practice</small><strong>{workspace.title}</strong></div>
           <span aria-hidden="true">◆</span>
         </>}
       </header>
 
       <section className="practice-brief-card" aria-labelledby="practiceObjective">
-        {introduction ? (
+        {planningPractice && introduction ? (
+          <PortfolioPlanningGuide introduction={introduction} controls={controls} />
+        ) : introduction ? (
           <PracticeIntroduction introduction={introduction} showReference={!hasRequestedPractice} imageFirst={setupPractice}>
             {setupPractice ? <PracticeScreenshotGuide key={courseRunId}>{controls}</PracticeScreenshotGuide> : controls}
           </PracticeIntroduction>
@@ -237,7 +242,7 @@ export function PracticeBrief({
         <p>{workspace.expectedOutcome}</p>
         {controls}
         </>}
-        <PracticeStartPrompt practiceId={identity.practiceId} prompt={workspace.startPrompt} title={workspace.title} />
+        {!planningPractice && <PracticeStartPrompt practiceId={identity.practiceId} prompt={workspace.startPrompt} title={workspace.title} />}
       </section>
 
       {!introduction || hasRequestedPractice ? <PracticeProgress

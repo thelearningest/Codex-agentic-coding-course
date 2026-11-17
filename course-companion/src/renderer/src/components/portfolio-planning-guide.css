@@ -1,0 +1,293 @@
+.planning-guide .desk {
+  border-radius: 18px;
+  overflow: hidden;
+  background-color: #d7cfb6;
+  background-image: radial-gradient(#8a846f55 1px,transparent 1px);
+  background-size: 12px 12px;
+  padding: clamp(18px,3vw,35px);
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+}
+
+.planning-guide .window {
+  background: #242521;
+  border: 1px solid #43443b;
+  border-radius: 13px;
+  box-shadow: 0 12px 26px #28271740;
+  overflow: hidden;
+  width: min(100%,720px);
+}
+
+.planning-guide .bar {
+  height: 40px;
+  padding: 0 16px;
+  gap: 6px;
+  border-bottom: 1px solid #414238;
+  font-size: 12px;
+  color: #cfcec3;
+}
+
+.planning-guide .bar i {
+  border-radius: 50%;
+  width: 9px;
+  height: 9px;
+  background: #cf7566;
+}
+
+.planning-guide .bar i:nth-child(2) {
+  background: #d2b46e;
+}
+
+.planning-guide .bar i:nth-child(3) {
+  background: #8ba784;
+}
+
+.planning-guide .bar span {
+  margin-left: 11px;
+}
+
+.planning-guide .bar small {
+  margin-left: auto;
+  color: #b4b5a8;
+}
+
+.planning-guide .chat {
+  padding: 21px clamp(18px,6vw,70px) 24px;
+  min-height: 212px;
+}
+
+.planning-guide .bubble {
+  background: #383a32;
+  border-radius: 14px 14px 4px 14px;
+  margin: 0 0 18px auto;
+  padding: 8px 13px;
+  width: fit-content;
+  font-size: 14px;
+}
+
+.planning-guide .speaker {
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.planning-guide .logo {
+  display: inline-grid;
+  place-items: center;
+  height: 23px;
+  width: 23px;
+  border-radius: 7px;
+  color: #d8dec6;
+  background: #454c3c;
+  font: 700 13px monospace;
+}
+
+.planning-guide .question {
+  font-size: clamp(21px,3vw,30px);
+  letter-spacing: -.025em;
+  color: #fff2ca;
+  border-left: 3px solid var(--pixel-yellow);
+  padding-left: 14px;
+  line-height: 1.32;
+  margin: 9px 0 0;
+}
+
+.planning-guide .papers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 20px;
+}
+
+.planning-guide .paper {
+  border-radius: 6px;
+  background: #f4f0e6;
+  color: #343729;
+  padding: 14px 18px 17px;
+  box-shadow: 0 3px 0 #9d9b8d;
+  overflow-wrap: anywhere;
+}
+
+.planning-guide .paper small,.file {
+  font: 12px/1.45 ui-monospace,monospace;
+}
+
+.planning-guide .paper strong {
+  display: block;
+  margin-top: 12px;
+}
+
+.planning-guide .paper p {
+  margin: 7px 0;
+  background: #f4dfa4;
+  padding: 4px 7px;
+  font-size: 15px;
+}
+
+.planning-guide .submit-view {
+  display: grid;
+  grid-template-columns: minmax(0,1.25fr) minmax(0,1fr);
+  align-items: center;
+  gap: 14px;
+  padding: 22px 30px;
+}
+
+.planning-guide .files {
+  border-left: 1px solid #66695c;
+  margin: 7px 0 0 6px;
+  padding-left: 14px;
+}
+
+.planning-guide .file {
+  display: block;
+  color: #d3d5c8;
+  overflow-wrap: anywhere;
+  margin: 5px 0;
+}
+
+.planning-guide .review {
+  text-align: center;
+}
+
+.planning-guide .portrait {
+  height: 82px;
+  width: 82px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 12%;
+  background: #464a39;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.planning-guide .review b {
+  display: inline-block;
+  border: 1px solid var(--pixel-yellow);
+  border-radius: 8px;
+  padding: 7px 12px;
+  color: var(--pixel-yellow);
+  font-size: 14px;
+}
+
+.planning-guide figcaption {
+  margin: 12px 0;
+  color: #d6d6cb;
+  font-size: 15px;
+  min-height: 1.5em;
+}
+
+.planning-guide .step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b3b3a8;
+  padding: 7px 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.planning-guide .step span {
+  border: 1px solid #646657;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-content: center;
+  font-size: 12px;
+}
+
+.planning-guide .step[aria-current=step] {
+  color: var(--pixel-yellow);
+}
+
+.planning-guide .step[aria-current=step] span {
+  background: #373325;
+  border-color: #ad955c;
+}
+
+.practice-workflow.has-planning-guide .practice-brief-card,
+.practice-workflow.has-planning-guide .practice-brief-header {
+  width: min(100%, 944px);
+  max-width: 944px;
+  padding-inline: 0;
+}
+.practice-workflow.has-planning-guide .practice-brief-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--obsidian-line-soft);
+  padding-bottom: 15px;
+}
+.has-planning-guide .planning-context strong { display: inline; color: var(--pixel-yellow); }
+.practice-workflow.has-planning-guide .practice-brief-header button {
+  width: auto;
+  padding: 5px 8px;
+  font: inherit;
+  border: 0;
+  background: transparent;
+}
+.practice-workflow.has-planning-guide .practice-brief-card {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding-block: 0;
+}
+.has-planning-guide .practice-brief-card .planning-guide h1 { margin: 0 0 20px; }
+.planning-guide {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  color: #f5f2e9;
+  font: 16px/1.5 var(--app-font);
+}
+.planning-guide > h1, .planning-guide figure, .planning-guide details,
+.planning-guide .practice-start-prompt-status { grid-column: 1 / -1; }
+.planning-guide > h1 { grid-row: 1; }
+.planning-guide figure { margin: -10px 0 0; min-width: 0; }
+.planning-guide .bar, .planning-guide .speaker, .planning-guide nav {
+  display: flex;
+  align-items: center;
+}
+.planning-guide nav { flex-wrap: wrap; gap: 6px; }
+.planning-guide .step { background: transparent; border: 0; font-family: inherit; }
+.planning-guide .practice-start-prompt { display: contents; }
+.planning-guide .practice-start-prompt > header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.planning-guide .practice-start-prompt > header > button {
+  text-transform: none;
+}
+.has-planning-guide .planning-guide .practice-brief-actions { margin: 0; }
+.planning-guide .practice-start-prompt details, .planning-guide .practice-setup-reference {
+  margin: 0;
+  border-top: 1px solid var(--obsidian-line-soft);
+  padding: 11px 0;
+}
+.planning-guide .practice-transition, .planning-guide .practice-brief-error { flex-basis: 100%; }
+.planning-guide .paper, .planning-guide dd { overflow-wrap: anywhere; }
+@container (max-width: 780px) {
+  .planning-guide { grid-template-columns: minmax(0, 1fr); }
+  .planning-guide .practice-start-prompt > header { justify-content: flex-start; }
+}
+@container (max-width: 650px) {
+  .planning-guide .desk { padding: 13px; min-height: 270px; }
+  .planning-guide .bar { padding: 0 10px; }
+  .planning-guide .chat { padding: 19px 16px; }
+  .planning-guide .papers { padding: 12px; gap: 8px; }
+  .planning-guide .paper { padding: 10px; }
+  .planning-guide .submit-view { padding: 14px 12px; gap: 10px; }
+  .planning-guide .step { padding: 6px 4px; }
+}
+@container (max-width: 420px) {
+  .planning-guide .papers, .planning-guide .submit-view { grid-template-columns: 1fr; }
+  .planning-guide .review { display: flex; justify-content: center; align-items: center; gap: 10px; }
+  .planning-guide .portrait { width: 42px; height: 42px; margin: 0; }
+}
+.practice-workflow .planning-guide .practice-brief-actions button.is-primary {
+  background: var(--pixel-yellow);
+  color: #252015;
+}

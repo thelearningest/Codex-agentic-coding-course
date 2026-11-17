@@ -63,10 +63,9 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(html.indexOf('</button>')).toBeLessThan(html.indexOf('<details>'))
   })
 
-  it('keeps the course transition bound to the same shared prompt', async () => {
+  it('offers the planning prompt in Practice only after leaving the lesson', async () => {
     const scenes = await readFile(join(process.cwd(), 'src/renderer/src/course/modules/module-2/scenes.tsx'), 'utf8')
-    expect(scenes).toContain("import { moduleTwoStartPrompt } from '../../../../../../shared/module-two-start-prompt'")
-    expect(scenes).toMatch(/'module-2-portfolio-practice': \{[\s\S]*?copyPrompt: moduleTwoStartPrompt/)
+    expect(scenes).not.toContain('moduleTwoStartPrompt')
   })
 
   it.each(['m1-codex-safe-setup', 'm3-portfolio-build', 'm4-portfolio-release'])(
@@ -95,7 +94,7 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(() => portfolioContinuationInstructions(release)).toThrow('verified Module 3 source checkpoint')
   })
 
-  it('keeps the prompt on the transition page and in the active task help surface independent of guide completion', async () => {
+  it('keeps the prompt available in Practice and in the active task help surface independent of guide completion', async () => {
     const [brief, teacher, component] = await Promise.all([
       readFile(join(process.cwd(), 'src/renderer/src/components/PracticeBrief.tsx'), 'utf8'),
       readFile(join(process.cwd(), 'src/renderer/src/components/TeacherWorkspace.tsx'), 'utf8'),

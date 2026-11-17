@@ -1,5 +1,4 @@
 import type { CheckpointId, CourseLessonId, SceneId } from '../../../../../../shared/contracts'
-import { moduleTwoStartPrompt } from '../../../../../../shared/module-two-start-prompt'
 import planningQuiz from '../../../../../../../pilot-workspace/course/quizzes/module-2.quiz.json'
 import type { RegistrySceneContent } from '../../module-contracts'
 
@@ -140,9 +139,8 @@ const instructionalScenes = {
       { label: 'ỨNG DỤNG', value: 'Chưa được tạo', ready: true },
       { label: 'PHÊ DUYỆT', value: 'Bạn duyệt từng phiên bản hiện tại' }
     ],
-    dialogue: 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi. Trước khi bấm chuyển sang Codex để thực hành, hãy copy prompt ở gốc trên bên phải để tẹo nữa paste vào Codex nha',
+    dialogue: 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi.',
     choices: [{ label: 'Mở Practice lập kế hoạch', action: 'practice', primary: true }],
-    copyPrompt: moduleTwoStartPrompt,
     showTitle: false,
     showPanel: false
   },

@@ -1,7 +1,7 @@
-import { useId, useState } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { moduleTwoStartPrompt } from '../../../../shared/module-two-start-prompt'
 
-export function PracticeStartPrompt({ practiceId, prompt, title }: { practiceId: string; prompt?: string; title?: string }) {
+export function PracticeStartPrompt({ practiceId, prompt, title, guideActions }: { practiceId: string; prompt?: string; title?: string; guideActions?: ReactNode }) {
   const titleId = useId()
   const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const text = practiceId === 'm2-portfolio-planning' ? moduleTwoStartPrompt : prompt
@@ -17,15 +17,16 @@ export function PracticeStartPrompt({ practiceId, prompt, title }: { practiceId:
   }
 
   return (
-    <aside className="practice-start-prompt" data-copy-state={status} aria-labelledby={titleId}>
+    <aside className="practice-start-prompt" data-copy-state={status} aria-label={guideActions ? 'Prompt để dán vào Codex' : undefined} aria-labelledby={guideActions ? undefined : titleId}>
       <header>
-        <strong id={titleId}>{practiceId === 'm2-portfolio-planning' ? 'Bắt đầu lập kế hoạch portfolio' : title}</strong>
+        {!guideActions && <strong id={titleId}>{practiceId === 'm2-portfolio-planning' ? 'Bắt đầu lập kế hoạch portfolio' : title}</strong>}
         <button type="button" onClick={() => void copyPrompt()}>
-          {status === 'copied' ? 'ĐÃ SAO CHÉP' : status === 'error' ? 'THỬ LẠI' : 'SAO CHÉP PROMPT'}
+          {status === 'copied' ? 'ĐÃ SAO CHÉP' : status === 'error' ? 'THỬ LẠI' : guideActions ? 'Sao chép prompt' : 'SAO CHÉP PROMPT'}
         </button>
+        {guideActions}
       </header>
       <details>
-        <summary>PROMPT ĐỂ DÁN VÀO CODEX</summary>
+        <summary>{guideActions ? 'Prompt để dán vào Codex' : 'PROMPT ĐỂ DÁN VÀO CODEX'}</summary>
         <p>{text}</p>
       </details>
       {status !== 'idle' ? (

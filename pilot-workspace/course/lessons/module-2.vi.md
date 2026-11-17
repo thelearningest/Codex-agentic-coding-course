@@ -63,7 +63,7 @@ làm dự án thực hành để áp dụng quy trình planning và PRD vừa h�
 này không chỉ dành cho portfolio; bạn có thể dùng lại khi làm việc với coding
 agent trên các sản phẩm khác.
 
-Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi. Trước khi bấm chuyển sang Codex để thực hành, hãy copy prompt ở gốc trên bên phải để tẹo nữa paste vào Codex nha
+Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi.
 
 Từ đây, Executor sẽ hướng dẫn bạn chọn workspace, thiết lập quy tắc dự án và
 hoàn thành từng bước của Practice. Course Companion không lặp lại các bước

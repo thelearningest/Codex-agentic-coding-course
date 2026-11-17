@@ -78,7 +78,7 @@ portfolio.
 
 Teacher dùng nguyên văn lời chuyển tiếp:
 
-> Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi. Trước khi bấm chuyển sang Codex để thực hành, hãy copy prompt ở gốc trên bên phải để tẹo nữa paste vào Codex nha
+> Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi.
 
 Course Companion mở thẳng Practice. Teacher không hướng dẫn chọn workspace,
 tạo `AGENTS.md`, tạo artifact hoặc review từng giai đoạn. Executor chịu trách
