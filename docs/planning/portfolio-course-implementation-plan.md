@@ -133,6 +133,51 @@ Normal learner profiles, portfolio contents and existing chat titles were not
 reset or modified by verification. No commit, push or release was performed.
 Live learner/AI quality and native-platform acceptance remain separate.
 
+### Desktop portfolio project registration repair — 17 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 / M2.5 / M3.8 / M4.8 — visible desktop project registration | `implemented` | `passed` for the Windows checks below | Existing automatic-project scope retained; final runtime acceptance remains `pending` | `pending` | Continue the owner's manual test from saved progress; retain native macOS and learner acceptance gates. |
+
+The live Windows test disproved the earlier assumption that a successful
+`project/create`/`project/read` establishes a visible Codex desktop project.
+The prior protocol and simulated Electron results remain valid for their
+tested surfaces, but did not verify the desktop sidebar. Course Companion had
+reported readiness for a backend-only project while the portfolio chat remained
+outside a desktop project.
+
+The repair uses Codex's native folder-opening deep link for registration,
+read-only desktop registry and desktop/server ID mapping verification, and
+backend primary-root readback. Missing or unsupported desktop registration
+blocks readiness. Existing desktop projects are reused; preparing an older
+portfolio task repairs and persists its project metadata without changing the
+thread, workspace, approval or review evidence. No course copy or scenes change.
+
+The native link was observed to add the selected folder to the real desktop
+project list. The existing portfolio conversation was attached through the
+desktop's project-management tool, then its mapped backend membership was
+aligned and independently re-read through App Server. The exact original
+thread and folder were preserved; no prompt was sent. Course Companion was
+restarted with the final build, and the learner-state file hash was unchanged.
+
+Final verification passed: typecheck, lint, production build, 831 unit tests
+(three existing skips across 97 files), all nine startup checks, the full
+Electron smoke/Teacher chat/video/review-feedback suites, and the disposable
+Modules 2–4 portfolio journey. Regression checks reject backend-only readiness,
+wait for desktop readback, reuse distinct desktop/server IDs, and preserve a
+concurrent learner update while saving repaired project metadata. The first
+sandboxed full run failed on filesystem restrictions and default-worker
+timeouts; the final two-worker run outside the sandbox passed without changing
+assertions or timeouts. Logs remain ignored under
+`.superpowers/qa/desktop-project-repair-*`.
+
+Desktop registry readback depends on the installed Codex registry format;
+unsupported formats fail registration rather than claiming success. Native
+macOS behavior, live beginner review quality and owner/pilot acceptance remain
+open. No acceptance is inferred from simulated Electron results. The owner
+requested pushing this repair to `main` on 17 November 2026; code delivery does
+not establish owner or pilot acceptance.
+
 ### Module 1 Practice video and guide replacement — 15 November 2026
 
 The owner then requested a 2–3 minute edit and rejected the prominent top

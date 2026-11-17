@@ -424,7 +424,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         if (definition.evidenceProfile === 'planning-package') {
           await this.prepareExecutor?.(targetBinding, true)
         }
-        await this.preparePracticeTarget(targetBinding, definition)
+        await this.preparePracticeTarget(targetCreated.pendingTransition!.targetBinding!, definition)
         committed = await this.commitTarget(targetCreated)
       } catch (error) {
         this.lastError = safeCreationError(error)
@@ -437,7 +437,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
 
   resume(identity?: PracticeIdentity): Promise<PracticeWorkspaceView> {
     return this.runExclusive(async () => {
-      const record = await this.repository.load()
+      let record = await this.repository.load()
       if (!record.activeRun || record.pendingTransition) {
         throw new Error('Không có Practice đang hoạt động để tiếp tục.')
       }
@@ -446,6 +446,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
           || record.activeRun.practiceVersion !== identity.practiceVersion)) {
         throw new Error('Practice đang hoạt động không khớp nội dung được yêu cầu.')
       }
+      const priorProjectId = record.activeRun.binding.projectId
       if (record.activeRun.practiceId === 'm4-portfolio-release') {
         try {
           await this.preparePracticeTarget(record.activeRun.binding,
@@ -459,7 +460,10 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
           await this.definitions.load(record.activeRun.practiceId, record.activeRun.practiceVersion),
           await this.loadApprovedConfiguration?.() ?? undefined)
       }
-      await this.openTarget(record.activeRun.binding)
+      if (record.activeRun!.binding.projectId !== priorProjectId) {
+        record = await this.repository.savePreparedProjectBinding(record.activeRun!.binding)
+      }
+      await this.openTarget(record.activeRun!.binding)
       return this.toView(record)
     })
   }
@@ -511,7 +515,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         if (definition.evidenceProfile === 'planning-package') {
           await this.prepareExecutor?.(targetBinding, true)
         }
-        await this.preparePracticeTarget(targetBinding, definition)
+        await this.preparePracticeTarget(targetCreated.pendingTransition!.targetBinding!, definition)
         committed = await this.commitTarget(targetCreated)
       } catch (error) {
         this.lastError = safeCreationError(error)

@@ -31,6 +31,49 @@ function handoff(workspace: string): PortfolioPackageHandoff {
 }
 
 describe('portfolio task continuation', () => {
+  it('repairs a backend-only project binding on resume while preserving the task and saved learner work', async () => {
+    const workspace = await mkdtemp(join(tmpdir(), 'portfolio-desktop-repair-'))
+    directories.push(workspace)
+    const repository = new PracticeRunRepository(workspace)
+    let desiredProject = 'backend-only-project'
+    let assignedProject = desiredProject
+    const calls: string[] = []
+    const executor = new ExecutorChatCoordinator({ async request(method, params = {}) {
+      calls.push(method)
+      if (method === 'thread/start') return {
+        thread: { id: 'original-task', projectId: assignedProject }, cwd: workspace,
+        model: approved.model, reasoningEffort: approved.reasoningEffort,
+        serviceTier: approved.serviceTier, approvalPolicy: 'on-request',
+        sandbox: { type: 'workspaceWrite', writableRoots: [workspace] }
+      }
+      if (method === 'thread/name/set') return {}
+      if (method === 'thread/metadata/update') {
+        assignedProject = String(params.projectId)
+        const latest = await repository.load()
+        latest.activeRun!.learnerDecisions['during-reconnect'] = 'Preserve this learner decision'
+        await repository.save(latest)
+        return {}
+      }
+      if (method === 'thread/read') return { thread: { id: 'original-task', cwd: workspace, projectId: assignedProject, turns: [] } }
+      throw new Error(`Unexpected automatic task action: ${method}`)
+    } }, { resolve: async () => workspace, resolveProjectId: async () => desiredProject }, async () => undefined)
+    const coordinator = new PracticeCoordinator(repository, definitions, executor,
+      () => new Date(time), undefined, undefined, async () => approved)
+    await coordinator.startNew({ practiceId: 'm2-portfolio-planning', practiceVersion: '2.0.0', transfer: false })
+    const before = await repository.load()
+    desiredProject = 'desktop-mapped-project'
+    calls.length = 0
+    await coordinator.resume()
+    const expected = structuredClone(before)
+    expected.activeRun!.binding.projectId = desiredProject
+    expected.activeRun!.learnerDecisions['during-reconnect'] = 'Preserve this learner decision'
+    expect(await repository.load()).toEqual(expected)
+    expect(calls).toEqual(['thread/read', 'thread/metadata/update', 'thread/read'])
+    calls.length = 0
+    await coordinator.resume()
+    expect(calls).toEqual(['thread/read'])
+  })
+
   it('opens an empty Module 2 task after failed preparation, Retry and Resume without sending learner instructions', async () => {
     const workspace = await mkdtemp(join(tmpdir(), 'portfolio-learner-start-'))
     directories.push(workspace)

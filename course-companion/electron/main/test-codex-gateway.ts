@@ -1,5 +1,5 @@
 import { access, mkdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { basename, join } from 'node:path'
 import { createHash } from 'node:crypto'
 import type {
   CodexConnectionListener,
@@ -7,6 +7,7 @@ import type {
   CodexNotificationListener
 } from './codex-app-server-client'
 import type { CodexRequestClient } from './executor-chat-coordinator'
+import type { CodexDesktopProject } from './codex-desktop-project-registry'
 
 type TestThread = {
   id: string
@@ -44,6 +45,7 @@ function effectiveThread(thread: TestThread): Record<string, unknown> {
 export class TestCodexGateway implements CodexRequestClient {
   private readonly threads = new Map<string, TestThread>()
   private readonly projects = new Map<string, { id: string; name: string; roots: Array<{ path: string }> }>()
+  private readonly desktopProjects = new Map<string, CodexDesktopProject>()
   private failProjectRead = process.env.COURSE_COMPANION_FAKE_PROJECT_FAILURE_ONCE === '1'
   private readonly notificationListeners = new Set<CodexNotificationListener>()
   private failTeacherTurn = process.env.COURSE_COMPANION_FAKE_TEACHER_FAIL_ONCE === '1'
@@ -63,6 +65,17 @@ export class TestCodexGateway implements CodexRequestClient {
   onNotification(listener: CodexNotificationListener): () => void {
     this.notificationListeners.add(listener)
     return () => this.notificationListeners.delete(listener)
+  }
+
+  async findDesktopProject(root: string): Promise<CodexDesktopProject | null> {
+    return this.desktopProjects.get(root) ?? null
+  }
+
+  async openDesktopProject(root: string): Promise<void> {
+    const result = await this.request('project/create', {
+      name: basename(root), roots: [{ path: root }], idempotencyKey: root
+    }) as { project: { id: string } }
+    this.desktopProjects.set(root, { id: `desktop-${result.project.id}`, serverId: result.project.id })
   }
 
   onConnectionState(listener: CodexConnectionListener): () => void {

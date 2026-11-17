@@ -129,6 +129,9 @@ export class ExecutorChatCoordinator {
           throw new Error('Codex could not verify portfolio task membership')
         }
       }
+      // Keep the saved handoff aligned when repairing an older backend-only
+      // project binding. The caller persists this prepared binding.
+      if (projectId) binding.projectId = projectId
       // Portfolio work is directed in desktop by the learner. A second server
       // must only verify the saved binding, never acquire its writer or send work.
       if (learnerDirected) return

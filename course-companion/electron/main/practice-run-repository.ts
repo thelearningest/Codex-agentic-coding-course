@@ -831,6 +831,21 @@ export class PracticeRunRepository {
     return this.runExclusive(() => this.saveDirect(normalizeWorkspaceRecord(record, false)))
   }
 
+  savePreparedProjectBinding(binding: ExecutorChatBinding): Promise<PracticeWorkspaceRecord> {
+    return this.runExclusive(async () => {
+      const record = await this.loadDirect()
+      const active = record.activeRun
+      if (!isBinding(binding) || !binding.projectId || !active || record.pendingTransition
+        || active.runId !== binding.runId || active.binding.threadId !== binding.threadId
+        || resolve(active.binding.workspaceRoot) !== resolve(binding.workspaceRoot)) {
+        throw new Error('Practice changed before the project binding could be saved')
+      }
+      return this.saveDirect({ ...record, activeRun: {
+        ...active, binding: { ...active.binding, projectId: binding.projectId }
+      } })
+    })
+  }
+
   selectPanel(surface: 'full' | 'compact', panel: PracticePanel): Promise<PracticeWorkspaceRecord> {
     return this.runExclusive(async () => {
       const record = await this.loadDirect()
