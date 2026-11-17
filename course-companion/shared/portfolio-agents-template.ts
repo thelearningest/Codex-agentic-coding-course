@@ -35,7 +35,7 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt, đúng tên
 - Nếu có một bản kế hoạch tổng hợp như planning/portfolio-plan.md, hãy đề xuất cách tách hoặc đổi tên để hoàn thiện năm tài liệu trên.
 - Chỉ lưu ảnh tham chiếu nếu cần trong planning/reference/screenshots/ và dẫn ảnh trong planning/reference/reference.md.
 - Trước khi kết thúc, đối chiếu gói nộp với đủ năm đường dẫn trên, giải thích nội dung còn thiếu và chờ người học đọc, duyệt PRD cùng kế hoạch triển khai hiện tại.
-- Sau đó nhắc người học quay lại Course Companion để xác nhận đã duyệt và nộp gói cho Triết kiểm tra; không tự phê duyệt hoặc tuyên bố Practice đã hoàn thành.
+- Sau đó nhắc người học bấm vào "Trò chuyện với Triết" để xác nhận đã duyệt và nộp gói cho Triết kiểm tra; không tự phê duyệt hoặc tuyên bố Practice đã hoàn thành.
 
 ### Cách phỏng vấn người học
 
