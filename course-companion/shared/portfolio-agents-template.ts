@@ -37,6 +37,75 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt, đúng tên
 - Trước khi kết thúc, đối chiếu gói nộp với đủ năm đường dẫn trên, giải thích nội dung còn thiếu và chờ người học đọc, duyệt PRD cùng kế hoạch triển khai hiện tại.
 - Sau đó nhắc người học quay lại Course Companion để xác nhận đã duyệt và nộp gói cho Triết kiểm tra; không tự phê duyệt hoặc tuyên bố Practice đã hoàn thành.
 
+### Cách phỏng vấn người học
+
+- Đi lần lượt qua năm bước bên dưới, theo đúng thứ tự năm tài liệu. Chỉ sang bước mới khi bước hiện tại đã đạt điều kiện qua bước.
+- Mỗi lượt chỉ hỏi một câu, lấy từ danh sách của bước hiện tại, và ghi rõ vị trí, ví dụ "Bước 1 · Câu 2/5".
+- Không hỏi câu ngoài danh sách. Bỏ qua câu người học đã trả lời ở phần trước.
+- Luôn kèm đề xuất để người học không phải tự nghĩ từ đầu. Mỗi câu hỏi có dạng: câu hỏi, đề xuất cụ thể, một câu lý do, rồi hỏi "Bạn đồng ý hay muốn đổi?". Dựa đề xuất vào những gì người học đã nói. Nếu chưa đủ thông tin, đưa ra hai hoặc ba lựa chọn và nói rõ nên chọn cái nào.
+- Không đề xuất thay người học những điều chỉ họ biết, như vai trò thật, kết quả, số liệu hay quyền công khai. Với những câu này, đưa một câu trả lời mẫu để người học biết cần nói gì, rồi chờ câu trả lời thật.
+- Nếu câu trả lời còn mơ hồ, chỉ hỏi lại một lần. Nếu vẫn chưa rõ, ghi vào mục "Còn thiếu" của tài liệu rồi sang câu tiếp theo.
+- Nếu người học nhắc đến công nghệ, hosting, tên miền hay hiệu ứng, ghi vào mục "Để sau" của PRD rồi quay lại câu đang hỏi.
+- Cuối mỗi bước, tóm tắt bản nháp ngắn và hỏi "Ghi vào tệp nhé?". Chỉ ghi khi người học đồng ý.
+
+### Bước 1 — planning/portfolio-brief.md
+
+1. "Bạn muốn ai xem portfolio này nhất?" Đề xuất một nhóm người cụ thể.
+2. "Sau khi xem, bạn muốn họ làm gì?" Đề xuất một hành động hợp với nhóm người ở câu 1.
+3. "Bạn muốn họ nhớ đến bạn với vai trò hoặc kỹ năng nào?" Đề xuất tối đa ba ý từ những gì người học đã kể.
+4. "Dấu hiệu nào cho bạn biết portfolio đã làm tốt việc của nó?" Đề xuất một dấu hiệu nhìn thấy được.
+5. "Phiên bản đầu tiên sẽ không làm những gì?" Đề xuất vài thứ nên để sau cho phiên bản đầu gọn nhẹ.
+
+Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn, một dấu hiệu thành công nhìn thấy được và ít nhất một điều nằm ngoài phạm vi.
+
+### Bước 2 — planning/content-evidence-inventory.md
+
+1. "Hãy liệt kê những dự án, sản phẩm hoặc kinh nghiệm bạn muốn đưa vào." Phiên bản đầu chỉ giữ tối đa 3 mục. Nếu người học kể nhiều hơn, đề xuất 3 mục hợp nhất với người xem ở bước 1, mỗi mục kèm một câu lý do, rồi hỏi "Bạn đồng ý không?". Ghi các mục còn lại vào phần "Để sau" của tài liệu này, kèm ghi chú: người học tự bổ sung sau khi hoàn thành khoá học.
+
+Với từng mục đã chọn, hỏi lần lượt. Đây là thông tin chỉ người học biết, nên chỉ đưa câu trả lời mẫu:
+
+2. "Bạn đã tự làm phần nào trong mục này?"
+3. "Bạn đang có gì để chứng minh, như link, ảnh, tệp hay số liệu? Chúng nằm ở đâu?"
+4. "Mục này có thông tin riêng tư hoặc của khách hàng, công ty cũ không? Bạn đã được phép công khai chưa?"
+
+Sau khi hết các mục:
+
+5. "Bạn cho phép công khai những thông tin liên hệ nào?" Đề xuất những kênh liên hệ phổ biến và an toàn để người học chọn.
+
+Qua bước khi có tối đa 3 mục, mỗi mục ghi vai trò thật, có tư liệu hoặc ghi "Chưa có", và có trạng thái công khai. Mục chưa được phép thì ghi "Không công khai".
+
+### Bước 3 — planning/reference/reference.md
+
+1. "Hãy gửi một đến ba trang web hoặc portfolio bạn thích, kèm link hoặc ảnh chụp màn hình." Nếu người học chưa có, gợi ý nên tìm loại trang nào cho hợp với người xem ở bước 1.
+2. Với mỗi link hoặc ảnh, tự xem và phân tích. Sau đó liệt kê những điểm nên học theo, như bố cục, thứ tự các phần, cách giới thiệu dự án, cách đặt thông tin liên hệ, cảm giác màu sắc và kiểu chữ. Đánh số từng điểm, mỗi điểm kèm một câu lý do gắn với mục tiêu ở bước 1. Rồi hỏi: "Bạn đồng ý với những điểm này không? Muốn bỏ điểm nào thì nói số thứ tự."
+3. Liệt kê những điểm không nên làm theo, rồi hỏi "Bạn đồng ý không?".
+
+Nếu không mở được link, nhờ người học gửi ảnh chụp màn hình. Ảnh lưu trong planning/reference/screenshots/.
+
+Qua bước khi mỗi trang có link hoặc ảnh, danh sách điểm học theo đã được người học đồng ý, và tệp ghi rõ: chỉ học cách làm, không chép chữ, hình ảnh, logo hay mã nguồn.
+
+### Bước 4 — planning/PRD.md
+
+Dùng câu trả lời ở bước 1–3 để soạn. Chỉ hỏi những câu dưới đây nếu các bước trước chưa có câu trả lời, và câu nào cũng kèm đề xuất:
+
+1. "Phiên bản đầu bắt buộc phải có những phần nào?" Đề xuất danh sách phần dựa trên bước 1–3.
+2. "Người xem sẽ liên hệ với bạn bằng cách nào?" Đề xuất cách đơn giản nhất, không cần máy chủ riêng.
+3. "Trang hiển thị bằng ngôn ngữ nào?" Đề xuất theo nhóm người xem ở bước 1.
+4. "Trang cần dùng tốt trên cả điện thoại và máy tính, đúng không?" Đề xuất là có.
+5. Đề xuất vài yêu cầu cơ bản để người dùng bàn phím hoặc trình đọc màn hình vẫn dùng được trang, rồi hỏi: "Bạn đồng ý hay muốn đổi gì?"
+
+PRD có mục "Ngoài phạm vi", "Còn thiếu" và "Để sau". Sau khi soạn, tự rà soát và liệt kê: yêu cầu mơ hồ, chỗ mâu thuẫn, tiêu chí chưa kiểm tra được, nội dung tự thêm mà người học chưa nói. Với mỗi điểm, đề xuất cách sửa rồi hỏi người học đồng ý không.
+
+Qua bước khi mọi điểm rà soát đã được người học sửa hoặc đồng ý giữ nguyên.
+
+### Bước 5 — planning/implementation-plan.md
+
+- Không hỏi câu mới.
+- Mỗi yêu cầu REQ-* trong PRD xuất hiện đúng một lần, kèm cách kiểm tra và bằng chứng dự kiến.
+- Mỗi giai đoạn có tiêu chí hoàn thành và điểm dừng để người học xem lại.
+- Không chọn công nghệ và không tạo ứng dụng; việc đó thuộc Module 3.
+- Khi xong, hỏi đúng một câu: "Bạn duyệt PRD và kế hoạch này chưa, hay muốn sửa gì?". Nếu người học sửa, cập nhật cả hai tệp cho khớp rồi hỏi lại.
+
 ## Module 3: xây website
 
 - Đọc năm tài liệu trong planning/ làm nguồn yêu cầu; chỉ sửa chúng khi người học yêu cầu.
