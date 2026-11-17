@@ -23,7 +23,6 @@ export function PracticeStartPrompt({ practiceId, prompt, title, guideActions }:
         <button type="button" onClick={() => void copyPrompt()}>
           {status === 'copied' ? 'ĐÃ SAO CHÉP' : status === 'error' ? 'THỬ LẠI' : guideActions ? 'Sao chép prompt' : 'SAO CHÉP PROMPT'}
         </button>
-        {guideActions}
       </header>
       <details>
         <summary>{guideActions ? 'Prompt để dán vào Codex' : 'PROMPT ĐỂ DÁN VÀO CODEX'}</summary>
@@ -36,6 +35,7 @@ export function PracticeStartPrompt({ practiceId, prompt, title, guideActions }:
             : 'Chưa thể sao chép. Hãy thử lại.'}
         </p>
       ) : null}
+      {guideActions}
     </aside>
   )
 }

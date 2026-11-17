@@ -150,6 +150,12 @@ smoke assertions now check the prompt in the guide. Build, full suite and
 Electron were not run for this UI change. Next action: inspect the integrated
 screen at desktop and narrow widths; learner acceptance remains pending.
 
+The guide and HTML preview now place Copy above the prompt disclosure and
+Start below it at all widths. Successful copying transfers the yellow emphasis
+to the primary Practice action. Start and Resume remain available immediately.
+Typecheck, lint and 25 focused tests passed for this follow-up. The standalone
+preview also passed clipboard success, fallback success and failure checks.
+
 ### Module 2 sample-prompt pages removed, 15 November 2026
 
 Implementation: `implemented` on branch `portfolio-agents-md`. At the owner's

@@ -235,7 +235,7 @@
 .has-planning-guide .practice-brief-card .planning-guide h1 { margin: 0 0 20px; }
 .planning-guide {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   color: #f5f2e9;
   font: 16px/1.5 var(--app-font);
@@ -250,16 +250,30 @@
 }
 .planning-guide nav { flex-wrap: wrap; gap: 6px; }
 .planning-guide .step { background: transparent; border: 0; font-family: inherit; }
-.planning-guide .practice-start-prompt { display: contents; }
+/* Copy, inspect the prompt, then launch the linked task in reading order. */
+.practice-workflow .planning-guide .practice-start-prompt {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+}
 .planning-guide .practice-start-prompt > header {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
+  justify-content: flex-start;
 }
-.planning-guide .practice-start-prompt > header > button {
-  text-transform: none;
+.practice-workflow .planning-guide .practice-start-prompt[data-copy-state] > header button,
+.practice-workflow .planning-guide .practice-start-prompt .practice-brief-actions button.is-primary {
+  border: 1px solid var(--obsidian-line);
+  background: var(--obsidian-surface-raised);
+  color: var(--pixel-white);
+  font: 650 14px/1.5 var(--app-font);
+}
+.practice-workflow .planning-guide .practice-start-prompt:not([data-copy-state="copied"]) > header button,
+.practice-workflow .planning-guide .practice-start-prompt[data-copy-state="copied"] .practice-brief-actions button.is-primary {
+  border-color: var(--pixel-yellow);
+  background: var(--pixel-yellow);
+  color: #252015;
 }
 .has-planning-guide .planning-guide .practice-brief-actions { margin: 0; }
 .planning-guide .practice-start-prompt details, .planning-guide .practice-setup-reference {
@@ -269,10 +283,6 @@
 }
 .planning-guide .practice-transition, .planning-guide .practice-brief-error { flex-basis: 100%; }
 .planning-guide .paper, .planning-guide dd { overflow-wrap: anywhere; }
-@container (max-width: 780px) {
-  .planning-guide { grid-template-columns: minmax(0, 1fr); }
-  .planning-guide .practice-start-prompt > header { justify-content: flex-start; }
-}
 @container (max-width: 650px) {
   .planning-guide .desk { padding: 13px; min-height: 270px; }
   .planning-guide .bar { padding: 0 10px; }
@@ -286,8 +296,4 @@
   .planning-guide .papers, .planning-guide .submit-view { grid-template-columns: 1fr; }
   .planning-guide .review { display: flex; justify-content: center; align-items: center; gap: 10px; }
   .planning-guide .portrait { width: 42px; height: 42px; margin: 0; }
-}
-.practice-workflow .planning-guide .practice-brief-actions button.is-primary {
-  background: var(--pixel-yellow);
-  color: #252015;
 }

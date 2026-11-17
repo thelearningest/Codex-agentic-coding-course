@@ -10,7 +10,7 @@
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 main{max-width:1008px;margin:auto;padding:22px 32px 40px}
-header,.row,nav,.actions,.bar,.speaker{display:flex;align-items:center}
+header,nav,.bar,.speaker{display:flex;align-items:center}
 header{gap:12px;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:15px}
 header strong{color:var(--gold)}
 button,summary{cursor:pointer;font:inherit}
@@ -39,8 +39,10 @@ figure{margin:0}
 .review{text-align:center}.portrait{height:82px;width:82px;border-radius:50%;object-fit:cover;object-position:center 12%;background:#464a39;display:block;margin:0 auto 8px}
 .review b{display:inline-block;border:1px solid var(--gold);border-radius:8px;padding:7px 12px;color:var(--gold);font-size:14px}
 figcaption{margin:12px 0;color:#d6d6cb;font-size:15px;min-height:1.5em}
-.row{justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-nav,.actions{gap:6px;flex-wrap:wrap}
+.prompt-actions{display:grid;gap:12px;margin:14px 0}
+.prompt-actions button{justify-self:start}
+.prompt-actions details{margin:0}
+nav{gap:6px;flex-wrap:wrap}
 .step{display:flex;align-items:center;gap:6px;color:var(--muted);padding:7px 8px;font-size:14px;font-weight:600}
 .step span{border:1px solid #646657;border-radius:50%;width:24px;height:24px;display:grid;place-content:center;font-size:12px}
 .step[aria-current=step]{color:var(--gold)}.step[aria-current=step] span{background:#373325;border-color:#ad955c}
@@ -53,7 +55,7 @@ summary{width:fit-content;color:#d7d8ce;font-size:14px}
 details p{white-space:pre-line;max-width:78ch}dl{display:grid;gap:9px}dt{color:var(--ink);font-weight:600}dd{margin:0;overflow-wrap:anywhere}code{color:#e7d399}
 .transition{display:grid;grid-template-columns:minmax(120px,1fr) 2fr;align-items:center;gap:28px;padding:40px 0}.transition img{width:100%;max-height:360px;object-fit:contain}.transition p{font-size:clamp(18px,2.5vw,25px)}
 .sim{padding:28px 0}.sim .window{margin:20px 0}
-@media(max-width:650px){main{padding:16px}.desk{padding:13px;min-height:270px}.bar{padding:0 10px}.chat{padding:19px 16px}.papers{padding:12px;gap:8px}.paper{padding:10px}.row{display:grid}.actions{margin-top:6px}.step{padding:6px 4px}.submit-view{padding:14px 12px;gap:10px}.file{font-size:11px}.transition{gap:12px}.back{font-size:13px}}
+@media(max-width:650px){main{padding:16px}.desk{padding:13px;min-height:270px}.bar{padding:0 10px}.chat{padding:19px 16px}.papers{padding:12px;gap:8px}.paper{padding:10px}.step{padding:6px 4px}.submit-view{padding:14px 12px;gap:10px}.file{font-size:11px}.transition{gap:12px}.back{font-size:13px}}
 @media(max-width:420px){.papers{grid-template-columns:1fr}.paper strong{margin-top:4px}.paper p{margin:4px 0}.submit-view{grid-template-columns:1fr}.review{display:flex;align-items:center;justify-content:center;gap:10px}.portrait{height:42px;width:42px;margin:0}.transition{grid-template-columns:1fr}.transition img{height:180px}}
 </style>
 </head>
@@ -75,8 +77,12 @@ details p{white-space:pre-line;max-width:78ch}dl{display:grid;gap:9px}dt{color:v
 </div></div>
 <figcaption id="caption" aria-live="polite">Trao đổi với Codex về người xem, nội dung và phạm vi portfolio.</figcaption>
 </figure>
-<div class="row"><nav aria-label="Chọn hình hướng dẫn"><button class="step" aria-current="step"><span>1</span>Trao đổi</button><button class="step"><span>2</span>Duyệt kế hoạch</button><button class="step"><span>3</span>Nộp bài</button></nav><div class="actions"><button class="secondary" id="copy">Sao chép prompt</button><button class="primary" id="start">Bắt đầu thực hành →</button></div></div>
+<nav aria-label="Chọn hình hướng dẫn"><button class="step" aria-current="step"><span>1</span>Trao đổi</button><button class="step"><span>2</span>Duyệt kế hoạch</button><button class="step"><span>3</span>Nộp bài</button></nav>
+<div class="prompt-actions">
+<button class="primary" id="copy">Sao chép prompt</button>
 <details id="promptBox"><summary>Prompt để dán vào Codex</summary><p id="prompt"></p></details>
+<button class="secondary" id="start">Bắt đầu thực hành →</button>
+</div>
 <details><summary>Xem năm tài liệu cần hoàn thiện</summary><p>Codex soạn và lưu tài liệu; bạn đọc, góp ý và duyệt PRD cùng kế hoạch hiện tại trước khi nộp.</p><dl id="reference"></dl></details>
 </section>
 <section class="sim" id="simulation" hidden><h1 tabindex="-1">Task portfolio trong Codex</h1><div class="window"><div class="bar"><i></i><i></i><i></i><span>Codex / Portfolio</span><small>Mô phỏng</small></div><div class="chat"><label for="draft">Dán prompt vào đây</label><textarea id="draft" rows="5" style="margin-top:10px;width:100%;padding:12px;border-radius:8px;background:#30322b;color:inherit;font:inherit"></textarea></div></div><button class="secondary" id="return">Quay lại hướng dẫn</button></section>
@@ -108,9 +114,10 @@ byId('start').onclick = () => showPage('simulation');
 const promptText = "Tôi muốn xây dựng một portfolio cá nhân nhưng chưa biết nên bắt đầu từ đâu. Hãy giúp tôi lập kế hoạch từ đầu bằng cách phỏng vấn tôi từng câu một. Trước tiên, hãy tìm hiểu mục tiêu của portfolio, người tôi muốn thuyết phục, nội dung tôi có thể đưa vào và phiên bản đầu tiên nên gồm những gì. Nếu tôi chưa chắc về câu trả lời, hãy đưa ra một vài lựa chọn dễ hiểu để tôi cân nhắc. Sau mỗi phần quan trọng, hãy tóm tắt những gì đã thống nhất và chờ tôi xác nhận trước khi tiếp tục. Trong quá trình này, chỉ tạo hoặc cập nhật tài liệu trong thư mục planning; chưa viết code, cài gói phụ thuộc hay tạo ứng dụng.\n\nHãy làm theo AGENTS.md trong thư mục này.";
 byId('prompt').textContent = promptText;
 byId('copy').onclick = async () => {
+  let copied;
   try {
     await navigator.clipboard.writeText(promptText);
-    byId('copy').textContent = 'Đã sao chép';
+    copied = true;
   } catch {
     byId('promptBox').open = true;
     const range = document.createRange();
@@ -118,8 +125,11 @@ byId('copy').onclick = async () => {
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-    byId('copy').textContent = document.execCommand('copy') ? 'Đã sao chép' : 'Sao chép phần đã chọn';
+    copied = document.execCommand('copy');
   }
+  byId('copy').textContent = copied ? 'Đã sao chép' : 'Sao chép phần đã chọn';
+  byId('copy').className = copied ? 'secondary' : 'primary';
+  byId('start').className = copied ? 'primary' : 'secondary';
 };
 const documents = [["Bản mô tả portfolio", "planning/portfolio-brief.md", "Người xem, mục tiêu và phạm vi của website."], ["Nội dung và bằng chứng", "planning/content-evidence-inventory.md", "Tư liệu bạn có, nguồn và quyền sử dụng."], ["Tham chiếu thiết kế", "planning/reference/reference.md", "Điều muốn học từ các website tham khảo và giới hạn không sao chép."], ["Yêu cầu cho website", "planning/PRD.md", "Website cần làm được gì và cách xác nhận kết quả."], ["Kế hoạch triển khai", "planning/implementation-plan.md", "Thứ tự xây từng phần và cách kiểm tra."]];
 for(const [label,path,description] of documents){

@@ -63,6 +63,16 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(html.indexOf('</button>')).toBeLessThan(html.indexOf('<details>'))
   })
 
+  it.each(['Bắt đầu thực hành', 'Tiếp tục Practice'])('places copying and the prompt before the enabled %s action', (action) => {
+    const html = renderToStaticMarkup(createElement(PracticeStartPrompt, {
+      practiceId: 'm2-portfolio-planning',
+      guideActions: createElement('button', { type: 'button' }, action)
+    }))
+    expect(html).toContain('data-copy-state="idle"')
+    expect(html).toMatch(/Sao chép prompt<\/button>[\s\S]+<details>/)
+    expect(html.slice(html.indexOf('</details>'))).toContain(`<button type="button">${action}</button>`)
+  })
+
   it('offers the planning prompt in Practice only after leaving the lesson', async () => {
     const scenes = await readFile(join(process.cwd(), 'src/renderer/src/course/modules/module-2/scenes.tsx'), 'utf8')
     expect(scenes).not.toContain('moduleTwoStartPrompt')
