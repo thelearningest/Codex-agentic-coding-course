@@ -59,7 +59,8 @@ the overlapping saved-Practice repair. All 61 scene definitions from current
 main remain present. Preservation hashes cover the combined, authorized copy;
 main's four-question assessment source is retained.
 
-The current video is version `1.2.0` (2:38). Its transcript disclosure is removed
+The merge shipped video version `1.2.0` (2:38); the owner-script `1.3.0` revision
+is recorded below. Its transcript disclosure is removed
 as requested; embedded and optional external captions remain. Authoring text is
 retained as source. Automatic registration, readable new chat titles and the
 four required settings are included in the same delivery.
@@ -177,6 +178,47 @@ macOS behavior, live beginner review quality and owner/pilot acceptance remain
 open. No acceptance is inferred from simulated Electron results. The owner
 requested pushing this repair to `main` on 17 November 2026; code delivery does
 not establish owner or pilot acceptance.
+
+### Owner-authored Practice video revision — 17 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / I4 — owner-script video, version `1.3.0` | `implemented` | `passed` — media integrity, full decoding, typecheck, lint, 25 focused checks, build and actual full-media Electron playback/confirmation/handoff | Replacement narration, scene order, highlights and Microsoft synthesis authorized; owner reviewed the result, said “looks good” and explicitly requested pushing to `main` on 17 November 2026 | `pending` | Continue real beginner and native-platform rehearsals with the approved video; no further visual-approval gate remains for this version. |
+
+The owner supplied new Vietnamese narration and requested adapting the video,
+then asked for highlights showing where to look in each scene. The new local
+asset is 100.511667 seconds (1:40), with a greeting, five scenes split into ten
+narration segments, a closing, 23 embedded two-line caption cues and 20 contextual
+gold highlights. Each spoken target is highlighted individually, including the
+new chat, Mở Triết, review, Medium, next action, hints, passed result, return and
+icon/window tips. The additional icon-position recording uses a disposable
+profile and real native window movement, without synthetic UI motion.
+
+The requested placeholder is filled with `Cập nhật và kiểm tra tiến độ`; the
+return action is identified as `Lưu kết quả và quay lại khóa học`. The narration
+says checking work in the bound chat rather than promising to read an unbounded
+entire transcript. The old spoken video-watching instructions, detailed settings
+tutorial and replay/resume digressions are removed from this edit. The actual
+application pages, four assessed settings, viewing gate and explicit
+confirmation remain unchanged.
+
+Technical evidence is under `.superpowers/qa/practice-desktop-v2/owner-*`.
+Script/word-boundary/WebVTT integrity, non-overlapping marks, H.264/AAC at
+1920 × 1080 / 30 fps and full decoding passed; all marks and final captions were
+visually sampled. Typecheck, lint, production build and 25 focused video and
+Module 1 renderer tests passed. The established media-only gate applies; the
+broader unrelated regression suite is not part of this revision. Owner visual
+acceptance was given on 17 November; real beginner and native macOS acceptance
+remain separate. Concurrent desktop
+project-registration work is preserved and is not included in this media scope.
+
+The final disposable Electron check passed actual full-media playback, seek
+prevention, native-hide pause and restart persistence, separate confirmation,
+failed-save retry, manual handoff, replay without Practice writes, reviewed
+return and desktop/narrow controls. The video-specific result is saved in
+`owner-electron.log`. No personal learner profile was reset and no application
+page or scene was removed. The owner approved the video and authorized its
+commit and push to `main` on 17 November 2026.
 
 ### Module 1 Practice video and guide replacement — 15 November 2026
 

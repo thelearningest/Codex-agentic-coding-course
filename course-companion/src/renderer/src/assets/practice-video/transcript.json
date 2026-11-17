@@ -1,50 +1,42 @@
 [
   {
-    "title": "Chuyển từ bài học sang Practice",
-    "text": "Từ bài học, bấm Chuyển sang Codex để thực hành. Xem hết video, xác nhận đã hiểu, rồi bấm Bắt đầu thực hành. Đoạn chờ trong ví dụ được cắt ngắn."
+    "title": "Lời chào của Triết",
+    "text": "Chào các bạn, mình là Triết. Mình sẽ hướng dẫn các bạn các bước làm practice trong Codex."
   },
   {
-    "title": "Codex và cửa sổ Triết",
-    "text": "Đây là task Codex và cửa sổ Triết của bài. Task là cuộc trò chuyện dành riêng cho Practice. Bạn thao tác trong Codex; Triết hướng dẫn và kiểm tra tiến độ."
+    "title": "Cảnh 1 · Chuyển sang Codex",
+    "text": "Chuyển sang màn hình làm việc với Codex. Từ trang bài học, các bạn bấm Chuyển sang Codex để thực hành."
   },
   {
-    "title": "Làm trong đúng task",
-    "text": "Chat Module 1 bắt đầu trống là bình thường; hướng dẫn nằm trong Triết. Nếu lạc sang chat khác, bấm Mở lại task Codex, rồi mở lại bong bóng Triết. Giữ nguyên task này khi sửa bài."
+    "title": "Cảnh 2 · Mở cửa sổ Triết",
+    "text": "Các bạn sẽ thấy app sẽ tự mở một màn hình làm việc Codex mới, hay còn gọi là đoạn chat mới. Đây là nơi mà bạn sẽ trò chuyện với Codex để hoàn thành bài thực hành. Nếu bạn để ý, ở góc phải dưới màn hình là icon của mình, kèm nút Mở Triết. Bấm vào nút này để mở cửa sổ Triết thu nhỏ."
   },
   {
-    "title": "Đọc bước tiếp theo và tìm trợ giúp",
-    "text": "Đọc bước Tiếp theo. Mở Xem tất cả các bước và chọn từng mục để xem chi tiết. Chưa biết làm gì thì bấm Cần gợi ý, đọc hướng dẫn rồi tự thực hiện trong Codex."
+    "title": "Cảnh 3.1 · Kiểm tra tiến độ",
+    "text": "Từ cửa sổ này, các bạn có thể kiểm tra tiến độ thực hành bằng cách nhấn nút Cập nhật và kiểm tra tiến độ. Mình sẽ kiểm tra bài làm trong đoạn chat của bạn với Codex và cập nhật tiến độ hiện tại và bước tiếp theo cần làm cho bạn."
   },
   {
-    "title": "Cài đặt 1 · Effort High",
-    "text": "Mở vùng tên Model và mức suy luận cạnh ô nhắn. Model do bạn tự chọn. Kéo thanh Effort đến High. Trong ví dụ, Minh tạm để Medium để xem cách Triết chỉ ra mục cần sửa."
+    "title": "Cảnh 3.2 · Ví dụ Effort Medium",
+    "text": "Ví dụ nhé, nếu mình cố ý chọn reasoning effort là Medium thay vì High như yêu cầu, sau đó mình chọn nút kiểm tra tiến độ, các bạn sẽ thấy Triết đã xác định đúng và hướng dẫn bạn bước tiếp theo."
   },
   {
-    "title": "Cài đặt 2 · Speed Standard",
-    "text": "Với Speed, tắt biểu tượng tia sét để dùng Standard. Nếu đã đúng, giữ nguyên; bạn không cần bật Fast để làm giống video."
+    "title": "Cảnh 3.3 · Cần gợi ý?",
+    "text": "Nếu có thắc mắc gì trong lúc làm, hay chưa biết bắt đầu từ đâu, bạn hãy bấm nút Cần gợi ý? để Triết cung cấp hướng dẫn cụ thể hơn cho bước tiếp theo."
   },
   {
-    "title": "Cài đặt 3 và 4 · Approval và Full access",
-    "text": "Mở phần quyền bên trái ô nhắn. Chọn Approve for me. Dấu tích nằm ở đây; Full access không được chọn, tức là đang tắt. Không bật Full access."
+    "title": "Cảnh 4 · Hoàn thành và quay lại bài học",
+    "text": "Sau khi các bạn đã hoàn thành bài practice và bấm kiểm tra tiến độ, các bạn sẽ thấy màn hình hiển thị đã hoàn thành. Bấm Lưu kết quả và quay lại khóa học để quay trở lại bài học."
   },
   {
-    "title": "Nhờ Triết kiểm tra và đọc kết quả",
-    "text": "Bấm Cập nhật và kiểm tra tiến độ. Triết đọc cài đặt trong task đã liên kết. Minh còn để Effort Medium, nên dòng Tiếp theo yêu cầu chọn High rồi kiểm tra lại. Các mục đã đúng không cần làm lại."
+    "title": "Cảnh 5.1 · Di chuyển icon Triết",
+    "text": "Ngoài ra trong lúc làm bài, bạn có thể di chuyển icon Triết nếu bị che màn hình."
   },
   {
-    "title": "Sửa đúng mục rồi kiểm tra lại",
-    "text": "Trong cùng task, đổi Effort sang High rồi nhờ Triết kiểm tra lần nữa. Nếu báo Chưa thể xác minh, mở đúng task, chọn lại cài đặt chưa đọc được rồi thử lại. Đổi cài đặt chưa tự cập nhật kết quả."
+    "title": "Cảnh 5.2 · Phóng to cửa sổ Triết",
+    "text": "Hay phóng to khung cửa sổ với Triết để nhìn yêu cầu bài thực hành dễ hơn."
   },
   {
-    "title": "Sắp xếp cửa sổ để dễ thao tác",
-    "text": "Triết che chỗ cần bấm thì kéo cửa sổ sang bên. Thu nhỏ về bong bóng rồi bấm để mở lại. Nút toàn màn hình giúp đọc rõ hơn; đóng để quay lại. Bài đang làm vẫn được giữ."
-  },
-  {
-    "title": "Xem lại hướng dẫn khi cần",
-    "text": "Cần xem lại, mở Xem lại video hướng dẫn Practice trong Triết. Bạn có thể tạm dừng hoặc mở toàn màn hình. Nếu rời ứng dụng khi chưa xong, dùng Tiếp tục Practice để trở lại đúng bài."
-  },
-  {
-    "title": "Lưu kết quả và quay lại bài học",
-    "text": "Khi cả bốn yêu cầu đã đạt, bấm Lưu kết quả và quay lại khóa học. Chờ trang bài học tiếp theo hiện ra. Đến lượt bạn: làm từng bước, xin gợi ý khi cần, nhờ Triết kiểm tra rồi lưu kết quả."
+    "title": "Lời kết",
+    "text": "Trên đây là tất tần tật những gì bạn cần biết khi thực hành, chúc bạn luyện tập hiệu quả nhé!"
   }
 ]
