@@ -40,7 +40,7 @@
   .lens, .origin { position: absolute; display: block; pointer-events: auto; }
   .lens { left: 62.8%; top: 35.5%; width: 15.8%; aspect-ratio: .89; border: 1px solid #e8c874; border-radius: 16px; background: #161a15; overflow: hidden; box-shadow: 0 8px 28px #0006; }
   .lens img { display: block; width: 136%; height: 123%; position: absolute; max-width: none; left: -27%; top: -10%; object-fit: fill; }
-  .lens-label { position: absolute; inset: auto 0 0; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 26%; padding: 4px; border-top: 1px solid rgb(255 214 102 / .45); background: #24231b; color: var(--pixel-yellow); font-size: clamp(13px, 1.55cqw, 17px); font-weight: 650; }
+  .lens-label { position: absolute; inset: auto 0 0; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 26%; padding: 4px; border-top: 1px solid rgb(255 214 102 / .45); background: #24231b; color: var(--pixel-yellow); font-size: clamp(13px, 1.55cqw, 17px); font-weight: 650; line-height: 1.2; text-align: center; text-wrap: balance; }
   .origin { left: 93%; top: 89.05%; width: 5.8%; height: 6.7%; border: 2px solid var(--pixel-yellow); border-radius: 30px; box-shadow: 0 0 0 4px #ffda7222; }
   .origin::after { content: ""; position: absolute; inset: -13px; }
   .open:hover .lens, .open:focus-visible .lens { border-color: white; box-shadow: 0 0 0 3px #ffda725c; }

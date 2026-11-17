@@ -85,7 +85,7 @@ export function CompanionWindow() {
             onClick={openQuickTeacher}
             onDoubleClick={openFullTeacher}
           >
-            Mở Triết
+            Trò chuyện với Triết
           </button>
         </div>
       ) : null}

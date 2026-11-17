@@ -30,11 +30,11 @@ export function PracticeScreenshotGuide({ children }: { children: ReactNode }) {
       <figure aria-label="Hình hướng dẫn tương tác">
         <div className="viewport"><div className="scene">
           <img className="photo" src={stage === 'codex' ? codexImage : panelImage}
-            alt={stage === 'codex' ? 'Nút Mở Triết nằm cạnh hình Triết ở góc dưới bên phải cửa sổ Codex.' : 'Bảng hướng dẫn của Triết mở bên phải Codex. Đọc mục Tiếp theo, rồi nộp bài ở đầu bảng khi làm xong.'} />
+            alt={stage === 'codex' ? 'Nút Trò chuyện với Triết nằm cạnh hình Triết ở góc dưới bên phải cửa sổ Codex.' : 'Bảng hướng dẫn của Triết mở bên phải Codex. Đọc mục Tiếp theo, rồi nộp bài ở đầu bảng khi làm xong.'} />
           {stage === 'codex' && <>
             <span className="leader" aria-hidden="true" />
-            <button className="open" type="button" aria-label="Mở Triết" ref={target} onClick={() => advance('panel')}>
-              <span className="lens" aria-hidden="true"><img src={detailImage} alt="" /><span className="lens-label">Mở Triết ↗</span></span>
+            <button className="open" type="button" aria-label="Trò chuyện với Triết" ref={target} onClick={() => advance('panel')}>
+              <span className="lens" aria-hidden="true"><img src={detailImage} alt="" /><span className="lens-label">Trò chuyện với Triết ↗</span></span>
               <span className="origin" aria-hidden="true" />
             </button>
           </>}
@@ -47,7 +47,7 @@ export function PracticeScreenshotGuide({ children }: { children: ReactNode }) {
         <figcaption className="controls">
           <nav className="steps" aria-label="Chọn hình hướng dẫn">
             <button className="step" type="button" aria-current={stage === 'codex' ? 'step' : undefined} onClick={() => setStage('codex')}>
-              <span aria-hidden="true">1</span>Mở Triết
+              <span aria-hidden="true">1</span>Trò chuyện với Triết
             </button>
             <span className="join" aria-hidden="true" />
             <button className="step" type="button" aria-current={stage === 'codex' ? undefined : 'step'} onClick={() => setStage('panel')}>

@@ -98,7 +98,7 @@ describe('Teacher Practice review controls', () => {
     expect(practiceBranch).not.toContain('sendMessage')
     expect(practiceBranch).not.toContain('Thử lại')
     expect(teacher).toContain("const practiceMode = Boolean(workspace?.activePractice)")
-    expect(companion).toContain('Mở Triết')
+    expect(companion).toContain('Trò chuyện với Triết')
     expect(companion).not.toContain('DUYỆT PRACTICE')
     expect(companion).not.toContain('loadPracticeWorkspace()')
   })

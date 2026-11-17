@@ -169,7 +169,7 @@ try {
   await compact.locator('.pixel-teacher-launcher').waitFor()
   await compact.setViewportSize({ width: 168, height: 188 })
   const launcher = compact.getByRole('button', { name: 'Mở cửa sổ Triết', exact: true })
-  assert.equal(await launcher.innerText(), 'Mở Triết')
+  assert.equal(await launcher.innerText(), 'Trò chuyện với Triết')
   assert.equal(await compact.locator('.pixel-teacher-drag-handle').evaluate((handle) => globalThis.getComputedStyle(handle).getPropertyValue('-webkit-app-region')), 'drag')
   assert.equal(await launcher.evaluate((button) => globalThis.getComputedStyle(button).getPropertyValue('-webkit-app-region')), 'no-drag')
   await compact.locator('.pixel-teacher-drag-handle').dispatchEvent('click')
