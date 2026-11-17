@@ -1,3 +1,4 @@
+import { setupSettings } from '../../shared/setup-settings'
 import { createHash } from 'node:crypto'
 import type {
   CodexTaskConfigurationSnapshot,
@@ -15,19 +16,12 @@ type ConfigurationSource = {
   current: () => Promise<ExecutorActivitySnapshot | null>
 }
 
-const expected = {
-  reasoningEffort: 'high',
-  serviceTier: 'standard',
-  approvalPolicy: 'on-request',
-  fullAccess: 'off'
-} as const
-
 function digest(snapshot: CodexTaskConfigurationSnapshot): string {
   return createHash('sha256').update(JSON.stringify(snapshot)).digest('hex')
 }
 
 function evidence(snapshot: CodexTaskConfigurationSnapshot): PracticeEvidenceReference[] {
-  return (Object.keys(expected) as Array<keyof typeof expected>).map((key) => ({
+  return setupSettings.map(({ key }) => ({
     id: 'configuration-' + key,
     kind: 'codex-task-configuration',
     text: snapshot[key].label === null
@@ -43,12 +37,7 @@ function stepStates(
   sourceDigest: string | null
 ): PracticeAdapterStepState[] {
   const checks = snapshot
-    ? [
-        snapshot.reasoningEffort.protocolValue === expected.reasoningEffort,
-        snapshot.serviceTier.protocolValue === expected.serviceTier,
-        snapshot.approvalPolicy.protocolValue === expected.approvalPolicy,
-        snapshot.fullAccess.protocolValue === expected.fullAccess
-      ]
+    ? setupSettings.map(setting => setting.matches(snapshot[setting.key].protocolValue))
     : []
   const firstUnmet = checks.findIndex((matches) => !matches)
   const completedThrough = snapshot === null || snapshot.freshness !== 'fresh'

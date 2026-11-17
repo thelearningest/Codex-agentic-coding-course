@@ -101,13 +101,13 @@ try {
     schemaVersion: 1, phase: 'active', title: 'Practice', objective: 'Practice', expectedOutcome: 'Practice',
     checklist: [
       { id: 'set-model', title: 'Chọn Model 5.6 Sol', status: 'completed' },
-      { id: 'set-effort', title: 'Chọn Effort High', status: 'current' },
+      { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'current' },
       { id: 'set-speed', title: 'Chọn Speed Standard', status: 'completed' },
       { id: 'set-approval', title: 'Chọn Approval: Approve for me', status: 'completed' },
       { id: 'disable-full-access', title: 'Giữ Full access ở trạng thái tắt', status: 'pending' }
     ],
     review: { status: 'needs-work', canReview: true, canReturn: false,
-      result: { criteria: [{ criterionId: 'effort-matches', status: 'unsatisfied', explanation: 'Effort cần là High.' }] },
+      result: { criteria: [{ criterionId: 'effort-matches', status: 'unsatisfied', explanation: 'Effort cần là Medium hoặc High.' }] },
       comparison: { kind: 'first-review', needsReverification: [], newlyVerified: [] }
     },
     activePractice: { runId: 'disposable-layout', generation: 1, practiceId: 'm1-codex-safe-setup', practiceVersion: '2.0.0', executorChatName: 'Practice', startedAt: '2026-10-28T00:00:00Z' },

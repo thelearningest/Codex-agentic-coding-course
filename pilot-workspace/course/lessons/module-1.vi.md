@@ -144,7 +144,7 @@ Mình chọn cấu hình này cho dự án thực hành ContentPilot. Đây khô
 lập mặc định của mọi tài khoản Codex:
 
 - Model: **Tự chọn**, không dùng để đánh giá Practice
-- Effort: **High**
+- Effort: **Medium hoặc High**
 - Speed: **Standard**
 - Approval: **Approve for me**
 - Full access: **Tắt**
@@ -191,7 +191,7 @@ Bạn hoàn thành Module 1 khi:
 - mô tả được Codex là coding agent của OpenAI,
 - dùng `/status` để xem mức sử dụng context và `/goal` để tạo mục tiêu bền vững,
 - chọn Approve for me và không bật Full access,
-- dùng cấu hình Sol, High và Standard cho ContentPilot,
+- dùng Sol, chọn Effort Medium hoặc High và giữ Speed Standard cho ContentPilot,
 - nộp đủ hai ảnh trong đúng task Codex, và
 - được mình duyệt bằng chứng, và
 - đạt ít nhất 3/4 câu trong bài ôn tập cuối Module 1.
@@ -199,5 +199,5 @@ Bạn hoàn thành Module 1 khi:
 ## Nguồn và lựa chọn mình đưa ra
 
 Khái niệm Codex, approval, model và reasoning effort dựa trên các nguồn được
-liên kết tại từng phần. Việc chọn Sol, High, Standard và Approve for me là lựa
+liên kết tại từng phần. Việc chọn Sol, Effort Medium hoặc High, Speed Standard và Approve for me là lựa
 chọn sư phạm mình đưa ra cho dự án ContentPilot.

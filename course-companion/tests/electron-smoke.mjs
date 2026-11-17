@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict'
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { verifyOutlineNavigation } from './support/outline-navigation.mjs'
-import { seedPracticeVideoReceipt } from './support/practice-video-fixture.mjs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import electronExecutable from 'electron'
@@ -555,9 +554,6 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     assert.ok(copywritingSkillBounds.y >= frontendSkillBounds.y + frontendSkillBounds.height)
     await page.setViewportSize({ width: 1180, height: 780 })
   }
-  // This broad lifecycle suite uses an explicit disposable introduction receipt;
-  // practice-video-electron.mjs separately watches the complete real media.
-  await seedPracticeVideoReceipt(page, userDataDirectory)
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   await page.locator('.practice-brief-overlay').waitFor()
   assert.equal(await page.getByText('Chứng minh cấu hình thật trong Codex', { exact: true }).count(), 0)
@@ -583,7 +579,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await page.keyboard.press('Enter')
   assert.equal(await setupReference.getAttribute('open'), '')
   assert.equal(await setupReference.locator('dt').count(), 4)
-  for (const value of ['High', 'Standard', 'Approve for me', 'Tắt']) {
+  for (const value of ['Medium hoặc High', 'Standard', 'Approve for me', 'Tắt']) {
     await setupReference.getByText(value, { exact: true }).waitFor()
   }
   await capture(page, 'module-1-codex-settings-expanded.png')
@@ -648,11 +644,11 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     assert.equal(await compactSteps.nth(index).getAttribute('aria-expanded'), 'false')
   }
   await compactSteps.nth(0).click()
-  await compactReview.getByRole('region', { name: 'Hướng dẫn: Chọn Effort High', exact: true }).waitFor()
+  await compactReview.getByRole('region', { name: 'Hướng dẫn: Chọn Effort Medium hoặc High', exact: true }).waitFor()
   await compactSteps.nth(1).click()
   assert.equal(await compactSteps.nth(0).getAttribute('aria-expanded'), 'false')
   assert.equal(await compactSteps.nth(1).getAttribute('aria-expanded'), 'true')
-  assert.equal(await compactReview.getByRole('region', { name: 'Hướng dẫn: Chọn Effort High', exact: true }).count(), 0)
+  assert.equal(await compactReview.getByRole('region', { name: 'Hướng dẫn: Chọn Effort Medium hoặc High', exact: true }).count(), 0)
   assert.equal(await compactReview.getByText('Mục tiêu', { exact: true }).count(), 0)
   assert.equal(await compactReview.getByText('Kết quả theo từng tiêu chí', { exact: true }).count(), 0)
   assert.equal(await compactReview.getByText('CẤU HÌNH ĐÃ QUAN SÁT', { exact: true }).count(), 0)
@@ -666,7 +662,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   const fullTeacher = page.locator('.pixel-teacher-overlay.is-practice-full')
   await fullTeacher.waitFor()
   assert.equal(await page.locator('.practice-guide').count(), 0)
-  await fullTeacher.locator('.practice-video-replay > summary').waitFor()
+  assert.equal(await fullTeacher.locator('video, .practice-video-replay').count(), 0)
   await fullTeacher.getByRole('button', { name: 'Cần gợi ý cho Practice?', exact: true }).click()
   await fullTeacher.locator('.practice-hint').waitFor()
   assert.match(await fullTeacher.locator('.practice-hint').innerText(), /Mình khuyên bạn nhìn vào một điểm/)
@@ -684,7 +680,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     (element) => globalThis.document.activeElement === element), true)
   assert.equal(await fullTeacher.locator('.pixel-chat-composer').count(), 0)
   assert.equal(await fullTeacher.locator('.pixel-chat-log').count(), 0)
-  await fullTeacher.getByRole('button', { name: 'Cập nhật và kiểm tra tiến độ Practice', exact: true }).click()
+  await fullTeacher.getByRole('button', { name: 'Nộp bài', exact: true }).click()
   const reviewOutcome = await Promise.race([
     fullTeacher.getByText('Đã đạt', { exact: true }).waitFor().then(() => 'passed'),
     fullTeacher.locator('.pixel-chat-warning[role="alert"]').waitFor().then(async () =>

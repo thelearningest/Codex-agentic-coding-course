@@ -5,15 +5,15 @@ import { describe, expect, it } from 'vitest'
 
 const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/lessons/intro.vi.md': '85b293c5ecf0d07f5aba6ad00181be185f4def7da0faaadcde40aaaf01b39ed9',
-  '../pilot-workspace/course/lessons/module-1.vi.md': 'ad538f78291e9dcdd263c8e7a9e0df554e83f3228728589305a56bc3e2f63f76',
+  '../pilot-workspace/course/lessons/module-1.vi.md': '5010b56239d3586e5d9aa325d298a09971a1d9f02159542362f0dacf408447c8',
   '../pilot-workspace/course/lesson-scripts/intro.script.vi.md': 'ac50c545ed4c301b7fee15f5277d7b482fef34c980d4102513c1fd2cf9a54d82',
-  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '8484bfa9b7fe034114dbb2d228e7d054fc90df0b1f21630164a0d1dd2f440c7d',
+  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': '94ec26355d346a549d788c38240ba99c2470ba6d457deb5b7723c7d3bdf63354',
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': '3121227b2754738ae1e967a660c965d2e6d3a8994a031349963984d15d735653',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',
   '../pilot-workspace/course/quizzes/module-1.quiz.json': '4f2f3741c432693f6606d828f2403541587aea9dad48d8f60f8d147bdc8e8a30',
-  '../pilot-workspace/course/practices/m1-codex-safe-setup.json': '1851d2679c3a5a6ced8d05fb3f9809b59d77c74dd44d51852cdc1a761fb2f2e9',
-  'content/practices/m1-codex-safe-setup.json': 'a1b960cf0708264dac0e977b6fddb284d5a3e4084a174d3ff6017b92f7fe0838',
+  '../pilot-workspace/course/practices/m1-codex-safe-setup.json': '540954dab8917d293a79e6beb242f6c3ba8e744263cd80b74e1ff31027c28610',
+  'content/practices/m1-codex-safe-setup.json': '63aedc95db5ac46cedc6a4b1203983927cf4d042cfaa1981435a86300c248870',
   '../pilot-workspace/course/codex-setup/app.js': '76ee417775f75c302be3758c31442564dbc6371e83ae8942b2c87baccfd7424d',
   '../pilot-workspace/course/codex-setup/images/SOURCES.md': 'f3473e33efcce6da9841b5d8bf21147d67b886437ce79140d417fcf2b3b0d2b3',
   '../pilot-workspace/course/codex-setup/images/approval-menu.png': 'aa54394758b3d17e9c67aeeaa8ea93090ef7bc2f01f3d5990986c9ea280581f6',
@@ -21,7 +21,7 @@ const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/codex-setup/images/model-settings.png': '02ee7752a4cb5870408b1e6b11998db3c55021a446a2e44b0f2a618c7ffb9134',
   '../pilot-workspace/course/codex-setup/images/reasoning-levels.png': '5f14317e0c72cfbefeb40e4562eca54078209b375944302fdb71afc8d9bb78be',
   '../pilot-workspace/course/codex-setup/images/slash-commands.png': '5f9baca5927a058019c411c7ef8d5d76d7bc0c60553557d183cb8656b37660c9',
-  '../pilot-workspace/course/codex-setup/index.html': 'b2f81260dce6bddc59dfa422205362f3651dc82ca3f04ab6af6ee832c2460d52',
+  '../pilot-workspace/course/codex-setup/index.html': '257e5ae7a714e83c5993e5a84faaef6d227d3d1dbbc9d341c86ce259d98feb78',
   '../pilot-workspace/course/codex-setup/styles.css': '3c40f22cf620789ff94a7e12eca49c160611a5212d4f94e7a551eff3e17e1676',
   '../pilot-workspace/course/onboarding/app.js': '75006ce0ec2f1f224c54265e9a61202ed6cfb8a4ff9c63a202095ad9586441e2',
   '../pilot-workspace/course/onboarding/images/SOURCES.md': 'e256b39a05931c56083ad7f53ba75998f103f712cb64f19ebb5f062187ddadfb',
@@ -62,7 +62,7 @@ describe('frozen introduction and approved Module 1', () => {
     )
     const masteryScene = scenes.slice(scenes.indexOf("'module-1-mastery': {"))
     expect(digest(assessment)).toBe('e9569f7111a13d7db61fef221f3a85a436f29899494ece43dc9ced61bde46b65')
-    expect(digest(scenes)).toBe('a5e3baea80d378b464a06cf5f2526e92bebab498ebba452cb525e66f0435ba4d')
+    expect(digest(scenes)).toBe('1b8e73a979318083bce07998e8d7eb06d1ba30386cd4280ec3bd886d0dc35337')
     expect(scenes).toContain("dialogue: 'Trong khoá học này, bạn sẽ được học cách dùng coding agents thông qua một dự án thực hành: Xây Portfolio cá nhân.'")
     expect(scenes).toContain("dialogue: 'Cuối khoá này, bạn sẽ có một web portfolio thật để có thể gửi cho nhà tuyển dụng.'")
     expect(scenes).toContain("dialogue: 'Những kỹ năng bạn học được trong khoá này không chỉ giúp bạn xây Portfolio, mà còn trang bị cho bạn kiến thức để tạo bất kỳ công cụ nào bạn muốn với AI'")

@@ -17,7 +17,6 @@ const screenshots = resolve('../.superpowers/sdd/screenshots')
 const course = await createDisposablePracticeWorkspace({ repositoryRoot: resolve('..') })
 await Promise.all([mkdir(portfolio), mkdir(userData), mkdir(screenshots, { recursive: true })])
 const fixtureSource = await readFile('tests/fixtures/portfolio-package-fixture.ts', 'utf8')
-const practiceVideo = JSON.parse(await readFile('shared/practice-video-manifest.json', 'utf8'))
 const fixtureCode = fixtureSource.slice(fixtureSource.indexOf('export const portfolioPackageDocuments'), fixtureSource.indexOf('export async function writePortfolioPackage'))
 const compiled = ts.transpileModule(fixtureCode, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText
 const { portfolioPackageDocuments } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'))
@@ -54,13 +53,10 @@ try {
   const page = app.windows().find((window) => window.url().includes('#/learning'))
     ?? await app.waitForEvent('window', { predicate: (window) => window.url().includes('#/learning') })
   await page.waitForLoadState('domcontentloaded')
-  await page.evaluate(async (videoDuration) => {
+  await page.evaluate(async () => {
     const api = globalThis.courseCompanion
     await api.saveProgress({ currentLessonId: 'module-1', currentCourseLessonId: 'm1-assessment',
       checkpointId: 'm1-setup-checklist', sceneId: 'module-1-setup-checklist', sceneHistory: [], completedCheckpointIds: [], decisions: {} })
-    // Explicit simulated introduction receipt for this unrelated portfolio journey.
-    const video = await api.loadPracticeVideo()
-    await api.updatePracticeVideo({ ...video, watched: videoDuration, position: videoDuration, confirmed: true })
     await api.startPractice({ practiceId: 'm1-codex-safe-setup', practiceVersion: '2.0.0', transfer: false })
     const reviewed = await api.reviewPractice()
     if ('error' in reviewed || reviewed.workspace.review?.status !== 'passed') throw new Error('Simulated Module 1 setup did not pass')
@@ -68,7 +64,7 @@ try {
     await api.saveProgress({ currentLessonId: 'module-2', currentCourseLessonId: 'm2-portfolio-brief',
       checkpointId: 'm2-portfolio-brief', sceneId: 'module-2-portfolio-folder', sceneHistory: [],
       completedCheckpointIds: ['m1-setup-checklist', 'm1-complete', 'm2-why-planning'], decisions: {} })
-  }, practiceVideo.durationSeconds)
+  })
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
   await page.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click()

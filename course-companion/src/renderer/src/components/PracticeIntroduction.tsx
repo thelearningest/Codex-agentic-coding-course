@@ -4,15 +4,16 @@ import type { Introduction } from './practice-introduction-copy'
 export function PracticeIntroduction({
   introduction,
   children,
-  showReference
+  showReference,
+  imageFirst = false
 }: {
   introduction: Introduction
   children: ReactNode
+  imageFirst?: boolean
   showReference: boolean
 }) {
-  return (
+  const instructions = (
     <>
-      <h1 id="practiceObjective">{introduction.title}</h1>
       <p className="practice-setup-purpose">{introduction.purpose}</p>
       <p className="practice-setup-definition">{introduction.context}</p>
       {introduction.portfolioProject ? (
@@ -24,10 +25,18 @@ export function PracticeIntroduction({
       <ol className="practice-setup-instructions" aria-label="Cách thực hành">
         {introduction.steps.map((step) => <li key={step}>{step}</li>)}
       </ol>
+    </>
+  )
+  return (
+    <>
+      {!imageFirst && <h1 id="practiceObjective">{introduction.title}</h1>}
+      {!imageFirst && instructions}
       {children}
+      {imageFirst && !showReference && instructions}
       {showReference ? (
         <details className="practice-setup-reference">
           <summary>{introduction.referenceTitle}</summary>
+          {imageFirst && instructions}
           {introduction.referenceNote ? <p>{introduction.referenceNote}</p> : null}
           <dl>
             {introduction.reference.map(([label, value, explanation]) => (

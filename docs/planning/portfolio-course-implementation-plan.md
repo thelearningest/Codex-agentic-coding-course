@@ -45,9 +45,28 @@ and must never be inferred from a passing automated check.
 | Phase | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
+| Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 | `in-progress` overall — five-document Practice is implemented, including Finder-metadata handling and original-task continuity; incoming theory/mastery preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | `pending` overall; prior five-document design/migration approvals remain recorded, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance; hand courseapp student findings to its owner. |
 | Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
 | Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
+
+### Module 1 Practice entry, 17 November 2026
+
+The entry screen uses stills from the Module 1 recording. Learners can try
+**Mở Triết** and **Nộp bài** on the image, or start the linked Codex task
+immediately. The picture rehearsal is local to the screen. The live **Nộp bài**
+button asks Triết to review the linked task. The existing review and return
+requirements still apply. The original instructions and four-setting reference
+remain available. The video, replay control, playback IPC and viewing gate
+have been removed. The image shows the current Teacher panel. The checklist,
+review and handoff accept Medium or High and preserve the observed effort in
+the approved configuration. Existing High completions remain valid.
+
+The scoped checkout passed typecheck, lint, build, 832 unit tests, nine startup
+checks and the full Electron suite. The guide test exercised the optional
+rehearsal, direct start, submission and reviewed return with a disposable
+profile at 1180, 390 and 320 px. Lesson scene IDs and navigation targets
+match the baseline. Owner review of the app and a learner rehearsal are pending.
 
 ### Portfolio instructions and shared Codex project integration, 17 November 2026
 
@@ -313,7 +332,7 @@ media-only revision.
 |---|---|---|---|---|---|
 | Foundation / I4 — concise native-desktop video, version `1.2.0` | `implemented` | `passed` — full decode, caption integrity, build/typecheck, lint, 29 focused tests and actual full-video Electron watch/confirmation/handoff check | 2–3 minute target, removal of banners and highlights preferred over slow zooms explicitly requested; final visual acceptance remains pending | `pending` | Deliver the 2:38 version for owner visual review. |
 | Foundation / I4 — v2 native-desktop video revision, version `1.1.0` | `implemented` | `passed` — build/typecheck, lint, 29 focused tests, full decoding, caption integrity and actual full-video Electron watch/confirmation/handoff check | Full desktop walkthrough and immediate implementation explicitly requested; owner will verify visual UI | `pending` | Deliver for owner visual review; learner/native-platform acceptance remains separate. |
-| Foundation / I4 — original v1 video gate/runtime (historical evidence) | `implemented` | `passed` for typecheck, lint, 823 unit tests (three existing skips), nine startup checks, build, full Electron suite, media decoding and desktop/narrow inspection | Video/design implementation approved explicitly, with no further confirmation; replacement of the old interactive guide explicitly requested | `pending` | Preserve the gate/runtime; use the v2 revision above for current media acceptance. |
+| Foundation / I4 — original v1 video gate/runtime (historical evidence) | `implemented` | `passed` for typecheck, lint, 823 unit tests (three existing skips), nine startup checks, build, full Electron suite, media decoding and desktop/narrow inspection | Video/design implementation approved explicitly, with no further confirmation; replacement of the old interactive guide explicitly requested | `pending` | Historical gate. See the 17 November screenshot guide for the current entry flow. |
 
 The original v1 Module 1 handoff page contained a locally bundled 2:41 Vietnamese
 walkthrough with narration, synchronized captions, transcript and native media

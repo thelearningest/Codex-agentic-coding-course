@@ -349,9 +349,9 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     evidence: [
       { label: 'EFFORT', value: 'Mức suy luận' },
       { label: 'SPEED', value: 'Tốc độ xử lý' },
-      { label: 'ĐỀ XUẤT', value: 'High · Standard' }
+      { label: 'ĐỀ XUẤT', value: 'Medium hoặc High · Standard' }
     ],
-    dialogue: 'Effort điều chỉnh mức suy luận của model. Speed điều chỉnh tốc độ xử lý và mức dùng credit. Với ContentPilot, mình đề xuất High và Standard.',
+    dialogue: 'Effort điều chỉnh mức suy luận của model. Speed điều chỉnh tốc độ xử lý và mức dùng credit. Với ContentPilot, mình đề xuất Effort Medium hoặc High và Speed Standard.',
     choices: [{ label: 'Tiếp theo: Lệnh /', next: 'module-1-codex-slash-commands', primary: true }]
   },
   'module-1-codex-slash-commands': {
@@ -445,11 +445,11 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'neutral',
     request: 'Bạn đổi cấu hình ngay trong task; Course Companion đọc metadata hiệu lực để Triết duyệt.',
     evidence: [
-      { label: 'CẤU HÌNH', value: 'High · Standard' },
+      { label: 'CẤU HÌNH', value: 'Medium hoặc High · Standard' },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt' },
       { label: 'BẰNG CHỨNG', value: 'Metadata đúng task và còn mới' }
     ],
-    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn High, Standard, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp bốn giá trị Course Companion đọc được.',
+    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn Medium hoặc High, Standard, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp bốn giá trị Course Companion đọc được.',
     practice: setupPracticeDefinition,
     choices: [{ label: 'Sang Codex thiết lập cấu hình', action: 'practice', primary: true }]
   },
@@ -466,7 +466,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'good',
     request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
-      { label: 'EFFORT', value: 'High', ready: true },
+      { label: 'EFFORT', value: 'Medium hoặc High', ready: true },
       { label: 'SPEED', value: 'Standard', ready: true },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
     ],

@@ -1,4 +1,3 @@
-import type { PracticeVideoProgress, PracticeVideoUpdate } from './practice-video'
 import {
   portfolioCheckpointCourseLesson,
   portfolioCheckpointIds,
@@ -587,7 +586,7 @@ export type ApprovedCodexConfiguration = {
   sourcePracticeId: 'm1-codex-safe-setup'
   sourcePracticeVersion: string
   model?: string
-  reasoningEffort: 'high'
+  reasoningEffort: 'medium' | 'high'
   serviceTier: 'standard'
   approvedAt: string
 }
@@ -1387,8 +1386,6 @@ export type CourseCompanionApi = {
   ensurePortfolioCodexProject: (request: PortfolioCodexProjectRequest) => Promise<PortfolioWorkspaceView>
   loadPracticeWorkspace: (identity?: PracticeIdentity) => Promise<PracticeWorkspaceView>
   hasActivePractice: () => Promise<boolean>
-  loadPracticeVideo: () => Promise<PracticeVideoProgress>
-  updatePracticeVideo: (request: PracticeVideoUpdate) => Promise<PracticeVideoProgress>
   startPractice: (request: PracticeStartRequest) => Promise<PracticeWorkspaceView>
   resumePractice: (identity?: PracticeIdentity) => Promise<PracticeWorkspaceView>
   openPracticeTask: (request: PracticeTaskOpenRequest) => Promise<void>
@@ -1406,7 +1403,6 @@ export type CourseCompanionApi = {
   updatePracticeGuide: (request: PracticeGuideUpdateRequest, context: PracticeGuideSurfaceContext)
     => Promise<PracticeGuideView | null>
   returnPassedPractice: () => Promise<void>
-  onPracticeVideoHidden: (callback: () => void) => () => void
   onPracticeWorkspaceChanged: (callback: () => void) => () => void
   onPracticeReturned: (callback: () => void) => () => void
   loadAppSettings: () => Promise<AppSettings>

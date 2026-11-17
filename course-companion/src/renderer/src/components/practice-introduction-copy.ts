@@ -10,7 +10,7 @@ export type Introduction = {
 }
 
 const settings = [
-  ['Effort', 'High', 'Mức độ suy luận của Codex khi xử lý yêu cầu.'],
+  ['Effort', 'Medium hoặc High', 'Mức độ suy luận của Codex khi xử lý yêu cầu.'],
   ['Speed', 'Standard', 'Chế độ tốc độ xử lý của task.'],
   ['Approval', 'Approve for me', 'Cách Codex xử lý yêu cầu phê duyệt hành động.'],
   ['Full access', 'Tắt', 'Giữ chế độ toàn quyền ở trạng thái tắt.']

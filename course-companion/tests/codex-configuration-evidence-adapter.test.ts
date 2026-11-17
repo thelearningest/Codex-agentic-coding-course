@@ -17,7 +17,7 @@ const definition: PracticeDefinition = {
   taskPolicy: 'inherit-configuration-only',
   evidenceProfile: 'codex-task-configuration',
   checklist: [
-    { id: 'set-effort', title: 'Chọn Effort High', dependsOn: [] },
+    { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', dependsOn: [] },
     { id: 'set-speed', title: 'Chọn Speed Standard', dependsOn: ['set-effort'] },
     { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-speed'] },
     { id: 'disable-full-access', title: 'Tắt Full access', dependsOn: ['set-approval'] }

@@ -1,3 +1,4 @@
+import { setupSettings } from '../../shared/setup-settings'
 import { randomUUID } from 'node:crypto'
 import type {
   CompanionMode,
@@ -136,12 +137,7 @@ export class TeacherService {
       const active = workspace.activeRun
       const configuration = activity.configuration
       const configurationMatches = configuration
-        ? [
-            configuration.reasoningEffort.protocolValue === 'high',
-            configuration.serviceTier.protocolValue === 'standard',
-            configuration.approvalPolicy.protocolValue === 'on-request',
-            configuration.fullAccess.protocolValue === 'off'
-          ]
+        ? setupSettings.map(setting => setting.matches(configuration[setting.key].protocolValue))
         : []
       const firstConfigurationMismatch = configurationMatches.findIndex((matches) => !matches)
       const configurationTarget = active.evidenceProfile === 'codex-task-configuration'

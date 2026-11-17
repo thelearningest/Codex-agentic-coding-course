@@ -1,3 +1,4 @@
+import { isSetupEffort, setupSettings } from '../../shared/setup-settings'
 import { createHash } from 'node:crypto'
 import type {
   PracticeCompletionReceipt,
@@ -25,41 +26,6 @@ import { reconcilePlanningStepState } from './practice-step-state'
 import { currentPortfolioPackageApproval, isReviewedPortfolioPackage } from './portfolio-package-state'
 import { portfolioActivityUnavailable } from './portfolio-activity-availability'
 
-const configurationChecks = [
-  {
-    field: 'reasoningEffort',
-    criterionId: 'effort-matches',
-    label: 'Effort',
-    expected: 'high',
-    expectedLabel: 'High',
-    action: 'Trong task Codex, mở Effort và chọn High.'
-  },
-  {
-    field: 'serviceTier',
-    criterionId: 'speed-matches',
-    label: 'Speed',
-    expected: 'standard',
-    expectedLabel: 'Standard',
-    action: 'Trong task Codex, mở Speed và chọn Standard.'
-  },
-  {
-    field: 'approvalPolicy',
-    criterionId: 'approval-matches',
-    label: 'Approval',
-    expected: 'on-request',
-    expectedLabel: 'Approve for me',
-    action: 'Trong task Codex, mở Approval và chọn Approve for me.'
-  },
-  {
-    field: 'fullAccess',
-    criterionId: 'full-access-off',
-    label: 'Full access',
-    expected: 'off',
-    expectedLabel: 'Off',
-    action: 'Trong task Codex, tắt Full access.'
-  }
-] as const
-
 function evaluateConfiguration(
   envelope: PracticeReviewEnvelope,
   definition: PracticeDefinition,
@@ -68,19 +34,19 @@ function evaluateConfiguration(
 ): PracticeReviewResult {
   const configuration = envelope.configuration
   const fresh = configuration?.freshness === 'fresh' && configuration.connection === 'connected'
-  const criteria = configurationChecks.map((check) => {
-    const value = configuration?.[check.field]
+  const criteria = setupSettings.map((check) => {
+    const value = configuration?.[check.key]
     const status = !fresh || !value || value.protocolValue === null
       ? 'unverifiable' as const
-      : value.protocolValue === check.expected
+      : check.matches(value.protocolValue)
         ? 'satisfied' as const
         : 'unsatisfied' as const
     return {
       criterionId: check.criterionId,
       status,
-      evidenceRefs: value ? ['configuration-' + check.field] : [],
+      evidenceRefs: value ? ['configuration-' + check.key] : [],
       explanation: status === 'satisfied'
-        ? check.label + ' đang khớp: ' + check.expectedLabel + '.'
+        ? check.label + ' đang khớp: ' + (value?.label ?? value?.protocolValue) + '.'
         : status === 'unsatisfied'
           ? check.label + ' hiện là ' + (value?.label ?? value?.protocolValue ?? 'không rõ')
             + '; cần ' + check.expectedLabel + '.'
@@ -378,7 +344,7 @@ export class PracticeReviewService {
             ...(portfolioPackage ? { submissionDigest: envelope.portfolioPackage!.evidenceDigest } : {}),
             ...((envelope.portfolioPackage?.kind === 'build' || envelope.portfolioPackage?.kind === 'release')
               ? { taskEvidenceDigest: createHash('sha256').update(JSON.stringify(envelope.portfolioPackage.taskEvidence ?? null)).digest('hex') } : {}),
-            ...(definition.practiceId === 'm1-codex-safe-setup' && envelope.configuration
+            ...(definition.practiceId === 'm1-codex-safe-setup' && envelope.configuration && isSetupEffort(envelope.configuration.reasoningEffort.protocolValue)
               ? {
                   approvedConfiguration: {
                     schemaVersion: 1 as const,
@@ -386,7 +352,7 @@ export class PracticeReviewService {
                     sourcePracticeVersion: definition.version,
                     ...(envelope.configuration.model.protocolValue
                       ? { model: envelope.configuration.model.protocolValue } : {}),
-                    reasoningEffort: 'high' as const,
+                    reasoningEffort: envelope.configuration.reasoningEffort.protocolValue,
                     serviceTier: 'standard' as const,
                     approvedAt: reviewedAt
                   }

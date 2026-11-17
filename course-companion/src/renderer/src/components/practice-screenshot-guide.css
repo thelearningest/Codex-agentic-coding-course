@@ -1,0 +1,85 @@
+/* The shot and its annotations share one coordinate system, including when cropped on narrow windows. */
+.practice-brief-overlay.has-screenshot-guide {
+  --guide-width: min(1016px, max(800px, calc((100svh - 260px) * 1.85)));
+  padding: 20px clamp(16px, 3vw, 36px) 36px;
+  background: #100f0e;
+}
+.has-screenshot-guide.practice-workflow .practice-brief-header,
+.has-screenshot-guide.practice-workflow .practice-brief-card {
+  max-width: var(--guide-width);
+}
+.has-screenshot-guide.practice-workflow .practice-brief-card {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+.has-screenshot-guide .practice-brief-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.has-screenshot-guide .practice-brief-header > button { order: 1; flex: none; width: 36px; height: 36px; }
+.has-screenshot-guide .practice-module-context { display: flex; align-items: baseline; gap: 10px; color: var(--pixel-muted); }
+.has-screenshot-guide .practice-module-context h1,
+.has-screenshot-guide .practice-module-context small { margin: 0; font: 600 13px/1.45 var(--app-font); }
+.has-screenshot-guide .practice-module-context small { color: var(--pixel-yellow); white-space: nowrap; }
+.practice-screenshot-guide {
+  color: var(--pixel-white);
+  font: 400 16px/1.5 var(--app-font);
+  h2 { font-size: clamp(27px, 3.1vw, 42px); letter-spacing: -.035em; line-height: 1.2; margin: 0 0 9px; font-weight: 650; }
+  > p { margin: 0 0 22px; color: #cbc8c1; line-height: 1.6; text-wrap: pretty; }
+  > p strong { color: var(--pixel-white); }
+  button { font-family: inherit; }
+  figure { margin: 0; }
+  .viewport { overflow: hidden; position: relative; border-radius: 16px; border: 1px solid #44453b; background: #171c16; }
+  .scene { aspect-ratio: 1616 / 876; position: relative; container-type: inline-size; isolation: isolate; }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .leader { position: absolute; inset: 0; background: var(--pixel-yellow); clip-path: polygon(78.4% 57.9%, 82.6% 57.9%, 92.95% 90.6%, 92.8% 90.79%, 82.48% 58.22%, 78.4% 58.22%); }
+  .open { position: absolute; inset: 0; border: 0; padding: 0; background: transparent; color: var(--pixel-white); pointer-events: none; }
+  .lens, .origin { position: absolute; display: block; pointer-events: auto; }
+  .lens { left: 62.8%; top: 35.5%; width: 15.8%; aspect-ratio: .89; border: 1px solid #e8c874; border-radius: 16px; background: #161a15; overflow: hidden; box-shadow: 0 8px 28px #0006; }
+  .lens img { display: block; width: 136%; height: 123%; position: absolute; max-width: none; left: -27%; top: -10%; object-fit: fill; }
+  .lens-label { position: absolute; inset: auto 0 0; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 26%; padding: 4px; border-top: 1px solid rgb(255 214 102 / .45); background: #24231b; color: var(--pixel-yellow); font-size: clamp(13px, 1.55cqw, 17px); font-weight: 650; }
+  .origin { left: 93%; top: 89.05%; width: 5.8%; height: 6.7%; border: 2px solid var(--pixel-yellow); border-radius: 30px; box-shadow: 0 0 0 4px #ffda7222; }
+  .origin::after { content: ""; position: absolute; inset: -13px; }
+  .open:hover .lens, .open:focus-visible .lens { border-color: white; box-shadow: 0 0 0 3px #ffda725c; }
+  .open:focus-visible { outline: 0; }
+  .submit { position: absolute; left: 68.65%; top: 22.94%; width: 28.15%; height: 6.73%; display: grid; place-items: center; padding: 0; border-radius: clamp(5px, .8cqw, 9px); border: 0; outline: 1px solid var(--pixel-yellow); outline-offset: 3px; background: #ffda72; color: #211b0e; font-size: clamp(13px, 1.68cqw, 19px); font-weight: 700; }
+  .submit::after { position: absolute; content: ""; inset: -5px 0; }
+  .submit:hover { background: #ffe59b; }
+  .submit:focus-visible { outline: 3px solid white; }
+  .receipt { position: absolute; inset: 0; display: grid; place-items: center; background: #0a0b09bb; }
+  .receipt-inner { text-align: center; padding: 22px; color: var(--pixel-white); background: #1b1c17; border: 1px solid var(--obsidian-line); border-radius: 14px; min-width: 215px; }
+  .receipt-inner p { font-weight: 630; font-size: 20px; margin: 0 0 14px; }
+  .replay { border: 1px solid #716e60; border-radius: 8px; background: transparent; padding: 6px 18px; color: var(--pixel-white); }
+  .replay:hover { background: #35342b; }
+  .controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-top: 17px; }
+  .steps { display: flex; align-items: center; gap: 12px; }
+  .step { display: inline-flex; align-items: center; gap: 8px; border: 0; padding: 8px 0; background: transparent; color: var(--pixel-muted); font-weight: 550; font-size: 14px; }
+  .step:hover { color: white; }
+  .step[aria-current="step"] { color: var(--pixel-yellow); }
+  .step span { width: 23px; height: 23px; display: grid; place-items: center; border: 1px solid #716e62; border-radius: 50%; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .step[aria-current="step"] span { background: #383120; border-color: rgb(255 214 102 / .6); }
+  .join { height: 1px; width: 25px; background: #514d42; }
+  .controls .practice-brief-actions { margin: 0 0 0 auto; }
+  .controls .practice-brief-actions button { font-size: 15px; }
+  .controls .practice-brief-actions button.is-primary::after { content: '\2192' / ''; margin-inline-start: 12px; }
+  .controls :is(.practice-transition, .practice-brief-error) { flex-basis: 100%; }
+  @media (max-width: 700px) {
+    .viewport { border-radius: 12px; }
+    .scene { width: 145%; margin-left: -45%; }
+    .lens { width: 19%; left: 60%; top: 34%; border-radius: 12px; }
+    .controls { margin-top: 12px; }
+    .steps { gap: 8px; }
+    .step { min-height: 44px; }
+    .join { width: 16px; }
+    .receipt { left: 31%; }
+  }
+  @media (max-width: 500px) {
+    .scene { width: 185%; margin-left: -85%; }
+    .controls { gap: 12px; }
+    .controls .practice-brief-actions { width: 100%; }
+    .receipt { left: 46%; }
+  }
+}

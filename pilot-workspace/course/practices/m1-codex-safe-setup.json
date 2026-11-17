@@ -10,7 +10,7 @@
     {
       "id": "effort",
       "label": "Effort",
-      "value": "High"
+      "value": "Medium hoặc High"
     },
     {
       "id": "speed",
@@ -80,7 +80,7 @@
       "required": true,
       "checklistStepId": "verify-settings",
       "acceptedEvidence": ["executor-reported-verification"],
-      "assertion": "A Verification section explicitly reports Effort High, Speed Standard, Approval Approve for me, and Full access disabled. Any model is allowed.",
+      "assertion": "A Verification section explicitly reports Effort Medium hoặc High, Speed Standard, Approval Approve for me, and Full access disabled. Any model is allowed.",
       "freshness": "fresh"
     },
     {

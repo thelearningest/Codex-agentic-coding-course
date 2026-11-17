@@ -181,7 +181,7 @@ async function main() {
         if (await skip.count()) await skip.first().click()
       }
       await delay(1200)
-      await page.getByRole('button', { name: 'Cập nhật và kiểm tra tiến độ Practice', exact: true }).click()
+      await page.getByRole('button', { name: 'Nộp bài', exact: true }).click()
       await page.locator('.practice-success, .practice-review-result').first().waitFor()
       await delay(2400)
     })

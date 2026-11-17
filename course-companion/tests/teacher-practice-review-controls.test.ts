@@ -54,7 +54,7 @@ describe('Teacher Practice review controls', () => {
       source('src/renderer/src/styles.css')
     ])
 
-    expect(teacher).toContain('aria-label="Cập nhật và kiểm tra tiến độ Practice"')
+    expect(teacher).toContain("aria-label={setupPractice ? 'Nộp bài' : 'Cập nhật và kiểm tra tiến độ Practice'}")
     expect(returnAction).toContain("quick ? 'Quay lại khóa học nhanh'")
     expect(teacher).toContain('onReturn={() => void returnToCourse()}')
     expect(teacher).toContain('returnBusy={returnBusy}')

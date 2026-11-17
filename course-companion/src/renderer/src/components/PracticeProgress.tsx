@@ -1,3 +1,4 @@
+import { setupSettings } from '../../../../shared/setup-settings'
 import { useState } from 'react'
 import type {
   PlanningPracticeActionRequest,
@@ -37,13 +38,6 @@ const stepIcon = {
   stale: '!',
   upcoming: '·'
 } as const
-
-const configurationRows = [
-  { key: 'reasoningEffort', label: 'Effort', expected: 'high', expectedLabel: 'High' },
-  { key: 'serviceTier', label: 'Speed', expected: 'standard', expectedLabel: 'Standard' },
-  { key: 'approvalPolicy', label: 'Approval', expected: 'on-request', expectedLabel: 'Approve for me' },
-  { key: 'fullAccess', label: 'Full access', expected: 'off', expectedLabel: 'Off' }
-] as const
 
 const artifactLabels = {
   'artifacts/PRD.md': 'PRD.md',
@@ -104,7 +98,7 @@ const portfolioIssueLabels: Record<string, string> = {
 }
 
 const criterionNextActions: Record<string, string> = {
-  'effort-matches': 'Trong task Codex, chọn Effort High rồi duyệt lại.',
+  'effort-matches': 'Trong task Codex, chọn Effort Medium hoặc High rồi duyệt lại.',
   'speed-matches': 'Trong task Codex, chọn Speed Standard rồi duyệt lại.',
   'approval-matches': 'Trong task Codex, chọn Approve for me rồi duyệt lại.',
   'full-access-off': 'Trong task Codex, tắt Full access rồi duyệt lại.',
@@ -158,8 +152,8 @@ export function PracticeProgress({
   const configuration = workspace.configuration
   const configurationFresh = configuration?.freshness === 'fresh'
     && configuration.connection === 'connected'
-  const configurationMismatches = configurationRows.filter((row) =>
-    configuration?.[row.key]?.protocolValue !== row.expected)
+  const configurationMismatches = setupSettings.filter((row) =>
+    !row.matches(configuration?.[row.key]?.protocolValue))
   const configurationNextAction = !configurationFresh
     ? 'Mở đúng task Codex, sau đó nhờ Triết kiểm tra lại.'
     : configurationMismatches.length
@@ -197,7 +191,7 @@ export function PracticeProgress({
     upcoming: 'Chưa đến lượt'
   } as const
   const compactConfigurationGuidance: Record<string, string> = {
-    'set-effort': 'Mở Effort trong task Codex và chọn High.',
+    'set-effort': 'Mở Effort trong task Codex và chọn Medium hoặc High.',
     'set-speed': 'Mở Speed trong task Codex và chọn Standard.',
     'set-approval': 'Mở Approval trong task Codex và chọn Approve for me.',
     'disable-full-access': 'Giữ Full access ở trạng thái tắt trong task Codex.'
@@ -379,9 +373,9 @@ export function PracticeProgress({
             ứng dụng không tự thay đổi cài đặt của bạn.
           </p>
           <dl>
-            {configurationRows.map((row) => {
+            {setupSettings.map((row) => {
               const value = configuration?.[row.key]
-              const matches = configurationFresh && value?.protocolValue === row.expected
+              const matches = configurationFresh && row.matches(value?.protocolValue)
               return (
                 <div className={matches ? 'is-match' : 'is-mismatch'} key={row.key}>
                   <dt>{row.label}</dt>

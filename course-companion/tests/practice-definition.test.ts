@@ -61,7 +61,7 @@ describe('Module 1 Practice definition', () => {
     expect(Object.fromEntries(
       practice.requiredSettings.map((setting) => [setting.label, setting.value])
     )).toEqual({
-      Effort: 'High',
+      Effort: 'Medium hoặc High',
       Speed: 'Standard',
       Approval: 'Approve for me',
       'Full access': 'Tắt'

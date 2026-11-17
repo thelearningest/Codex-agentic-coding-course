@@ -1,6 +1,4 @@
-import { PracticeVideoRepository } from './practice-video-repository'
 import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
-import { practiceVideoPracticeId, type PracticeVideoUpdate } from '../../shared/practice-video'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -131,7 +129,6 @@ const practiceDefinitionRepository = new PracticeDefinitionRepository(
   pilotPracticeDefinitionsDirectory()
 )
 let companionAlwaysOnTop = true
-const practiceVideoRepository = new PracticeVideoRepository(app.getPath('userData'))
 const progressRepository = new ProgressRepository(app.getPath('userData'))
 const courseRoot = process.env.COURSE_COMPANION_WORKSPACE_ROOT || resolve(app.getAppPath(), '..')
 const practiceGuideDefinitionRepository = new PracticeGuideDefinitionRepository(practiceGuidesDirectory())
@@ -519,14 +516,6 @@ function openNewWindowsInDefaultBrowser(targetWindow: BrowserWindow): void {
   })
 }
 
-function notifyVideoWhenWindowHidden(window: BrowserWindow): void {
-  const notify = () => {
-    if (!window.webContents.isDestroyed()) window.webContents.send('course:practice-video-hidden')
-  }
-  window.on('hide', notify)
-  window.on('minimize', notify)
-}
-
 function createMainWindow(): BrowserWindow {
   const window = new BrowserWindow({
     width: 1180,
@@ -544,7 +533,6 @@ function createMainWindow(): BrowserWindow {
     }
   })
 
-  notifyVideoWhenWindowHidden(window)
   openNewWindowsInDefaultBrowser(window)
   window.once('ready-to-show', () => window.show())
 
@@ -595,7 +583,6 @@ function createCompanionWindow(mode: CompanionMode): BrowserWindow {
     }
   })
 
-  notifyVideoWhenWindowHidden(window)
   applyCompanionTopmost(window)
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 
@@ -917,21 +904,9 @@ function registerIpcHandlers(): void {
     Boolean((await practiceRunRepository.load()).activeRun)
   ))
 
-  const currentVideoCourseRun = async () => {
-    const loaded = await progressRepository.load()
-    if (loaded.status !== 'returning' && loaded.status !== 'recovered') throw new Error('Course progress unavailable')
-    return loaded.progress.courseRunId
-  }
-  const requireVideoReceipt = async () => {
-    if (!(await practiceVideoRepository.load(await currentVideoCourseRun())).confirmed) throw new Error('Practice video confirmation required')
-  }
-  ipcMain.handle('course:load-practice-video', async () => practiceVideoRepository.load(await currentVideoCourseRun()))
-  ipcMain.handle('course:update-practice-video', async (_event, request: PracticeVideoUpdate) => practiceVideoRepository.update(await currentVideoCourseRun(), request))
-
   ipcMain.handle('course:start-practice', async (_event, request: PracticeStartRequest) => {
     const previousRun = (await practiceRunRepository.load()).activeRun
     if (!isPracticeStartRequest(request)) throw new Error('Invalid Practice start request')
-    if (request.practiceId === practiceVideoPracticeId) await requireVideoReceipt()
     const view = await practiceCoordinator.startNew(request)
     const activeRun = (await practiceRunRepository.load()).activeRun
     if (activeRun) await teacherService.activatePracticeRun(activeRun.runId)
@@ -943,8 +918,6 @@ function registerIpcHandlers(): void {
   })
 
   ipcMain.handle('course:resume-practice', async (_event, identity) => {
-    const active = (await practiceRunRepository.load()).activeRun
-    if ((isRecord(identity) ? identity.practiceId : active?.practiceId) === practiceVideoPracticeId) await requireVideoReceipt()
     const view = await practiceCoordinator.resume(isRecord(identity) ? {
       practiceId: String(identity.practiceId),
       practiceVersion: String(identity.practiceVersion)
@@ -965,9 +938,7 @@ function registerIpcHandlers(): void {
   })
 
   ipcMain.handle('course:retry-practice-switch', async () => {
-    const previous = await practiceRunRepository.load()
-    const previousRun = previous.activeRun
-    if (previous.pendingTransition?.practiceId === practiceVideoPracticeId) await requireVideoReceipt()
+    const previousRun = (await practiceRunRepository.load()).activeRun
     const view = await practiceCoordinator.retry()
     const activeRun = (await practiceRunRepository.load()).activeRun
     if (activeRun) await teacherService.activatePracticeRun(activeRun.runId)

@@ -983,8 +983,11 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       expectedOutcome: definition?.expectedOutcome ?? '',
       checklist: structuredClone(
         displayedRun?.evidenceProfile === 'codex-task-configuration' && definition
-          ? definition.checklist.map((step) => displayedRun.checklist.find((saved) => saved.id === step.id)
-            ?? { id: step.id, title: step.title, status: 'pending' as const })
+          ? definition.checklist.map((step) => ({
+              id: step.id, status: 'pending' as const,
+              ...displayedRun.checklist.find((saved) => saved.id === step.id),
+              title: step.title
+            }))
           : displayedRun?.checklist ?? (definition ? initialChecklist(definition) : [])
       ),
       ...(definition

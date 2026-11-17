@@ -1,4 +1,3 @@
-import type { PracticeVideoProgress, PracticeVideoUpdate } from '../../shared/practice-video'
 import { contextBridge, ipcRenderer } from 'electron'
 import type {
   CompanionMode,
@@ -55,8 +54,6 @@ const courseCompanionApi: CourseCompanionApi = {
     ipcRenderer.invoke('course:load-practice-workspace', identity) as Promise<PracticeWorkspaceView>,
   hasActivePractice: () =>
     ipcRenderer.invoke('course:has-active-practice') as Promise<boolean>,
-  loadPracticeVideo: () => ipcRenderer.invoke('course:load-practice-video') as Promise<PracticeVideoProgress>,
-  updatePracticeVideo: (request: PracticeVideoUpdate) => ipcRenderer.invoke('course:update-practice-video', request) as Promise<PracticeVideoProgress>,
   startPractice: (request: PracticeStartRequest) =>
     ipcRenderer.invoke('course:start-practice', request) as Promise<PracticeWorkspaceView>,
   resumePractice: (identity?: PracticeIdentity) =>
@@ -85,11 +82,6 @@ const courseCompanionApi: CourseCompanionApi = {
     ipcRenderer.invoke('course:update-practice-guide', request, context) as Promise<PracticeGuideView | null>,
   returnPassedPractice: () =>
     ipcRenderer.invoke('course:return-passed-practice') as Promise<void>,
-  onPracticeVideoHidden: (callback: () => void) => {
-    const listener = () => callback()
-    ipcRenderer.on('course:practice-video-hidden', listener)
-    return () => ipcRenderer.removeListener('course:practice-video-hidden', listener)
-  },
   onPracticeWorkspaceChanged: (callback: () => void) => {
     const listener = () => callback()
     ipcRenderer.on('course:practice-workspace-changed', listener)

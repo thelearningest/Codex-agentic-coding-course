@@ -209,7 +209,7 @@ describe('Module 1 Practice review service', () => {
   })
 
   it.each([
-    ['Effort', { reasoningEffort: { protocolValue: 'medium', label: 'Medium' } }],
+    ['Effort', { reasoningEffort: { protocolValue: 'low', label: 'Low' } }],
     ['Speed', { serviceTier: { protocolValue: 'fast', label: 'Fast' } }],
     ['Approval', { approvalPolicy: { protocolValue: 'never', label: 'Never' } }],
     ['Full access', { fullAccess: { protocolValue: 'on', label: 'On' } }]
@@ -226,6 +226,13 @@ describe('Module 1 Practice review service', () => {
       expect.objectContaining({ explanation: expect.stringContaining(label) })
     ]))
     await expect(service.passedCompletion()).rejects.toThrow()
+  })
+
+  it('preserves Medium in the approved configuration for the next module', async () => {
+    const { service } = await harness(configuration({ reasoningEffort: { protocolValue: 'medium', label: 'Medium' } }))
+    const response = await service.review()
+    expect(response.workspace.review?.status).toBe('passed')
+    expect((await service.passedCompletion()).approvedConfiguration?.reasoningEffort).toBe('medium')
   })
 
   it.each(['gpt-5.6-terra', 'gpt-6-astra', 'another-model', null])('accepts model %s without weakening the other checks', async (model) => {
@@ -283,7 +290,7 @@ describe('Module 1 Practice review service', () => {
 
     setConfiguration(configuration({
       eventTimestampMs: 2,
-      reasoningEffort: { protocolValue: 'medium', label: 'Medium' }
+      reasoningEffort: { protocolValue: 'low', label: 'Low' }
     }))
     await expect(service.returnPassedPractice()).rejects.toThrow('chưa được Triết xác nhận')
 
@@ -302,7 +309,7 @@ describe('Module 1 Practice review service', () => {
     const { runs, service, changeConfigurationDuringReview } = await harness()
     changeConfigurationDuringReview(configuration({
       eventTimestampMs: 2,
-      reasoningEffort: { protocolValue: 'medium', label: 'Medium' }
+      reasoningEffort: { protocolValue: 'low', label: 'Low' }
     }))
 
     await expect(service.review()).rejects.toThrow('PRACTICE_EVIDENCE_CHANGED')

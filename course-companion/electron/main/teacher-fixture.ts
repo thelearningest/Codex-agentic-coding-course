@@ -101,7 +101,7 @@ function replyFor(context?: TeacherContext): string {
     return 'Codex là coding agent của OpenAI. Nó có thể đọc tệp, dùng công cụ, chạy lệnh và kiểm tra kết quả trong phạm vi bạn cho phép.'
   }
   if (context.checkpointId === 'm1-model-choice') {
-    return 'Mình đề xuất 5.6 Sol, High và Standard cho ContentPilot. Đây là lựa chọn cho dự án này, không phải mặc định của mọi tài khoản Codex.'
+    return 'Mình đề xuất 5.6 Sol, Effort Medium hoặc High và Speed Standard cho ContentPilot. Đây là lựa chọn cho dự án này, không phải mặc định của mọi tài khoản Codex.'
   }
   if (context.checkpointId === 'm1-setup-checklist') {
     return 'Hãy sửa từng giá trị trong đúng task Codex. Triết sẽ đối chiếu trực tiếp Model, Effort, Speed, Approval và Full access; nội dung chat không thể tự đánh dấu đạt.'

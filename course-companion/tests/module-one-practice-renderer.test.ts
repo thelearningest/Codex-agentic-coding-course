@@ -44,7 +44,7 @@ function workspace(
     objective: 'Thiết lập Codex an toàn.',
     expectedOutcome: 'Đủ bốn giá trị.',
     checklist: [
-      { id: 'set-effort', title: 'Chọn Effort High', status: 'current' }
+      { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'current' }
     ],
     review: { status: 'not-reviewed', canReview: true, canReturn: false },
     ...(config ? { configuration: config } : {}),
@@ -121,7 +121,7 @@ describe('Module 1 Practice renderer', () => {
     const html = renderToStaticMarkup(createElement(PracticeProgress, {
       workspace: workspace(configuration({
         model: { protocolValue: 'gpt-6-astra', label: null },
-        reasoningEffort: { protocolValue: 'medium', label: 'Medium' }
+        reasoningEffort: { protocolValue: 'low', label: 'Low' }
       }))
     }))
     expect(html).toContain('Cấu hình task được phát hiện')
@@ -246,7 +246,7 @@ describe('Module 1 Practice renderer', () => {
     }))
 
     expect(compact).toContain('0/1 bước đã xác minh')
-    expect(compact).toContain('Hoàn thành bước hiện tại: Chọn Effort High.')
+    expect(compact).toContain('Hoàn thành bước hiện tại: Chọn Effort Medium hoặc High.')
     expect(compact.indexOf('aria-label="Hành động tiếp theo"')).toBeLessThan(compact.indexOf('practice-compact-progress'))
     expect(compact.indexOf('practice-compact-progress')).toBeLessThan(compact.indexOf('<details'))
     expect(compact).toContain('Tất cả các bước Practice')
@@ -266,7 +266,7 @@ describe('Module 1 Practice renderer', () => {
         ...workspace(),
         checklist: [
           { id: 'set-model', title: 'Chọn Model 5.6 Sol', status: 'completed' },
-          { id: 'set-effort', title: 'Chọn Effort High', status: 'stale', reason: 'Effort đã thay đổi.' }
+          { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'stale', reason: 'Effort đã thay đổi.' }
         ],
         review: {
           status: 'needs-work', canReview: true, canReturn: false,
@@ -278,7 +278,7 @@ describe('Module 1 Practice renderer', () => {
             currentCompletedCount: 1,
             totalStepCount: 2,
             newlyVerified: [],
-            needsReverification: [{ stepId: 'set-effort', title: 'Chọn Effort High', reason: 'Effort đã thay đổi.' }]
+            needsReverification: [{ stepId: 'set-effort', title: 'Chọn Effort Medium hoặc High', reason: 'Effort đã thay đổi.' }]
           }
         }
       },
@@ -286,10 +286,10 @@ describe('Module 1 Practice renderer', () => {
     }))
 
     expect(compact).toContain('1/2 bước đã xác minh')
-    expect(compact).toContain('Cần xác minh lại: Chọn Effort High.')
+    expect(compact).toContain('Cần xác minh lại: Chọn Effort Medium hoặc High.')
     expect(compact).toContain('Cần xác minh lại')
     expect(compact).toContain('Xem tất cả 2 bước')
-    expect(compact).not.toContain('Chọn Effort High</strong></span><span class="practice-compact-step-state">Chưa bắt đầu')
+    expect(compact).not.toContain('Chọn Effort Medium hoặc High</strong></span><span class="practice-compact-step-state">Chưa bắt đầu')
   })
 
   it('keeps Practice animation disabled for reduced-motion users', async () => {

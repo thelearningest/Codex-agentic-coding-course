@@ -14,7 +14,6 @@ import type {
 } from '../../../../shared/contracts'
 import teacherImage from '../assets/teacher-triet.png'
 import { PracticeProgress } from './PracticeProgress'
-import { PracticeVideoGuide } from './PracticeVideoGuide'
 import { practiceGuideAnchor } from './practice-guide-anchors'
 import { PracticeReturnAction } from './PracticeReturnAction'
 import { PracticeTaskLink } from './PracticeTaskLink'
@@ -120,7 +119,6 @@ export function TeacherWorkspace({
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false)
   const [workspaceRefreshing, setWorkspaceRefreshing] = useState(false)
   const [workspaceUnavailable, setWorkspaceUnavailable] = useState(false)
-  const [videoOpen, setVideoOpen] = useState(false)
   const [practiceBusy, setPracticeBusy] = useState(false)
   const [reviewBusy, setReviewBusy] = useState(false)
   const [hintBusy, setHintBusy] = useState(false)
@@ -144,7 +142,6 @@ export function TeacherWorkspace({
     if (workspaceIdentity.current !== identity) {
       setHint(null)
       setHintError('')
-      setVideoOpen(false)
       setReturnBusy(false)
       workspaceIdentity.current = identity
     }
@@ -534,6 +531,7 @@ export function TeacherWorkspace({
   }
   const currentTeacherStatus = teacherStatus[teacherRuntime.connection]
   const practiceMode = Boolean(workspace?.activePractice)
+  const setupPractice = workspace?.activePractice?.practiceId === 'm1-codex-safe-setup'
   const compactPractice = practiceMode && !embedded
   const practicePassed = workspace?.review?.status === 'passed' && workspace.review.canReturn
   const contextFreshnessNote = teacherRuntime.contextFreshness === 'stale'
@@ -634,13 +632,13 @@ export function TeacherWorkspace({
               <button
                 className={'pixel-review-primary' + (reviewBusy ? ' is-busy' : '')}
                 type="button"
-                aria-label="Cập nhật và kiểm tra tiến độ Practice"
+                aria-label={setupPractice ? 'Nộp bài' : 'Cập nhật và kiểm tra tiến độ Practice'}
                 aria-busy={reviewBusy}
                 disabled={workspaceRefreshing || reviewBusy || hintBusy || returnBusy}
                 onClick={() => void reviewProgress()}
               >
                 {reviewBusy ? <span className="pixel-review-spinner" aria-hidden="true" /> : null}
-                {reviewBusy ? 'Đang cập nhật và kiểm tra…' : 'Cập nhật và kiểm tra tiến độ'}
+                {reviewBusy ? 'Đang cập nhật và kiểm tra…' : setupPractice ? 'Nộp bài' : 'Cập nhật và kiểm tra tiến độ'}
                 {reviewBusy ? <PracticeReviewElapsed /> : null}
               </button>
             ) : null}
@@ -679,12 +677,6 @@ export function TeacherWorkspace({
             prompt={workspace.startPrompt}
             title={workspace.title}
           /> : null}
-          {workspace?.activePractice?.practiceId === 'm1-codex-safe-setup' ? (
-            <details key={`${workspace.activePractice.runId}:${workspace.activePractice.generation}`} className="practice-video-replay" onToggle={(event) => setVideoOpen(event.currentTarget.open)}>
-              <summary>Xem lại video hướng dẫn Practice</summary>
-              {videoOpen && visible ? <PracticeVideoGuide /> : null}
-            </details>
-          ) : null}
           {error || workspace?.error ? <div className="pixel-chat-warning" role="alert">{error || workspace?.error} Kết quả gần nhất vẫn được giữ nguyên.</div> : null}
             {workspace ? (
               <PracticeProgress

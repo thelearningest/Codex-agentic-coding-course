@@ -1,3 +1,4 @@
+import { isSetupEffort } from '../../shared/setup-settings'
 import type {
   ApprovedCodexConfiguration,
   PracticeDefinition,
@@ -45,7 +46,7 @@ export function isApprovedCodexConfiguration(
     && /^[0-9]+\.[0-9]+\.[0-9]+$/.test(value.sourcePracticeVersion)
     && (value.model === undefined || (typeof value.model === 'string'
       && value.model.trim().length > 0 && value.model.length <= 160))
-    && value.reasoningEffort === 'high'
+    && isSetupEffort(value.reasoningEffort)
     && value.serviceTier === 'standard'
     && typeof value.approvedAt === 'string'
     && !Number.isNaN(Date.parse(value.approvedAt))
