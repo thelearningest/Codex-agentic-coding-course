@@ -358,7 +358,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.deepEqual(await page.evaluate(() => globalThis.courseCompanion.loadProgress()), progressBeforeModelTab)
   const approvedModelCopy = JSON.parse(await readFile(join(repositoryRoot, 'pilot-workspace/course/codex-setup/model-controls.vi.json'), 'utf8'))
   assert.deepEqual(await modelIntroBoard.locator('.model-controls__personal-copy p').allTextContents(), approvedModelCopy.model)
-  const modelDocsLink = modelIntroBoard.getByRole('link', { name: 'Xem cách giải thích cụ thể của OpenAI' })
+  const modelDocsLink = modelIntroBoard.getByRole('link', { name: 'Xem tài liệu từ OpenAI' })
   assert.equal(await modelDocsLink.getAttribute('href'), 'https://learn.chatgpt.com/docs/models?surface=app')
   assert.equal(await modelDocsLink.locator('small').count(), 0)
   await page.getByRole('button', { name: '← Trang trước', exact: true }).click()

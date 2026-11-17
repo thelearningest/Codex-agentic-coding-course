@@ -47,7 +47,7 @@ Mình chỉ dùng Terra làm sub-agent, tức trợ lý AI phụ, để xử lý
 
 Mình hầu như không dùng Luna. Nhưng mình nghĩ dòng này có thể hữu ích với các công ty lớn muốn phục vụ AI cho hàng triệu người và cần giảm chi phí.
 
-[Xem cách giải thích cụ thể của OpenAI](https://learn.chatgpt.com/docs/models?surface=app)
+[Xem tài liệu từ OpenAI](https://learn.chatgpt.com/docs/models?surface=app)
 
 ## Effort
 
