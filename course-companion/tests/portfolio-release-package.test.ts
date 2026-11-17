@@ -14,6 +14,29 @@ afterEach(async () => { await Promise.all(roots.splice(0).map((root) =>
   rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }))) })
 
 describe('Module 4 deployment evidence', () => {
+  it('passes alternate check commands, concise observations and extra metadata to semantic review', async () => {
+    const f = await fixture()
+    const record = {
+      ...f.record, notes: 'Independent release notes are not a schema failure.',
+      deployment: { ...f.record.deployment, provider: 'Vercel', buildStatus: 'READY', region: 'Singapore' },
+      validation: { ...f.record.validation, command: 'pnpm lint && pnpm test && pnpm build',
+        desktop: { ...f.record.validation.desktop, observations: 'Liên kết hoạt động.', viewport: '1280 × 720' },
+        mobile: { ...f.record.validation.mobile, observations: 'Không cuộn ngang.', viewport: '360 × 800' }
+      }
+    }
+    expect(parsePortfolioDeploymentRecord(record).validation).toMatchObject(record.validation)
+    expect(parsePortfolioDeploymentRecord(record).deployment).toMatchObject({ provider: 'vercel', buildStatus: 'ready' })
+    await f.writeRecord(record)
+    const evidence = await f.collect()
+    expect(evidence.portfolioRelease?.issues).toEqual([])
+    const artifact = evidence.portfolioRelease?.artifacts.find((item) => item.path === portfolioReleaseRecordPath)
+    expect(artifact?.content).toContain('pnpm lint && pnpm test && pnpm build')
+    expect(artifact?.content).toContain('Không cuộn ngang.')
+    expect(artifact?.content).toContain('Independent release notes')
+    // Collection establishes provenance/readability; no content pass is awarded.
+    expect(currentPortfolioPackageApproval({ ...f.run, evidence })).toBeNull()
+  })
+
   it('accepts equivalent revision/checkpoint letter case and URL spelling without editing the record', async () => {
     const f = await fixture()
     const record = structuredClone(f.record)
@@ -197,10 +220,11 @@ describe('Module 4 deployment evidence', () => {
     expect(f.verificationCalls).toEqual([])
   })
 
-  it('requires concrete observations, the same shared URL, real check results and sensible timestamps', async () => {
+  it('requires nonempty observations, the same shared URL, reported passing results and sensible timestamps', async () => {
     const f = await fixture()
     const invalidRecords = [
-      { ...f.record, validation: { ...f.record.validation, desktop: { ...f.record.validation.desktop, observations: 'Looks good' } } },
+      { ...f.record, validation: { ...f.record.validation, desktop: { ...f.record.validation.desktop, observations: ' ' } } },
+      { ...f.record, validation: { ...f.record.validation, command: ' ' } },
       { ...f.record, validation: { ...f.record.validation, mobile: { ...f.record.validation.mobile, url: 'https://different.vercel.app/' } } },
       { ...f.record, validation: { ...f.record.validation, passed: false } },
       { ...f.record, validation: { ...f.record.validation, checkedAt: '2026-10-21T01:00:00.000Z' } },
@@ -318,7 +342,10 @@ describe('Module 4 approval and simulated review lifecycle', { timeout: 15_000 }
       const f = await fixture()
       await f.approve()
       if (problem === 'learner-messages') f.activity.learnerAuthoredPrompts = []
-      if (problem === 'reported-checks') f.activity.reportedVerificationEvidence = []
+      if (problem === 'reported-checks') {
+        f.activity.reportedVerificationEvidence = []
+        f.activity.executorResponses = []
+      }
       if (problem === 'task-identity') f.activity.threadId = 'unrelated-thread'
 
       await expect(f.service.review()).rejects.toThrow()
@@ -326,6 +353,20 @@ describe('Module 4 approval and simulated review lifecycle', { timeout: 15_000 }
       expect((await f.runs.load()).activeRun?.completion).toBeUndefined()
     }
   )
+
+  it('lets AI judge full task reports when keyword extraction finds no checks', async () => {
+    const f = await fixture()
+    await f.approve()
+    f.activity.reportedVerificationEvidence = []
+    f.activity.executorResponses = ['SIMULATED: Liên hệ mở đúng địa chỉ; trang vừa màn hình, có thể đi qua từng mục bằng phím Tab.']
+    f.setVerdict('needs-work')
+    const result = await f.service.review()
+    expect(result.workspace.review?.status).toBe('needs-work')
+    expect(result.workspace.completion).toBeUndefined()
+    expect(f.envelopes[0]?.portfolioPackage?.taskEvidence?.reportedChecks).toEqual([])
+    expect(f.envelopes[0]?.evidence.some((item) => item.kind === 'executor-reported-verification'
+      && item.text.includes(f.activity.executorResponses[0]!))).toBe(true)
+  })
 
   it.each(['record', 'source', 'url'])(
     'invalidates approval and passed review when the current %s changes', async (part) => {

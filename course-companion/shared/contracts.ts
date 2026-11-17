@@ -718,7 +718,7 @@ export type PortfolioDeploymentRecord = {
   moduleThreeSourceCheckpoint: string
   sourceRevision: string
   deployment: { url: string; provider: 'vercel'; deploymentId: string; sourceRevision: string; buildStatus: 'ready'; deployedAt: string }
-  validation: { checkedAt: string; command: 'npm run check'; passed: true; desktop: { url: string; observations: string }; mobile: { url: string; observations: string }; limitations: string[] }
+  validation: { checkedAt: string; command: string; passed: true; desktop: { url: string; observations: string }; mobile: { url: string; observations: string }; limitations: string[] }
   publication: { learnerApproved: true; observedPublicAccess: true }
 }
 export const portfolioBuildRecordPaths = [

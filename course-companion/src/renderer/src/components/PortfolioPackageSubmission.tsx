@@ -63,6 +63,10 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
   return (
     <section className="practice-planning-evidence practice-package-submission" aria-label={build ? 'Nộp bài xây portfolio' : 'Nộp gói planning'}>
       <h3 className="practice-package-heading">{build ? 'Bằng chứng từ quá trình xây website' : 'Năm tài liệu cần nộp'}</h3>
+      {!build ? <p role="status">
+        Đã đọc {artifactPaths.filter((path) => packageView.artifactPaths.includes(path)).length}/{artifactPaths.length} tài liệu.
+        {!packageView.ready || !packageView.approved ? ' Chưa duyệt nội dung.' : ''}
+      </p> : null}
       {build ? <p>Tiếp tục từng phần của kế hoạch trong task Codex. Bạn xem kết quả và quyết định; Codex ghi lại ba hồ sơ dưới đây. Cải thiện và lỗi đã xử lý trong lúc xây được tính, không cần thêm một tính năng mới.</p> : null}
       <ul className="practice-package-issues" role="list">{artifactPaths.map((path) => {
         const issues = [...new Set(packageView.issues.filter((issue) => issue.startsWith(`${path}: `)))]

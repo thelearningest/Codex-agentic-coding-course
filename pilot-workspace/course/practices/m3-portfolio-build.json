@@ -132,7 +132,7 @@
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require coverage of every current PRD acceptance criterion, passing npm run check tied to the submitted source, desktop and mobile browser observations including links, keyboard/focus, content and overflow. Viewports may follow the approved plan; 1440x900 and 390x844 are defaults, not exact-string requirements. Require URLs or screenshot references and reproducible observations; a hash, URL, checkbox, template or claimed success alone cannot pass. Distinguish Codex-reported observations from independently read evidence.",
+      "assertion": "Require coverage of every current PRD acceptance criterion, passing technical checks appropriate to the application and tied to the submitted source (equivalent command names, composition and tooling are acceptable; do not impose a Node toolchain on a static site), desktop and mobile browser observations including links, keyboard/focus, content and overflow. Viewports may follow the approved plan; 1440x900 and 390x844 are defaults, not exact-string requirements. Require URLs or screenshot references and reproducible observations; a hash, URL, checkbox, template or claimed success alone cannot pass. Distinguish Codex-reported observations from independently read evidence.",
       "freshness": "fresh"
     },
     {

@@ -128,6 +128,58 @@ async function writeValidDocuments(workspace: string, overrides: Record<string, 
 }
 
 describe('collectPortfolioPackage', () => {
+  it.each(['prose', 'bullets', 'table', 'setext', 'single-heading', 'optional-empty-section'])(
+    'collects all five documents in %s format without enforcing a template', async (format) => {
+      const workspace = await temporaryWorkspace()
+      const bodies: Record<string, string> = {
+        prose: 'Giới thiệu bản thân rồi trình bày hai dự án đã được duyệt. Đối chiếu kết quả trên điện thoại và máy tính; dừng để người học xem lại.',
+        bullets: '- Giới thiệu: hiện tên và vai trò.\n- Dự án: chỉ dùng tư liệu được phép công bố.\n- Xem lại trên màn hình hẹp, thử liên kết bằng bàn phím.',
+        table: '| Việc cần làm | Khi nào | Cách xem kết quả |\n| --- | --- | --- |\n| Giới thiệu | Có nội dung đã duyệt | Đọc tên và vai trò |',
+        setext: 'Présentation\n=============\nPrésenter le rôle, puis les projets autorisés. Vérifier la page avant validation.',
+        'single-heading': '# Một phiên bản nhỏ\nNội dung, điều kiện thực hiện và cách kiểm chứng được trình bày trong một đoạn văn.',
+        'optional-empty-section': '# Kế hoạch\nĐối chiếu yêu cầu Giới thiệu và Dự án, rồi xin duyệt.\n\n## Ghi chú tùy chọn\n'
+      }
+      await writeValidDocuments(workspace, Object.fromEntries(Object.keys(validDocuments).map((path) => [path, bodies[format]!])))
+      const evidence = await collectPortfolioPackage(context(workspace))
+      expect(evidence.portfolioPlanning?.issues).toEqual([])
+      expect(evidence.portfolioPlanning?.artifacts).toHaveLength(5)
+      expect(evidence.portfolioPlanning?.artifacts.every((artifact) => artifact.content === bodies[format])).toBe(true)
+    }
+  )
+
+  it('rejects whitespace-only documents as empty', async () => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace, { 'planning/implementation-plan.md': '\uFEFF \r\n\t' })
+    const evidence = await collectPortfolioPackage(context(workspace))
+    expect(evidence.portfolioPlanning?.issues).toEqual([
+      expect.objectContaining({ path: 'planning/implementation-plan.md', code: 'empty' })
+    ])
+  })
+
+  it.each([
+    '# Kế hoạch\n\n## Giai đoạn 1\nChuẩn bị nội dung cho REQ-HERO.\n\n## Giai đoạn 2\nPhụ thuộc vào việc duyệt giai đoạn 1. Bổ sung REQ-WORK-02.\n\n## Kiểm tra\nĐối chiếu hai yêu cầu trên trang.',
+    '# Kế hoạch\n\n## Khởi đầu\nĐầu tiên chuẩn bị REQ-HERO.\n\n## Tiếp tục\nChỉ bổ sung REQ-WORK-02 sau khi người học duyệt phần đầu.\n\n## Kết quả\nĐối chiếu hai yêu cầu trên trang.',
+    '# Plan\n\n## Alpha\nFirst prepare REQ-HERO.\n\n## Beta\nOnly after learner approval, add REQ-WORK-02.\n\n## Gamma\nVerify both requirements on the page.'
+  ])('accepts plan content without prescribed headings: %s', async (plan) => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace, { 'planning/implementation-plan.md': plan })
+    const evidence = await collectPortfolioPackage(context(workspace))
+    expect(evidence.portfolioPlanning?.issues).toEqual([])
+    expect(evidence.portfolioPlanning?.stages.every((stage) => stage.status === 'ready')).toBe(true)
+  })
+
+  it.each([
+    ['các bước hoặc giai đoạn triển khai', 'REQ-HERO và REQ-WORK-02 phụ thuộc vào nội dung đã duyệt. Kiểm tra hai yêu cầu.'],
+    ['phụ thuộc hoặc thứ tự thực hiện', 'Giai đoạn 1: REQ-HERO. Giai đoạn 2: REQ-WORK-02. Kiểm tra hai yêu cầu.'],
+    ['kiểm tra hoặc cách xác minh', 'Giai đoạn 1: REQ-HERO. Giai đoạn 2: REQ-WORK-02 phụ thuộc vào việc duyệt giai đoạn 1.']
+  ])('leaves missing %s to semantic review', async (_label, body) => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace, { 'planning/implementation-plan.md': `# Kế hoạch\n\n## Nội dung\n${body}\n\n## Phạm vi\nChỉ xây portfolio.` })
+    const evidence = await collectPortfolioPackage(context(workspace))
+    expect(evidence.portfolioPlanning?.issues).toEqual([])
+    expect(evidence.portfolioPlanning?.artifacts.find((artifact) => artifact.path === 'planning/implementation-plan.md')?.content).toContain(body)
+  })
+
   it('preserves the original combined plan without counting it as a required or reviewed document', async () => {
     const workspace = await temporaryWorkspace()
     await writeValidDocuments(workspace)
@@ -315,7 +367,7 @@ describe('collectPortfolioPackage', () => {
     expect(evidence.portfolioPlanning?.unexpectedPaths).toEqual(['.hidden', 'planning/.hidden'])
   })
 
-  it('reports both missing and unknown plan requirement IDs', async () => {
+  it('preserves requirement differences for semantic review instead of rejecting identifier spelling', async () => {
     const workspace = await temporaryWorkspace()
     await writeValidDocuments(workspace, {
       'planning/implementation-plan.md': validDocuments['planning/implementation-plan.md']!
@@ -323,10 +375,8 @@ describe('collectPortfolioPackage', () => {
     })
 
     const evidence = await collectPortfolioPackage(context(workspace))
-    const coverage = evidence.portfolioPlanning?.issues.filter((item) => item.code === 'requirement-coverage') ?? []
-
-    expect(coverage.some((item) => item.message.includes('REQ-HERO'))).toBe(true)
-    expect(coverage.some((item) => item.message.includes('REQ-UNKNOWN'))).toBe(true)
+    expect(evidence.portfolioPlanning?.issues).toEqual([])
+    expect(evidence.portfolioPlanning?.artifacts.find((artifact) => artifact.path === 'planning/implementation-plan.md')?.content).toContain('REQ-UNKNOWN')
   })
 
   it('rejects invalid UTF-8 and text files above 128 KiB', async () => {

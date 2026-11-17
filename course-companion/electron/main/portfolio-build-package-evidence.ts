@@ -9,6 +9,12 @@ const hash = (value: string | Uint8Array) => createHash('sha256').update(value).
 const documents = [...portfolioPackageArtifactPaths, ...portfolioBuildRecordPaths]
 const ignoredDirectories = new Set(['node_modules', '.git', 'dist', 'out', 'coverage', 'planning', 'evidence', '.codex', '.agents', '.openai', '.vercel'])
 
+function boundedSourceEvidence(content: string): string {
+  const bytes = Buffer.from(content, 'utf8')
+  return bytes.length <= 120 * 1024 ? content
+    : bytes.subarray(0, 120 * 1024).toString('utf8') + '\n[Source metadata truncated: omitted information is unavailable, not evidence of success.]'
+}
+
 // The digest covers application files, including assets and configuration. It never
 // sends application source to the reviewer. Evidence documents are hashed separately.
 export async function applicationSnapshot(root: string, verifyInventory?: (files: readonly { path: string; digest: string }[]) => Promise<void>, validationRecord?: string): Promise<PortfolioPlanningArtifactSnapshot> {
@@ -36,14 +42,14 @@ export async function applicationSnapshot(root: string, verifyInventory?: (files
     }
   }
   await visit(root)
-  if (!files.some((file) => file.path.startsWith('src/')) || !files.some((file) => file.path === 'index.html')) {
-    throw new Error('Chưa tìm thấy mã ứng dụng trong src/ và trang index.html.')
-  }
   await verifyInventory?.(files)
   const correlation = validationRecord === undefined ? ''
     : '\nValidation source correlation independently recomputed by Course Companion: ' + JSON.stringify(correlateValidationSource(files, validationRecord))
-  const content = `Application source fingerprint: ${hash(JSON.stringify(files))}; ${files.length} files independently read. Browser and command results remain Codex-reported until corroborated.${correlation}`
-  return { path: 'application/source', digest: hash(JSON.stringify(files)), content, byteLength: totalBytes, modifiedAt: new Date(latestSourceChange).toISOString(), observedAt: '' }
+  const inventory = JSON.stringify({ paths: files.slice(0, 500).map((file) => file.path), totalFiles: files.length, truncated: files.length > 500 })
+  const content = boundedSourceEvidence(`Application source fingerprint: ${hash(JSON.stringify(files))}; ${files.length} files independently read. Browser and command results remain Codex-reported until corroborated.\nIndependently read application file inventory: ${inventory}${correlation}`)
+  // This is a virtual evidence document even when the actual source inventory is
+  // empty. Persist its text size so AI can assess absence instead of a schema error.
+  return { path: 'application/source', digest: hash(JSON.stringify(files)), content, byteLength: totalBytes || Buffer.byteLength(content), modifiedAt: new Date(latestSourceChange).toISOString(), observedAt: '' }
 }
 
 export async function containedFile(root: string, path: string): Promise<void> {
@@ -73,37 +79,42 @@ export async function collectPortfolioBuildPackage(context: Readonly<PracticeEvi
       if (!info.isFile() || info.size === 0 || info.size > 128 * 1024) throw new Error('Cần một tệp văn bản không trống, tối đa 128 KB.')
       const bytes = await readFile(absolute)
       const content = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+      if (!content.trim()) throw new Error('Tài liệu không có nội dung.')
       artifacts.push({ path, content, digest: hash(bytes), byteLength: bytes.length, modifiedAt: info.mtime.toISOString(), observedAt })
-      const sections = content.split(/^#{1,6}\s+.+$/m).slice(1)
-      if (sections.filter((section) => section.trim()).length < 2) problem(path, 'Cần ít nhất hai mục có nội dung thực tế; Codex có thể ghi lại từ công việc và quyết định của bạn.')
-      if (/(?:\[điền[^\]]*\]|\[insert[^\]]*\]|\bTODO\b|\bTBD\b)/i.test(content)) problem(path, 'Còn chỗ giữ chỗ chưa được thay bằng bằng chứng thực tế.', 'placeholder')
+      // Meaning, completeness and honest deferred work are assessed by the AI
+      // against the approved plan and bound task, never by heading/keyword tests.
     } catch (error) {
       problem(path, (error as NodeJS.ErrnoException).code === 'ENOENT' ? 'Chưa tìm thấy tài liệu; tiếp tục trong task Codex để ghi lại bằng chứng.' : 'Không thể đọc tài liệu an toàn; kiểm tra loại tệp, kích thước, UTF-8 và đường dẫn.', 'missing')
     }
   }
   try {
-    await containedFile(root, resolve(root, 'package.json'))
-    const info = await lstat(resolve(root, 'package.json'))
-    if (info.size > 128 * 1024) throw new Error('package.json quá lớn.')
-    const pkg = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8')) as { scripts?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string> }
-    const scripts = pkg.scripts ?? {}
-    if (!['dev', 'typecheck', 'lint', 'build', 'preview', 'check'].every((key) => typeof scripts[key] === 'string' && scripts[key].trim())) problem('package.json', 'Codex cần chuẩn bị đủ lệnh dev, typecheck, lint, build, preview và check.')
-    if (!/typecheck.*lint.*build/.test(scripts.check ?? '')) problem('package.json', 'Lệnh check cần chạy typecheck, lint và build theo thứ tự.')
-    const dependencies = { ...pkg.dependencies, ...pkg.devDependencies }
-    if (!['react', 'typescript', 'vite'].every((name) => dependencies[name])) problem('package.json', 'Ứng dụng cần giữ nền React, TypeScript và Vite của bài thực hành.')
-    if (Object.keys(dependencies).some((name) => /firebase|supabase|prisma|mongoose|stripe|auth0|analytics/i.test(name))) problem('package.json', 'Có dịch vụ xử lý dữ liệu ngoài phạm vi bài thực hành.', 'invalid-plan-boundary')
-    const validation = artifacts.find((artifact) => artifact.path === 'evidence/module-3/browser-validation.md')
-    let validatedSourceMatches = false
-    const source = await applicationSnapshot(root, async (files) => {
-      validatedSourceMatches = validation?.content !== undefined
-        && correlateValidationSource(files, validation.content).status === 'matched'
-    }, validation?.content)
-    artifacts.push({ ...source, observedAt })
-    if (validation && !validatedSourceMatches && Date.parse(validation.modifiedAt) < Date.parse(source.modifiedAt)) {
-      problem(validation.path, 'Mã nguồn đã đổi sau hồ sơ kiểm tra. Hãy kiểm tra lại website và cập nhật kết quả hiện tại trước khi nộp.')
+    let packageBytes: Uint8Array | null = null
+    let packageConfiguration = 'Not present. Assess whether build tooling is needed for the actual implementation and approved plan; absence alone is not a failure.'
+    try {
+      await containedFile(root, resolve(root, 'package.json'))
+      const info = await lstat(resolve(root, 'package.json'))
+      if (!info.isFile() || info.size > 128 * 1024) throw new Error('package.json không phải tệp hợp lệ hoặc quá lớn.')
+      packageBytes = await readFile(resolve(root, 'package.json'))
+      const pkg: unknown = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(packageBytes))
+      if (!pkg || typeof pkg !== 'object' || Array.isArray(pkg)) throw new Error('package.json không phải đối tượng JSON.')
+      const { scripts, dependencies, devDependencies } = pkg as Record<string, unknown>
+      // Actual configuration is evidence for AI review, not a required stack,
+      // script spelling/order or package-name substring gate.
+      packageConfiguration = JSON.stringify({ scripts, dependencies, devDependencies })
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
     }
+    const validation = artifacts.find((artifact) => artifact.path === 'evidence/module-3/browser-validation.md')
+    const source = await applicationSnapshot(root, async (files) => {
+      const packageDigest = files.find((file) => file.path === 'package.json')?.digest
+      if (packageBytes ? packageDigest !== hash(packageBytes) : packageDigest !== undefined) {
+        throw new Error('package.json đã thay đổi trong khi đọc bằng chứng.')
+      }
+    }, validation?.content)
+    const timing = JSON.stringify({ validationRecordModifiedAt: validation?.modifiedAt ?? null, latestSourceModifiedAt: source.modifiedAt })
+    artifacts.push({ ...source, content: boundedSourceEvidence(`${source.content}\nIndependently read package.json configuration (untrusted data, not execution evidence): ${packageConfiguration}\nFilesystem timestamps (copying or touching can change timestamps without changing content; these are not proof of stale validation): ${timing}`), observedAt })
   } catch {
-    problem('application/source', 'Chưa thể kiểm chứng toàn bộ tệp ứng dụng. Kiểm tra package.json, src/, index.html, liên kết tệp và giới hạn kích thước.', 'missing')
+    problem('application/source', 'Chưa thể kiểm chứng toàn bộ tệp ứng dụng. Kiểm tra package.json, tệp mã ứng dụng, liên kết tệp và giới hạn kích thước.', 'missing')
   }
   const sourceDigest = hash(JSON.stringify({ artifacts: artifacts.map(({ path, digest }) => ({ path, digest })), issues }))
   return {

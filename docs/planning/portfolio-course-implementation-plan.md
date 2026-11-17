@@ -45,9 +45,68 @@ and must never be inferred from a passing automated check.
 | Phase | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
-| Module 2 | `in-progress` overall — five-document Practice is implemented, including Finder-metadata handling and original-task continuity; incoming theory/mastery preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | `pending` overall; prior five-document design/migration approvals remain recorded, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance; hand courseapp student findings to its owner. |
-| Module 3 | `implemented` — approved v2 Practice, current archive/restart recovery, complete source fingerprints and task-acceptance freshness; all incoming course scenes/questions preserved | `passed` for the 22 October Windows Practice batch and Module 2→3→4 rehearsal described below | v2 design/implementation approved 13 September; student-review repairs requested 22 October; exact continuation restart copy approved; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance; preserve the mixed working tree. |
-| Module 4 | `in-progress` overall — Practice, course-page entry, reviewed return and terminal completion recording are `implemented`; course-wide acceptance remains separate | `passed` for the 29 October Windows delivery batch, disposable journey, live publication and QA-only completion described below; real beginner/AI/native acceptance is separate | Scoped implementation and subsequent end-user QA/repairs authorized; public sample release, two exact wording corrections, beginner review policy and current-branch commit/push explicitly approved; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified current branch; retain real beginner-pilot, native macOS and overall acceptance gates. |
+| Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 3 | `implemented` — v2 Practice, flexible AI assessment, complete source fingerprints and task-acceptance freshness; course scenes/questions preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | v2 design/implementation approved 13 September; expanded validity repairs requested 17 November; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance. |
+| Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Practice content validity and issue #9 — 17 November 2026
+
+- Scope: M2.4/M2.6 and the current Module 3/4 Practice review gates. The owner
+  requested fixing issue #9, simple document feedback, AI content assessment,
+  and a delegated audit/repair of similar brittle gates across Practice.
+- Implementation: `implemented`. Module 2 now sends readable nonempty documents
+  to the existing live AI reviewer after current learner approval. Heading
+  keywords, section counts, exact REQ/AC syntax and static requirement matching
+  no longer reject submissions. The reviewer accepts equivalent prose, lists,
+  tables, descriptive references and bounded unknowns, while assessing actual
+  coverage, consistency, validation, honest evidence and scope.
+- Feedback: show the number of required documents actually read, one actionable
+  issue at its file, and whether content review is pending. Do not show the
+  synthetic all-unverifiable result as five content failures or a misleading
+  zero-step count. Actual AI needs-work feedback remains visible.
+- Audit: Module 3/4 repairs remove formatting and command-spelling gates,
+  defer content adequacy to AI, and keep independently read source identity,
+  task binding, approval, publication consent and external verification checks.
+  Task report candidates can reach semantic review without matching the
+  activity observer's keyword extractor; a candidate is not proof of a check.
+- Module 3 accepts prose/list/table records, bounded deferred work, equivalent
+  scripts/toolchains and source layouts, including plain HTML without Node.
+  Configuration and file inventory reach AI as bounded untrusted evidence.
+  File modification times alone no longer prove validation stale; actual byte
+  changes still invalidate approval. Module 4 accepts actual equivalent check
+  commands, concise concrete observations, extra metadata and equivalent case
+  in provider/status values while retaining required release identities.
+- Verification: `passed` for the final Windows batch: typecheck, lint, build,
+  865 unit tests (three existing skips), nine startup checks, Electron smoke,
+  Teacher chat, Practice video, review feedback and the disposable Module
+  2→3→4 journey. Desktop and 320px document feedback were visually inspected
+  without overflow. Tests cover flexible document formats, actual AI verdict
+  propagation, missing/empty files, absent application evidence, current
+  approval, source changes, task identity and bounded metadata persistence.
+  AI outcomes and deployment responses in these tests are simulated.
+- Verification repairs: an empty virtual source inventory needed a nonzero
+  evidence-text size to satisfy persistence; oversized metadata is bounded in
+  UTF-8 bytes and explicitly marked incomplete. The final full unit rerun
+  passed after those corrections. An initial Module 1 smoke timeout passed
+  unchanged on rerun. Chat Retry after resizing required bringing the test
+  window to the foreground; no product assertion was weakened. Practice video
+  passed unchanged in isolation after a playback pause; the displayed seek
+  warning came from its intentional earlier seek test, not proof of a product
+  defect. No video behavior or test was changed.
+- Preservation: no lesson scene, route, quiz, progress reset, learner submission,
+  schema migration or personal profile change. Older Practice versions retain
+  their historical rules and migrate through the existing v2 path. Module 1
+  continues to compare actual normalized configuration facts.
+- Remaining gaps: automated review fixtures do not establish live AI judgment
+  quality, beginner acceptance or native macOS behavior. Overall module owner
+  and pilot acceptance remain pending. The separate mastery-response length
+  policy is outside this Practice-review repair.
+- Delivery authorization: on 17 November the owner explicitly requested
+  committing and pushing these verified fixes. This authorizes repository
+  publication, not learner/pilot acceptance or application deployment.
+- Next permitted action: stage the scoped repair, pass the clean-course-source
+  index check, commit and push to the current branch, then obtain live learner
+  review. No GitHub issue comment or closure is included in this delivery.
 
 ### Portfolio project and Practice video integration into main — 15 November 2026
 
@@ -3384,15 +3443,20 @@ I1–I6 are implemented.
 3. Limit write scope to the five approved planning documents and bounded
    reference screenshots.
 4. Extend planning evidence collection to validate:
-   - required sections and artifact digests;
+   - readable nonempty required files and artifact digests;
    - the approved plain-language evidence labels and privacy/permission review;
    - learner-owned or externally sourced references, optional useful
      screenshots, and explicit unknown-rights boundaries;
    - PRD scope and acceptance criteria;
-   - one-to-one requirement-validation coverage inside the implementation plan;
+   - semantic coverage of every requirement inside the implementation plan;
    - phased plan dependencies, non-goals, and the absence of a Module 2
      implementation task;
    - learner approval of the current versions.
+   As authorized on 17 November 2026, AI assesses content meaning across
+   arbitrary document layouts and wording. Static checks must not require
+   heading names/counts, exact keywords or REQ/AC naming conventions. Stable
+   descriptive requirement references and shared validation are acceptable
+   when every required outcome remains unambiguously covered.
 5. On submission, Course Companion inspects the current five documents and
    records explicit learner approval of the current PRD and plan before AI
    review. A needs-work result keeps the same task available for revision;
