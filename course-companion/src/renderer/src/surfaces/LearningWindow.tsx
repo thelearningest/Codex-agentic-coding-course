@@ -3149,7 +3149,13 @@ export function LearningWindow() {
           </div>
         </details>
         <div className="pixel-hud-actions">
-          <button className="pixel-hud-teacher" type="button" onClick={() => setTeacherOpen(true)}>HỎI TRIẾT</button>
+          <button className="pixel-hud-teacher" type="button" onClick={() => setTeacherOpen(true)} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết">
+            <img src={teacherImage} alt="" />
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="currentColor" stroke="var(--pixel-yellow)" d="M4 2h8a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H8l-4 3v-3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3Z" />
+              <path stroke="var(--pixel-yellow)" strokeLinecap="round" strokeWidth="1.6" d="M5 7h.1M8 7h.1M11 7h.1" />
+            </svg>
+          </button>
           <button className="pixel-quit" type="button" onClick={() => void window.courseCompanion?.quitApp()}>
             THOÁT <span className="pixel-quit-version">· v{runtime?.appVersion ?? '…'}</span>
           </button>

@@ -114,7 +114,7 @@ try {
   assert.equal(await panel.locator('.pixel-chat-message.is-teacher p').last().innerText(), content)
   await panel.getByRole('button', { name: 'Đóng Triết', exact: true }).click()
   await page.locator('button.pixel-roadmap-stage.is-current').click()
-  await page.getByRole('button', { name: 'HỎI TRIẾT', exact: true }).click()
+  await page.getByRole('button', { name: 'Trò chuyện với Triết', exact: true }).click()
   assert.equal(await panel.getByRole('tablist').count(), 0)
   assert.equal(await panel.locator('.pixel-chat-message.is-teacher p').last().innerText(), content)
   await page.setViewportSize({ width: 390, height: 844 })

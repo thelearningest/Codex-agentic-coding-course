@@ -1315,7 +1315,7 @@ try {
     assert.ok(narrowOutlineBounds)
     assert.ok(narrowActionsBounds)
     assert.ok(narrowActionsBounds.x > narrowOutlineBounds.x)
-    assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'HỎI TRIẾT', exact: true }).isVisible(), true)
+    assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'Trò chuyện với Triết', exact: true }).isVisible(), true)
     assert.equal(await firstWindows.learningPage.getByRole('button', { name: 'THOÁT', exact: true }).isVisible(), true)
     await firstWindows.learningPage.locator('.pixel-outline summary').click()
     await capture(firstWindows.learningPage, 'module-2-opening-390px.png')

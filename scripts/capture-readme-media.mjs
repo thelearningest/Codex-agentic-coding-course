@@ -152,7 +152,7 @@ async function main() {
     }
 
     await openLesson('module-2', 'module-2-portfolio-workspace', 'm2-portfolio-brief', 'm2-portfolio-brief')
-    await page.getByRole('button', { name: 'HỎI TRIẾT', exact: true }).click()
+    await page.getByRole('button', { name: 'Trò chuyện với Triết', exact: true }).click()
     await record('teacher-companion', async () => {
       const composer = page.getByRole('textbox', { name: 'Nhắn cho Triết' })
       await composer.fill('Mình nên kiểm tra những gì')

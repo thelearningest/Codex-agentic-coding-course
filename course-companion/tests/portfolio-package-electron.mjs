@@ -446,7 +446,7 @@ try {
     learning?.focus()
   })
   await page.bringToFront()
-  await page.getByRole('button', { name: 'HỎI TRIẾT', exact: true }).click()
+  await page.getByRole('button', { name: 'Trò chuyện với Triết', exact: true }).click()
   const embeddedReview = page.locator('.pixel-teacher-panel.is-embedded.is-practice-review .pixel-practice-review')
   await embeddedReview.waitFor()
   for (const viewport of [{ width: 1168, height: 746 }, { width: 360, height: 640 }]) {
