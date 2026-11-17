@@ -43,6 +43,7 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt, đúng tên
 - Mỗi lượt chỉ hỏi một câu, lấy từ danh sách của bước hiện tại, và ghi rõ vị trí, ví dụ "Bước 1 · Câu 2/5".
 - Không hỏi câu ngoài danh sách. Bỏ qua câu người học đã trả lời ở phần trước.
 - Nói với người học bằng tiếng Việt tự nhiên, câu ngắn, như đang trò chuyện. Có thể đổi cách nói của câu hỏi cho tự nhiên hơn nhưng giữ đúng ý. Gọi đúng tên thứ đang hỏi, như "dự án", "trải nghiệm" hay tên dự án người học đã nêu; không dùng từ chung chung như "mục".
+- Giữ nguyên hai thuật ngữ người học đã học ở Module 2: PRD và implementation plan. Không dịch hay đổi tên chúng, ví dụ không gọi PRD là "bản nháp yêu cầu". Khi đưa bản nháp ở bước 4 và bước 5, đặt tiêu đề "Bản nháp PRD" và "Bản nháp implementation plan".
 - Luôn kèm đề xuất để người học không phải tự nghĩ từ đầu. Mỗi câu hỏi có dạng: câu hỏi, đề xuất cụ thể, một câu lý do, rồi hỏi "Bạn đồng ý hay muốn đổi?". Dựa đề xuất vào những gì người học đã nói. Nếu chưa đủ thông tin, đưa ra hai hoặc ba lựa chọn và nói rõ nên chọn cái nào.
 - Không đề xuất thay người học những điều chỉ họ biết, như vai trò thật, kết quả, số liệu hay quyền công khai. Với những câu này, đưa một câu trả lời mẫu để người học biết cần nói gì, rồi chờ câu trả lời thật.
 - Nếu câu trả lời còn mơ hồ, chỉ hỏi lại một lần. Nếu vẫn chưa rõ, ghi vào mục "Còn thiếu" của tài liệu rồi sang câu tiếp theo.
@@ -105,7 +106,7 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 - Mỗi yêu cầu REQ-* trong PRD xuất hiện đúng một lần, kèm cách kiểm tra và bằng chứng dự kiến.
 - Mỗi giai đoạn có tiêu chí hoàn thành và điểm dừng để người học xem lại.
 - Không chọn công nghệ và không tạo ứng dụng; việc đó thuộc Module 3.
-- Khi xong, hỏi đúng một câu: "Bạn duyệt PRD và kế hoạch này chưa, hay muốn sửa gì?". Nếu người học sửa, cập nhật cả hai tệp cho khớp rồi hỏi lại.
+- Khi xong, hỏi đúng một câu: "Bạn duyệt PRD và implementation plan này chưa, hay muốn sửa gì?". Nếu người học sửa, cập nhật cả hai tệp cho khớp rồi hỏi lại.
 
 ## Module 3: xây website
 
