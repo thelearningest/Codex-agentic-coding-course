@@ -54,7 +54,7 @@ and must never be inferred from a passing automated check.
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
-| I4 / M2.5 — Triết review panel keeps only `Cập nhật và kiểm tra tiến độ` | `implemented` | `passed` for typecheck, lint, 878 unit tests, nine startup checks, build, Electron smoke, Teacher chat, screenshot guide and review-feedback suites; the disposable portfolio journey is `blocked` earlier at an existing intro-text assertion | Owner chose option A and approved both copy edits on 18 November 2026 | `pending` | Owner reviews the panel in the rebuilt app; repair the stale portfolio-journey assertion separately. |
+| I4 / M2.5 — Triết review panel keeps only `Cập nhật và kiểm tra tiến độ` | `implemented` | `passed` for typecheck, lint, 878 unit tests, nine startup checks, build, Electron smoke, Teacher chat, screenshot guide and review-feedback suites, and the disposable Module 2→3→4 portfolio journey after its test repair | Owner chose option A and approved both copy edits on 18 November 2026; the owner requested the test repair | `pending` | Owner reviews the panel in the rebuilt app. |
 
 The owner asked to keep only the upper review button. In the Triết review
 panel, `Cập nhật và kiểm tra tiến độ` now shows for every active Practice.
@@ -69,10 +69,17 @@ unchanged.
 On macOS the unit run used `TMPDIR=/private/tmp`; without it, three
 main-process evidence files fail on the `/var` symlink alias. Teacher chat timed
 out twice at the windowed-reply step, then passed on unchanged source and twice
-more with this change. `tests/portfolio-package-electron.mjs` stops at line 114
-because the expected shared-project sentence is no longer found. That happens
-before any refresh step, so it could not verify this change. The canReview-false
-path is covered by a source test, not an Electron journey.
+more with this change. The canReview-false path is covered by a source test,
+not an Electron journey.
+
+Portfolio journey repair: `tests/portfolio-package-electron.mjs` still expected
+the shared-project sentence that the illustrated Module 2 guide (`4609e8a`)
+does not render. It now checks that the illustrated guide opens. Its Triết-panel
+refresh step now asserts that the panel has no `Làm mới bằng chứng` button and
+clicks the upper review button; the course-side Practice page step still uses
+its own refresh button. No application copy changed. The full journey then
+passed, and its desktop screenshot shows the planning submission without a
+refresh button.
 
 ### Main synchronization, 18 November 2026
 
