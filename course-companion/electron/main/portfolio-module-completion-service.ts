@@ -124,7 +124,7 @@ export class PortfolioModuleCompletionService {
       destination: {
         lessonId: 'module-3',
         checkpointId: 'm3-complete-first-version',
-        sceneId: 'module-3-local-preview'
+        sceneId: 'module-3-first-build'
       },
       portfolioPlanningHandoff: {
         schemaVersion: 2, workspace: { canonicalPath: active.binding.workspaceRoot, identityDigest: approval.workspaceIdentityDigest },
@@ -188,7 +188,7 @@ export class PortfolioModuleCompletionService {
         schemaVersion: 1, courseRunId: progress.courseRunId, practiceId: active.practiceId, practiceVersion: active.practiceVersion,
         runId: active.runId, checkpointId: 'm3-complete', status: 'completed', completedAt: this.now().toISOString(),
         submissionDigest: active.completion.submissionDigest,
-        evidenceSummary: 'Đã duyệt việc xây theo kế hoạch, cải thiện do người học đề xuất, gỡ lỗi và kiểm tra website trên phiên bản hiện tại.',
+        evidenceSummary: 'Đã duyệt kết quả kiểm tra theo PRD và quan sát của người học trên phiên bản hiện tại.',
         masterySummary: 'Đã lưu năm câu trả lời tổng kết Module 3.',
         destination: { lessonId: 'module-3', checkpointId: 'm3-complete', sceneId: 'module-3-complete' },
         portfolioBuildHandoff: { schemaVersion: 2, workspace: { canonicalPath, identityDigest: approval.workspaceIdentityDigest },

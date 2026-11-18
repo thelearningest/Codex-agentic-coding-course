@@ -1,6 +1,7 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
-import { portfolioBuildRecordPaths, portfolioBuildVersion, portfolioPackageArtifactPaths, portfolioPackageVersion, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
+import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPackageVersion, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
 import type { PortfolioPackageApproval, PracticeAdapterEvidenceState } from '../../shared/contracts'
 import type { PracticeRunRecord } from './practice-run-repository'
 
@@ -14,7 +15,7 @@ export function isPortfolioPackage(run: { practiceId: string; practiceVersion: s
 }
 
 export function isPortfolioBuildPackage(run: { practiceId: string; practiceVersion: string }): boolean {
-  return run.practiceId === 'm3-portfolio-build' && run.practiceVersion === portfolioBuildVersion
+  return run.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(run.practiceVersion)
 }
 
 export function isReviewedPortfolioPackage(run: { practiceId: string; practiceVersion: string }): boolean {

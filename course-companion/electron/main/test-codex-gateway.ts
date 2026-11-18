@@ -265,7 +265,7 @@ export class TestCodexGateway implements CodexRequestClient {
       if (process.env.COURSE_COMPANION_FAKE_BUILD_EVIDENCE === '1' && text.includes('Module 3 v2:')
         && !thread.turns.some((candidate) => candidate.id === 'build-v2-simulated-evidence')) {
         thread.turns.push({ id: 'build-v2-simulated-evidence', status: 'completed', items: [
-          { id: 'build-v2-learner', type: 'userMessage', content: [{ type: 'text', text: 'Simulated learner: I inspected project stories and accepted that part before the introduction. I requested the heading improvement, explained the wrong project ID using logs, rechecked both links and accepted the final desktop/mobile website.' }] },
+          { id: 'build-v2-learner', type: 'userMessage', content: [{ type: 'text', text: 'Simulated learner: I opened both project links and contact on desktop and mobile. I accept the current website as it is.' }] },
           { id: 'build-v2-checks', type: 'agentMessage', phase: 'final_answer', text: 'Simulated verification: npm run check passed (typecheck, lint, build). Desktop/mobile browser and keyboard checks passed. This is disposable test evidence, not a live learner run.' }
         ] })
       }

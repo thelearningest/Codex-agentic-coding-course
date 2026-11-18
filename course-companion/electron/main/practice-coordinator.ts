@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { randomUUID } from 'node:crypto'
 import { portfolioContinuationInstructions } from './portfolio-continuation-instructions'
 import { portfolioBuildSliceIds } from '../../shared/contracts'
@@ -301,7 +302,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       let record = await this.repository.load()
       let verifiedArchive: PracticeRunRecord | undefined
       let archiveRefreshFailed = false
-      if (identity && isPortfolioBuildPackage(identity) && !record.pendingTransition) {
+      if (identity?.practiceId === 'm3-portfolio-build' && identity.practiceVersion === '2.1.0' && !record.pendingTransition) {
         const prior = record.activeRun ?? [...record.archivedRuns].reverse().find((archive) =>
           archive.practiceId === identity.practiceId && archive.retainedRun)?.retainedRun
         if (prior?.practiceId === identity.practiceId
@@ -963,7 +964,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       ? await this.definitions.load(identity.practiceId, identity.practiceVersion)
       : null
     let startPrompt: string | undefined
-    if (definition?.practiceId === 'm3-portfolio-build' && definition.version === '2.0.0') {
+    if (definition?.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(definition.version)) {
       startPrompt = portfolioContinuationInstructions(definition)
     } else if (definition?.practiceId === 'm4-portfolio-release') {
       const handoff = await this.loadPortfolioReleaseHandoff?.().catch(() => null)

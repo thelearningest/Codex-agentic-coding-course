@@ -334,7 +334,7 @@ export class PracticeReviewService {
             evidenceSummary: result.summary,
             masterySummary: envelope.portfolioPackage?.kind === 'release'
               ? 'Đã duyệt phiên bản portfolio trên mạng, kết quả kiểm tra đường link và xác nhận hiện tại của người học. Module 4 không có bài kiểm tra cuối.' : envelope.portfolioPackage?.kind === 'build'
-              ? 'Đã đối chiếu kế hoạch, việc xây từng phần, cải thiện, gỡ lỗi và xác nhận website hiện tại; phần tổng kết vẫn cần hoàn thành.'
+              ? 'Đã đối chiếu kế hoạch, kết quả kiểm tra theo PRD và xác nhận website hiện tại; phần tổng kết vẫn cần hoàn thành.'
               : portfolioPackage
               ? 'Năm tài liệu đã được kiểm tra cấu trúc, phạm vi và nội dung; PRD và kế hoạch được người học duyệt trên phiên bản hiện tại.'
               : definition.evidenceProfile === 'planning-package'

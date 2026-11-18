@@ -67,7 +67,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
         Đã đọc {artifactPaths.filter((path) => packageView.artifactPaths.includes(path)).length}/{artifactPaths.length} tài liệu.
         {!packageView.ready || !packageView.approved ? ' Chưa duyệt nội dung.' : ''}
       </p> : null}
-      {build ? <p>Tiếp tục từng phần của kế hoạch trong task Codex. Bạn xem kết quả và quyết định; Codex ghi lại ba hồ sơ dưới đây. Cải thiện và lỗi đã xử lý trong lúc xây được tính, không cần thêm một tính năng mới.</p> : null}
+      {build ? <p>Trong task Codex, nêu những gì bạn đã thử và kết quả trên website. Codex ghi lại vào ba hồ sơ dưới đây.</p> : null}
       <ul className="practice-package-issues" role="list">{artifactPaths.map((path) => {
         const issues = [...new Set(packageView.issues.filter((issue) => issue.startsWith(`${path}: `)))]
         return <li key={path}>
@@ -82,7 +82,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
         !artifactPaths.some((path) => issue.startsWith(`${path}: `)))
         .map((issue) => <p className="practice-package-notice" key={issue}>{issue}</p>)}
       {packageView.unexpectedPaths.length > 0 ? <p className="practice-package-notice">Ngoài phạm vi: {packageView.unexpectedPaths.join(', ')}</p> : null}
-      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại quá trình xây, ví dụ cải thiện và gỡ lỗi, rồi kiểm tra website hiện tại trước khi nộp.' : onRefresh ? 'Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.' : 'Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.'}</p> : null}
+      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại kết quả kiểm tra và quan sát trên website hiện tại trước khi nộp.' : onRefresh ? 'Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.' : 'Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.'}</p> : null}
       <label className="practice-package-approval">
         <input type="checkbox" checked={accepted} disabled={busy || disabled || !packageView.ready}
           onChange={() => { setApproved(!accepted); setApprovalDigest(packageView.sourceDigest) }} />

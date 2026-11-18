@@ -10,7 +10,7 @@
   five-document Practice runtime is implemented with final-package approval,
   actual-content review, recoverable same-task migration and versioned handoff.
   Module 2 remains `in-progress` overall because owner acceptance remains
-  pending. Module 3 includes a Local preview opening and a short GitHub
+  pending. Module 3 opens with the first portfolio build, followed by local preview, debugging and a short GitHub
   publishing reminder. Module 4 uses the approved hosting opening and deployment
   video, then goes straight to Practice with a shareable portfolio as its goal.
   Module 4 has no assessment. This integration excludes temporary content-review
@@ -47,8 +47,30 @@ and must never be inferred from a passing automated check.
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
-| Module 3 | `implemented` — v2 Practice, flexible AI assessment, complete source fingerprints and task-acceptance freshness; course scenes/questions preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | v2 design/implementation approved 13 September; expanded validity repairs requested 17 November; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance. |
+| Module 3 | `implemented` — Practice 2.1 starts with a first build and ends with acceptance against the PRD and plan in the same task | `passed` for the 18 November first-build batch below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 3 first build and final review, 18 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| M2.6 handoff / M3.1 lesson entry / M3.8 Practice and completion | `implemented` | `passed` for automated checks and disposable Electron rehearsal | Flow and assessment approved for integration. Owner runtime acceptance pending. | `pending` | Observe a learner going from their five planning documents to their reviewed website and the publishing handoff. |
+
+The opening Practice continues the planning task and folder. The learner opens
+the local URL and chooses “Quay lại bài học”. The app saves the local-preview
+lesson and retains the active Practice. This action grants no review or receipt.
+The final Practice resumes that run. The current website can pass after one
+build if the three records, authenticated learner observations, technical and
+browser checks, PRD coverage and website approval support it. Five mastery
+answers and the accepted source handoff still precede publication in Module 4.
+
+Technical verification covers lint, typecheck, production build, unit and
+startup checks, Electron smoke, Teacher chat, Practice guide, review feedback
+and the disposable Module 2→3→4 journey. The journey exercised both Practice
+visits, the same task and run, desktop and narrow layouts, completed teaching
+checkpoints and a single-build submission. Codex messages, website observations,
+AI verdicts and the public deployment in this rehearsal are fixtures.
+Real learner and live AI acceptance remain pending.
 
 ### Module 1 Project introduction, 18 November 2026
 
@@ -4341,27 +4363,21 @@ Do not author or implement Module 3 course content before this gate is accepted.
 
 ---
 
-## Module 3 — Implement and debug in verified slices
+## Module 3 — Build and verify the portfolio
 
-**Current Practice authority — 13 September 2026:** The approved
-[Module 3 Practice v2 design](module-3-practice-v2-design.md) and the v2 progress
-table above supersede the fixed-slice and separate revision/enhancement
-requirements below. M3.2–M3.8 retain their v1 detail as historical context.
-Current acceptance requires plan-derived parts with learner acceptance, one
-learner-directed improvement and one evidence-based debugging investigation
-(which may occur during those parts), three supporting records, current website
-acceptance and package review, and all five mastery answers. Same-task recovery,
-honest desktop/mobile evidence, full technical verification, scoped checkpoints
-and live owner/learner acceptance remain required.
+**Current Practice authority, 18 November 2026.** The first-build and final-review
+entry above and the version 2.1 Practice definition govern the current course.
+The [v2 design](module-3-practice-v2-design.md) and the older M3.2–M3.8 entries
+below document the earlier versions.
 
 ### Module outcome
 
-The learner continues the Codex task used in Module 2 and turns the approved PRD
-and implementation plan into a working portfolio one part at a time. The
-learner checks visible behavior after each part, gives the coding agent useful
-debugging evidence when something fails, and understands how Git, GitHub,
-commit, push, and branch protect the work without having to perform the
-technical commands personally.
+The learner uses the five approved planning documents in the Module 2 task
+to build and open a working portfolio. They can request one build or smaller
+increments. They learn how to reopen it locally, give an agent useful evidence
+when a bug occurs and use Git and GitHub to protect their work. To finish,
+they verify the submitted version against the PRD using the implementation plan,
+confirm it for publication and complete the five mastery questions.
 
 ### Decision gate before Module 3 authoring
 

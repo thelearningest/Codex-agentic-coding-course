@@ -8,6 +8,8 @@
 
 Tài liệu này lưu lại toàn bộ nội dung Module 3 đã được duyệt để việc triển khai không phụ thuộc vào lịch sử hội thoại. Tài liệu không thay thế cổng nghiệm thu trong kế hoạch triển khai toàn khóa học.
 
+**Cập nhật ngày 18/11/2026.** Các phần bên dưới lưu lại thiết kế ban đầu. Trong luồng hiện hành, người học mở lại task từ Module 2 để tạo và xem portfolio, rồi quay lại trang “Mở portfolio trên máy”. Cuối Module 3, họ thử các yêu cầu trong PRD theo implementation plan và xác nhận phiên bản sẽ phát hành. Bản đầu có thể đạt ngay. Xem [kế hoạch triển khai](portfolio-course-implementation-plan.md#module-3-first-build-and-final-review-18-november-2026) để đối chiếu tiêu chí và kết quả kiểm tra.
+
 ## 1. Mục đích của Module 3
 
 ### Câu mở đầu đã duyệt nguyên văn

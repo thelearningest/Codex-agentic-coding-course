@@ -14,7 +14,7 @@ async function fixture() {
   roots.push(root)
   await writeBuildPackage(root)
   const definition = await new PracticeDefinitionRepository(join(process.cwd(), '..', 'pilot-workspace/course/practices'))
-    .load('m3-portfolio-build', '2.0.0')
+    .load('m3-portfolio-build', '2.1.0')
   const adapter = new PortfolioBuildEvidenceAdapter()
   const collect = () => adapter.collect({ definition, runId: 'source-scope', generation: 1, workspaceRoot: root, task: null })
   return { root, collect }

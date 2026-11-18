@@ -33,7 +33,7 @@ async function moduleThreeV2Fixture() {
   const base = await fixture()
   const ready = await base.service.completeModuleTwo()
   const { practiceRunRepository: runs, definitionRepository: definitions, workspaceRepository } = base.dependencies
-  const definition = await definitions.load('m3-portfolio-build', '2.0.0')
+  const definition = await definitions.load('m3-portfolio-build', '2.1.0')
   await writeBuildPackage(base.workspace)
   const run = buildRun(definition, base.workspace)
   const adapter = new PortfolioBuildEvidenceAdapter()
@@ -337,7 +337,7 @@ describe('PortfolioModuleCompletionService', () => {
 
     expect(completed).toMatchObject({
       currentLessonId: 'module-3',
-      sceneId: 'module-3-local-preview',
+      sceneId: 'module-3-first-build',
       completedCheckpointIds: expect.arrayContaining([
         'm2-portfolio-planning', 'm2-portfolio-mastery', 'm2-portfolio-complete'
       ])
@@ -359,8 +359,25 @@ describe('PortfolioModuleCompletionService', () => {
     expect(receipt.portfolioPlanningHandoff).not.toHaveProperty('stageReceipts')
     expect(receipt.submissionDigest).toBe(test.active.completion?.submissionDigest)
     await expect(new ProgressRepository(join(test.root, 'data')).load()).resolves.toMatchObject({
-      status: 'returning', progress: { sceneId: 'module-3-local-preview' }
+      status: 'returning', progress: { sceneId: 'module-3-first-build' }
     })
+  })
+
+  it('restores the lesson after the first build without granting a Practice receipt', async () => {
+    const test = await fixture()
+    const opening = await test.service.completeModuleTwo()
+    const data = join(test.root, 'data')
+    await new ProgressRepository(data).resumeLessonAfterFirstBuild()
+    const restarted = new ProgressRepository(data)
+    await expect(restarted.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: {
+        courseRunId: opening.courseRunId, sceneId: 'module-3-local-preview',
+        completedCheckpointIds: opening.completedCheckpointIds, practiceCompletions: opening.practiceCompletions,
+        sceneHistory: expect.arrayContaining(['module-3-first-build'])
+      }
+    })
+    await expect(restarted.resumeLessonAfterFirstBuild()).rejects.toThrow()
   })
 
   it('extracts late relevant sections for the bounded Module 3 handoff summary', async () => {
@@ -423,7 +440,7 @@ describe('PortfolioModuleCompletionService', () => {
     )
 
     await expect(relaunched.completeModuleTwo()).resolves.toMatchObject({
-      sceneId: 'module-3-local-preview'
+      sceneId: 'module-3-first-build'
     })
   })
 

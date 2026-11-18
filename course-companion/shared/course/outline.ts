@@ -30,6 +30,7 @@ export const courseOutline: Record<LessonId, readonly OutlineSection[]> = {
     'module-2-portfolio-mastery-summary'
   ].map((startSceneId, index) => ({ title: moduleTwoOutlineSections[index]!, startSceneId: startSceneId as SceneId })),
   'module-3': [
+    { title: 'Tạo bản portfolio đầu tiên', startSceneId: 'module-3-first-build' },
     { title: 'Mở portfolio trên máy', startSceneId: 'module-3-local-preview' },
     { title: 'Debug cùng coding agent', startSceneId: 'module-3-debugging-intro' },
     { title: 'Git và GitHub', startSceneId: 'module-3-git-intro' },

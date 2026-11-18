@@ -49,8 +49,7 @@ describe('Module 3 content and evidence contract', () => {
     })
     expect(module.unlockGate).toMatchObject({
       nextLessonId: 'module-4',
-      requiresPlanPartAcceptance: true,
-      requiresReviewedBuildPackageVersion: '2.0.0',
+      requiresReviewedBuildPackageVersion: '2.1.0',
       requiresCurrentCheck: true,
       requiresBrowserValidation: true,
       requiresMasteryReceipt: true

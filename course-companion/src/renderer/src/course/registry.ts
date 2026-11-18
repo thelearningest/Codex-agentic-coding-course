@@ -42,6 +42,7 @@ const rendererModules = [
     lessons: moduleThreeDefinition.lessons,
     lessonPages: {
       'm3-complete-first-version': [
+        ['module-3-first-build'],
         ['module-3-local-preview'],
         ['module-3-debugging-intro'],
         ['module-3-visible-error'],

@@ -10,6 +10,7 @@ import { PracticeStartPrompt } from './PracticeStartPrompt'
 
 type PracticeBriefProps = {
   identity: PracticeIdentity
+  firstBuild?: boolean
   courseRunId?: string
   onClose: () => void
   onPortfolioComplete?: () => void | Promise<void>
@@ -33,6 +34,7 @@ const previewWorkspace: PracticeWorkspaceView = {
 
 export function PracticeBrief({
   identity,
+  firstBuild = false,
   courseRunId,
   onClose,
   onPortfolioComplete
@@ -188,6 +190,9 @@ export function PracticeBrief({
   const introduction = getPracticeIntroduction(identity.practiceId)
   const hasRequestedPractice = workspace.activePractice?.practiceId === identity.practiceId
     && workspace.activePractice.practiceVersion === identity.practiceVersion
+  const startPrompt = identity.practiceId === 'm3-portfolio-build' && !firstBuild && hasRequestedPractice && workspace.startPrompt
+    ? 'Tiếp tục Module 3 trên bản portfolio hiện tại. Hãy giúp tôi đối chiếu từng yêu cầu PRD theo cách kiểm tra trong implementation plan. Tôi sẽ tự thử website, nêu kết quả và quyết định có cần sửa trước khi nộp.'
+    : workspace.startPrompt
   const preferResume = Boolean(introduction && hasRequestedPractice && workspace.capabilities.canResume)
   const resumeButton = workspace.capabilities.canResume ? (
     <button className={preferResume ? 'is-primary' : undefined} type="button" disabled={busy || switching} onClick={() => void resume()}>
@@ -197,9 +202,9 @@ export function PracticeBrief({
   const controls = <>
     <div className="practice-brief-actions">
       {preferResume ? resumeButton : null}
-      <button className={preferResume ? undefined : 'is-primary'} type="button" disabled={busy || switching} onClick={() => void start()}>
+      {!(preferResume && identity.practiceId === 'm3-portfolio-build') && <button className={preferResume ? undefined : 'is-primary'} type="button" disabled={busy || switching} onClick={() => void start()}>
         {busy ? 'Đang chuẩn bị…' : introduction && !hasRequestedPractice ? 'Bắt đầu thực hành' : 'Bắt đầu Practice mới'}
-      </button>
+      </button>}
       {!preferResume ? resumeButton : null}
     </div>
 
@@ -229,7 +234,11 @@ export function PracticeBrief({
       </header>
 
       <section className="practice-brief-card" aria-labelledby="practiceObjective">
-        {planningPractice && introduction ? (
+        {firstBuild ? <>
+          <h1 id="practiceObjective">Tạo bản portfolio đầu tiên</h1>
+          <p>Tiếp tục task Codex từ Module 2. Dán hướng dẫn vào task để agent xây website theo kế hoạch đã duyệt và gửi bạn đường dẫn.</p>
+          {controls}
+        </> : planningPractice && introduction ? (
           <PortfolioPlanningGuide introduction={introduction} controls={controls} />
         ) : introduction ? (
           <PracticeIntroduction introduction={introduction} showReference={!hasRequestedPractice} imageFirst={setupPractice}>
@@ -242,10 +251,10 @@ export function PracticeBrief({
         <p>{workspace.expectedOutcome}</p>
         {controls}
         </>}
-        {!planningPractice && <PracticeStartPrompt practiceId={identity.practiceId} prompt={workspace.startPrompt} title={workspace.title} />}
+        {!planningPractice && <PracticeStartPrompt practiceId={identity.practiceId} prompt={startPrompt} title={workspace.title} />}
       </section>
 
-      {!introduction || hasRequestedPractice ? <PracticeProgress
+      {!firstBuild && (!introduction || hasRequestedPractice) ? <PracticeProgress
         workspace={workspace}
         showObjective={false}
         api={window.courseCompanion}

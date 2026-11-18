@@ -6,7 +6,7 @@ export function portfolioContinuationInstructions(definition: PracticeDefinition
   return [
     'Tiếp tục trong chính task này với các tài liệu đã có; không tạo task hoặc workspace thay thế.',
     ...(definition.practiceId === 'm3-portfolio-build' ? [
-      'Đọc năm tài liệu planning đã được duyệt làm nguồn yêu cầu. Trước khi viết ứng dụng, xác nhận tác vụ triển khai đầu tiên với người học; không cần first-bounded-task.md. Giữ nguyên ranh giới và các cổng kiểm chứng hiện hành của Module 3.'
+      'Đọc năm tài liệu planning đã được duyệt làm nguồn yêu cầu. Thực hiện kế hoạch người học đã duyệt; giữ nguyên phạm vi đã thống nhất. Giữ nguyên ranh giới và các cổng kiểm chứng hiện hành của Module 3.'
     ] : []),
     'Thực hiện Practice ' + definition.practiceId + '.',
     'Mục tiêu: ' + definition.objective,

@@ -540,6 +540,8 @@ export function TeacherWorkspace({
   const practiceMode = Boolean(workspace?.activePractice)
   const setupPractice = workspace?.activePractice?.practiceId === 'm1-codex-safe-setup'
   const compactPractice = practiceMode && !embedded
+  const firstBuild = workspace?.activePractice?.practiceId === 'm3-portfolio-build'
+    && context?.sceneId === 'module-3-first-build'
   const practicePassed = workspace?.review?.status === 'passed' && workspace.review.canReturn
   const contextFreshnessNote = teacherRuntime.contextFreshness === 'stale'
     ? 'Ngữ cảnh Codex đã cũ.'
@@ -561,7 +563,7 @@ export function TeacherWorkspace({
           </span>
           <div>
             <small>{practiceMode ? 'Triết · Duyệt Practice' : currentTeacherStatus.label}</small>
-            <strong>{practiceMode ? 'Duyệt Practice' : 'Triết'}</strong>
+            <strong>{firstBuild ? 'Portfolio của tôi' : practiceMode ? 'Duyệt Practice' : 'Triết'}</strong>
           </div>
         </div>
         <div className="pixel-panel-controls">
@@ -617,6 +619,22 @@ export function TeacherWorkspace({
           <strong>Chưa thể xác minh chế độ</strong>
           <p>Triết tạm khóa chat và duyệt tiến độ. Hãy đóng rồi mở lại cửa sổ này.</p>
         </div>
+      ) : firstBuild && workspace?.activePractice ? (
+        <section className="pixel-practice-review first-build-return" aria-label="Xem bản đầu tiên">
+          <h2>Xem bản đầu tiên</h2>
+          <p>Mở đường dẫn agent gửi trong task Codex. Khi thấy nội dung portfolio của mình, bạn có thể quay lại bài học.</p>
+          <PracticeStartPrompt practiceId="m3-portfolio-build" prompt={workspace.startPrompt} title={workspace.title} />
+          <PracticeTaskLink task={workspace.activePractice} api={window.courseCompanion} disabled={returnBusy} />
+          <button className="pixel-review-primary" type="button" disabled={workspaceRefreshing || returnBusy} onClick={async () => {
+            const active = workspace.activePractice
+            if (!active || !window.courseCompanion) return
+            setReturnBusy(true)
+            try { await window.courseCompanion.resumeFirstBuildLesson(active.runId, active.generation) }
+            catch { setError('Chưa thể mở lại bài học. Hãy thử lại.') }
+            finally { setReturnBusy(false) }
+          }}>Quay lại bài học</button>
+          {error && <p role="alert">{error}</p>}
+        </section>
       ) : practiceMode ? (
         <section className="pixel-practice-review" aria-label="Duyệt tiến độ Practice">
           <div {...practiceGuideAnchor('review-progress')} className={'pixel-practice-review__primary practice-review-overview' + (practicePassed ? ' is-complete' : '')}>

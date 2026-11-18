@@ -697,7 +697,8 @@ export const portfolioPlanningArtifactPaths = [
 export type PortfolioPlanningArtifactPath = (typeof portfolioPlanningArtifactPaths)[number]
 
 export const portfolioPackageVersion = '2.0.0' as const
-export const portfolioBuildVersion = '2.0.0' as const
+export const portfolioBuildVersion = '2.1.0' as const
+export const isPortfolioBuildPackageVersion = (version: unknown): boolean => version === portfolioBuildVersion || version === '2.0.0'
 export const portfolioReleaseVersion = '1.0.0' as const
 export const portfolioReleaseRecordPath = 'evidence/module-4/deployment-record.json' as const
 
@@ -1404,6 +1405,7 @@ export type CourseCompanionApi = {
   ) => Promise<PracticeGuideView | null>
   updatePracticeGuide: (request: PracticeGuideUpdateRequest, context: PracticeGuideSurfaceContext)
     => Promise<PracticeGuideView | null>
+  resumeFirstBuildLesson: (runId: string, generation: number) => Promise<void>
   returnPassedPractice: () => Promise<void>
   onPracticeWorkspaceChanged: (callback: () => void) => () => void
   onPracticeReturned: (callback: () => void) => () => void

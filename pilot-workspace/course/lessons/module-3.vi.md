@@ -1,12 +1,14 @@
 # Module 3 — Hiện thực hoá sản phẩm cùng coding agent
 
+## Tạo bản portfolio đầu tiên
+
+Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết.
+
 ## Mở portfolio trên máy
 
-Để mở portfolio trên máy, bạn có thể nhắn cho agent: “Hãy chạy portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”
+Lần đầu, bạn đã mở portfolio từ đường dẫn agent gửi. Lần sau, nếu đường dẫn đó không còn hoạt động, hãy mở lại task Codex và nhắn: “Hãy chạy lại portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”
 
-Agent sẽ kiểm tra cách chạy của dự án và khởi động website cho bạn. Bạn có thể thấy agent dùng lệnh `npm run dev`. Hiểu đơn giản, đây là lệnh khởi động website ngay trên máy tính của bạn để bạn kiểm tra thành quả.
-
-Bạn có thể nhờ agent thiết lập một lần và hướng dẫn cách mở terminal tại thư mục dự án. Những lần sau, bạn chỉ cần mở terminal ở thư mục đó, gõ `npm run dev`, rồi mở đường dẫn hiện ra để xem website. Đây là cách xem dự án trong môi trường local, tức là chạy ngay trên máy của bạn.
+Với một số dự án, agent sẽ dùng lệnh npm run dev để chạy website trên máy của bạn. Đây là cách xem website trong môi trường local. Bạn có thể nhờ agent chỉ cách mở lại dự án của mình.
 
 ## Debug cùng coding agent
 
@@ -119,11 +121,9 @@ Xử lý conflict là một chủ đề khá rộng nên mình sẽ không đi s
 
 ## Practice: Xây portfolio
 
-Tiếp tục task Codex từ Module 2 và xây từng phần theo PRD và implementation plan đã duyệt. Sau mỗi phần, Codex giải thích kết quả và chạy kiểm tra; bạn mở website, tự nêu nhận xét rồi chấp nhận hoặc yêu cầu sửa trước khi đi tiếp. Tên, số lượng và thứ tự các phần theo kế hoạch, không bắt buộc bốn phần cố định.
+Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.
 
-Bạn cần một cải thiện do mình đề xuất và một lần gỡ lỗi có bằng chứng. Những việc đã làm trong quá trình xây được tính, theo bất kỳ thứ tự nào; không cần thêm một tính năng mới. Với lỗi, hãy ghi thao tác, mong đợi/thực tế, bằng chứng tìm nguyên nhân và kết quả kiểm tra lại. Nếu chưa gặp lỗi, Codex có thể đề xuất một lỗi thực hành nhỏ có thể khôi phục; chỉ thực hiện khi bạn đồng ý và phải loại bỏ trước khi nộp.
-
-Codex ghi lại bằng chứng trong ba hồ sơ: `evidence/module-3/build-log.md`, `evidence/module-3/learning-record.md` và `evidence/module-3/browser-validation.md`. Bạn tự quan sát, giải thích và quyết định; Codex phụ trách phần ghi chép kỹ thuật. Không cần tự điền digest hoặc duyệt lặp lại từng tài liệu.
+Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.
 
 ## Publish repo trước bài tổng kết
 
@@ -131,7 +131,7 @@ Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của b
 
 ## Điều kiện hoàn thành
 
-Website phải được đối chiếu với PRD hiện tại, có kết quả kiểm tra kỹ thuật và quan sát trên desktop/mobile. Người học đã chấp nhận từng phần trước khi Codex tiếp tục, giải thích một cải thiện và một lần gỡ lỗi dựa trên công việc thật của mình.
+Website phải được đối chiếu với PRD hiện tại, có kết quả kiểm tra kỹ thuật và quan sát trên desktop/mobile. Người học tự nêu kết quả đã quan sát và chấp nhận phiên bản hiện tại.
 
 Khi đã xem website và bằng chứng hiện tại, chọn **Chấp nhận website và nộp bài** trong Practice. Triết kiểm tra tệp và nội dung bằng chứng, rồi trả kết quả đạt hoặc phần cần bổ sung. Nếu chưa đạt, tiếp tục sửa trong cùng task. Thay đổi mã nguồn hoặc hồ sơ sau khi duyệt cần được kiểm tra, xác nhận và nộp lại.
 

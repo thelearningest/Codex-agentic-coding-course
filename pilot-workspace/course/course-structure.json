@@ -174,10 +174,7 @@
         "nextLessonId": "module-4",
         "requiresCurrentArtifactDigests": true,
         "requiresLearnerApproval": true,
-        "requiresPlanPartAcceptance": true,
-        "requiresReviewedBuildPackageVersion": "2.0.0",
-        "requiresLearnerImprovement": true,
-        "requiresEvidenceDebugging": true,
+        "requiresReviewedBuildPackageVersion": "2.1.0",
         "requiresCurrentCheck": true,
         "requiresBrowserValidation": true,
         "requiresMasteryReceipt": true

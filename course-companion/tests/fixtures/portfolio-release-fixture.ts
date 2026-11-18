@@ -88,7 +88,7 @@ export async function portfolioReleaseFixture(registerRoot: (root: string) => vo
   // This explicitly simulated prerequisite isolates Module 4 lifecycle tests;
   // the full prior-module learner journey is covered by separate rehearsals.
   const simulatedPrerequisite: PracticeCompletionReceipt = {
-    schemaVersion: 1, courseRunId: learner.courseRunId, practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0',
+    schemaVersion: 1, courseRunId: learner.courseRunId, practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0',
     runId: 'run-simulated-prerequisite', checkpointId: 'm3-complete', status: 'completed', completedAt: releaseObservedAt,
     submissionDigest: 'b'.repeat(64), evidenceSummary: 'SIMULATED Module 3 prerequisite for isolated Module 4 lifecycle test.',
     masterySummary: 'SIMULATED prerequisite; no learner acceptance is claimed.',

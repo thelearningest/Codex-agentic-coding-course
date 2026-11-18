@@ -156,7 +156,7 @@ describe('beginner portfolio review policy', () => {
 
   it.each([
     ['m2-portfolio-planning', '2.0.0', 'planning'],
-    ['m3-portfolio-build', '2.0.0', 'build'],
+    ['m3-portfolio-build', '2.1.0', 'build'],
     ['m4-portfolio-release', '1.0.0', 'release']
   ] as const)('accepts the stated minimum for %s without dropping required gates', async (practiceId, version, kind) => {
     const definition = await new PracticeDefinitionRepository(join(process.cwd(), '../pilot-workspace/course/practices')).load(practiceId, version)

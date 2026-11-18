@@ -65,7 +65,7 @@ window.feedbackFixture = {
     workspace = {
       schemaVersion: 1, phase: 'active', title: 'Simulated Module 3 review', objective: 'Fixture only', expectedOutcome: 'Fixture only',
       startPrompt: 'Simulated instructions. '.repeat(180),
-      activePractice: { runId: 'fixture-' + fixtureId, generation: 1, practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0', executorChatName: 'Fixture', startedAt: '2026-10-29T00:00:00Z' },
+      activePractice: { runId: 'fixture-' + fixtureId, generation: 1, practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0', executorChatName: 'Fixture', startedAt: '2026-10-29T00:00:00Z' },
       presentation: { compactPanel: 'progress', fullPanel: 'progress' },
       checklist: Array.from({ length: 5 }, (_, index) => ({ id: 'fixture-step-' + index, title: 'Simulated step ' + index, status: 'pending' })),
       review: { status: 'not-reviewed', canReview: true, canReturn: false },
@@ -89,7 +89,7 @@ window.feedbackFixture = {
     }
     workspace.review = {
       status: verdict, canReview: true, canReturn: verdict === 'passed',
-      result: { schemaVersion: 1, practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0', runId: workspace.activePractice.runId,
+      result: { schemaVersion: 1, practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0', runId: workspace.activePractice.runId,
         verdict, summary: 'Simulated review result, not learner evidence.', reviewedAt: new Date().toISOString(), sourceDigest: String(fixtureId).repeat(64).slice(0, 64),
         criteria: [{ criterionId: 'final-validation-current', status: verdict === 'passed' ? 'satisfied' : 'unverifiable', evidenceRefs: [], explanation: 'Simulated criterion feedback.' }] }
     }

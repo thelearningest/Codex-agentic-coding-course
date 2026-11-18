@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "practiceId": "m3-portfolio-build",
   "title": "Xây và kiểm chứng portfolio theo kế hoạch",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "checkpointId": "m3-portfolio-build",
-  "objective": "Tiếp tục task Codex từ Module 2, xây từng phần theo kế hoạch đã duyệt, tự xem kết quả và quyết định bước tiếp theo. Một cải thiện do bạn đề xuất và một lần điều tra lỗi có bằng chứng có thể được thực hiện ngay trong quá trình xây.",
-  "expectedOutcome": "Website đáp ứng PRD hiện tại; bạn đã xem và chấp nhận từng phần, giải thích một cải thiện và một lần gỡ lỗi. Codex ghi lại quá trình xây, ví dụ học được và kiểm tra website trong ba tài liệu hỗ trợ. Bạn chấp nhận website rồi nộp một lần để Triết duyệt; năm câu tổng kết vẫn cần hoàn thành.",
+  "objective": "Xây portfolio theo kế hoạch đã duyệt trong cùng task Codex. Mở bản đầu, quay lại bài học rồi kiểm tra phiên bản cuối theo PRD.",
+  "expectedOutcome": "Website đáp ứng PRD hiện tại. Bạn đã thử website trên máy tính và kích thước màn hình điện thoại, nêu kết quả và chấp nhận phiên bản đem nộp.",
   "workspaceKind": "learner-portfolio",
   "taskPolicy": "safe-workspace-write",
   "evidenceProfile": "portfolio-build",
@@ -19,15 +19,15 @@
       ]
     },
     {
-      "id": "learner-improvement",
+      "id": "technical-checks",
       "order": 2,
       "dependsOn": [],
       "requiredArtifactPaths": [
-        "evidence/module-3/learning-record.md"
+        "evidence/module-3/build-log.md"
       ]
     },
     {
-      "id": "evidence-debugging",
+      "id": "learner-observation",
       "order": 3,
       "dependsOn": [],
       "requiredArtifactPaths": [
@@ -54,17 +54,17 @@
   "checklist": [
     {
       "id": "plan-led-build",
-      "title": "Xây từng phần theo kế hoạch đã duyệt",
+      "title": "Xây portfolio theo kế hoạch",
       "dependsOn": []
     },
     {
-      "id": "learner-improvement",
-      "title": "Giải thích một cải thiện do bạn đề xuất",
+      "id": "technical-checks",
+      "title": "Kiểm tra kỹ thuật trên bản hiện tại",
       "dependsOn": []
     },
     {
-      "id": "evidence-debugging",
-      "title": "Điều tra và kiểm tra lại một lỗi",
+      "id": "learner-observation",
+      "title": "Tự xem website và nhận xét",
       "dependsOn": []
     },
     {
@@ -80,8 +80,8 @@
   ],
   "criteria": [
     {
-      "id": "plan-led-build-current",
-      "description": "Xây từng phần theo kế hoạch đã duyệt",
+      "id": "plan-led-build-acceptance",
+      "description": "Xây portfolio theo kế hoạch",
       "required": true,
       "checklistStepId": "plan-led-build",
       "acceptedEvidence": [
@@ -90,35 +90,35 @@
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Assess the five planning inputs and build log against the actual bound-task evidence. Require at least two bounded, plan-derived parts, observable results, technical checks, and learner-authored acceptance or revision before the next part. Parts may have any names or order justified by the approved plan. Do not require four fixed page sections or a separate neutral scaffold approval.",
+      "assertion": "Assess the current website against the five planning inputs. Building the entire portfolio in one pass is valid. No minimum number of slices or intermediate approvals.",
       "freshness": "fresh"
     },
     {
-      "id": "learner-improvement-current",
-      "description": "Giải thích một cải thiện do bạn đề xuất",
+      "id": "technical-checks-acceptance",
+      "description": "Kiểm tra kỹ thuật trên bản hiện tại",
       "required": true,
-      "checklistStepId": "learner-improvement",
+      "checklistStepId": "technical-checks",
       "acceptedEvidence": [
         "artifact",
         "executor-reported-verification",
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require one learner-directed improvement grounded in their observation, bounded proposal, before/after result, recheck and learner explanation. Refining an existing feature during any build part counts. Do not require an extra feature, separate enhancement stage or another whole-page revision.",
+      "assertion": "Require appropriate checks on the submitted project, with results. Static HTML is acceptable.",
       "freshness": "fresh"
     },
     {
-      "id": "evidence-debugging-current",
-      "description": "Điều tra và kiểm tra lại một lỗi",
+      "id": "learner-observation-acceptance",
+      "description": "Tự xem website và nhận xét",
       "required": true,
-      "checklistStepId": "evidence-debugging",
+      "checklistStepId": "learner-observation",
       "acceptedEvidence": [
         "artifact",
         "executor-reported-verification",
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require reproduction, expected versus actual behavior, evidence supporting a hypothesis, bounded fix, original and regression rechecks, and a learner-authored explanation. Earlier debugging during the build counts. A clearly labeled, learner-approved reversible practice fault counts only when removed and rechecked. Never invent a bug or learner evidence.",
+      "assertion": "Require a concrete observation from the learner in the bound task about a planned behavior they tried. An unchanged first build is acceptable. A bug, simulated fault, revision or improvement is optional.",
       "freshness": "fresh"
     },
     {

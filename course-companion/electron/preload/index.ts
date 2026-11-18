@@ -80,6 +80,7 @@ const courseCompanionApi: CourseCompanionApi = {
     ipcRenderer.invoke('course:load-practice-guide', context) as Promise<PracticeGuideView | null>,
   updatePracticeGuide: (request: PracticeGuideUpdateRequest, context: PracticeGuideSurfaceContext) =>
     ipcRenderer.invoke('course:update-practice-guide', request, context) as Promise<PracticeGuideView | null>,
+  resumeFirstBuildLesson: (runId, generation) => ipcRenderer.invoke('course:resume-first-build-lesson', runId, generation),
   returnPassedPractice: () =>
     ipcRenderer.invoke('course:return-passed-practice') as Promise<void>,
   onPracticeWorkspaceChanged: (callback: () => void) => {

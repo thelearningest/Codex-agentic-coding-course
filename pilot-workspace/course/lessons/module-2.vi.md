@@ -79,5 +79,5 @@ thiết lập đó thành slide.
 - [Microsoft Engineering Playbook — Test planning](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/test-planning/): phép kiểm tra cần xuất phát từ tiêu chí chấp nhận và có thể làm lộ điểm mơ hồ trước khi triển khai.
 - [W3C WAI — Evaluating Web Accessibility](https://www.w3.org/WAI/test-evaluate/): đánh giá khả năng tiếp cận cần bắt đầu sớm, kết hợp công cụ với kiểm tra của con người.
 
-Các nguồn trên hỗ trợ cách làm. Cấu trúc năm milestone và bảy tài liệu là quyết
+Các nguồn trên hỗ trợ cách làm. Cấu trúc gói năm tài liệu là quyết
 định chương trình cần tiếp tục được kiểm chứng qua pilot với người học.

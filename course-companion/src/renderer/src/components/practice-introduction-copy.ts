@@ -52,18 +52,18 @@ const introductions: Record<string, Introduction> = {
   'm3-portfolio-build': {
     portfolioProject: true,
     title: 'Xây portfolio theo kế hoạch',
-    purpose: 'Bạn sẽ điều phối Codex xây từng phần của website, tự xem kết quả và quyết định cần sửa gì.',
+    purpose: 'Đối chiếu portfolio với PRD và tự quyết định phiên bản nào sẵn sàng để phát hành.',
     context: 'Tiếp tục task Codex và thư mục portfolio từ Module 2.',
     steps: [
-      'Xây từng phần theo kế hoạch đã duyệt. Xem và chấp nhận từng phần trước khi tiếp tục.',
-      'Đề xuất một cải thiện và điều tra một lỗi có bằng chứng. Việc đã làm trong lúc xây được tính.',
+      'Mở lại website trong task Codex đã dùng để xây bản đầu.',
+      'Thử các thao tác trong kế hoạch trên máy tính và kích thước màn hình điện thoại.',
       'Kiểm tra website theo PRD, chấp nhận phiên bản hiện tại rồi nộp để Triết duyệt.'
     ],
     referenceTitle: 'Xem ba hồ sơ Codex cần ghi lại',
     referenceNote: 'Codex ghi lại quá trình; bạn kiểm tra website và đưa ra quyết định. Sau khi Practice đạt, bạn còn năm câu tổng kết.',
     reference: [
-      ['Quá trình xây website', 'evidence/module-3/build-log.md', 'Các phần đã xây và quyết định của bạn sau mỗi phần.'],
-      ['Cải thiện và gỡ lỗi', 'evidence/module-3/learning-record.md', 'Một cải thiện do bạn đề xuất và một lần điều tra, kiểm tra lại lỗi.'],
+      ['Quá trình xây website', 'evidence/module-3/build-log.md', 'Phạm vi đã xây và kết quả kiểm tra kỹ thuật.'],
+      ['Quan sát và quyết định', 'evidence/module-3/learning-record.md', 'Điều bạn đã thử và kết quả bạn quan sát được.'],
       ['Kiểm tra website', 'evidence/module-3/browser-validation.md', 'Kết quả kiểm tra website hiện tại so với PRD.']
     ]
   },

@@ -111,8 +111,8 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 ## Module 3: xây website
 
 - Đọc năm tài liệu trong planning/ làm nguồn yêu cầu; chỉ sửa chúng khi người học yêu cầu.
-- Dùng React, TypeScript và Vite. Chạy npm run check trước khi báo một phần đã xong.
-- Làm từng phần nhỏ theo implementation plan. Sau mỗi phần, chờ người học tự xem website rồi chấp nhận hoặc yêu cầu sửa trước khi làm tiếp.
+- Chọn công cụ và lệnh kiểm tra phù hợp với dự án.
+- Có thể thực hiện implementation plan trong một lượt. Gửi đường dẫn bản đầu để người học xem rồi quay lại bài học. Khi người học trở lại, kiểm tra bản cuối theo PRD và ghi lại quan sát thật.
 - Commit sau mỗi phần người học đã chấp nhận. Khi người học muốn thêm tính năng mới, đề xuất tạo branch riêng.
 - Không thêm backend, dịch vụ xử lý dữ liệu hay triển khai lên hosting trong Module 3.
 - Trước khi push lên GitHub, kiểm tra secret, token và dữ liệu riêng tư, nói rõ nội dung nào sẽ công khai và chờ người học đồng ý.

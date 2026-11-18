@@ -99,7 +99,7 @@ describe('Module 2 portfolio assessment contract', () => {
     expect(scenarios).toHaveLength(4)
     expect(scenario('mastery-1')).toMatch(/lỗi chính tả.*lập kế hoạch.*sản phẩm mới/i)
     expect(scenario('mastery-4')).toMatch(/PRD.*dành cho ai.*lựa chọn kỹ thuật/i)
-    expect(scenario('mastery-5')).toMatch(/chỗ nào.*chưa rõ.*tự mở rộng.*sửa lại trước khi bạn duyệt/i)
+    expect(scenario('mastery-5')).toMatch(/làm rõ các thuật ngữ mơ hồ.*tự mở rộng.*sửa lại trước khi bạn duyệt/i)
     expect(scenario('mastery-6')).toMatch(/hỏi bạn những ý bạn chưa chốt/i)
     expect(scenario('mastery-6')).toMatch(/người học vẫn quyết định/i)
     expect(new Set(scenarios.map((question) => question.answerIndex)).size).toBeGreaterThan(1)

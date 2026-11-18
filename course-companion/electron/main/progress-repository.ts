@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import {
   appendFile,
   mkdir,
@@ -545,7 +546,7 @@ export function isPracticeCompletionReceipt(value: unknown): value is PracticeCo
     && (value.submissionDigest === undefined || DIGEST.test(String(value.submissionDigest)))
     && (value.taskEvidenceDigest === undefined || DIGEST.test(String(value.taskEvidenceDigest)))
     && (!isRecord(value.portfolioBuildHandoff) || value.portfolioBuildHandoff.schemaVersion !== 2
-      || (value.practiceId === 'm3-portfolio-build' && value.practiceVersion === '2.0.0'
+      || (value.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(value.practiceVersion)
         && value.submissionDigest === value.portfolioBuildHandoff.submissionDigest
         && DIGEST.test(String(value.submissionDigest))
         && isRecord(value.portfolioBuildHandoff.workspace)
@@ -567,7 +568,8 @@ export function isPracticeCompletionReceipt(value: unknown): value is PracticeCo
 
 function completionKey(receipt: PracticeCompletionReceipt): string {
   const base = `${receipt.courseRunId}:${receipt.practiceId}:${receipt.practiceVersion}:${receipt.runId}`
-  return ((['m2-portfolio-planning', 'm3-portfolio-build'].includes(receipt.practiceId) && receipt.practiceVersion === '2.0.0')
+  return ((receipt.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(receipt.practiceVersion))
+    || (receipt.practiceId === 'm2-portfolio-planning' && receipt.practiceVersion === '2.0.0')
     || (receipt.practiceId === 'm4-portfolio-release' && receipt.practiceVersion === '1.0.0'))
     ? `${base}:${receipt.checkpointId}:${receipt.submissionDigest ?? ''}:${receipt.taskEvidenceDigest ?? ''}` : base
 }
@@ -608,7 +610,8 @@ function hasPortfolioModuleCompletion(progress: LearnerProgress): boolean {
     && receipt.checkpointId === 'm2-portfolio-complete'
     && receipt.practiceVersion === '2.0.0'
     && receipt.destination.lessonId === 'module-3'
-    && (receipt.destination.sceneId === 'module-3-local-preview'
+    && (receipt.destination.sceneId === 'module-3-first-build'
+      || receipt.destination.sceneId === 'module-3-local-preview'
       || receipt.destination.sceneId === 'module-3-debugging-intro')
     && receipt.portfolioPlanningHandoff?.schemaVersion === 2)
 }
@@ -635,7 +638,7 @@ function hasPortfolioBuildCompletion(progress: LearnerProgress): boolean {
     && receipt.practiceId === 'm3-portfolio-build'
     && receipt.checkpointId === 'm3-complete'
     && receipt.destination.sceneId === 'module-3-complete'
-    && receipt.practiceVersion === '2.0.0' && receipt.portfolioBuildHandoff?.schemaVersion === 2)
+    && isPortfolioBuildPackageVersion(receipt.practiceVersion) && receipt.portfolioBuildHandoff?.schemaVersion === 2)
 }
 
 function assertModuleFourUnlockGate(update: ProgressUpdate, current: LearnerProgress | null): void {
@@ -916,13 +919,30 @@ export class ProgressRepository {
     return progress
   }
 
+  resumeLessonAfterFirstBuild(): Promise<LearnerProgress> {
+    return this.runExclusive(async () => {
+      const result = await this.readProgress(this.statePath)
+      if (result.status !== 'valid' || result.progress.sceneId !== 'module-3-first-build') {
+        throw new Error('Chỉ có thể quay lại bài học từ lượt xây portfolio đầu tiên.')
+      }
+      const progress = result.progress
+      return this.saveUnlocked({
+        currentLessonId: 'module-3', currentCourseLessonId: 'm3-complete-first-version',
+        checkpointId: 'm3-complete-first-version', sceneId: 'module-3-local-preview',
+        sceneHistory: [...progress.sceneHistory, progress.sceneId].slice(-200),
+        completedCheckpointIds: progress.completedCheckpointIds, decisions: progress.decisions
+      })
+    })
+  }
+
   completePortfolioPlanning(receipt: PracticeCompletionReceipt): Promise<LearnerProgress> {
     if (!isPracticeCompletionReceipt(receipt)
       || receipt.practiceId !== 'm2-portfolio-planning'
       || receipt.checkpointId !== 'm2-portfolio-complete'
       || receipt.destination.lessonId !== 'module-3'
       || receipt.destination.checkpointId !== 'm3-complete-first-version'
-      || (receipt.destination.sceneId !== 'module-3-local-preview'
+      || (receipt.destination.sceneId !== 'module-3-first-build'
+        && receipt.destination.sceneId !== 'module-3-local-preview'
         && receipt.destination.sceneId !== 'module-3-debugging-intro')
       || receipt.practiceVersion !== '2.0.0'
       || receipt.portfolioPlanningHandoff?.schemaVersion !== 2) {

@@ -90,19 +90,7 @@ nhiệm hướng dẫn các bước này sau khi Learner mở Practice.
 câu mỗi lượt. Chỉ đưa feedback và căn cứ sau câu trả lời. Không dùng ngưỡng cố
 định chưa được pilot phê duyệt.]
 
-Khi mastery đạt, Teacher xác nhận gate kết hợp:
-
-- năm stage receipt hợp lệ;
-- bảy artifact có digest hiện tại;
-- phê duyệt của Learner trên đúng phiên bản;
-- mastery receipt hợp lệ.
-
-Teacher kết thúc:
-
-> “Gói planning của bạn đã sẵn sàng làm đầu vào cho Module 3. Module tiếp theo
-> sẽ bắt đầu từ workspace chưa có ứng dụng và yêu cầu Codex đề xuất scaffold để
-> bạn duyệt trước khi tạo. Chưa có công nghệ hay file ứng dụng nào được ngầm
-> chọn trong Module 2.”
+Khi năm tài liệu hiện tại đã được duyệt, review đạt và người học hoàn thành phần kiểm tra, bàn giao đúng task và thư mục cho Module 3 để tạo bản portfolio đầu tiên.
 
 ## Phục hồi
 

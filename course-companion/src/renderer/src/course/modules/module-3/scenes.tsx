@@ -1,6 +1,16 @@
 import type { RegistrySceneContent } from '../../module-contracts'
 
 export const moduleThreeScenes = {
+  'module-3-first-build': {
+    lessonId: 'module-3', checkpointId: 'm3-complete-first-version', step: 1, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · PRACTICE', mission: 'Tạo bản portfolio đầu tiên',
+    objective: 'Tạo bản portfolio đầu tiên', panelLabel: 'PRACTICE', panelStatus: 'TASK CODEX TỪ MODULE 2',
+    copyPromptTitle: 'Tạo bản portfolio đầu tiên',
+    copyPrompt: 'Bắt đầu Module 3. Hãy dùng năm tài liệu planning đã duyệt để xây bản portfolio đầu tiên theo implementation plan. Chạy website và gửi tôi đường dẫn để xem trên trình duyệt.',
+    tone: 'neutral', request: 'Dùng kế hoạch đã duyệt để xây portfolio.', evidence: [],
+    dialogue: 'Bạn đã có kế hoạch từ Module 2. Hãy tiếp tục trong cùng task Codex và giao cho agent xây bản portfolio đầu tiên. Khi agent gửi đường dẫn, hãy mở website. Khi thấy nội dung portfolio của mình, chọn “Quay lại bài học” trong cửa sổ Triết.',
+    choices: [{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true }]
+  },
   'module-3-local-preview': {
     lessonId: 'module-3', checkpointId: 'm3-complete-first-version', step: 2, totalSteps: 5,
     lessonLabel: 'MODULE 3 · LOCAL', mission: 'Mở portfolio trên máy',
@@ -8,7 +18,7 @@ export const moduleThreeScenes = {
     panelStatus: 'CHẠY TRÊN MÁY CỦA BẠN', tone: 'neutral',
     request: 'Nhờ agent chạy portfolio và gửi đường dẫn để xem.',
     evidence: [],
-    dialogue: "Để mở portfolio trên máy, bạn có thể nhắn cho agent: “Hãy chạy portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”\n\nAgent sẽ kiểm tra cách chạy của dự án và khởi động website cho bạn. Bạn có thể thấy agent dùng lệnh npm run dev. Hiểu đơn giản, đây là lệnh khởi động website ngay trên máy tính của bạn để bạn kiểm tra thành quả.\n\nBạn có thể nhờ agent thiết lập một lần và hướng dẫn cách mở terminal tại thư mục dự án. Những lần sau, bạn chỉ cần mở terminal ở thư mục đó, gõ npm run dev, rồi mở đường dẫn hiện ra để xem website. Đây là cách xem dự án trong môi trường local, tức là chạy ngay trên máy của bạn.",
+    dialogue: "Lần đầu, bạn đã mở portfolio từ đường dẫn agent gửi. Lần sau, nếu đường dẫn đó không còn hoạt động, hãy mở lại task Codex và nhắn: “Hãy chạy lại portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”\n\nVới một số dự án, agent sẽ dùng lệnh npm run dev để chạy website trên máy của bạn. Đây là cách xem website trong môi trường local. Bạn có thể nhờ agent chỉ cách mở lại dự án của mình.",
     highlightTerms: ['npm run dev', 'local'],
     choices: [{ label: 'Debug cùng coding agent', next: 'module-3-debugging-intro', primary: true }]
   },
@@ -169,7 +179,7 @@ export const moduleThreeScenes = {
       { label: 'TASK', value: 'Tiếp tục từ Module 2' },
       { label: 'REVIEW', value: 'Bằng chứng hiện tại' }
     ],
-    dialogue: 'Tiếp tục task Codex từ Module 2 và xây từng phần theo kế hoạch đã duyệt. Sau mỗi phần, hãy xem website, đọc kết quả kiểm tra rồi chấp nhận hoặc yêu cầu sửa trước khi đi tiếp.\n\nBạn cần một cải thiện do mình đề xuất và một lần gỡ lỗi có bằng chứng; những việc đã làm trong quá trình xây được tính, không cần thêm một tính năng mới. Codex ghi lại quá trình xây, ví dụ học được và kiểm tra website trong ba hồ sơ hỗ trợ.\n\nKhi đã đối chiếu website với PRD, bạn chấp nhận phiên bản hiện tại và nộp bài cho Triết duyệt. Nếu chưa đạt, tiếp tục sửa trong cùng task. Sau khi đạt, bạn làm năm câu tổng kết.',
+    dialogue: "Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.\n\nKhi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.",
     choices: [{ label: 'Mở Practice xây portfolio', action: 'practice', primary: true }]
   },
   'module-3-portfolio-mastery': {

@@ -1003,7 +1003,7 @@ export class PracticeRunRepository {
         archive.practiceId === definition.practiceId && archive.retainedRun)?.retainedRun
       if (!prior || prior.practiceId !== definition.practiceId || prior.binding.threadId !== binding.threadId
         || prior.runId !== binding.runId || resolve(prior.binding.workspaceRoot) !== resolve(binding.workspaceRoot)
-        || !['1.0.0', definition.version].includes(prior.practiceVersion)
+        || !['1.0.0', '2.0.0', definition.version].includes(prior.practiceVersion)
         || (record.activeRun && prior.practiceVersion === definition.version)) return record
       const generation = Math.max(prior.generation, ...record.archivedRuns.map((archive) => archive.generation)) + 1
       if (!Number.isSafeInteger(generation)) return record

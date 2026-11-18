@@ -2,9 +2,11 @@ Dùng `$start-course-lesson module-3` để bắt đầu bài **Hiện thực ho
 
 Đọc `course/lesson-scripts/module-3.script.vi.md` làm nguồn điều phối. Xác nhận Module 2 đã có PRD và implementation plan được duyệt, rồi mở Module 3 bằng đúng wording trong lesson.
 
-Giảng theo thứ tự: mở portfolio trên máy, thực hiện implementation plan theo từng phần, debug cùng coding agent, Git và GitHub, trang chốt trước Practice, Practice, rồi năm câu hỏi tổng kết. Không chèn câu hỏi kiểm tra giữa các trang giải thích. Trang chốt dùng nguyên văn phần **Tóm lại** trong lesson và không thêm nội dung về implementation plan.
+Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Giữ thứ tự trang local, Debug, Git và GitHub rồi quay lại cùng Practice. Không chèn câu hỏi kiểm tra giữa các trang giải thích.
 
-Trong Practice, tiếp tục task Codex từ Module 2 và xây các phần theo kế hoạch đã duyệt. Sau mỗi phần, người học tự xem website và chấp nhận hoặc yêu cầu sửa trước khi đi tiếp. Một cải thiện do người học đề xuất và một lần gỡ lỗi có bằng chứng trong quá trình xây được tính; không bắt bốn phần cố định hoặc thêm tính năng.
+Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.
+
+Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.
 
 Codex ghi ba hồ sơ hỗ trợ theo định nghĩa m3-portfolio-build v2. Người học tự nêu quan sát, giải thích và quyết định. Teacher không mở chat song song. Chỉ mở phần tổng kết khi người học chấp nhận website hiện tại và review bằng chứng đạt; nếu cần sửa, tiếp tục cùng task và nộp lại.
 

@@ -56,7 +56,7 @@ describe('beginner Practice introductions', () => {
     expect(planning.context).toContain('chưa viết code')
     expect(planning.steps.join(' ')).toContain('duyệt PRD')
     expect(build.context).toContain('từ Module 2')
-    expect(build.steps.join(' ')).toContain('một lỗi có bằng chứng')
+    expect(build.steps.join(' ')).toContain('Kiểm tra website theo PRD')
     expect(build.referenceNote).toContain('năm câu tổng kết')
     expect(release.context).toContain('từ Module 3')
     expect(release.context).toContain('Bạn tự đăng nhập, cấp quyền và quyết định phát hành')

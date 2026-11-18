@@ -57,5 +57,5 @@ export const moduleTwoDefinition = {
     'planning/PRD.md',
     'planning/implementation-plan.md'
   ],
-  completionDestination: { moduleId: 'module-3', sceneId: 'module-3-local-preview' }
+  completionDestination: { moduleId: 'module-3', sceneId: 'module-3-first-build' }
 } as const

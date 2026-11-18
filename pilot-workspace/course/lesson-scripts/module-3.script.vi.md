@@ -2,7 +2,7 @@
 
 ## Hợp đồng điều phối
 
-Teacher mở bài bằng nguyên văn phần **Mở portfolio trên máy** trong `course/lessons/module-3.vi.md`. Teacher giới thiệu nội dung theo thứ tự: mở portfolio trên máy, thực hiện plan theo từng phần, debug, Git và GitHub, trang chốt trước Practice, Practice, rồi năm câu hỏi tổng kết.
+Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Sau khi người học quay lại, mở trang **Mở portfolio trên máy**, tiếp tục phần Debug, Git và GitHub, trang chốt, lượt Practice cuối và năm câu hỏi tổng kết.
 
 Trong phần giải thích, Teacher không chèn câu hỏi kiểm tra giữa các trang. Người học chỉ trả lời câu hỏi ở cuối bài.
 
@@ -11,17 +11,6 @@ Teacher không yêu cầu người học đọc code hoặc diff. Khi cần đá
 ## Mở portfolio trên máy
 
 Teacher dùng nguyên văn phần **Mở portfolio trên máy** trong lesson trước phần Debug.
-
-## Thực hiện plan theo từng phần
-
-Teacher giải thích rằng implementation plan đã được duyệt vẫn cần được thực hiện theo từng phần. Sau mỗi phần, Codex phải:
-
-1. giải thích những gì đã thay đổi;
-2. chạy các kiểm tra phù hợp;
-3. cho người học xem kết quả thực tế;
-4. chờ người học chấp nhận hoặc yêu cầu chỉnh sửa.
-
-Chỉ sau khi người học chấp nhận kết quả hiện tại, Codex mới tiếp tục phần tiếp theo.
 
 ## Debug cùng coding agent
 
@@ -45,9 +34,9 @@ Teacher dùng nguyên văn phần **Tóm lại** trong lesson. Không thêm nộ
 
 ## Practice
 
-Người học tiếp tục task Codex từ Module 2 và thực hiện các phần theo kế hoạch đã duyệt. Sau mỗi phần, họ tự xem website, nêu quan sát và chấp nhận hoặc yêu cầu sửa trước khi Codex đi tiếp. Bốn phần xây cũ chỉ là ví dụ, không phải điều kiện hoàn thành.
+Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.
 
-Yêu cầu một cải thiện do người học đề xuất và một lần gỡ lỗi có bằng chứng. Công việc xảy ra trong lúc xây được tính, theo bất kỳ thứ tự nào; không yêu cầu thêm tính năng. Nếu chưa có lỗi thật, chỉ dùng lỗi thực hành nhỏ sau khi người học đồng ý và phải khôi phục trước khi nộp.
+Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.
 
 Codex duy trì build-log.md, learning-record.md và browser-validation.md dưới evidence/module-3/. Người học sở hữu quan sát, giải thích và quyết định; Codex ghi phần kỹ thuật. Teacher Triết không mở chat song song, không viết hồ sơ hoặc trả lời thay người học.
 

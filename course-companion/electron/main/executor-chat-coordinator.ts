@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { resolve } from 'node:path'
 import type {
   ApprovedCodexConfiguration,
@@ -114,7 +115,7 @@ export class ExecutorChatCoordinator {
     const projectId = await this.workspaces.resolveProjectId?.(definition.workspaceKind, workspaceRoot)
     await this.withBootstrap(async () => {
       const learnerDirected = definition.practiceId === 'm2-portfolio-planning'
-        || (definition.practiceId === 'm3-portfolio-build' && definition.version === '2.0.0')
+        || (definition.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(definition.version))
         || definition.practiceId === 'm4-portfolio-release'
       const thread = await this.waitUntilReadable(
         binding.threadId,
@@ -183,7 +184,7 @@ export class ExecutorChatCoordinator {
                 'Chỉ làm trong phạm vi Practice và dừng tại mọi điểm cần người học duyệt.',
                 ...(definition.practiceId === 'm4-portfolio-release'
                   ? [portfolioReleaseInstructions(releaseSourceCheckpoint)]
-                  : definition.practiceId === 'm3-portfolio-build' && definition.version === '2.0.0'
+                  : definition.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(definition.version)
                   ? [PORTFOLIO_BUILD_INSTRUCTIONS]
                   : definition.evidenceProfile === 'planning-package'
                   ? [

@@ -8,7 +8,7 @@ Ghi các yêu cầu PRD được triển khai, kế hoạch hiện tại và ph�
 
 ## Các phần đã thực hiện
 
-Với mỗi phần có kết quả riêng (ít nhất hai phần), Codex ghi phạm vi, kiểm tra đã chạy, kết quả trong website và nguồn lời nhận xét/quyết định thật của người học trước khi chuyển sang phần tiếp theo. Có thể đặt tên phần theo sản phẩm, không bắt buộc bốn phần cố định. Ghi cả lần yêu cầu sửa và kết quả kiểm tra lại.
+Ghi phạm vi đã xây, phiên bản, các kiểm tra kỹ thuật và kết quả. Có thể hoàn thành bản đầu trong một lượt. Nếu có thay đổi, ghi nội dung đã sửa và kết quả kiểm tra lại.
 
 ## Kết quả và giới hạn
 

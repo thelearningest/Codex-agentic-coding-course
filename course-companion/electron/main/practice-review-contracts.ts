@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { createHash } from 'node:crypto'
 import type {
   PracticeChecklistStep,
@@ -107,7 +108,8 @@ export function parsePracticeReviewResult(input: {
       throw new Error('Planning package pass lacks complete fresh canonical evidence')
     }
   }
-  const currentPackage = (['m2-portfolio-planning', 'm3-portfolio-build'].includes(input.definition.practiceId) && input.definition.version === '2.0.0')
+  const currentPackage = (input.definition.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(input.definition.version))
+    || (input.definition.practiceId === 'm2-portfolio-planning' && input.definition.version === '2.0.0')
     || (input.definition.practiceId === 'm4-portfolio-release' && input.definition.version === '1.0.0')
   if (currentPackage
     && parsed.verdict === 'passed'
@@ -115,7 +117,7 @@ export function parsePracticeReviewResult(input: {
       || !input.evidence.some((item) => item.id === 'portfolio-package-approval' && item.freshness === 'fresh'))) {
     throw new Error('Portfolio package pass lacks current approval or canonical evidence')
   }
-  if (((input.definition.practiceId === 'm3-portfolio-build' && input.definition.version === '2.0.0')
+  if (((input.definition.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(input.definition.version))
       || (input.definition.practiceId === 'm4-portfolio-release' && input.definition.version === '1.0.0'))
     && parsed.verdict === 'passed'
     && (!input.evidence.some((item) => item.kind === 'learner-decision' && item.freshness === 'fresh')

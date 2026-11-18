@@ -428,10 +428,27 @@ try {
   assert.equal(handoff.artifacts.length, 5)
   assert.equal(handoff.task.threadId, originalTask)
   const moduleThreeOpening = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
-  assert.equal(moduleThreeOpening.progress.sceneId, 'module-3-local-preview')
+  assert.equal(moduleThreeOpening.progress.sceneId, 'module-3-first-build')
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
   await page.getByRole('button', { name: /MODULE 3.*MỞ BÀI HỌC/ }).click()
+  await page.locator('main[data-scene-id="module-3-first-build"]').waitFor()
+  for (const width of [390, 1180]) {
+    await page.setViewportSize({ width, height: 780 })
+    assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+    await page.screenshot({ path: join(screenshots, width === 390 ? 'module-3-first-build-390.png' : 'module-3-first-build-entry.png'), animations: 'disabled' })
+  }
+  await page.getByRole('button', { name: 'Mở Practice', exact: true }).click()
+  await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()
+  const confirmSwitch = page.locator('.practice-switch-dialog .practice-switch-confirm')
+  if (await confirmSwitch.count()) await confirmSwitch.click()
+  await page.waitForFunction(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice?.practiceId === 'm3-portfolio-build')
+  const firstRun = await page.evaluate(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice.runId)
+  await compact.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
+  const lessonReturn = compact.getByRole('button', { name: 'Quay lại bài học', exact: true })
+  await lessonReturn.waitFor()
+  await compact.screenshot({ path: join(screenshots, 'module-3-first-build-return.png') })
+  await lessonReturn.click()
   await page.locator('main[data-scene-id="module-3-local-preview"]').waitFor()
   for (const width of [1180, 390]) {
     await page.setViewportSize({ width, height: 780 })
@@ -447,19 +464,29 @@ try {
   await handoffReference.locator('summary').click()
   assert.equal(await handoffReference.locator('li').count(), 5)
   assert.equal((await page.locator('.pixel-dialogue > p').innerText()).includes(handoff.summary.firstBuild), false)
-  await page.evaluate(() => globalThis.courseCompanion.startPractice({ practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0', transfer: false }))
+  const practiceScene = page.locator('main[data-scene-id="module-3-portfolio-practice"]')
+  for (let i = 0; i < 15 && !(await practiceScene.count()); i++) {
+    const previous = await page.locator('main[data-scene-id]').getAttribute('data-scene-id')
+    await page.locator('.pixel-lesson-actions button.pixel-choice.is-primary').click()
+    await page.waitForFunction((id) => globalThis.document.querySelector('main[data-scene-id]')?.getAttribute('data-scene-id') !== id, previous)
+  }
+  await practiceScene.waitFor()
+  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
+  await page.getByRole('button', { name: 'Tiếp tục Practice', exact: true }).click()
   const continued = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8'))
+  assert.equal(continued.activeRun.runId, firstRun)
   assert.equal(continued.activeRun.binding.threadId, originalTask)
-  for (const [path, content] of Object.entries(buildDocuments)) {
+  const firstPassRecords = {
+    ...buildDocuments,
+    'evidence/module-3/build-log.md': 'Simulated first portfolio built from the approved plan in one pass. Technical checks and browser results are recorded in browser-validation.md.',
+    'evidence/module-3/learning-record.md': 'Simulated learner opened both project links and contact on desktop and mobile. The first build matched the approved PRD and the learner accepted it as it stood.'
+  }
+  for (const [path, content] of Object.entries(firstPassRecords)) {
     // Keep the already approved planning documents unchanged in this handoff rehearsal.
     if (path.startsWith('planning/')) continue
     await mkdir(dirname(join(portfolio, path)), { recursive: true })
     await writeFile(join(portfolio, path), content, 'utf8')
   }
-  await page.evaluate(async () => {
-    const { progress } = await globalThis.courseCompanion.loadProgress()
-    await globalThis.courseCompanion.saveProgress({ ...progress, currentLessonId: 'module-3', currentCourseLessonId: 'm3-evidence-debugging', checkpointId: 'm3-portfolio-build', sceneId: 'module-3-portfolio-practice' })
-  })
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
   await page.getByRole('button', { name: /MODULE 3.*MỞ BÀI HỌC/ }).click()
@@ -628,7 +655,7 @@ try {
   assert.equal(retainedProjectSetup.selectedPath, projectSetup.selectedPath)
   await page.locator('main[data-scene-id="module-4-complete"]').waitFor()
   await page.getByRole('button', { name: 'VIBECODING 101 VỀ HOME BASE', exact: true }).click()
-  assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '13/19 checkpoint · 68%', 'Home counts only current checkpoints, including the folder setup now exercised by this journey; this fixture skips four early setup checkpoints and the two Module 3 teaching checkpoints')
+  assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '15/19 checkpoint · 79%', 'Home counts the two Module 3 teaching checkpoints visited after returning from the first build')
   console.log('Module 4 Practice rehearsal: course-page entry, same task, real local Git revision, one record, simulated public URL/review, explicit approval, atomic return and desktop/narrow controls passed')
   console.log('Module 3 v2 rehearsal: three records, one website approval, simulated content review, original task, archived completion, five mastery answers and desktop/narrow layouts passed')
   console.log('Portfolio rehearsal: explicit approval, five-document simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and same-task Module 3 handoff passed')

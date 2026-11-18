@@ -19,6 +19,7 @@ export const moduleThreeDefinition = {
     { id: 'm3-complete', courseLessonId: 'm3-independent-enhancement' }
   ],
   scenes: [
+    { id: 'module-3-first-build', checkpointId: 'm3-complete-first-version', courseLessonId: 'm3-complete-first-version', nextSceneId: 'module-3-local-preview' },
     { id: 'module-3-local-preview', checkpointId: 'm3-complete-first-version', courseLessonId: 'm3-complete-first-version', nextSceneId: 'module-3-debugging-intro' },
     { id: 'module-3-debugging-intro', checkpointId: 'm3-complete-first-version', courseLessonId: 'm3-complete-first-version', nextSceneId: 'module-3-visible-error' },
     { id: 'module-3-visible-error', checkpointId: 'm3-complete-first-version', courseLessonId: 'm3-complete-first-version', nextSceneId: 'module-3-visible-error-prompt' },
@@ -45,7 +46,7 @@ export const moduleThreeDefinition = {
   quizGroupIds: ['m3-final-assessment'],
   practice: {
     id: 'm3-portfolio-build',
-    version: '2.0.0',
+    version: '2.1.0',
     evidenceProfile: 'portfolio-build'
   },
   artifactPaths: [

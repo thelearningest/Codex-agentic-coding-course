@@ -2849,6 +2849,7 @@ export function LearningWindow() {
       if (practiceScene.practice
         || progress.sceneId === 'module-1-setup-checklist'
         || progress.sceneId === 'module-2-portfolio-practice'
+        || progress.sceneId === 'module-3-first-build'
         || progress.sceneId === 'module-3-portfolio-practice'
         || progress.sceneId === 'module-4-portfolio-practice') {
         setBusy(true)
@@ -3516,7 +3517,8 @@ export function LearningWindow() {
               ? { practiceId: 'm2-portfolio-planning', practiceVersion: '2.0.0' }
               : progress.sceneId === 'module-4-portfolio-practice'
                 ? { practiceId: 'm4-portfolio-release', practiceVersion: '1.0.0' }
-              : { practiceId: 'm3-portfolio-build', practiceVersion: '2.0.0' }}
+              : { practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0' }}
+          firstBuild={progress.sceneId === 'module-3-first-build'}
           courseRunId={progress.courseRunId}
           onClose={() => setPracticeBriefOpen(false)}
           onPortfolioComplete={async () => {

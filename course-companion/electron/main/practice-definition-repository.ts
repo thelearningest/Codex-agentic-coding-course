@@ -390,6 +390,9 @@ export class PracticeDefinitionRepository {
     if (['m2-portfolio-planning', 'm3-portfolio-build'].includes(practiceId) && expectedVersion === '1.0.0' && definition.version !== expectedVersion) {
       definition = parsePracticeDefinition(await this.readDefinition(practiceId + '.v1'))
     }
+    if (practiceId === 'm3-portfolio-build' && expectedVersion === '2.0.0' && definition.version !== expectedVersion) {
+      definition = parsePracticeDefinition(await this.readDefinition(practiceId + '.v2'))
+    }
     if (definition.practiceId !== practiceId) throw new Error('Practice definition id mismatch')
     if (expectedVersion !== undefined && definition.version !== expectedVersion) {
       throw new Error('Practice definition version mismatch')

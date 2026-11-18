@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
 import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
@@ -328,7 +329,7 @@ async function loadPortfolioReleaseContinuation() {
   if (loaded.status !== 'returning' && loaded.status !== 'recovered') return null
   const receipt = [...loaded.progress.practiceCompletions].reverse().find((item) =>
     item.courseRunId === loaded.progress.courseRunId && item.practiceId === 'm3-portfolio-build'
-    && item.practiceVersion === '2.0.0' && item.checkpointId === 'm3-complete'
+    && isPortfolioBuildPackageVersion(item.practiceVersion) && item.checkpointId === 'm3-complete'
     && item.portfolioBuildHandoff?.schemaVersion === 2)
   const handoff = receipt?.portfolioBuildHandoff
   if (!receipt || handoff?.schemaVersion !== 2) return null
@@ -338,7 +339,7 @@ async function loadPortfolioReleaseContinuation() {
   const record = await practiceRunRepository.load()
   const source = [record.activeRun, ...record.archivedRuns.map((archive) => archive.retainedRun)].find((run) =>
     run?.runId === receipt.runId && run.generation === handoff.approval.generation
-    && run.practiceId === 'm3-portfolio-build' && run.practiceVersion === '2.0.0')
+    && run.practiceId === 'm3-portfolio-build' && run.practiceVersion === receipt.practiceVersion)
   if (!source || source.reviewStatus !== 'passed' || source.completion?.submissionDigest !== handoff.submissionDigest
     || source.binding.threadId !== handoff.approval.threadId || handoff.approval.courseRunId !== loaded.progress.courseRunId
     || resolve(source.binding.workspaceRoot) !== resolve(handoff.workspace.canonicalPath)) return null
@@ -751,7 +752,7 @@ function isPortfolioStageActionRequest(value: unknown): value is PortfolioStageA
 function isPortfolioPackageApprovalRequest(value: unknown): value is PortfolioPackageApprovalRequest {
   return isRecord(value)
     && ((value.practiceId === 'm2-portfolio-planning' && value.practiceVersion === '2.0.0' && Object.keys(value).length === 8 && value.approvePrd === true && value.approvePlan === true)
-      || (value.practiceId === 'm3-portfolio-build' && value.practiceVersion === '2.0.0' && Object.keys(value).length === 7 && value.approveWebsite === true)
+      || (value.practiceId === 'm3-portfolio-build' && isPortfolioBuildPackageVersion(value.practiceVersion) && Object.keys(value).length === 7 && value.approveWebsite === true)
       || (value.practiceId === 'm4-portfolio-release' && value.practiceVersion === '1.0.0' && Object.keys(value).length === 7 && value.approveWebsite === true))
     && typeof value.runId === 'string' && /^[A-Za-z0-9_-]{1,160}$/.test(value.runId)
     && Number.isSafeInteger(value.generation) && Number(value.generation) > 0
@@ -989,6 +990,12 @@ function registerIpcHandlers(): void {
     if ((loaded.status !== 'returning' && loaded.status !== 'recovered') || loaded.progress.courseRunId !== request.courseRunId) {
       throw new Error('Portfolio approval does not match the current course run')
     }
+    if (request.practiceId === 'm3-portfolio-build' && loaded.progress.currentLessonId === 'module-3'
+      && loaded.progress.sceneId !== 'module-3-portfolio-practice'
+      && (loaded.progress.sceneId === 'module-3-first-build' || loaded.progress.sceneHistory.includes('module-3-first-build'))
+      && loaded.progress.checkpointId !== 'm3-mastery' && loaded.progress.checkpointId !== 'm3-complete') {
+      throw new Error('Hãy quay lại bài học sau khi xem bản đầu, rồi nộp website ở lượt Practice cuối.')
+    }
     return practiceCoordinator.approvePortfolioPackage(request)
   })
 
@@ -1045,6 +1052,18 @@ function registerIpcHandlers(): void {
     } finally {
       practiceHintPending = false
     }
+  })
+
+  ipcMain.handle('course:resume-first-build-lesson', async (_event, runId: unknown, generation: unknown) => {
+    const run = (await practiceRunRepository.load()).activeRun
+    if (!run || run.practiceId !== 'm3-portfolio-build' || run.runId !== runId
+      || run.generation !== generation || !run.binding) throw new Error('Task portfolio đã thay đổi.')
+    await progressRepository.resumeLessonAfterFirstBuild()
+    if (mainWindow?.isMinimized()) mainWindow.restore()
+    mainWindow?.show()
+    mainWindow?.focus()
+    companionWindow?.hide()
+    mainWindow?.webContents.send('course:practice-returned')
   })
 
   ipcMain.handle('course:return-passed-practice', async () => {

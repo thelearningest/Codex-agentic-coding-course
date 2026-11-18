@@ -30,7 +30,7 @@ async function fixture() {
   await mkdir(workspace)
   await mkdir(definitionDirectory)
   const courseDefinitions = new PracticeDefinitionRepository(join(process.cwd(), '..', 'pilot-workspace/course/practices'))
-  const buildDefinition = await courseDefinitions.load('m3-portfolio-build', '2.0.0')
+  const buildDefinition = await courseDefinitions.load('m3-portfolio-build', '2.1.0')
   const releaseDefinition: PracticeDefinition = {
     ...buildDefinition, practiceId: identity.practiceId, version: identity.practiceVersion,
     title: 'Phát hành portfolio', checkpointId: 'm4-portfolio-release', evidenceProfile: 'portfolio-release',

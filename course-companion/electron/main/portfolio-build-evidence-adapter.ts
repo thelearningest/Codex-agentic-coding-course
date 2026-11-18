@@ -1,3 +1,4 @@
+import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { createHash } from 'node:crypto'
 import { lstat, readFile, realpath } from 'node:fs/promises'
 import { isAbsolute, relative, resolve, sep } from 'node:path'
@@ -99,7 +100,7 @@ export class PortfolioBuildEvidenceAdapter implements PracticeEvidenceAdapter {
 
   async collect(context: Readonly<PracticeEvidenceAdapterContext>): Promise<PracticeAdapterEvidenceState> {
     const observedAt = this.now().toISOString()
-    if (context.definition.version === '2.0.0') return collectPortfolioBuildPackage(context, observedAt)
+    if (isPortfolioBuildPackageVersion(context.definition.version)) return collectPortfolioBuildPackage(context, observedAt)
     const root = await realpath(resolve(context.workspaceRoot))
     const artifacts = new Map<string, TextArtifact>()
     const issues: PortfolioPlanningIssue[] = []

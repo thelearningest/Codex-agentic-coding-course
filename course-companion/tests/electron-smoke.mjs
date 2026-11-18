@@ -1585,7 +1585,7 @@ try {
   }
   await learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await answerAssessmentGroup(learningPage, 'final-assessment', { retryFirstChoice: true })
-  await learningPage.getByText('Bạn đã trả lời 5/5 câu.', { exact: false }).waitFor()
+  await learningPage.getByText('Bạn đã trả lời 4/4 câu.', { exact: false }).waitFor()
   assert.equal(await learningPage.locator('.pixel-scene-title').count(), 0)
   await capture(learningPage, 'module-2-portfolio-mastery-summary.png')
 
@@ -1625,7 +1625,7 @@ try {
     Object.entries(persisted.decisions).filter(
       ([key, value]) => key.startsWith('assessment:mastery-') && String(value).startsWith('correct')
     ).length,
-    5
+    4
   )
   assert.equal(persisted.practice.status, 'idle')
 
