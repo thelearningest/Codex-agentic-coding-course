@@ -484,7 +484,7 @@ export function PracticeProgress({
                   <button type="button" disabled={actionBusy || scopeDecision.trim().length === 0} onClick={() => planningAction({ type: 'record-scope-decision', value: scopeDecision.trim(), expectedPrdDigest: actionContext.prdDigest!, expectedPlanDigest: actionContext.planDigest! })}>Ghi nhận quyết định phạm vi</button>
                 </label>
               ) : null}
-              {currentPlanningStep.id === 'draft-plan' ? <p>Quay lại Codex để tạo implementation plan từ PRD đã duyệt, rồi chọn “Làm mới bằng chứng”.</p> : null}
+              {currentPlanningStep.id === 'draft-plan' ? <p>Quay lại Codex để tạo implementation plan từ PRD đã duyệt, rồi chọn “{onRefresh ? 'Làm mới bằng chứng' : 'Cập nhật và kiểm tra tiến độ'}”.</p> : null}
               {actionBusy ? <small>Đang xác nhận bằng chứng hiện tại…</small> : null}
             </div>
           ) : null}

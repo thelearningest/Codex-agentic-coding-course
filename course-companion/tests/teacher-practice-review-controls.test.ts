@@ -38,6 +38,23 @@ describe('Teacher Practice review controls', () => {
     expect(teacher).not.toContain('ĐANG CẬP NHẬT & KIỂM TRA…')
   })
 
+  it('keeps the upper review button as the only evidence refresh in the Practice review panel', async () => {
+    const teacher = await source('src/renderer/src/components/TeacherWorkspace.tsx')
+    const start = teacher.indexOf('<section className="pixel-practice-review"')
+    const end = teacher.indexOf(") : activeTab === 'teacher' ? (", start)
+    const practiceBranch = teacher.slice(start, end)
+    const reviewStart = teacher.indexOf('const reviewProgress = async')
+    const reviewEnd = teacher.indexOf('const requestHint = async', reviewStart)
+    const reviewHandler = teacher.slice(reviewStart, reviewEnd)
+
+    expect(start).toBeGreaterThan(-1)
+    expect(practiceBranch).toContain("{workspace?.activePractice ? (\n              <button\n                className={'pixel-review-primary'")
+    expect(practiceBranch).not.toContain('onRefresh=')
+    expect(reviewHandler.indexOf('if (!workspace?.review?.canReview)')).toBeGreaterThan(-1)
+    expect(reviewHandler.indexOf('if (!workspace?.review?.canReview)'))
+      .toBeLessThan(reviewHandler.indexOf('window.courseCompanion.reviewPractice()'))
+  })
+
   it('gates return on persisted review state rather than Teacher prose', async () => {
     const teacher = await source('src/renderer/src/components/TeacherWorkspace.tsx')
 

@@ -315,7 +315,14 @@ export function TeacherWorkspace({
     setReviewBusy(true)
     setError('')
     try {
-      if (workspace?.portfolioPackage && workspace.activePractice) {
+      // Before Triết may review, this button only re-reads the linked Codex task's evidence.
+      if (!workspace?.review?.canReview) {
+        const refreshed = await window.courseCompanion.loadPracticeWorkspace()
+        applyWorkspace(refreshed)
+        if (refreshed.error) setError(refreshed.error)
+        return
+      }
+      if (workspace.portfolioPackage && workspace.activePractice) {
         const refreshed = await window.courseCompanion.loadPracticeWorkspace()
         applyWorkspace(refreshed)
         if (refreshed.error) {
@@ -628,7 +635,7 @@ export function TeacherWorkspace({
                   : 'Sẵn sàng đối chiếu tiến độ'}</strong>
               {!compactPractice ? <p>Triết sẽ cập nhật bằng chứng từ đúng task Codex rồi duyệt tiến độ hiện tại.</p> : null}
             </div> : null}
-            {workspace?.review?.canReview ? (
+            {workspace?.activePractice ? (
               <button
                 className={'pixel-review-primary' + (reviewBusy ? ' is-busy' : '')}
                 type="button"
@@ -689,7 +696,6 @@ export function TeacherWorkspace({
                 returnDisabled={workspaceRefreshing || reviewBusy || hintBusy}
                 actionBusy={workspaceRefreshing || planningActionBusy || hintBusy}
                 onPlanningAction={(action) => void recordPlanningAction(action)}
-                onRefresh={() => void refreshPracticeWorkspace()}
                 onReturn={() => void returnToCourse()}
               />
             ) : null}

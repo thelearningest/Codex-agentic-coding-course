@@ -82,7 +82,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
         !artifactPaths.some((path) => issue.startsWith(`${path}: `)))
         .map((issue) => <p className="practice-package-notice" key={issue}>{issue}</p>)}
       {packageView.unexpectedPaths.length > 0 ? <p className="practice-package-notice">Ngoài phạm vi: {packageView.unexpectedPaths.join(', ')}</p> : null}
-      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại quá trình xây, ví dụ cải thiện và gỡ lỗi, rồi kiểm tra website hiện tại trước khi nộp.' : 'Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.'}</p> : null}
+      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại quá trình xây, ví dụ cải thiện và gỡ lỗi, rồi kiểm tra website hiện tại trước khi nộp.' : onRefresh ? 'Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.' : 'Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.'}</p> : null}
       <label className="practice-package-approval">
         <input type="checkbox" checked={accepted} disabled={busy || disabled || !packageView.ready}
           onChange={() => { setApproved(!accepted); setApprovalDigest(packageView.sourceDigest) }} />

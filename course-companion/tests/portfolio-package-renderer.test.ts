@@ -163,4 +163,16 @@ describe('five-document Practice submission surface', () => {
     const busy = renderToStaticMarkup(createElement(PracticeProgress, { ...props, actionBusy: true }))
     expect(busy).toMatch(/disabled=""[^>]*>Làm mới bằng chứng/)
   })
+
+  it.each([false, true])('points to the upper review button when no refresh action is provided in compact=%s', (compact) => {
+    const view = workspace()
+    view.portfolioPackage!.ready = false
+    view.portfolioPackage!.approved = false
+    view.portfolioPackage!.artifactPaths = portfolioPackageArtifactPaths.slice(0, 4)
+    const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact }))
+    expect(html).not.toContain('Làm mới bằng chứng')
+    expect(html).toContain('Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.')
+    const withRefresh = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact, onRefresh: () => {} }))
+    expect(withRefresh).toContain('Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.')
+  })
 })

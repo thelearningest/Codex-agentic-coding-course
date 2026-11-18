@@ -50,6 +50,30 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — v2 Practice, flexible AI assessment, complete source fingerprints and task-acceptance freshness; course scenes/questions preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | v2 design/implementation approved 13 September; expanded validity repairs requested 17 November; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### One evidence action in the Triết review panel, 18 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| I4 / M2.5 — Triết review panel keeps only `Cập nhật và kiểm tra tiến độ` | `implemented` | `passed` for typecheck, lint, 878 unit tests, nine startup checks, build, Electron smoke, Teacher chat, screenshot guide and review-feedback suites; the disposable portfolio journey is `blocked` earlier at an existing intro-text assertion | Owner chose option A and approved both copy edits on 18 November 2026 | `pending` | Owner reviews the panel in the rebuilt app; repair the stale portfolio-journey assertion separately. |
+
+The owner asked to keep only the upper review button. In the Triết review
+panel, `Cập nhật và kiểm tra tiến độ` now shows for every active Practice.
+Before Triết may review, it only re-reads the linked task's evidence and does
+not request a review. Once review is allowed, it behaves as before. The panel no
+longer passes a refresh action, so its four `Làm mới bằng chứng` buttons are
+gone. The course-side Practice page keeps its refresh button because it has no
+review button. Where the panel has no refresh button, the draft-plan step and
+the five-document notice now name `Cập nhật và kiểm tra tiến độ`; other copy is
+unchanged.
+
+On macOS the unit run used `TMPDIR=/private/tmp`; without it, three
+main-process evidence files fail on the `/var` symlink alias. Teacher chat timed
+out twice at the windowed-reply step, then passed on unchanged source and twice
+more with this change. `tests/portfolio-package-electron.mjs` stops at line 114
+because the expected shared-project sentence is no longer found. That happens
+before any refresh step, so it could not verify this change. The canReview-false
+path is covered by a source test, not an Electron journey.
+
 ### Main synchronization, 18 November 2026
 
 Implementation: `implemented`. The merge combines local course and Teacher
