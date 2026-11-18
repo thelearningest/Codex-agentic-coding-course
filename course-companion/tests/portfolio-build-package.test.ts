@@ -203,6 +203,7 @@ describe('Module 3 plan-led build package', () => {
       portfolioPlanningHandoff: { schemaVersion: 2, workspace, artifacts, approval, task,
         submission: { runId: task.runId, generation: approval.generation, sourceDigest: approval.sourceDigest,
           reviewDigest: 'b'.repeat(64), reviewedAt: f.run.startedAt },
+        // A completion recorded before the audience question was removed must still unlock Module 3.
         mastery: { questionIds: ['mastery-1', 'mastery-4', 'mastery-5', 'mastery-6', 'mastery-audience-choice'], answerDigest: 'c'.repeat(64) },
         summary: { learnerDecision: 'SIMULATED audience decision', evidenceBoundary: 'SIMULATED evidence boundary',
           firstBuild: 'SIMULATED first build', deliberatelyOutOfScope: 'SIMULATED scope boundary' },

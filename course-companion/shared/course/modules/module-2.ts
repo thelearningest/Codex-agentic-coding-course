@@ -39,7 +39,6 @@ export const moduleTwoDefinition = {
     { id: 'module-2-mastery-scenario-prd', checkpointId: 'm2-portfolio-mastery', courseLessonId: 'm2-portfolio-brief' },
     { id: 'module-2-mastery-scenario-validation', checkpointId: 'm2-portfolio-mastery', courseLessonId: 'm2-portfolio-brief' },
     { id: 'module-2-mastery-scenario-first-task', checkpointId: 'm2-portfolio-mastery', courseLessonId: 'm2-portfolio-brief' },
-    { id: 'module-2-mastery-owned-audience', checkpointId: 'm2-portfolio-mastery', courseLessonId: 'm2-portfolio-brief' },
     { id: 'module-2-portfolio-mastery-summary', checkpointId: 'm2-portfolio-mastery', courseLessonId: 'm2-portfolio-brief' },
     { id: 'module-2-portfolio-complete', checkpointId: 'm2-portfolio-complete', courseLessonId: 'm2-portfolio-brief' }
   ],

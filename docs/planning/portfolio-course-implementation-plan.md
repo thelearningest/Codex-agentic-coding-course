@@ -75,6 +75,39 @@ Course Companion few-screen UI gate, unit/startup tests, build, Electron tests
 and screenshot checks were not run. Desktop/narrow rendered inspection and
 owner visual acceptance remain pending; no pilot acceptance is inferred.
 
+### Module 2 written audience question removed, 18 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| M2.6 — final assessment ends with four scenario questions | `implemented` | `passed` for typecheck, lint, build, nine startup checks, unit tests, screenshot guide, review feedback and the disposable Module 2→3→4 journey; Electron smoke `blocked` at an unrelated Module 1 page count | Owner explicitly requested removing this exact question and approved the decision packet, including the completion-summary text, on 18 November 2026 | `pending` | Owner reviews the four-question assessment in the rebuilt app. |
+
+The owner asked to delete the last Module 2 mastery question,
+`mastery-audience-choice`, and its page `module-2-mastery-owned-audience`. The
+final assessment now has the four scenario questions `mastery-1`, `-4`, `-5`
+and `-6`. Module 2 completion no longer requires a learner-written mastery
+answer; the learner still approves the five documents and Triết still reviews
+the package. The completion receipt now says “Đã đối chiếu 4 tình huống trên
+planning package hiện tại.”
+
+Saved progress on the removed page moves to the first mastery question, as for
+earlier retired Module 2 questions, and the old written answer is cleared. The
+other four answers are kept. Completions recorded with the old five-question
+list remain valid, so learners who already finished Module 2 keep their
+Module 3 handoff. Regression tests cover the page migration and the old
+five-question handoff.
+
+Verification used `TMPDIR=/private/tmp`. 878 of 879 unit tests passed. The one
+failure is the `mastery-5` wording test, caused by a separate uncommitted edit
+to that answer choice in the working copy; this commit does not include that
+edit, and the test passed with the committed wording. The disposable portfolio
+journey completed Module 2 with four answers and handed off to Module 3.
+Electron smoke stopped in Module 1 at `TRANG 1/5`, after `3919ba2` added the
+Projects page, before reaching Module 2. Teacher chat timed out at its
+windowed-reply step in two of three runs; this change does not touch theory
+chat. The quiz page was not opened in the app: a disposable profile cannot
+reach mastery without a passed Practice. Its `Câu x/y` label and submit-button
+count are computed from the question list.
+
 ### One evidence action in the Triết review panel, 18 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

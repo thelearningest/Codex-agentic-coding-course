@@ -126,9 +126,9 @@ describe('Course module assessment banks', () => {
   it('keeps only the final Module 2 assessment after Executor Practice', async () => {
     const quiz = await loadQuiz('module-2')
     expect(Object.fromEntries((quiz.groups ?? []).map((group) => [group.id, group.questions.length]))).toEqual({
-      'final-assessment': 5
+      'final-assessment': 4
     })
-    expect((quiz.groups ?? []).flatMap((group) => group.questions)).toHaveLength(5)
+    expect((quiz.groups ?? []).flatMap((group) => group.questions)).toHaveLength(4)
   })
 
   it('gives every question an answer contract and approved source', async () => {
@@ -167,12 +167,7 @@ describe('Course module assessment banks', () => {
         expect(question.answerIndex).toBeLessThan(4)
       } else {
         const reviewSignals = question.criteria ?? question.expectedSignals ?? []
-        if (reviewSignals.length === 0) {
-          expect(question.id).toBe('mastery-audience-choice')
-          expect(question.explanation).toMatch(/^Câu hỏi này không tính điểm/)
-        } else {
-          expect(reviewSignals.length).toBeGreaterThanOrEqual(3)
-        }
+        expect(reviewSignals.length).toBeGreaterThanOrEqual(3)
       }
     }
   })
@@ -202,7 +197,7 @@ describe('Course module assessment banks', () => {
     })
     expect(finalGroup?.questions.filter((question) => question.type === 'multiple-choice')).toHaveLength(4)
     expect(finalGroup?.questions.map((question) => question.id)).not.toContain('mastery-2')
-    expect(finalGroup?.questions.filter((question) => question.type === 'short-answer')).toHaveLength(1)
+    expect(finalGroup?.questions.filter((question) => question.type === 'short-answer')).toHaveLength(0)
     expect(finalGroup?.questions.filter((question) => question.type === 'artifact-answer')).toHaveLength(0)
   })
 

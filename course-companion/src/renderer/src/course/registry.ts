@@ -30,7 +30,6 @@ const rendererModules = [
         ['module-2-mastery-scenario-prd'],
         ['module-2-mastery-scenario-validation'],
         ['module-2-mastery-scenario-first-task'],
-        ['module-2-mastery-owned-audience'],
         ['module-2-portfolio-mastery-summary'],
         ['module-2-portfolio-complete']
       ]

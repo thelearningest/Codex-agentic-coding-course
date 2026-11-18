@@ -96,7 +96,8 @@ const RETIRED_MODULE_TWO_SCENES = new Set([
   'module-2-mastery-scenario-reference',
   'module-2-mastery-owned-scope',
   'module-2-mastery-owned-evidence',
-  'module-2-mastery-owned-validation'
+  'module-2-mastery-owned-validation',
+  'module-2-mastery-owned-audience'
 ])
 const RETIRED_MODULE_TWO_LESSONS = new Set([
   'm2-content-evidence-inventory',
@@ -120,11 +121,15 @@ const moduleTwoMasteryQuestionIds = [
   'mastery-1',
   'mastery-4',
   'mastery-5',
-  'mastery-6',
+  'mastery-6'
+] as const
+// Module 2 completions recorded before the written audience question was removed.
+const fiveQuestionModuleTwoMasteryQuestionIds = [
+  ...moduleTwoMasteryQuestionIds,
   'mastery-audience-choice'
 ] as const
 const previousModuleTwoMasteryQuestionIds = [
-  ...moduleTwoMasteryQuestionIds,
+  ...fiveQuestionModuleTwoMasteryQuestionIds,
   'mastery-3',
   'mastery-scope-boundary',
   'mastery-evidence-gap',
@@ -139,7 +144,8 @@ const RETIRED_MODULE_TWO_MASTERY_QUESTION_IDS = new Set([
   'mastery-3',
   'mastery-scope-boundary',
   'mastery-evidence-gap',
-  'mastery-requirement-validation'
+  'mastery-requirement-validation',
+  'mastery-audience-choice'
 ])
 const RETIRED_MODULE_THREE_SCENE_DESTINATIONS = new Map<string, SceneId>([
   ['module-3-scaffold-intro', 'module-3-debugging-intro'],
@@ -448,6 +454,7 @@ function isPortfolioPlanningHandoff(value: unknown): boolean {
     && expected.every((id) => masteryQuestionValues.includes(id))
   if (!masteryQuestionValues.every((id) => typeof id === 'string')
     || (!hasQuestionIds(moduleTwoMasteryQuestionIds)
+      && !hasQuestionIds(fiveQuestionModuleTwoMasteryQuestionIds)
       && !hasQuestionIds(previousModuleTwoMasteryQuestionIds)
       && !hasQuestionIds(legacyModuleTwoMasteryQuestionIds))
     || !DIGEST.test(String(mastery.answerDigest))) return false
@@ -484,8 +491,10 @@ function isPortfolioPackageHandoff(value: Record<string, unknown>): boolean {
   if (submission.runId !== task.runId || submission.generation !== approval.generation
     || submission.sourceDigest !== approval.sourceDigest || !DIGEST.test(String(submission.reviewDigest))
     || !isIsoDate(submission.reviewedAt)) return false
-  return Array.isArray(mastery.questionIds) && mastery.questionIds.length === moduleTwoMasteryQuestionIds.length
-    && moduleTwoMasteryQuestionIds.every((id) => (mastery.questionIds as string[]).includes(id))
+  return Array.isArray(mastery.questionIds)
+    && [moduleTwoMasteryQuestionIds, fiveQuestionModuleTwoMasteryQuestionIds].some((expected) =>
+      (mastery.questionIds as string[]).length === expected.length
+      && expected.every((id) => (mastery.questionIds as string[]).includes(id)))
     && DIGEST.test(String(mastery.answerDigest))
     && hasExactKeys(summary, ['learnerDecision', 'evidenceBoundary', 'firstBuild', 'deliberatelyOutOfScope'])
     && Object.values(summary).every((text) => typeof text === 'string' && text.trim().length > 0 && text.length <= 700)

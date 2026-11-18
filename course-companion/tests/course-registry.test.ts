@@ -201,7 +201,7 @@ describe('portfolio course registry', () => {
       'module-2-check-delayed-evidence'
     ]) expect(moduleTwo.scenes.some((scene) => scene.id === retiredSceneId)).toBe(false)
     expect(moduleTwo.scenes.filter((scene) => scene.id.startsWith('module-2-check-'))).toHaveLength(0)
-    expect(moduleTwo.scenes.filter((scene) => scene.id.startsWith('module-2-mastery-'))).toHaveLength(5)
+    expect(moduleTwo.scenes.filter((scene) => scene.id.startsWith('module-2-mastery-'))).toHaveLength(4)
   })
 
   it('registers the complete Module 4 content journey while preserving its deferred Practice identity', () => {

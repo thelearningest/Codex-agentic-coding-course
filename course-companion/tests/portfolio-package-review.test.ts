@@ -551,8 +551,7 @@ describe('five-document portfolio package review', () => {
     await test.service.review()
     await test.service.returnPassedPractice()
     const masteryDecisions = Object.fromEntries([
-      ...[1, 4, 5, 6].map((index) => [`assessment:mastery-${index}`, 'correct:1']),
-      ['assessment:mastery-audience-choice', 'correct:self-review:A recruiter decides whether to invite me based on verified work.']
+      ...[1, 4, 5, 6].map((index) => [`assessment:mastery-${index}`, 'correct:1'])
     ])
     await test.progress.save({
       currentLessonId: 'module-2',

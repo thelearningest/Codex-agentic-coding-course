@@ -2734,9 +2734,6 @@ export function LearningWindow() {
       const assessmentDecisions = Object.fromEntries(group.questions.map((question) => {
         const answer = answers[question.id]?.trim() ?? ''
         if (question.type !== 'multiple-choice') {
-          if (group.id === 'final-assessment' && question.id === 'mastery-audience-choice') {
-            return [assessmentDecisionKey(question.id), `correct:self-review:${answer}`]
-          }
           const currentResult = progress.decisions[assessmentDecisionKey(question.id)]
           if (currentResult?.startsWith('correct')) {
             return [assessmentDecisionKey(question.id), currentResult]

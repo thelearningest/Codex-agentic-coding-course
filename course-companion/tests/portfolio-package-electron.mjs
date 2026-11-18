@@ -394,8 +394,7 @@ try {
     const { progress } = await api.loadProgress()
     await api.saveProgress({ currentLessonId: 'module-2', currentCourseLessonId: 'm2-portfolio-brief', checkpointId: 'm2-portfolio-mastery',
       sceneId: 'module-2-portfolio-mastery-summary', sceneHistory: progress.sceneHistory, completedCheckpointIds: progress.completedCheckpointIds,
-      decisions: Object.fromEntries([...['mastery-1', 'mastery-4', 'mastery-5', 'mastery-6'].map((id) => ['assessment:' + id, 'correct:1']),
-        ['assessment:mastery-audience-choice', 'correct:self-review:Nhà tuyển dụng cần xem dự án thật trước khi mời tôi phỏng vấn.']]) })
+      decisions: Object.fromEntries([...['mastery-1', 'mastery-4', 'mastery-5', 'mastery-6'].map((id) => ['assessment:' + id, 'correct:1'])]) })
   })
   await saveMasteryAnswers()
   await writeFile(join(portfolio, 'planning/portfolio-brief.md'),

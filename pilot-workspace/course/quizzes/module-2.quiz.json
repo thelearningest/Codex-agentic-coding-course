@@ -109,20 +109,6 @@
             "url": "docs/planning/portfolio-course-v1/DECISION_LOG.md#d-008-define-the-capability-milestones-within-modules-2-4",
             "basis": "Quy trình Module 2 cho phép coding agent hỗ trợ hỏi và soạn thảo, nhưng người học giữ quyền quyết định và duyệt các lựa chọn quan trọng."
           }
-        },
-        {
-          "id": "mastery-audience-choice",
-          "sceneId": "module-2-mastery-owned-audience",
-          "type": "short-answer",
-          "prompt": "Trong bài học, việc lập kế hoạch bắt đầu từ câu hỏi sản phẩm dành cho ai và cần giúp họ làm gì. Hãy mở `planning/portfolio-brief.md` của bạn rồi giải thích: người xem chính là ai, họ cần đưa ra quyết định gì sau khi xem portfolio, và lựa chọn này hỗ trợ mục tiêu của bạn như thế nào?",
-          "criteria": [],
-          "explanation": "Câu hỏi này không tính điểm, nó chỉ tạo cơ hội cho bạn tự xem lại PRD của mình",
-          "source": {
-            "kind": "authoritative-source",
-            "label": "GOV.UK — Learning about users and their needs",
-            "url": "https://www.gov.uk/service-manual/user-research/start-by-learning-user-needs",
-            "basis": "Thiết kế bắt đầu bằng việc hiểu ai có khả năng sử dụng sản phẩm, họ đang cố làm gì và kết quả họ cần đạt."
-          }
         }
       ]
     }

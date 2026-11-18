@@ -111,32 +111,20 @@ describe('Module 2 portfolio assessment contract', () => {
     }
   })
 
-  it('keeps one learner-owned PRD reflection without marking criteria', async () => {
+  it('ends the final assessment with four scenario questions and no written reflection', async () => {
     const quiz = await loadQuiz()
     const final = quiz.groups.find((group) => group.id === 'final-assessment')
-    const learnerOwned = final?.questions.filter((question) => question.type === 'short-answer') ?? []
 
-    expect(learnerOwned.map((question) => question.id)).toEqual([
-      'mastery-audience-choice'
+    expect(final?.questions.map((question) => question.id)).toEqual([
+      'mastery-1', 'mastery-4', 'mastery-5', 'mastery-6'
     ])
-    expect(learnerOwned.map((question) => question.prompt)).toEqual([
-      expect.stringContaining('portfolio-brief.md')
-    ])
-    expect(learnerOwned[0]?.criteria).toEqual([])
-    expect(learnerOwned[0]?.explanation).toBe(
-      'Câu hỏi này không tính điểm, nó chỉ tạo cơ hội cho bạn tự xem lại PRD của mình'
-    )
+    expect(final?.questions.every((question) => question.type === 'multiple-choice')).toBe(true)
   })
 
-  it('auto-confirms the unscored reflection and opens the summary on group submission', async () => {
+  it('opens the summary on group submission without a written-reflection special case', async () => {
     const source = await loadLearningWindowSource()
 
-    expect(source).toContain(
-      "group.id === 'final-assessment' && question.id === 'mastery-audience-choice'"
-    )
-    expect(source).toContain(
-      "return [assessmentDecisionKey(question.id), `correct:self-review:${answer}`]"
-    )
+    expect(source).not.toContain('mastery-audience-choice')
     expect(source).toContain(
       "await advanceToScene('module-2-portfolio-mastery-summary', decisions)"
     )

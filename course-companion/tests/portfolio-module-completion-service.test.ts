@@ -101,8 +101,7 @@ async function fixture(documentOverrides: Record<string, string> = {}) {
   await Promise.all([mkdir(workspace), mkdir(courseRoot), mkdir(dataDirectory)])
   const progressRepository = new ProgressRepository(dataDirectory, () => new Date(observedAt))
   const decisions = Object.fromEntries([
-    ...[1, 4, 5, 6].map((index) => [`assessment:mastery-${index}`, 'correct:1']),
-    ['assessment:mastery-audience-choice', 'correct:self-review:Nhà tuyển dụng cần quyết định mời tôi phỏng vấn dựa trên dự án thật.']
+    ...[1, 4, 5, 6].map((index) => [`assessment:mastery-${index}`, 'correct:1'])
   ])
   const initialUpdate: ProgressUpdate = {
     currentLessonId: 'module-2',

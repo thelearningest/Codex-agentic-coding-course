@@ -685,6 +685,59 @@ describe('ProgressRepository', () => {
     expect(JSON.stringify(migrated)).not.toContain('module-2-mastery-owned-validation')
   })
 
+  it('moves learners off the removed Module 2 audience question and keeps the four scenario answers', async () => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save({
+      currentLessonId: 'module-2',
+      currentCourseLessonId: 'm2-portfolio-brief',
+      checkpointId: 'm2-portfolio-planning',
+      sceneId: 'module-2-portfolio-practice',
+      sceneHistory: ['module-2-portfolio-practice'],
+      completedCheckpointIds: ['m2-portfolio-planning'],
+      decisions: {}
+    })
+    const scenarioAnswers = {
+      'assessment:mastery-1': 'correct:1',
+      'assessment:mastery-4': 'correct:1',
+      'assessment:mastery-5': 'correct:1',
+      'assessment:mastery-6': 'correct:2'
+    }
+    await writeFile(join(directory, 'learner-state.json'), `${JSON.stringify({
+      ...started,
+      checkpointId: 'm2-portfolio-mastery',
+      sceneId: 'module-2-mastery-owned-audience',
+      sceneHistory: [
+        ...started.sceneHistory,
+        'module-2-portfolio-mastery',
+        'module-2-mastery-scenario-viewer',
+        'module-2-mastery-scenario-first-task',
+        'module-2-mastery-owned-audience'
+      ],
+      decisions: {
+        ...scenarioAnswers,
+        'assessment:mastery-audience-choice': 'correct:self-review:Nhà tuyển dụng cần xem dự án thật.'
+      }
+    }, null, 2)}\n`, 'utf8')
+
+    await expect(repository.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: {
+        sceneId: 'module-2-mastery-scenario-viewer',
+        sceneHistory: [
+          'module-2-portfolio-practice',
+          'module-2-portfolio-mastery',
+          'module-2-mastery-scenario-viewer',
+          'module-2-mastery-scenario-first-task'
+        ],
+        decisions: scenarioAnswers
+      }
+    })
+    const migrated = await readFile(join(directory, 'learner-state.json'), 'utf8')
+    expect(migrated).not.toContain('mastery-audience-choice')
+    expect(migrated).not.toContain('module-2-mastery-owned-audience')
+  })
+
   it('resumes an exact page inside the opening introduction', async () => {
     const repository = new ProgressRepository(await temporaryDirectory())
     await repository.save(introStart)

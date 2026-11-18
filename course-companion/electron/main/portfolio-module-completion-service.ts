@@ -18,11 +18,7 @@ const masteryQuestionIds = [
   'mastery-1',
   'mastery-4',
   'mastery-5',
-  'mastery-6',
-  'mastery-audience-choice'
-] as const
-const writtenQuestionIds = [
-  'mastery-audience-choice'
+  'mastery-6'
 ] as const
 
 function digest(value: string): string {
@@ -94,12 +90,6 @@ export class PortfolioModuleCompletionService {
     }
     const masteryAnswers = masteryQuestionIds.map((questionId) => ({ questionId, result: progress.decisions[`assessment:${questionId}`] ?? '' }))
     if (masteryAnswers.some(({ result }) => !result.startsWith('correct'))) throw new Error('All Module 2 mastery evidence must be satisfied')
-    for (const questionId of writtenQuestionIds) {
-      const result = progress.decisions[`assessment:${questionId}`] ?? ''
-      if (!result.startsWith('correct:self-review:') || result.slice('correct:self-review:'.length).trim().length < 20) {
-        throw new Error('Learner-owned mastery answers must be saved before completion')
-      }
-    }
     const artifacts = portfolioPackageArtifactPaths.map((path) => ({ path, digest: approval.artifactDigests[path]! }))
     const contents = new Map(envelope.portfolioPackage.artifacts.map((artifact) => [artifact.path, artifact.content]))
     const excerpt = (path: string, headings: RegExp) => {
@@ -130,7 +120,7 @@ export class PortfolioModuleCompletionService {
       practiceVersion: active.practiceVersion, runId: active.runId, checkpointId: 'm2-portfolio-complete',
       status: 'completed', completedAt: this.now().toISOString(), submissionDigest: active.completion.submissionDigest,
       evidenceSummary: bounded(active.reviewResult.summary, 1500),
-      masterySummary: 'Đã đối chiếu 4 tình huống và lưu 1 câu trả lời do người học tự viết trên planning package hiện tại.',
+      masterySummary: 'Đã đối chiếu 4 tình huống trên planning package hiện tại.',
       destination: {
         lessonId: 'module-3',
         checkpointId: 'm3-complete-first-version',
