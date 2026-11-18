@@ -21,7 +21,7 @@ try {
     await app.waitForEvent('window', { predicate: w => w.url().includes('#/learning') })
   await page.evaluate(() => globalThis.courseCompanion.saveProgress({
     currentLessonId: 'module-1', currentCourseLessonId: 'm1-agents-and-skills',
-    checkpointId: 'm1-agents-and-skills', sceneId: 'module-1-skills-portfolio', sceneHistory: [], completedCheckpointIds: [], decisions: {}
+    checkpointId: 'm1-agents-and-skills', sceneId: 'module-1-codex-projects', sceneHistory: [], completedCheckpointIds: [], decisions: {}
   }))
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()

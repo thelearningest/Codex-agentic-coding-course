@@ -460,7 +460,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await page.setViewportSize({ width: 1180, height: 780 })
   }
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 1/3', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 1/4', { exact: true }).first().waitFor()
   const agentsBoard = page.locator('.pixel-guidance-board.is-agents')
   await agentsBoard.waitFor()
   assert.doesNotMatch(await agentsBoard.textContent(), /AGENTS\.md - bộ quy luật cho coding agents/)
@@ -494,7 +494,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await page.setViewportSize({ width: 1180, height: 780 })
   }
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 2/3', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 2/4', { exact: true }).first().waitFor()
   const skillBoard = page.locator('.pixel-guidance-board.is-skills')
   await skillBoard.waitFor()
   assert.equal(await skillBoard.locator('.pixel-skill-excerpt').count(), 1)
@@ -528,7 +528,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await page.setViewportSize({ width: 1180, height: 780 })
   }
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 3/3', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 3/4', { exact: true }).first().waitFor()
   await verifySequentialReview(page, 6, 'module-1')
   const portfolioSkillsBoard = page.locator('.pixel-guidance-board.is-skills-portfolio')
   await portfolioSkillsBoard.waitFor()
@@ -554,6 +554,9 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     assert.ok(copywritingSkillBounds.y >= frontendSkillBounds.y + frontendSkillBounds.height)
     await page.setViewportSize({ width: 1180, height: 780 })
   }
+  await portfolioSkillsBoard.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
+  await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 4/4', { exact: true }).first().waitFor()
+  await page.getByRole('heading', { name: 'Làm quen với Project trong Codex', exact: true }).waitFor()
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   await page.locator('.practice-brief-overlay').waitFor()
   assert.equal(await page.getByText('Chứng minh cấu hình thật trong Codex', { exact: true }).count(), 0)

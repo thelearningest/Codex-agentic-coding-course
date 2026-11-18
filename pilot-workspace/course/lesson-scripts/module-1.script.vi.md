@@ -14,20 +14,6 @@ chọn phạm vi và duyệt kết quả cuối cùng."
 `course/codex-setup/index.html` với nhãn **Mở phần giới thiệu Codex**. Không chạy
 server và không yêu cầu cài dependency.]
 
-### Làm quen với Project trong Codex
-
-Teacher nói: "Xuyên suốt khóa học, bạn sẽ sử dụng tính năng Projects của Codex để thực hành."
-
-Teacher nói: "Bạn có thể tìm thấy mục Projects trong thanh bên ở phía trái cửa sổ Codex."
-
-[Cho Learner xem ảnh `course/codex-setup/images/projects-sidebar.png`.]
-
-Teacher nói: "Trong khóa học này, chúng mình đã chuẩn bị sẵn một project cho bạn, nó sẽ tự động hiện lên lúc bạn bắt đầu thực hành."
-
-Teacher nói: "Project giúp Codex làm việc với ngữ cảnh liên quan đến dự án, chẳng hạn như thư mục đang sử dụng, nội dung cuộc trò chuyện và hướng dẫn riêng trong tệp AGENTS.md."
-
-Teacher nói: "Ở bước này, bạn chỉ cần biết cách nhận ra project của khóa học trong mục Projects. Chúng mình sẽ hướng dẫn các thao tác cần thiết khi bạn bắt đầu thực hành."
-
 Teacher nói: "Approval cho biết khi nào Codex cần dừng để bạn quyết định. Ask
 for approval hỏi thường xuyên hơn. Approve for me tự xử lý hành động thông
 thường nhưng vẫn dừng ở hành động có rủi ro. Full access gỡ bỏ các ranh giới
@@ -118,7 +104,21 @@ portfolio và `copywriting` cho nội dung dựa trên thông tin thật. Teache
 thiệu `skills.sh` là nơi khám phá skill do cộng đồng chia sẻ và nói rõ Learner
 chưa cần cài thêm skill trong Module 1.
 
-[Dừng chờ Learner xem đủ ba trang của bài `AGENTS.md` và Skills. Khi chuyển sang
+### Làm quen với Project trong Codex
+
+Teacher nói: "Xuyên suốt khóa học, bạn sẽ sử dụng tính năng Projects của Codex để thực hành."
+
+Teacher nói: "Bạn có thể tìm thấy mục Projects trong thanh bên ở phía trái cửa sổ Codex."
+
+[Cho Learner xem ảnh `course/codex-setup/images/projects-sidebar.png`.]
+
+Teacher nói: "Trong khóa học này, chúng mình đã chuẩn bị sẵn một project cho bạn, nó sẽ tự động hiện lên lúc bạn bắt đầu thực hành."
+
+Teacher nói: "Project giúp Codex làm việc với ngữ cảnh liên quan đến dự án, chẳng hạn như thư mục đang sử dụng, nội dung cuộc trò chuyện và hướng dẫn riêng trong tệp AGENTS.md."
+
+Teacher nói: "Ở bước này, bạn chỉ cần biết cách nhận ra project của khóa học trong mục Projects. Chúng mình sẽ hướng dẫn các thao tác cần thiết khi bạn bắt đầu thực hành."
+
+[Dừng chờ Learner xem đủ bốn trang của bài `AGENTS.md` và Skills. Khi chuyển sang
 phần thực hành, lưu checkpoint `m1-agents-and-skills`. Không kiểm tra tệp và không
 yêu cầu ảnh chụp.]
 

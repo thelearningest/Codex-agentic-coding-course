@@ -294,23 +294,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'TỰ ĐỘNG HÓA', value: 'Việc lặp lại' }
     ],
     dialogue: 'Codex là coding agent của OpenAI. Ở bài này, mình chỉ cần bạn hiểu coding agent là một trợ lý có thể thực hiện công việc liên quan đến code: tạo ứng dụng, xây trang web, chỉnh sửa dự án và tự động hóa những việc lặp lại.',
-    choices: [{ label: 'Làm quen với giao diện Codex', next: 'module-1-codex-projects', primary: true }]
-  },
-  'module-1-codex-projects': {
-    lessonId: 'module-1',
-    checkpointId: 'm1-codex-orientation',
-    step: 1,
-    totalSteps: 6,
-    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
-    mission: projectsCopy.title,
-    objective: projectsCopy.title,
-    panelLabel: 'PROJECTS',
-    panelStatus: '',
-    tone: 'neutral',
-    request: projectsCopy.introduction[0]!,
-    evidence: [],
-    dialogue: [...projectsCopy.introduction, ...projectsCopy.details].join('\n\n'),
-    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-examples', primary: true }]
+    choices: [{ label: 'Làm quen với giao diện Codex', next: 'module-1-codex-examples', primary: true }]
   },
   'module-1-codex-examples': {
     lessonId: 'module-1',
@@ -447,6 +431,22 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'COPYWRITING', value: 'Viết nội dung dựa trên thông tin thật' }
     ],
     dialogue: 'Trong quá trình xây portfolio, bạn sẽ dùng frontend-design cho giao diện và copywriting cho nội dung. Bạn cũng có thể tự khám phá thêm skill tại skills.sh.',
+    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-projects', primary: true }]
+  },
+  'module-1-codex-projects': {
+    lessonId: 'module-1',
+    checkpointId: 'm1-agents-and-skills',
+    step: 2,
+    totalSteps: 6,
+    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
+    mission: projectsCopy.title,
+    objective: projectsCopy.title,
+    panelLabel: 'PROJECTS',
+    panelStatus: '',
+    tone: 'neutral',
+    request: projectsCopy.introduction[0]!,
+    evidence: [],
+    dialogue: [...projectsCopy.introduction, ...projectsCopy.details].join('\n\n'),
     practice: setupPracticeDefinition,
     choices: [{ label: 'Tiếp theo: thực hành cấu hình', next: 'module-1-setup-checklist', action: 'practice', primary: true }]
   },
@@ -1276,7 +1276,6 @@ const courseLessonPages = {
   ],
   'm1-understand-codex': [
     ['module-1-codex-orientation'],
-    ['module-1-codex-projects'],
     ['module-1-codex-examples'],
     ['module-1-codex-model-intro'],
     ['module-1-codex-effort-speed'],
@@ -1285,7 +1284,8 @@ const courseLessonPages = {
   'm1-agents-and-skills': [
     ['module-1-agents-intro'],
     ['module-1-skills-intro'],
-    ['module-1-skills-portfolio']
+    ['module-1-skills-portfolio'],
+    ['module-1-codex-projects']
   ],
   'm1-assessment': [
     ['module-1-mastery'],

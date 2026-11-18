@@ -11,12 +11,11 @@ export const courseOutline: Record<LessonId, readonly OutlineSection[]> = {
   ],
   'module-1': [
     { title: 'Codex và coding agent', startSceneId: 'module-1-codex-orientation' },
-    { title: 'Làm quen với Project trong Codex', startSceneId: 'module-1-codex-projects' },
     { title: 'Approval: quyền thực hiện thao tác', startSceneId: 'module-1-codex-examples' },
     { title: 'Model và mức suy luận', startSceneId: 'module-1-codex-model-intro' },
     { title: 'Lệnh / và menu @', startSceneId: 'module-1-codex-slash-commands' },
     { title: 'AGENTS.md và Skills', startSceneId: 'module-1-agents-intro' },
-    { title: 'Thực hành: Thiết lập Codex', startSceneId: 'module-1-skills-portfolio' },
+    { title: 'Thực hành: Thiết lập Codex', startSceneId: 'module-1-codex-projects' },
     { title: 'Kiểm tra cuối Module 1', startSceneId: 'module-1-mastery' },
     { title: 'Tổng kết Module 1', startSceneId: 'module-1-final-summary' }
   ],

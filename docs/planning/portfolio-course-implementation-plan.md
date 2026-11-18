@@ -54,21 +54,25 @@ and must never be inferred from a passing automated check.
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
-| Foundation / Module 1 orientation — Project introduction | `implemented` | `passed` for typecheck, lint and scoped source-preservation review under the few-screen UI gate | Owner approved the page, the non-exhaustive context sentence and implementation on 18 November; visual acceptance `pending` | `pending` | Review “Làm quen với Project trong Codex” in Module 1 at desktop and narrow widths. |
+| Foundation / Module 1 before Practice — Project introduction | `implemented` | `passed` for typecheck, lint and scoped source-preservation review under the few-screen UI gate | Owner approved the page, context sentence and moving it after Skills immediately before Module 1 Practice on 18 November; visual acceptance `pending` | `pending` | Review “Làm quen với Project trong Codex” in Module 1 at desktop and narrow widths. |
 
-The new `module-1-codex-projects` page follows Codex orientation and leads to
-the existing Approval page. It is also directly available in the Module 1
-outline. The page uses the approved copy, the owner-supplied Projects sidebar
+The `module-1-codex-projects` page now follows Skills for portfolio and leads
+to Module 1 setup Practice. The owner approved moving it from the opening
+orientation to this position. The existing “Thực hành: Thiết lập Codex” outline
+entry opens this preparation page; Skills remains in the AGENTS.md/Skills
+section. The page uses the approved copy, the owner-supplied Projects sidebar
 image, and the existing dark, rounded lesson board with gold navigation.
 Desktop uses an image/text grid; narrow layouts stack the content and buttons.
 The Pilot lesson and Teacher script carry the same wording. The renderer reads
 the copy from `course/codex-setup/projects.vi.json`.
 
 The source inventory preserves all existing introduction and Module 1 scene
-blocks and their copy, changing only the orientation destination to insert the
-new page. No checkpoint, assessment rule, Practice behavior or persistence
-schema was added. Frozen content digests were updated only for the approved
-additions. Existing learner progress was not reset.
+blocks and their teaching copy. The page is now the fourth page of the
+AGENTS.md/Skills lesson and uses its existing checkpoint. The existing Practice
+launch action moved from Skills to Project; the saved setup handoff displays
+Project when returning to the lesson. No checkpoint, assessment rule, Practice
+runtime or persistence schema was added. Pilot sections and existing test
+fixtures/digests follow this order. Existing learner progress was not reset.
 
 `npm run typecheck`, `npm run lint` and scoped diff checks passed. Per the
 Course Companion few-screen UI gate, unit/startup tests, build, Electron tests
