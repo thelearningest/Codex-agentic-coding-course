@@ -1,0 +1,33 @@
+.projects-lesson { width: min(1120px, 92vw); }
+.projects-lesson__body { min-height: 0; overflow-y: auto; padding: 28px 32px; }
+.projects-lesson__header h1 {
+  margin: 0 0 20px;
+  font-size: clamp(24px, 2.2vw, 31px);
+  line-height: 1.3;
+  letter-spacing: -.6px;
+}
+.projects-lesson p { margin: 0 0 16px; color: #cecec8; font-size: 16px; line-height: 1.7; }
+.projects-lesson__header p { margin-bottom: 8px; }
+.projects-lesson__content {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  align-items: start;
+  gap: 36px;
+  margin-top: 24px;
+}
+.projects-lesson__figure { min-width: 0; margin: 0; }
+.projects-lesson__figure img { display: block; width: 100%; height: auto; border-radius: 14px; }
+.projects-lesson__copy { min-width: 0; }
+.projects-lesson__copy p:last-child { margin-bottom: 0; }
+@media (max-width: 900px) {
+  .projects-lesson { width: 100%; }
+  .projects-lesson__body { padding: 24px; }
+  .projects-lesson__content { grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 24px; }
+}
+@media (max-width: 640px) {
+  .projects-lesson__body { padding: 22px 20px; }
+  .projects-lesson__content { grid-template-columns: minmax(0, 1fr); }
+  .projects-lesson__figure { width: min(320px, 100%); margin-inline: auto; }
+  .projects-lesson .model-controls__actions { flex-direction: column; align-items: stretch; }
+  .projects-lesson .model-controls__actions .pixel-choice { width: 100%; }
+}

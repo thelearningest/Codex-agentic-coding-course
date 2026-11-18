@@ -50,6 +50,31 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — v2 Practice, flexible AI assessment, complete source fingerprints and task-acceptance freshness; course scenes/questions preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | v2 design/implementation approved 13 September; expanded validity repairs requested 17 November; runtime acceptance `pending` | `pending` | Obtain real learner/AI and owner runtime acceptance. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Module 1 Project introduction, 18 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / Module 1 orientation — Project introduction | `implemented` | `passed` for typecheck, lint and scoped source-preservation review under the few-screen UI gate | Owner approved the page, the non-exhaustive context sentence and implementation on 18 November; visual acceptance `pending` | `pending` | Review “Làm quen với Project trong Codex” in Module 1 at desktop and narrow widths. |
+
+The new `module-1-codex-projects` page follows Codex orientation and leads to
+the existing Approval page. It is also directly available in the Module 1
+outline. The page uses the approved copy, the owner-supplied Projects sidebar
+image, and the existing dark, rounded lesson board with gold navigation.
+Desktop uses an image/text grid; narrow layouts stack the content and buttons.
+The Pilot lesson and Teacher script carry the same wording. The renderer reads
+the copy from `course/codex-setup/projects.vi.json`.
+
+The source inventory preserves all existing introduction and Module 1 scene
+blocks and their copy, changing only the orientation destination to insert the
+new page. No checkpoint, assessment rule, Practice behavior or persistence
+schema was added. Frozen content digests were updated only for the approved
+additions. Existing learner progress was not reset.
+
+`npm run typecheck`, `npm run lint` and scoped diff checks passed. Per the
+Course Companion few-screen UI gate, unit/startup tests, build, Electron tests
+and screenshot checks were not run. Desktop/narrow rendered inspection and
+owner visual acceptance remain pending; no pilot acceptance is inferred.
+
 ### One evidence action in the Triết review panel, 18 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

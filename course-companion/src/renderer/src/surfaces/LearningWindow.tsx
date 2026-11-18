@@ -27,6 +27,8 @@ import teacherImage from '../assets/teacher-triet.png'
 import m1ApprovalMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/approval-menu.png'
 import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-setup/images/model-controls.png'
 import { ModelLessonBoard, type ModelLessonTopic } from '../components/ModelLessonBoard'
+import { ProjectsLessonBoard } from '../components/ProjectsLessonBoard'
+import projectsCopy from '../../../../../pilot-workspace/course/codex-setup/projects.vi.json'
 import m1SlashCommandsImage from '../../../../../pilot-workspace/course/codex-setup/images/slash-commands.png'
 import m1AtMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/at-menu.png'
 import m1UnderstandCodexImage from '../assets/lesson-visuals/m1-understand-codex.webp'
@@ -292,7 +294,23 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'TỰ ĐỘNG HÓA', value: 'Việc lặp lại' }
     ],
     dialogue: 'Codex là coding agent của OpenAI. Ở bài này, mình chỉ cần bạn hiểu coding agent là một trợ lý có thể thực hiện công việc liên quan đến code: tạo ứng dụng, xây trang web, chỉnh sửa dự án và tự động hóa những việc lặp lại.',
-    choices: [{ label: 'Làm quen với giao diện Codex', next: 'module-1-codex-examples', primary: true }]
+    choices: [{ label: 'Làm quen với giao diện Codex', next: 'module-1-codex-projects', primary: true }]
+  },
+  'module-1-codex-projects': {
+    lessonId: 'module-1',
+    checkpointId: 'm1-codex-orientation',
+    step: 1,
+    totalSteps: 6,
+    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
+    mission: projectsCopy.title,
+    objective: projectsCopy.title,
+    panelLabel: 'PROJECTS',
+    panelStatus: '',
+    tone: 'neutral',
+    request: projectsCopy.introduction[0]!,
+    evidence: [],
+    dialogue: [...projectsCopy.introduction, ...projectsCopy.details].join('\n\n'),
+    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-examples', primary: true }]
   },
   'module-1-codex-examples': {
     lessonId: 'module-1',
@@ -1258,6 +1276,7 @@ const courseLessonPages = {
   ],
   'm1-understand-codex': [
     ['module-1-codex-orientation'],
+    ['module-1-codex-projects'],
     ['module-1-codex-examples'],
     ['module-1-codex-model-intro'],
     ['module-1-codex-effort-speed'],
@@ -3069,7 +3088,8 @@ export function LearningWindow() {
   const usesImplementationPlanBoard = Boolean(implementationPlanBoardByScene[displayedSceneId])
   const usesModelLessonBoard = Boolean(modelLessonBoardKind && lessonVisual)
   const usesGuidanceLessonBoard = Boolean(guidanceLessonBoardKind)
-  const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard
+  const usesProjectsLessonBoard = displayedSceneId === 'module-1-codex-projects'
+  const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard || usesProjectsLessonBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
   const canExpandLessonVisual = scene.lessonId !== 'intro'
@@ -3267,6 +3287,23 @@ export function LearningWindow() {
           onInitialTopicApplied={() => setModelLessonEntry(null)}
           onNext={(topic) => {
             setModelLessonEntry(topic ? { sceneId: modelLessonSceneByKind.settings, topic } : null)
+            if (isReviewing) {
+              openNextReviewPage()
+              return
+            }
+            const choice = scene.choices[0]
+            if (choice) void choose(choice)
+          }}
+        />
+      ) : null}
+
+      {usesProjectsLessonBoard ? (
+        <ProjectsLessonBoard
+          busy={busy}
+          canOpenPreviousPage={canOpenPreviousPage}
+          nextLabel={isReviewing ? reviewNextLabel : yellowChoiceLabel(scene.choices[0] ?? { label: 'Tiếp tục', primary: true })}
+          onBack={openPreviousPage}
+          onNext={() => {
             if (isReviewing) {
               openNextReviewPage()
               return

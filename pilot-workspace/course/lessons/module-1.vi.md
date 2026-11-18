@@ -15,6 +15,20 @@ là coding agent của OpenAI. [The Codex Handbook của
 FreeCodeCamp](https://www.freecodecamp.org/news/the-codex-handbook-a-practical-guide-to-openai-s-coding-platform/)
 phân biệt Codex với một chatbot chỉ trả lời bằng văn bản.
 
+## Làm quen với Project trong Codex
+
+Xuyên suốt khóa học, bạn sẽ sử dụng tính năng Projects của Codex để thực hành.
+
+Bạn có thể tìm thấy mục Projects trong thanh bên ở phía trái cửa sổ Codex.
+
+![Mục Projects trong thanh bên Codex](../codex-setup/images/projects-sidebar.png)
+
+Trong khóa học này, chúng mình đã chuẩn bị sẵn một project cho bạn, nó sẽ tự động hiện lên lúc bạn bắt đầu thực hành.
+
+Project giúp Codex làm việc với ngữ cảnh liên quan đến dự án, chẳng hạn như thư mục đang sử dụng, nội dung cuộc trò chuyện và hướng dẫn riêng trong tệp AGENTS.md.
+
+Ở bước này, bạn chỉ cần biết cách nhận ra project của khóa học trong mục Projects. Chúng mình sẽ hướng dẫn các thao tác cần thiết khi bạn bắt đầu thực hành.
+
 ## Approval: Codex được phép làm đến đâu?
 
 Sandbox là ranh giới kỹ thuật giới hạn những gì Codex có thể truy cập. Approval

@@ -17,3 +17,9 @@ Practice. Ảnh không chứa dữ liệu cá nhân hoặc nội dung dự án.
 - `model-controls.png`: original screenshot supplied by the course owner for the approved Module 1 mockup.
 - Screenshot pixels are preserved; arrows and highlights are rendered separately.
 - Used on the existing model introduction and effort/speed pages.
+
+## Projects sidebar — 18 November 2026
+
+- `projects-sidebar.png`: original screenshot supplied by the course owner for the approved Project introduction.
+- Shows the Projects heading, project folders and example chat titles. Screenshot pixels are preserved.
+- Used only as an instructional illustration; it is not learner progress or evidence of completing Practice.
