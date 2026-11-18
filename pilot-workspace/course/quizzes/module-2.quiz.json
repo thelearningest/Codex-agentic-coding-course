@@ -77,7 +77,7 @@
           "prompt": "Bản nháp PRD viết “portfolio phải chuyên nghiệp và dễ dùng”, đồng thời thêm một trang blog mà bạn chưa yêu cầu. Trước khi duyệt, bạn nên làm gì?",
           "choices": [
             "Duyệt bản nháp vì coding agent đã viết đủ các phần của PRD.",
-            "Yêu cầu coding agent chỉ ra chỗ nào mà nó cảm thấy chưa rõ, nội dung nào nó đang tự mở rộng và kết quả nào nó chưa kiểm tra được, rồi sửa lại trước khi bạn duyệt.",
+            "Yêu cầu coding agent làm rõ các thuật ngữ mơ hồ, nội dung nào nó đang tự mở rộng và kết quả nào nó chưa kiểm tra được, rồi sửa lại trước khi bạn duyệt.",
             "Giữ nguyên trang blog để phòng trường hợp sau này bạn cần dùng.",
             "Bỏ toàn bộ PRD và yêu cầu coding agent bắt đầu viết ứng dụng từ đầu."
           ],
