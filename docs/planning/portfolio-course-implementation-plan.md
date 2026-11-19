@@ -54,9 +54,9 @@ and must never be inferred from a passing automated check.
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
-| Module 1 / `m1-codex-orientation` | `implemented` | `passed` for typecheck, lint and source page-order comparison | Two-page copy and illustrations approved on 19 November | `pending` | Review both pages in Course Companion at desktop and narrow widths. |
+| Module 1 / `m1-codex-orientation` | `implemented` | `passed` for typecheck, lint, production build and focused Electron navigation at 1180 px and 390 px | Opening-page comparison layout, copy and three images approved for integration on 19 November | `pending` | Collect learner feedback on the opening. |
 
-The first lesson opens with Chat and Work, followed by the course author's reasons for using Codex. The Pilot reading and desktop app use the same two illustrated Markdown pages. The five prior pages follow in their previous order. The new pages use the existing orientation checkpoint. Rendered layout and navigation await visual review under the few-screen UI verification gate.
+The first lesson opens with Chat and Work, followed by the course author's reasons for using Codex. The Pilot reading and desktop app use the same two illustrated Markdown pages. The five prior pages follow in their previous order. The new pages use the existing orientation checkpoint. The opening uses two columns on desktop and a single column in narrow windows. A disposable Electron run matched its text against the approved preview, decoded all three images, opened the 3232 × 2080 Work example at native size, and navigated to the Codex page and back.
 
 ### Module 3 first build and final review, 18 November 2026
 

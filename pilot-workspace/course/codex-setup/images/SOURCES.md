@@ -26,5 +26,6 @@ Practice. Ảnh không chứa dữ liệu cá nhân hoặc nội dung dự án.
 
 ## Module 1 opening — 19 November 2026
 
-- `work-vendor-comparison.jpg`: [OpenAI's example of Work comparing vendors](https://learn.chatgpt.com/docs/use-chatgpt#what-chatgpt-work-can-do).
+- `chat-start.png` and `work-start.png`: original screenshots supplied by the course owner for the Chat and Work comparison.
+- `work-vendor-comparison.png`: 3232 × 2080 capture of [OpenAI's example of Work comparing vendors](https://learn.chatgpt.com/docs/use-chatgpt#what-chatgpt-work-can-do).
 - `codex-new-chat.png`: screenshot selected and supplied by the course owner for the Codex page.

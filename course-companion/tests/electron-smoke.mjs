@@ -235,7 +235,10 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.ok(await page.getByRole('button', { name: '← Trang trước', exact: true }).isDisabled())
   for (const id of ['module-1-chat-work', 'module-1-why-codex']) {
     const scene = page.locator(`main[data-scene-id="${id}"]`)
-    await scene.locator('.module-one-opening img').evaluate(image => image.decode())
+    const images = scene.locator('.module-one-opening img')
+    await images.first().waitFor()
+    assert.equal(await images.count(), id === 'module-1-chat-work' ? 3 : 1)
+    await images.evaluateAll(items => Promise.all(items.map(image => image.decode())))
     await scene.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }
   await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 3/7', { exact: true }).first().waitFor()
