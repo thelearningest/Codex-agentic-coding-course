@@ -2,6 +2,8 @@
 
 ## Bước 1 — Codex và coding agent (`m1-codex-orientation`)
 
+[Mở đầu bằng hai trang theo thứ tự: đọc nguyên văn `course/codex-setup/chat-work.vi.md`, sau đó `course/codex-setup/why-codex.vi.md`. Cho Learner xem ảnh trên từng trang trước khi tiếp tục phần dưới.]
+
 Teacher nói: "Codex là coding agent của OpenAI. Trong bài này, bạn chỉ cần hiểu
 coding agent là một trợ lý có thể thực hiện công việc liên quan đến code: tạo
 ứng dụng, xây trang web, chỉnh sửa dự án và tự động hóa những việc lặp lại."

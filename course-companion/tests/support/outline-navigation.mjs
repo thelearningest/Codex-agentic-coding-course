@@ -4,7 +4,7 @@ import { join } from 'node:path'
 
 const expectedStarts = {
   intro: ['intro-visual-onboarding', 'intro-course-overview-2', 'intro-learning-method'],
-  'module-1': ['module-1-codex-orientation', 'module-1-codex-examples', 'module-1-codex-model-intro', 'module-1-codex-slash-commands', 'module-1-agents-intro', 'module-1-codex-projects', 'module-1-mastery', 'module-1-final-summary'],
+  'module-1': ['module-1-chat-work', 'module-1-codex-orientation', 'module-1-codex-examples', 'module-1-codex-model-intro', 'module-1-codex-slash-commands', 'module-1-agents-intro', 'module-1-codex-projects', 'module-1-mastery', 'module-1-final-summary'],
   'module-2': ['module-2-portfolio-workspace', 'module-2-prd-definition', 'module-2-prd-review-workflow', 'module-2-prd-agent-workflow', 'module-2-implementation-plan-intro', 'module-2-portfolio-practice', 'module-2-portfolio-mastery', 'module-2-portfolio-mastery-summary'],
   'module-3': ['module-3-first-build', 'module-3-local-preview', 'module-3-debugging-intro', 'module-3-git-intro', 'module-3-pre-practice-summary', 'module-3-portfolio-practice', 'module-3-portfolio-mastery', 'module-3-mastery-summary'],
   'module-4': ['module-4-hosting-intro', 'module-4-vercel-benefits', 'module-4-after-video', 'module-4-vercel-preview', 'module-4-portfolio-practice']

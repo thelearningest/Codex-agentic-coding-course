@@ -23,3 +23,8 @@ Practice. Ảnh không chứa dữ liệu cá nhân hoặc nội dung dự án.
 - `projects-sidebar.png`: original screenshot supplied by the course owner for the approved Project introduction.
 - Shows the Projects heading, project folders and example chat titles. Screenshot pixels are preserved.
 - Used only as an instructional illustration; it is not learner progress or evidence of completing Practice.
+
+## Module 1 opening — 19 November 2026
+
+- `work-vendor-comparison.jpg`: [OpenAI's example of Work comparing vendors](https://learn.chatgpt.com/docs/use-chatgpt#what-chatgpt-work-can-do).
+- `codex-new-chat.png`: screenshot selected and supplied by the course owner for the Codex page.

@@ -1923,6 +1923,22 @@ button:focus-visible {
   }
 }
 
+.module-one-opening {
+  position: relative;
+  width: min(100%, 82ch);
+  flex: 0 0 auto;
+  padding: clamp(18px, 4vw, 44px);
+  border-radius: var(--obsidian-radius-card);
+  background: #141414;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.module-one-opening p { margin: 0 0 1em; }
+.module-one-opening p:last-child { margin-bottom: 0; }
+.module-one-opening img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.pixel-learning-shell[data-scene-id="module-1-chat-work"],
+.pixel-learning-shell[data-scene-id="module-1-why-codex"],
 .pixel-learning-shell[data-scene-id="module-4-vercel-benefits"] {
   padding: 100px 5vw 24px;
   display: flex;

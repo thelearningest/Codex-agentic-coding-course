@@ -1,5 +1,10 @@
 # Module 1 — Bắt đầu làm việc với Codex
 
+## Chat, Work và Codex
+
+1. [Chat và Work](../codex-setup/chat-work.vi.md)
+2. [Codex](../codex-setup/why-codex.vi.md)
+
 ## Codex là gì?
 
 Codex là coding agent của OpenAI. Ở bài này, mình chỉ cần bạn hiểu coding agent

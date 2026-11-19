@@ -16,6 +16,9 @@ import {
   type RuntimeInfo,
   type SceneId
 } from '../../../../shared/contracts'
+import { ModuleOneOpening } from '../components/ModuleOneOpening'
+import chatWorkCopy from '../../../../../pilot-workspace/course/codex-setup/chat-work.vi.md?raw'
+import whyCodexCopy from '../../../../../pilot-workspace/course/codex-setup/why-codex.vi.md?raw'
 import roomImage from '../../../../../prototypes/mvp-3-course-experience-companion/assets/home-base.png'
 import courseStructure from '../../../../../pilot-workspace/course/course-structure.json'
 import setupPracticeDefinitionSource from '../../../../../pilot-workspace/course/practices/m1-codex-safe-setup.json'
@@ -209,6 +212,12 @@ const assessmentQuestionById = new Map(assessmentQuestions.map((question) => [qu
 const assessmentGroupById = new Map(assessmentGroups.map((group) => [group.id, group]))
 const assessmentDecisionKey = (questionId: string) => `assessment:${questionId}`
 
+const openingScene = {
+  lessonId: 'module-1', checkpointId: 'm1-codex-orientation', step: 1, totalSteps: 6,
+  lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX', tone: 'neutral',
+  panelLabel: '', panelStatus: '', request: '', evidence: [], showTitle: false, showPanel: false
+} satisfies Partial<SceneContent>
+
 const staticScenes: Partial<Record<SceneId, SceneContent>> = {
   'intro-visual-onboarding': {
     lessonId: 'intro',
@@ -272,9 +281,23 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'KẾT QUẢ', value: 'Cấu hình được Triết duyệt' }
     ],
     dialogue: 'Những kỹ năng bạn học được trong khoá này không chỉ giúp bạn xây Portfolio, mà còn trang bị cho bạn kiến thức để tạo bất kỳ công cụ nào bạn muốn với AI',
-    choices: [{ label: 'Bắt đầu Module 1', next: 'module-1-codex-orientation', afterSave: 'home', primary: true, preservePrimaryLabel: true }],
+    choices: [{ label: 'Bắt đầu Module 1', next: 'module-1-chat-work', afterSave: 'home', primary: true, preservePrimaryLabel: true }],
     showTitle: false,
     showPanel: false
+  },
+  'module-1-chat-work': {
+    ...openingScene,
+    mission: 'Chat và Work',
+    objective: 'Chat và Work',
+    dialogue: chatWorkCopy,
+    choices: [{ label: 'Tiếp tục', next: 'module-1-why-codex', primary: true }]
+  },
+  'module-1-why-codex': {
+    ...openingScene,
+    mission: 'Codex',
+    objective: 'Codex',
+    dialogue: whyCodexCopy,
+    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-orientation', primary: true }]
   },
   'module-1-codex-orientation': {
     lessonId: 'module-1',
@@ -1131,10 +1154,6 @@ const moduleLessonIds: Record<Exclude<LessonId, 'intro'>, CourseLessonId[]> = {
 }
 
 const lessonVisuals: Partial<Record<CourseLessonId, LessonVisual>> = {
-  'm1-understand-codex': {
-    image: m1UnderstandCodexImage,
-    alt: 'Giao diện Codex hiển thị danh sách công việc, dự án đang mở và ô nhập yêu cầu'
-  },
   'm1-assessment': {
     image: m1AssessmentImage,
     alt: 'Giao diện Codex hiển thị kết quả, các tệp đã tạo và những điểm cần người dùng kiểm tra'
@@ -1166,6 +1185,10 @@ const lessonVisuals: Partial<Record<CourseLessonId, LessonVisual>> = {
 }
 
 const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
+  'module-1-codex-orientation': {
+    image: m1UnderstandCodexImage,
+    alt: 'Giao diện Codex hiển thị danh sách công việc, dự án đang mở và ô nhập yêu cầu'
+  },
   'module-4-hosting-intro': {
     image: m4ProjectsOverviewImage,
     alt: 'Trang quản lý dự án trên Vercel hiển thị portfolio-smu và địa chỉ minhtrietportfolio.dev',
@@ -1275,6 +1298,8 @@ const courseLessonPages = {
     ['intro-learning-method']
   ],
   'm1-understand-codex': [
+    ['module-1-chat-work'],
+    ['module-1-why-codex'],
     ['module-1-codex-orientation'],
     ['module-1-codex-examples'],
     ['module-1-codex-model-intro'],
@@ -3005,7 +3030,7 @@ export function LearningWindow() {
     setReviewHistoryIndex(null)
     closeOutline()
   }
-  const isFirstModuleOneSlide = displayedSceneId === 'module-1-codex-orientation'
+  const isFirstModuleOneSlide = displayedSceneId === 'module-1-chat-work'
   const canOpenPreviousPage = !isFirstModuleOneSlide && (outlineSceneId !== null
     ? adjacentOutlinePage(reviewPages, displayedSceneId, -1) !== undefined
     : isReviewing
@@ -3090,6 +3115,8 @@ export function LearningWindow() {
   const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard || usesProjectsLessonBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
+  const isModuleOneOpening = displayedSceneId === 'module-1-chat-work' || displayedSceneId === 'module-1-why-codex'
+  const standaloneReadingPage = isModuleOneOpening || isVercelTutorial
   const canExpandLessonVisual = scene.lessonId !== 'intro'
   const canShowSceneMedia = !assessmentQuestion && !scene.assessmentSummary
   const usesPairedLessonNavigation = isReviewing || (!assessmentQuestion && !scene.assessmentSummary)
@@ -3193,7 +3220,7 @@ export function LearningWindow() {
           title={scene.copyPromptTitle}
         />
       ) : null}
-      {assessmentQuestion || scene.assessmentSummary || usesLessonBoard || isVercelTutorial
+      {assessmentQuestion || scene.assessmentSummary || usesLessonBoard || standaloneReadingPage
         ? null
         : <img className="pixel-teacher-character" src={teacherImage} alt="Triết, giáo viên đồng hành" />}
 
@@ -3255,6 +3282,8 @@ export function LearningWindow() {
             </figure>
           )
           : null}
+
+      {isModuleOneOpening && scene.dialogue ? <ModuleOneOpening content={scene.dialogue} /> : null}
 
       {isVercelTutorial ? (
         <div className="pixel-vercel-tutorial-stage">
@@ -3369,12 +3398,12 @@ export function LearningWindow() {
       ) : null}
 
       <section
-        aria-label={isVercelTutorial ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
-        aria-labelledby={isAssessmentQuestionPage || isVercelTutorial ? undefined : 'teacherName'}
-        className={isVercelTutorial ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
+        aria-label={standaloneReadingPage ? 'Điều hướng bài học' : isAssessmentQuestionPage ? `Câu hỏi Module ${scene.lessonId.slice(-1)}` : undefined}
+        aria-labelledby={isAssessmentQuestionPage || standaloneReadingPage ? undefined : 'teacherName'}
+        className={standaloneReadingPage ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
-        {isAssessmentQuestionPage || isVercelTutorial ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
-        {isAssessmentQuestionPage || isVercelTutorial ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
+        {isAssessmentQuestionPage || standaloneReadingPage ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
+        {isAssessmentQuestionPage || standaloneReadingPage ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
           <PortfolioWorkspacePicker
             courseRunId={progress.courseRunId}
             onContinue={() => void advanceToScene('module-2-portfolio-practice', progress.decisions)}

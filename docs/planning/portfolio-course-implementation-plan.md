@@ -50,6 +50,14 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 starts with a first build and ends with acceptance against the PRD and plan in the same task | `passed` for the 18 November first-build batch below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Module 1 opening, 19 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Module 1 / `m1-codex-orientation` | `implemented` | `passed` for typecheck, lint and source page-order comparison | Two-page copy and illustrations approved on 19 November | `pending` | Review both pages in Course Companion at desktop and narrow widths. |
+
+The first lesson opens with Chat and Work, followed by the course author's reasons for using Codex. The Pilot reading and desktop app use the same two illustrated Markdown pages. The five prior pages follow in their previous order. The new pages use the existing orientation checkpoint. Rendered layout and navigation await visual review under the few-screen UI verification gate.
+
 ### Module 3 first build and final review, 18 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
