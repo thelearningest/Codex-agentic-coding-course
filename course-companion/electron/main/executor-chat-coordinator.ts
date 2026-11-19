@@ -1,5 +1,5 @@
 import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
-import { resolve } from 'node:path'
+import { isAbsolute, resolve } from 'node:path'
 import type {
   ApprovedCodexConfiguration,
   PracticeDefinition
@@ -218,30 +218,33 @@ export class ExecutorChatCoordinator {
     })
   }
 
-  async validateExistingTarget(
-    binding: ExecutorChatBinding,
-    definition: PracticeDefinition,
-    unchangedBefore?: string
-  ): Promise<boolean> {
+  async validateExistingTarget(binding: ExecutorChatBinding, definition: PracticeDefinition): Promise<boolean> {
+    const thread = await this.readExistingTarget(binding, definition)
+    return samePath(thread?.cwd, binding.workspaceRoot)
+  }
+
+  async canSplitLegacyBuildChat(binding: ExecutorChatBinding, definition: PracticeDefinition, startedAt: string): Promise<boolean> {
+    const thread = await this.readExistingTarget(binding, definition)
+    if (!thread || typeof thread.cwd !== 'string' || !isAbsolute(thread.cwd)) return false
+    if (samePath(thread.cwd, binding.workspaceRoot)) {
+      return typeof thread.updatedAt === 'number' && Number.isSafeInteger(thread.updatedAt)
+        && thread.updatedAt > 0 && thread.updatedAt < Math.floor(Date.parse(startedAt) / 1000)
+    }
+    // This chat can no longer supply evidence for the portfolio folder. Its
+    // Project identifies it for archival only. The new chat gets its own checks.
+    return Boolean(binding.projectId && thread.projectId === binding.projectId)
+  }
+
+  private async readExistingTarget(binding: ExecutorChatBinding, definition: PracticeDefinition): Promise<Record<string, unknown> | null> {
     try {
       const workspaceRoot = await this.workspaces.resolve(definition.workspaceKind)
-      if (!THREAD_ID.test(binding.threadId)
-        || !samePath(binding.workspaceRoot, workspaceRoot)) return false
+      if (!THREAD_ID.test(binding.threadId) || !samePath(binding.workspaceRoot, workspaceRoot)) return null
       return await this.withBootstrap(async () => {
-        const read = await this.client.request('thread/read', {
-          threadId: binding.threadId,
-          includeTurns: false
-        })
-        return isRecord(read)
-          && isRecord(read.thread)
-          && read.thread.id === binding.threadId
-          && samePath(read.thread.cwd, workspaceRoot)
-          && (!unchangedBefore || (typeof read.thread.updatedAt === 'number'
-            && Number.isSafeInteger(read.thread.updatedAt) && read.thread.updatedAt > 0
-            && read.thread.updatedAt < Math.floor(Date.parse(unchangedBefore) / 1000)))
+        const read = await this.client.request('thread/read', { threadId: binding.threadId, includeTurns: false })
+        return isRecord(read) && isRecord(read.thread) && read.thread.id === binding.threadId ? read.thread : null
       })
     } catch {
-      return false
+      return null
     }
   }
 

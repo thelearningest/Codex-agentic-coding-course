@@ -50,6 +50,22 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Module 3 chat recovery, 20 November 2026
+
+M3.1 and M3.8 recovery is `implemented`. The owner approved opening a fresh
+build chat when an unreviewed legacy run still uses the planning chat and Codex
+reports a different working folder for it in the same Project. The app checks the
+approved planning handoff and opens the new chat in the selected portfolio folder.
+It archives the old Practice run and reopens the new chat on later visits.
+
+Verification `passed` for 70 focused tests, typecheck, lint, build, nine startup
+checks, the Electron suite and the disposable Module 2 through 4 journey.
+The folder-mismatch regression exercised resume, chat creation and the second
+visit. It also covered mismatched Project metadata and an unavailable planning
+handoff. The full unit suite had 888 passes and the two existing Module 1
+manifest and CSS palette failures. Pilot acceptance is `pending`. The next
+step is a learner opening Practice in the rebuilt app.
+
 ### Module 3 build chat, 19 November 2026
 
 For M2.6, M3.1 and M3.8, the owner approved automatic chat creation at the

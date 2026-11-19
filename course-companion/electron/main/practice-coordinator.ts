@@ -278,7 +278,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
     private readonly repository: PracticeRunRepository,
     private readonly definitions: PracticeDefinitionRepository,
     private readonly executor: Pick<ExecutorChatCoordinator, 'createTarget' | 'prepareTarget' | 'openTarget'>
-      & Partial<Pick<ExecutorChatCoordinator, 'validateExistingTarget'>>,
+      & Partial<Pick<ExecutorChatCoordinator, 'validateExistingTarget' | 'canSplitLegacyBuildChat'>>,
     private readonly now: () => Date = () => new Date(),
     private readonly createId: () => string = randomUUID,
     private readonly prepareExecutor?: (binding: PracticeRunRecord['binding'], captureBaseline: boolean) => Promise<void>,
@@ -449,8 +449,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
           || record.activeRun.practiceVersion !== identity.practiceVersion)) {
         throw new Error('Practice đang hoạt động không khớp nội dung được yêu cầu.')
       }
-      // Earlier releases reused the planning thread. Split an unopened build on
-      // its next visit only when Codex can confirm there has been no new work.
+      // Earlier releases used one chat for both planning and building.
       const active = record.activeRun
       if (active.practiceId === 'm3-portfolio-build' && active.practiceVersion === portfolioBuildVersion
         && active.reviewStatus === 'not-reviewed' && !active.packageApproval
@@ -458,7 +457,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         && record.archivedRuns.some((entry) => entry.practiceId === 'm2-portfolio-planning'
           && entry.threadId === active.binding.threadId)) {
         const definition = await this.definitions.load(active.practiceId, active.practiceVersion)
-        if (await this.executor.validateExistingTarget?.(active.binding, definition, active.startedAt)
+        if (await this.executor.canSplitLegacyBuildChat?.(active.binding, definition, active.startedAt)
           && (await this.loadPortfolioHandoff?.())?.task.threadId === active.binding.threadId) {
           return this.startRun({ practiceId: active.practiceId, practiceVersion: active.practiceVersion, transfer: false })
         }

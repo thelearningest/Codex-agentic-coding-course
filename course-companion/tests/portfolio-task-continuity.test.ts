@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { portfolioPackageArtifactPaths, type ApprovedCodexConfiguration, type PortfolioPackageHandoff } from '../shared/contracts'
+import { buildRun } from './fixtures/portfolio-build-fixture'
 import { ExecutorChatCoordinator } from '../electron/main/executor-chat-coordinator'
 import { PracticeCoordinator } from '../electron/main/practice-coordinator'
 import { PracticeDefinitionRepository } from '../electron/main/practice-definition-repository'
@@ -198,34 +199,71 @@ describe('portfolio task continuation', () => {
     expect(request).not.toHaveBeenCalled()
   })
 
-  it.each([true, false])('splits a legacy planning chat only when it is untouched (%s)', async (untouched) => {
+  it.each([
+    { cwdChanged: false, edited: false, sameProject: true, approvedPlan: true, splits: true },
+    { cwdChanged: false, edited: true, sameProject: true, approvedPlan: true, splits: false },
+    { cwdChanged: true, edited: true, sameProject: true, approvedPlan: true, splits: true },
+    { cwdChanged: true, edited: true, sameProject: false, approvedPlan: true, splits: false },
+    { cwdChanged: true, edited: true, sameProject: true, approvedPlan: false, splits: false }
+  ])('recovers a legacy build on resume: %o', async ({ cwdChanged, edited, sameProject, approvedPlan, splits }) => {
     const root = await mkdtemp(join(tmpdir(), 'legacy-build-chat-'))
     directories.push(root)
     const repository = new PracticeRunRepository(root)
     const receipt = handoff(root)
-    const createTarget = vi.fn(async ({ runId }: { runId: string }) => ({
-      ...receipt.task, runId, threadId: 'new-build-chat', projectId: 'portfolio-project'
-    }))
-    const validateExistingTarget = vi.fn(async () => untouched)
-    const openTarget = vi.fn()
-    const coordinator = new PracticeCoordinator(repository, definitions, {
-      createTarget, prepareTarget: async () => undefined, validateExistingTarget, openTarget
-    }, undefined, undefined, undefined, async () => approved, undefined, undefined, undefined, async () => receipt)
-    // Reproduce the persisted state produced by the previous release.
-    await coordinator.startNew({ practiceId: 'm3-portfolio-build', practiceVersion: '1.0.0', transfer: false })
-    const state = await repository.load()
-    const legacy = state.activeRun!
-    legacy.practiceVersion = '2.1.0'
+    const projectId = 'portfolio-project'
+    receipt.task.projectId = projectId
+    const definition = await definitions.load('m3-portfolio-build', '2.1.0')
+    const legacy = buildRun(definition, root)
+    legacy.binding = { ...receipt.task, runId: legacy.runId }
+    const state = defaultPracticeWorkspaceRecord()
+    state.activeRun = legacy
     state.archivedRuns.push({ runId: receipt.task.runId, generation: 1, practiceId: 'm2-portfolio-planning',
-      practiceVersion: '2.0.0', threadId: receipt.task.threadId, name: 'Planning', outcome: 'completed', archivedAt: time })
+      practiceVersion: '2.0.0', threadId: receipt.task.threadId, name: 'Planning', outcome: 'completed', archivedAt: time, reviewHistory: [] })
     await repository.save(state)
-    await coordinator.resume()
-    await coordinator.resume()
-    expect(validateExistingTarget).toHaveBeenCalledWith(legacy.binding, expect.anything(), legacy.startedAt)
-    expect(createTarget).toHaveBeenCalledTimes(untouched ? 1 : 0)
+
+    const request = vi.fn(async (method: string, params: Record<string, unknown> = {}) => {
+      if (method === 'thread/read' && params.threadId === receipt.task.threadId) return {
+        thread: { id: receipt.task.threadId, cwd: cwdChanged ? join(root, 'visualizations') : root,
+          projectId: sameProject ? projectId : 'other-project',
+          updatedAt: Date.parse(legacy.startedAt) / 1000 + (edited ? 10 : -10) }
+      }
+      if (method === 'thread/start') return {
+        thread: { id: 'new-build-chat', projectId }, cwd: root, model: approved.model,
+        serviceTier: approved.serviceTier, reasoningEffort: approved.reasoningEffort,
+        approvalPolicy: 'on-request', sandbox: { type: 'workspaceWrite', writableRoots: [root] }
+      }
+      if (params.threadId === 'new-build-chat') {
+        if (method === 'thread/name/set') return {}
+        if (method === 'thread/read') return { thread: { id: 'new-build-chat', cwd: root, projectId } }
+      }
+      throw new Error('Unexpected Codex request: ' + method)
+    })
+    const open = vi.fn(async () => undefined)
+    const executor = new ExecutorChatCoordinator({ request }, {
+      resolve: async () => root, resolveProjectId: async () => projectId
+    }, open, undefined, { attempts: 1 })
+    const coordinator = new PracticeCoordinator(repository, definitions, executor, undefined, undefined,
+      undefined, async () => approved, undefined, undefined, undefined, async () => approvedPlan ? receipt : null)
+    const identity = { practiceId: definition.practiceId, practiceVersion: definition.version }
+
+    if (cwdChanged && !splits) {
+      await expect(coordinator.resume(identity)).rejects.toThrow()
+      expect(open).not.toHaveBeenCalled()
+    } else {
+      await coordinator.resume(identity)
+      await coordinator.resume(identity)
+      const url = 'codex://threads/' + (splits ? 'new-build-chat' : receipt.task.threadId)
+      expect(open.mock.calls).toEqual([[url], [url]])
+    }
+    expect(request.mock.calls.filter(([method]) => method === 'thread/start')).toHaveLength(splits ? 1 : 0)
     const result = await repository.load()
-    expect(result.activeRun?.binding.threadId).toBe(untouched ? 'new-build-chat' : receipt.task.threadId)
-    if (untouched) expect(result.archivedRuns.at(-1)?.retainedRun).toEqual(legacy)
+    if (splits) {
+      expect(request).toHaveBeenCalledWith('thread/start', expect.objectContaining({ cwd: root, projectId }))
+      expect(result.activeRun?.binding).toMatchObject({ threadId: 'new-build-chat', projectId, workspaceRoot: root })
+      expect(result.archivedRuns.at(-1)?.retainedRun).toEqual(legacy)
+    } else {
+      expect(result).toEqual(state)
+    }
   })
 
   it('fails closed with no handed-off task', async () => {
@@ -272,7 +310,7 @@ describe('portfolio task continuation', () => {
     const boundary = Date.parse(time) / 1000
     for (const [updatedAt, untouched] of [[boundary - 1, true], [boundary, false], [boundary + 10, false], [null, false]] as const) {
       request.mockResolvedValueOnce({ thread: { id: target.threadId, cwd: workspace, turns: [], updatedAt } } as Awaited<ReturnType<typeof request>>)
-      await expect(executor.validateExistingTarget(target, definition, time)).resolves.toBe(untouched)
+      await expect(executor.canSplitLegacyBuildChat(target, definition, time)).resolves.toBe(untouched)
     }
     request.mockResolvedValueOnce({ thread: { id: target.threadId, cwd: resolve('wrong-workspace'), turns: [] } })
     await expect(executor.validateExistingTarget(target, definition)).resolves.toBe(false)
