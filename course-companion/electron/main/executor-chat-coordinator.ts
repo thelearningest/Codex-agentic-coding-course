@@ -54,9 +54,16 @@ export class ExecutorChatCoordinator {
     runId: string
     definition: PracticeDefinition
     approvedConfiguration?: ApprovedCodexConfiguration
+    portfolio?: Pick<ExecutorChatBinding, 'workspaceRoot' | 'projectId'>
   }): Promise<ExecutorChatBinding> {
     const workspaceRoot = await this.workspaces.resolve(input.definition.workspaceKind)
+    if (input.portfolio && workspaceRoot !== input.portfolio.workspaceRoot) {
+      throw new Error('PORTFOLIO_CONTINUATION_UNAVAILABLE')
+    }
     const projectId = await this.workspaces.resolveProjectId?.(input.definition.workspaceKind, workspaceRoot)
+    if (input.portfolio && (!projectId || (input.portfolio.projectId && input.portfolio.projectId !== projectId))) {
+      throw new Error('PORTFOLIO_CONTINUATION_UNAVAILABLE')
+    }
     const plan = buildPracticeTaskStartPlan({
       ...input,
       workspaceRoot
@@ -213,7 +220,8 @@ export class ExecutorChatCoordinator {
 
   async validateExistingTarget(
     binding: ExecutorChatBinding,
-    definition: PracticeDefinition
+    definition: PracticeDefinition,
+    unchangedBefore?: string
   ): Promise<boolean> {
     try {
       const workspaceRoot = await this.workspaces.resolve(definition.workspaceKind)
@@ -228,6 +236,9 @@ export class ExecutorChatCoordinator {
           && isRecord(read.thread)
           && read.thread.id === binding.threadId
           && samePath(read.thread.cwd, workspaceRoot)
+          && (!unchangedBefore || (typeof read.thread.updatedAt === 'number'
+            && Number.isSafeInteger(read.thread.updatedAt) && read.thread.updatedAt > 0
+            && read.thread.updatedAt < Math.floor(Date.parse(unchangedBefore) / 1000)))
       })
     } catch {
       return false

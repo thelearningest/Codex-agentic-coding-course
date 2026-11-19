@@ -410,7 +410,7 @@ describe('Module 3 plan-led build package', () => {
     expect(view.portfolioPackage).toBeUndefined()
   })
 
-  it('retains the full previous build attempt when explicitly restarting in the same portfolio task', async () => {
+  it('retains the full previous build attempt when explicitly restarting in a new chat in the same portfolio project', async () => {
     const f = await fixture()
     await f.approve()
     await f.service.review()
@@ -424,7 +424,11 @@ describe('Module 3 plan-led build package', () => {
       summary: { learnerDecision: 'Fixture decision', evidenceBoundary: 'Fixture boundary', firstBuild: 'Fixture order', deliberatelyOutOfScope: 'Fixture scope' },
       moduleThreeInput: { workspacePath: f.workspace, artifactReferences: [] }
     }
-    const coordinator = new PracticeCoordinator(f.runs, f.definitions, f.executor,
+    const coordinator = new PracticeCoordinator(f.runs, f.definitions, {
+      ...f.executor, createTarget: async ({ runId }) => ({
+        ...prior.binding, runId, threadId: 'new-build-chat', projectId: 'portfolio-project'
+      })
+    },
       undefined, undefined, undefined, undefined, f.registry, undefined, undefined, async () => handoff)
 
     await coordinator.startNew({ practiceId: prior.practiceId, practiceVersion: prior.practiceVersion, transfer: false })
@@ -432,7 +436,7 @@ describe('Module 3 plan-led build package', () => {
 
     expect(saved.archivedRuns.at(-1)).toMatchObject({ outcome: 'replaced', retainedRun: prior })
     expect(saved.activeRun?.runId).not.toBe(prior.runId)
-    expect(saved.activeRun?.binding.threadId).toBe(prior.binding.threadId)
+    expect(saved.activeRun?.binding.threadId).toBe('new-build-chat')
     expect(saved.activeRun?.binding.workspaceRoot).toBe(prior.binding.workspaceRoot)
     expect(saved.activeRun?.packageApproval).toBeUndefined()
     expect(saved.activeRun?.reviewStatus).toBe('not-reviewed')

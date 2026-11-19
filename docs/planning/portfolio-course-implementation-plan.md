@@ -47,8 +47,29 @@ and must never be inferred from a passing automated check.
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
-| Module 3 | `implemented` — Practice 2.1 starts with a first build and ends with acceptance against the PRD and plan in the same task | `passed` for the 18 November first-build batch below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
+| Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 3 build chat, 19 November 2026
+
+For M2.6, M3.1 and M3.8, the owner approved automatic chat creation at the
+first Module 3 Practice visit. After verifying the five planning documents,
+the app creates the build chat in the same Codex Project and portfolio folder.
+Subsequent visits reopen the saved build chat. Module 4 continues the reviewed
+build chat. This supersedes the earlier same-thread handoff below.
+
+Older active builds can move to a dedicated chat on resume if they still use
+the planning thread, have no recorded decisions or approval, and Codex confirms
+the conversation predates the build. Otherwise the learner can resume their
+existing work. The app retains the previous Practice run when it makes the switch.
+
+Verification passed for typecheck, lint, build, nine startup checks, the
+Electron suite and the disposable Module 2 through 4 journey. The journey
+checked distinct planning and build thread IDs, matching Project and folder,
+later resume, review and release continuity at desktop and narrow sizes.
+The full unit run had 885 passes and two existing failures in the frozen
+Module 1 image manifest and CSS palette. Pilot acceptance is pending.
+The next step is a learner rehearsal with a live Codex Project.
 
 ### Module 1 opening, 19 November 2026
 
@@ -4373,15 +4394,15 @@ Do not author or implement Module 3 course content before this gate is accepted.
 
 ## Module 3 — Build and verify the portfolio
 
-**Current Practice authority, 18 November 2026.** The first-build and final-review
+**Current Practice authority, 19 November 2026.** The build chat, first-build and final-review
 entry above and the version 2.1 Practice definition govern the current course.
 The [v2 design](module-3-practice-v2-design.md) and the older M3.2–M3.8 entries
 below document the earlier versions.
 
 ### Module outcome
 
-The learner uses the five approved planning documents in the Module 2 task
-to build and open a working portfolio. They can request one build or smaller
+The learner uses the five approved planning documents in a new chat in the
+Module 2 Project to build and open a working portfolio. They can request one build or smaller
 increments. They learn how to reopen it locally, give an agent useful evidence
 when a bug occurs and use Git and GitHub to protect their work. To finish,
 they verify the submitted version against the PRD using the implementation plan,

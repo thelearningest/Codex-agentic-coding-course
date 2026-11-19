@@ -149,6 +149,85 @@ describe('portfolio task continuation', () => {
     expect((await repository.load()).activeRun?.binding.threadId).toBe('original-task')
   })
 
+  it('creates one build chat in the planning Project and reopens it after retry and resume', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'module-three-chat-'))
+    directories.push(root)
+    const receipt = handoff(root)
+    receipt.task.projectId = 'portfolio-project'
+    const repository = new PracticeRunRepository(root)
+    let failRead = true
+    const request = vi.fn(async (method: string) => {
+      if (method === 'thread/start') return {
+        thread: { id: 'build-chat', projectId: receipt.task.projectId }, cwd: root,
+        model: approved.model, reasoningEffort: approved.reasoningEffort, serviceTier: approved.serviceTier,
+        approvalPolicy: 'on-request', sandbox: { type: 'workspaceWrite', writableRoots: [root] }
+      }
+      if (method === 'thread/name/set') return {}
+      if (method === 'thread/read' && !failRead) return {
+        thread: { id: 'build-chat', cwd: root, projectId: receipt.task.projectId, turns: [] }
+      }
+      throw new Error('Unavailable')
+    })
+    const open = vi.fn(async () => undefined)
+    const executor = new ExecutorChatCoordinator({ request }, {
+      resolve: async () => root, resolveProjectId: async () => receipt.task.projectId
+    }, open, undefined, { attempts: 1 })
+    const coordinator = new PracticeCoordinator(repository, definitions, executor, undefined, undefined,
+      undefined, async () => approved, undefined, undefined, undefined, async () => receipt)
+    await expect(coordinator.startNew({ practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0', transfer: false })).rejects.toThrow()
+    expect((await repository.load()).pendingTransition?.targetBinding?.threadId).toBe('build-chat')
+    failRead = false
+    await coordinator.retry()
+    await coordinator.resume()
+    expect(request).toHaveBeenCalledWith('thread/start', expect.objectContaining({ cwd: root, projectId: 'portfolio-project' }))
+    expect(request.mock.calls.filter(([method]) => method === 'thread/start')).toHaveLength(1)
+    expect(request.mock.calls.some(([method]) => method === 'turn/start')).toBe(false)
+    expect(open.mock.calls).toEqual([['codex://threads/build-chat'], ['codex://threads/build-chat']])
+  })
+
+  it.each(['different-folder', 'different-project', 'missing-project'])('blocks %s before creating a build chat', async (problem) => {
+    const root = resolve('approved-portfolio-folder')
+    const request = vi.fn()
+    const executor = new ExecutorChatCoordinator({ request }, {
+      resolve: async () => problem === 'different-folder' ? resolve('other-folder') : root,
+      resolveProjectId: async () => problem === 'missing-project' ? undefined : 'other-project'
+    }, async () => undefined)
+    await expect(executor.createTarget({ runId: 'build-run', definition: await definitions.load('m3-portfolio-build', '2.1.0'),
+      approvedConfiguration: approved, portfolio: { workspaceRoot: root, projectId: 'planning-project' }
+    })).rejects.toThrow('PORTFOLIO_CONTINUATION_UNAVAILABLE')
+    expect(request).not.toHaveBeenCalled()
+  })
+
+  it.each([true, false])('splits a legacy planning chat only when it is untouched (%s)', async (untouched) => {
+    const root = await mkdtemp(join(tmpdir(), 'legacy-build-chat-'))
+    directories.push(root)
+    const repository = new PracticeRunRepository(root)
+    const receipt = handoff(root)
+    const createTarget = vi.fn(async ({ runId }: { runId: string }) => ({
+      ...receipt.task, runId, threadId: 'new-build-chat', projectId: 'portfolio-project'
+    }))
+    const validateExistingTarget = vi.fn(async () => untouched)
+    const openTarget = vi.fn()
+    const coordinator = new PracticeCoordinator(repository, definitions, {
+      createTarget, prepareTarget: async () => undefined, validateExistingTarget, openTarget
+    }, undefined, undefined, undefined, async () => approved, undefined, undefined, undefined, async () => receipt)
+    // Reproduce the persisted state produced by the previous release.
+    await coordinator.startNew({ practiceId: 'm3-portfolio-build', practiceVersion: '1.0.0', transfer: false })
+    const state = await repository.load()
+    const legacy = state.activeRun!
+    legacy.practiceVersion = '2.1.0'
+    state.archivedRuns.push({ runId: receipt.task.runId, generation: 1, practiceId: 'm2-portfolio-planning',
+      practiceVersion: '2.0.0', threadId: receipt.task.threadId, name: 'Planning', outcome: 'completed', archivedAt: time })
+    await repository.save(state)
+    await coordinator.resume()
+    await coordinator.resume()
+    expect(validateExistingTarget).toHaveBeenCalledWith(legacy.binding, expect.anything(), legacy.startedAt)
+    expect(createTarget).toHaveBeenCalledTimes(untouched ? 1 : 0)
+    const result = await repository.load()
+    expect(result.activeRun?.binding.threadId).toBe(untouched ? 'new-build-chat' : receipt.task.threadId)
+    if (untouched) expect(result.archivedRuns.at(-1)?.retainedRun).toEqual(legacy)
+  })
+
   it('fails closed with no handed-off task', async () => {
     const workspace = await mkdtemp(join(tmpdir(), 'portfolio-no-handoff-'))
     directories.push(workspace)
@@ -190,6 +269,11 @@ describe('portfolio task continuation', () => {
     expect(request).toHaveBeenCalledTimes(1)
     expect(request).toHaveBeenCalledWith('thread/read', { threadId: target.threadId, includeTurns: false })
 
+    const boundary = Date.parse(time) / 1000
+    for (const [updatedAt, untouched] of [[boundary - 1, true], [boundary, false], [boundary + 10, false], [null, false]] as const) {
+      request.mockResolvedValueOnce({ thread: { id: target.threadId, cwd: workspace, turns: [], updatedAt } } as Awaited<ReturnType<typeof request>>)
+      await expect(executor.validateExistingTarget(target, definition, time)).resolves.toBe(untouched)
+    }
     request.mockResolvedValueOnce({ thread: { id: target.threadId, cwd: resolve('wrong-workspace'), turns: [] } })
     await expect(executor.validateExistingTarget(target, definition)).resolves.toBe(false)
     request.mockRejectedValueOnce(new Error('unreadable'))

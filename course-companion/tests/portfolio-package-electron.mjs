@@ -443,7 +443,13 @@ try {
   const confirmSwitch = page.locator('.practice-switch-dialog .practice-switch-confirm')
   if (await confirmSwitch.count()) await confirmSwitch.click()
   await page.waitForFunction(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice?.practiceId === 'm3-portfolio-build')
-  const firstRun = await page.evaluate(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice.runId)
+  const firstBuild = (await waitForPracticeState((state) =>
+    state.activeRun?.practiceId === 'm3-portfolio-build', 'first build chat')).activeRun
+  const firstRun = firstBuild.runId
+  const buildThread = firstBuild.binding.threadId
+  assert.notEqual(buildThread, originalTask)
+  assert.equal(firstBuild.binding.projectId, projectSetup.codexProject.id)
+  assert.equal(firstBuild.binding.workspaceRoot, handoff.workspace.canonicalPath)
   await compact.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
   const lessonReturn = compact.getByRole('button', { name: 'Quay lại bài học', exact: true })
   await lessonReturn.waitFor()
@@ -475,7 +481,7 @@ try {
   await page.getByRole('button', { name: 'Tiếp tục Practice', exact: true }).click()
   const continued = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8'))
   assert.equal(continued.activeRun.runId, firstRun)
-  assert.equal(continued.activeRun.binding.threadId, originalTask)
+  assert.equal(continued.activeRun.binding.threadId, buildThread)
   const firstPassRecords = {
     ...buildDocuments,
     'evidence/module-3/build-log.md': 'Simulated first portfolio built from the approved plan in one pass. Technical checks and browser results are recorded in browser-validation.md.',
@@ -601,8 +607,8 @@ try {
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   await page.getByRole('heading', { name: 'Đưa portfolio lên mạng', exact: true }).waitFor()
   await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()
-  const releaseState = await waitForPracticeState((record) => record.activeRun?.practiceId === 'm4-portfolio-release', 'Release must continue the original task')
-  assert.equal(releaseState.activeRun.binding.threadId, originalTask)
+  const releaseState = await waitForPracticeState((record) => record.activeRun?.practiceId === 'm4-portfolio-release', 'Release must continue the Module 3 build chat')
+  assert.equal(releaseState.activeRun.binding.threadId, buildThread)
   assert.equal(releaseState.activeRun.binding.projectId, projectSetup.codexProject.id)
   const deployedAt = new Date(Date.now() - 1000).toISOString()
   const deploymentRecord = { schemaVersion: 1,
@@ -643,7 +649,7 @@ try {
   await compact.getByRole('button', { name: 'Lưu kết quả và quay lại khóa học', exact: true }).waitFor()
   await compact.getByRole('button', { name: 'Lưu kết quả và quay lại khóa học', exact: true }).click()
   const released = await waitForPracticeState((record) => record.activeRun === null, 'Release return must archive the reviewed attempt')
-  assert.equal(released.archivedRuns.at(-1).retainedRun.binding.threadId, originalTask)
+  assert.equal(released.archivedRuns.at(-1).retainedRun.binding.threadId, buildThread)
   const finalReleaseProgress = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
   assert.equal(finalReleaseProgress.progress.sceneId, 'module-4-complete')
   assert.ok(finalReleaseProgress.progress.completedCheckpointIds.includes('m4-complete'))
@@ -657,8 +663,8 @@ try {
   await page.getByRole('button', { name: 'VIBECODING 101 VỀ HOME BASE', exact: true }).click()
   assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '15/19 checkpoint · 79%', 'Home counts the two Module 3 teaching checkpoints visited after returning from the first build')
   console.log('Module 4 Practice rehearsal: course-page entry, same task, real local Git revision, one record, simulated public URL/review, explicit approval, atomic return and desktop/narrow controls passed')
-  console.log('Module 3 v2 rehearsal: three records, one website approval, simulated content review, original task, archived completion, five mastery answers and desktop/narrow layouts passed')
-  console.log('Portfolio rehearsal: explicit approval, five-document simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and same-task Module 3 handoff passed')
+  console.log('Module 3 v2 rehearsal: three records, one website approval, simulated content review, dedicated build chat, archived completion, five mastery answers and desktop/narrow layouts passed')
+  console.log('Portfolio rehearsal: explicit approval, five-document simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and new Module 3 chat in the planning Project passed')
 } catch (error) {
   console.error(runtimeErrors)
   const diagnosticRun = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8')).activeRun

@@ -1,4 +1,4 @@
-import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
+import { isPortfolioBuildPackageVersion, portfolioBuildVersion } from '../../shared/contracts'
 import { randomUUID } from 'node:crypto'
 import { portfolioContinuationInstructions } from './portfolio-continuation-instructions'
 import { portfolioBuildSliceIds } from '../../shared/contracts'
@@ -46,7 +46,7 @@ function initialChecklist(definition: PracticeDefinition): PracticeChecklistStep
 }
 
 function transitionLabel(transition: PracticeTransitionRecord, failed: boolean): string {
-  if (transition.practiceId === 'm3-portfolio-build' || transition.practiceId === 'm4-portfolio-release') {
+  if ((transition.practiceId === 'm3-portfolio-build' && transition.practiceVersion !== portfolioBuildVersion) || transition.practiceId === 'm4-portfolio-release') {
     if (failed) return 'Chưa thể tiếp tục task Codex đã bàn giao.'
     return transition.stage === 'creating-target'
       ? 'Đang kiểm tra task Codex đã bàn giao…'
@@ -388,52 +388,54 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
 
   startNew(request: PracticeStartRequest): Promise<PracticeWorkspaceView> {
     if (request.transfer) return Promise.reject(selectiveTransferUnavailable())
-    return this.runExclusive(async () => {
-      this.lastError = ''
-      const record = await this.repository.load()
-      if (record.pendingTransition) throw new Error('A Practice switch is already pending')
-      if (record.activeRun && isReviewedPortfolioPackage(record.activeRun) && record.activeRun.reviewStatus === 'reviewing') {
-        throw new Error('Wait for the current portfolio review before switching Practice')
+    return this.runExclusive(() => this.startRun(request))
+  }
+
+  private async startRun(request: PracticeStartRequest): Promise<PracticeWorkspaceView> {
+    this.lastError = ''
+    const record = await this.repository.load()
+    if (record.pendingTransition) throw new Error('A Practice switch is already pending')
+    if (record.activeRun && isReviewedPortfolioPackage(record.activeRun) && record.activeRun.reviewStatus === 'reviewing') {
+      throw new Error('Wait for the current portfolio review before switching Practice')
+    }
+    const definition = await this.definitions.load(request.practiceId, request.practiceVersion)
+    const approvedConfiguration = definition.taskPolicy === 'safe-workspace-write'
+      ? await this.loadApprovedConfiguration?.() ?? undefined
+      : undefined
+    const startedAt = this.now().toISOString()
+    const transition: PracticeTransitionRecord = {
+      transitionId: this.createId(),
+      sourceRunId: record.activeRun?.runId ?? null,
+      targetRunId: this.createId(),
+      practiceId: request.practiceId,
+      practiceVersion: request.practiceVersion,
+      stage: 'creating-target',
+      startedAt
+    }
+    const pending = await this.repository.save({ ...record, pendingTransition: transition })
+    let targetBinding
+    let committed
+    try {
+      targetBinding = await this.createPracticeTarget({
+        runId: transition.targetRunId,
+        definition,
+        approvedConfiguration
+      })
+      const targetCreated = await this.repository.save({
+        ...pending,
+        pendingTransition: { ...transition, stage: 'target-created', targetBinding }
+      })
+      if (definition.evidenceProfile === 'planning-package') {
+        await this.prepareExecutor?.(targetBinding, true)
       }
-      const definition = await this.definitions.load(request.practiceId, request.practiceVersion)
-      const approvedConfiguration = definition.taskPolicy === 'safe-workspace-write'
-        ? await this.loadApprovedConfiguration?.() ?? undefined
-        : undefined
-      const startedAt = this.now().toISOString()
-      const transition: PracticeTransitionRecord = {
-        transitionId: this.createId(),
-        sourceRunId: record.activeRun?.runId ?? null,
-        targetRunId: this.createId(),
-        practiceId: request.practiceId,
-        practiceVersion: request.practiceVersion,
-        stage: 'creating-target',
-        startedAt
-      }
-      const pending = await this.repository.save({ ...record, pendingTransition: transition })
-      let targetBinding
-      let committed
-      try {
-        targetBinding = await this.createPracticeTarget({
-          runId: transition.targetRunId,
-          definition,
-          approvedConfiguration
-        })
-        const targetCreated = await this.repository.save({
-          ...pending,
-          pendingTransition: { ...transition, stage: 'target-created', targetBinding }
-        })
-        if (definition.evidenceProfile === 'planning-package') {
-          await this.prepareExecutor?.(targetBinding, true)
-        }
-        await this.preparePracticeTarget(targetCreated.pendingTransition!.targetBinding!, definition)
-        committed = await this.commitTarget(targetCreated)
-      } catch (error) {
-        this.lastError = safeCreationError(error)
-        throw new Error(this.lastError, { cause: error })
-      }
-      await this.openTarget(targetBinding)
-      return this.toView(committed)
-    })
+      await this.preparePracticeTarget(targetCreated.pendingTransition!.targetBinding!, definition)
+      committed = await this.commitTarget(targetCreated)
+    } catch (error) {
+      this.lastError = safeCreationError(error)
+      throw new Error(this.lastError, { cause: error })
+    }
+    await this.openTarget(targetBinding)
+    return this.toView(committed)
   }
 
   resume(identity?: PracticeIdentity): Promise<PracticeWorkspaceView> {
@@ -446,6 +448,20 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         && (record.activeRun.practiceId !== identity.practiceId
           || record.activeRun.practiceVersion !== identity.practiceVersion)) {
         throw new Error('Practice đang hoạt động không khớp nội dung được yêu cầu.')
+      }
+      // Earlier releases reused the planning thread. Split an unopened build on
+      // its next visit only when Codex can confirm there has been no new work.
+      const active = record.activeRun
+      if (active.practiceId === 'm3-portfolio-build' && active.practiceVersion === portfolioBuildVersion
+        && active.reviewStatus === 'not-reviewed' && !active.packageApproval
+        && !Object.keys(active.learnerDecisions).length && !Object.keys(active.learnerApprovals).length
+        && record.archivedRuns.some((entry) => entry.practiceId === 'm2-portfolio-planning'
+          && entry.threadId === active.binding.threadId)) {
+        const definition = await this.definitions.load(active.practiceId, active.practiceVersion)
+        if (await this.executor.validateExistingTarget?.(active.binding, definition, active.startedAt)
+          && (await this.loadPortfolioHandoff?.())?.task.threadId === active.binding.threadId) {
+          return this.startRun({ practiceId: active.practiceId, practiceVersion: active.practiceVersion, transfer: false })
+        }
       }
       const priorProjectId = record.activeRun.binding.projectId
       if (record.activeRun.practiceId === 'm4-portfolio-release') {
@@ -481,7 +497,11 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       const approvedConfiguration = definition.taskPolicy === 'safe-workspace-write'
         ? await this.loadApprovedConfiguration?.() ?? undefined
         : undefined
-      if (transition.stage === 'target-created' && transition.targetBinding) {
+      // A pre-upgrade transition may still point at the planning chat.
+      const legacyBuildTarget = definition.practiceId === 'm3-portfolio-build'
+        && definition.version === portfolioBuildVersion && transition.targetBinding
+        && (await this.loadPortfolioHandoff?.())?.task.threadId === transition.targetBinding.threadId
+      if (transition.stage === 'target-created' && transition.targetBinding && !legacyBuildTarget) {
         let committed
         try {
           if (definition.evidenceProfile === 'planning-package') {
@@ -559,14 +579,18 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         || handoff.task.workspaceRoot !== handoff.workspace.canonicalPath) {
         throw new Error('PORTFOLIO_RELEASE_CONTINUATION_UNAVAILABLE')
       }
-      return { ...handoff.task, runId: input.runId }
+      const releaseBinding = { ...handoff.task, runId: input.runId }
+      // The settings snapshot is evidence from the build run.
+      delete releaseBinding.configuration
+      return releaseBinding
     }
     if (input.definition.practiceId !== 'm3-portfolio-build') return this.executor.createTarget(input)
     const handoff = await this.loadPortfolioHandoff?.()
     if (!handoff) throw new Error('PORTFOLIO_CONTINUATION_UNAVAILABLE')
     if (handoff.task.workspaceRoot !== handoff.workspace.canonicalPath
       || handoff.task.threadId !== handoff.approval.threadId) throw new Error('The approved portfolio task binding is invalid')
-    return { ...handoff.task, runId: input.runId }
+    if (input.definition.version !== portfolioBuildVersion) return { ...handoff.task, runId: input.runId }
+    return this.executor.createTarget({ ...input, portfolio: handoff.task })
   }
 
   private async preparePracticeTarget(binding: PracticeRunRecord['binding'], definition: PracticeDefinition): Promise<void> {
@@ -590,7 +614,11 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
     if (definition.practiceId !== 'm3-portfolio-build') return this.executor.prepareTarget(binding, definition, approvedConfiguration)
     try {
       const handoff = await this.loadPortfolioHandoff?.()
-      if (!handoff || binding.threadId !== handoff.task.threadId || binding.workspaceRoot !== handoff.workspace.canonicalPath) {
+      if (!handoff || binding.workspaceRoot !== handoff.workspace.canonicalPath
+        || (definition.version === portfolioBuildVersion
+          ? binding.threadId === handoff.task.threadId || !binding.projectId
+            || (handoff.task.projectId && binding.projectId !== handoff.task.projectId)
+          : binding.threadId !== handoff.task.threadId)) {
         throw new Error('Portfolio handoff changed')
       }
       await this.executor.prepareTarget(binding, definition, approvedConfiguration)
