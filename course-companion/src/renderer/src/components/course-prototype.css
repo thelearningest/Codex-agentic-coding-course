@@ -1,0 +1,37 @@
+.pixel-learning-shell[data-scene-id="module-2-html-design-prototype"] .pixel-scene-world {
+  transform: none;
+}
+
+.pixel-learning-shell[data-scene-id="module-2-html-design-prototype"] figcaption {
+  padding: 10px 14px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+@media (min-width: 821px) {
+  .pixel-learning-shell.has-module-two-visual-dialogue[data-scene-id="module-2-html-design-prototype"] {
+    grid-template-columns: minmax(0, 1fr) minmax(460px, min(60vw, 780px));
+  }
+}
+
+.course-prototype-dialog {
+  width: min(1280px, 96vw);
+  height: 92dvh;
+  max-height: 96dvh;
+  padding: 12px;
+  border: 1px solid var(--obsidian-line);
+  border-radius: var(--obsidian-radius-panel);
+  color: white;
+  background: var(--obsidian-canvas);
+}
+
+.course-prototype-dialog[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+}
+
+.course-prototype-dialog::backdrop { background: rgb(0 0 0 / 80%); }
+.course-prototype-dialog form { justify-self: end; }
+.course-prototype-dialog .pixel-page-back { position: static; margin: 0; }
+.course-prototype-dialog iframe { width: 100%; height: 100%; border: 0; background: #111; }

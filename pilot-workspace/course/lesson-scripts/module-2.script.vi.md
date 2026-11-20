@@ -40,6 +40,14 @@ Teacher hướng dẫn quy trình bốn bước:
 Teacher phải nói rõ rằng coding agent hỗ trợ phân tích và soạn thảo, còn Learner
 giữ quyền quyết định mục tiêu, người dùng, phạm vi và tiêu chí chấp nhận.
 
+### Duyệt mẫu HTML
+
+Bạn chỉ cần prompt bảo là: "tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".
+
+Và sau này, không chỉ với portfolio mà với tất cả các ứng dụng khác bạn tạo với AI, bạn nên bảo agent tạo trước một trang html mẫu để bạn duyệt thiết kế. Như vậy sẽ làm giảm trường hợp bạn nói một đằng agent làm một nẻo, vì giờ nó đã có trang html để làm reference.
+
+[Mình cũng tạo design prototype trước khi thực hiện khoá này](../../../plan/module-3-prototype/index.html)
+
 ## Phần 4 — Đọc một implementation plan mẫu
 
 Teacher mở phần bằng nguyên văn lời dẫn của tác giả:

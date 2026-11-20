@@ -43,6 +43,8 @@ import m2PrdReviewImage from '../assets/lesson-visuals/m2-prd-review.webp'
 import m2ImplementationPlanImage from '../assets/lesson-visuals/m2-implementation-plan.webp'
 import m2AssessmentImage from '../assets/lesson-visuals/m2-assessment.webp'
 import m2PafoliosImage from '../assets/lesson-visuals/m2-pafolios.webp'
+import prototypeThumbnail from '../../../../../plan/module-3-prototype/preview.png'
+import { CoursePrototypeButton } from '../components/CoursePrototypeButton'
 import m2AwwwardsImage from '../assets/lesson-visuals/m2-awwwards.webp'
 import m3VisibleScreenErrorImage from '../assets/lesson-visuals/m3-visible-screen-error-example.png'
 import m3VisibleErrorPromptImage from '../assets/lesson-visuals/m3-visible-error-prompt-example.png'
@@ -1231,6 +1233,12 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
     image: m2PafoliosImage,
     alt: 'Ảnh chụp Pafolios với hai portfolio được tuyển chọn',
     caption: 'Pafolios',
+    fit: 'contain'
+  },
+  'module-2-html-design-prototype': {
+    image: prototypeThumbnail,
+    alt: 'Bản mẫu Module 3 với trang Tạo bản portfolio đầu tiên',
+    caption: 'Mình cũng tạo design prototype trước khi thực hiện khoá này',
     fit: 'contain'
   },
   'module-3-visible-error': {
@@ -3128,11 +3136,12 @@ export function LearningWindow() {
     && Boolean(lessonVisual)
     && Boolean(secondaryLessonVisual)
     && !usesLessonBoard
+  const isCoursePrototype = displayedSceneId === 'module-2-html-design-prototype'
   const usesModuleTwoVisualDialogue = scene.lessonId === 'module-2'
     && canShowSceneMedia
     && Boolean(lessonVisual)
     && !usesLessonBoard
-    && (showsSceneTitle || usesModuleTwoVisualGallery)
+    && (showsSceneTitle || usesModuleTwoVisualGallery || isCoursePrototype)
   const pageBackControl = (
     <button
       className="pixel-page-back"
@@ -3266,10 +3275,10 @@ export function LearningWindow() {
                 isApprovalTour={isApprovalTour}
                 visual={lessonVisual}
               />
-              {(displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual.annotations) && lessonVisual.caption ? (
+              {(isCoursePrototype || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual.annotations) && lessonVisual.caption ? (
                 <figcaption>{lessonVisual.caption}</figcaption>
               ) : null}
-              {canExpandLessonVisual ? (
+              {isCoursePrototype ? <CoursePrototypeButton /> : canExpandLessonVisual ? (
                 <button
                   aria-label="Phóng to ảnh minh họa"
                   className="pixel-visual-expand"

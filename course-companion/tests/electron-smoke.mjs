@@ -45,7 +45,7 @@ const designReferenceLinks = [
   ['Mobbin', 'https://mobbin.com/'],
   ['Pinterest', 'https://www.pinterest.com/']
 ]
-async function openModuleTwoPractice(page, stepsRemaining = 5) {
+async function openModuleTwoPractice(page, stepsRemaining = 6) {
   for (let index = 0; index < stepsRemaining; index += 1) {
     await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }
@@ -1408,6 +1408,16 @@ try {
     await firstWindows.learningPage.setViewportSize({ width: 1180, height: 780 })
   }
   await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
+  const prototypePage = firstWindows.learningPage
+  await prototypePage.locator('main[data-scene-id="module-2-html-design-prototype"]').waitFor()
+  await prototypePage.getByRole('button', { name: 'Mở mẫu HTML' }).click()
+  await prototypePage.frameLocator('dialog iframe').getByRole('heading', { name: 'Tạo bản portfolio đầu tiên' }).waitFor()
+  await prototypePage.getByRole('button', { name: 'Đóng mẫu HTML' }).click()
+  await prototypePage.getByRole('button', { name: '← Trang trước', exact: true }).click()
+  await prototypePage.getByLabel('Hai nguồn tham khảo thiết kế', { exact: true }).waitFor()
+  await prototypePage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
+  await prototypePage.locator('main[data-scene-id="module-2-html-design-prototype"]').waitFor()
+  await prototypePage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   const implementationPlanBoard = firstWindows.learningPage.locator('.pixel-plan-board')
   await implementationPlanBoard.waitFor()
   await implementationPlanBoard.getByRole('heading', { name: 'Implementation plan là gì?', exact: true }).waitFor()

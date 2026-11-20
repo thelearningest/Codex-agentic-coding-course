@@ -39,6 +39,14 @@ người dùng, phạm vi và tiêu chí chấp nhận. Chỉ sau khi bạn duy�
 agent mới nên chuyển từng yêu cầu thành các bước triển khai nhỏ có cách kiểm
 tra.
 
+### Duyệt mẫu HTML
+
+Bạn chỉ cần prompt bảo là: "tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".
+
+Và sau này, không chỉ với portfolio mà với tất cả các ứng dụng khác bạn tạo với AI, bạn nên bảo agent tạo trước một trang html mẫu để bạn duyệt thiết kế. Như vậy sẽ làm giảm trường hợp bạn nói một đằng agent làm một nẻo, vì giờ nó đã có trang html để làm reference.
+
+[Mình cũng tạo design prototype trước khi thực hiện khoá này](../../../plan/module-3-prototype/index.html)
+
 ## Phần 4 — Đọc một implementation plan mẫu
 
 Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.

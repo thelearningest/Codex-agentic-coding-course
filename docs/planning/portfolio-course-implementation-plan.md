@@ -2,7 +2,7 @@
 
 - **Status:** Foundation repair and the selective Triet V2 content integration are verified; Module 3 content and its approved v2 Practice are implemented and technically verified while its overall acceptance gate remains in progress. Module 1 now includes
   the approved `AGENTS.md` and Skills introduction and routes directly from it
-  to setup Practice. Module 2 now keeps five Course Companion knowledge slides,
+  to setup Practice. Module 2 now keeps six Course Companion knowledge slides,
   passes through one required technical portfolio-folder boundary, and retires
   the other 22 Teacher-led Practice-setup slides. The combined fictional implementation-plan page, final assessment,
   saved-progress redirects, and detailed Teacher/Executor integration handoff
@@ -46,6 +46,7 @@ and must never be inferred from a passing automated check.
 |---|---|---|---|---|---|
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
+| Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
@@ -3719,7 +3720,7 @@ and `Còn thiếu`, while preserving private/publication/ownership boundaries.
 **Verify**
 
 - Every curriculum milestone appears once and in approved order.
-- Exactly five knowledge slides and one technical workspace picker precede one
+- Exactly six knowledge slides and one technical workspace picker precede one
   real Practice launch; the picker is not a Teacher-led knowledge slide.
 - No fixed duration or speed promise appears.
 - No learner is required to open a template, fill technical metadata, read
@@ -3852,7 +3853,7 @@ artifact evidence.
 **Change**
 
 1. Build the Module 2 definition and scenes in its module package.
-2. Present five focused knowledge scenes followed by one technical
+2. Present six focused knowledge scenes followed by one technical
    portfolio-folder readiness boundary and the single real Practice entry.
    After folder confirmation, automatically register or reuse its Codex project
    and verify the exact root on that same boundary before allowing continuation.
@@ -3877,9 +3878,9 @@ artifact evidence.
 - Supported desktop Course Companion layouts.
 - Keyboard and focus behavior.
 - No Teacher-led `AGENTS.md`, milestone example or formative-check slide appears
-  between the fifth knowledge slide and Practice. The only intermediate surface
+  between the sixth knowledge slide and Practice. The only intermediate surface
   is the technical folder picker required by the workspace resolver.
-- Exactly five knowledge slides and one technical workspace picker precede the
+- Exactly six knowledge slides and one technical workspace picker precede the
   real Practice.
 - Automatic project registration, retry and revisit reuse preserve the selected
   root and project identity; no manual project-confirmation checkbox is needed.
@@ -4322,6 +4323,8 @@ passed with 292 unit tests, nine startup tests, typecheck, lint, production
 build, full Electron smoke with clipboard verification, responsive DOM checks
 without screenshots, and `git diff --check`. Overall Module 2 owner acceptance
 and pilot acceptance remain pending.
+
+**Interactive HTML prototype example — 20 November 2026.** The new scene follows the Pafolios/Awwwards gallery and precedes the implementation-plan lesson. It shows the approved prompt and opens the original Module 3 HTML prototype inside Course Companion. All 14 earlier Module 2 scenes retain their order. Typecheck, lint, production build and 22 registry/outline tests passed. A disposable Electron walkthrough covered the exact caption, interaction inside the prototype, closing it, and Previous/Continue in both directions at desktop and narrow widths. The scene fits 1180 and 390 pixels without horizontal overflow. Full-suite verification and learner acceptance remain outstanding for this change.
 
 **HTML visual-prototype guidance note — 18 August 2026:** At the owner's
 explicit request, the Module 2 design-reference page now explains that a learner

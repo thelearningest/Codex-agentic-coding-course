@@ -104,6 +104,17 @@ const instructionalScenes = {
       { label: '5 · KẾ HOẠCH', value: 'Kế hoạch triển khai' }
     ],
     dialogue: 'Ngoài nội dung ra thì bạn cũng cần lên kế hoạch cho thiết kế của ứng dụng bạn muốn tạo. Trong phần này, nếu bạn có thể tự vẽ đồ hoạ chi tiết thì quá tốt. Nhưng nếu bạn cũng hơi mù thiết kế giống như mình, bạn có thể gửi cho agent ảnh mà bạn thích và những phần cụ thể bạn muốn bắt chước trong ảnh đó. Khi thiết kế portfolio, hai trang web mình hay dùng nhất là Pafolios và Awwwards. Còn nếu thiết kế ứng dụng thì mình sẽ tìm thêm ở hai trang là Dribbble và Mobbin. Hoặc bạn cũng có thể vào Pinterest để tìm cảm hứng.\n\nTrước khi bắt đầu xây sản phẩm thật, bạn cũng có thể nhờ coding agent tạo một visual prototype bằng HTML — tức là một bản mẫu giao diện có thể mở trong trình duyệt. Hãy dùng bản mẫu này để xem bố cục, thứ tự thông tin và cảm giác tổng thể có đúng với điều bạn hình dung hay chưa. Sau khi bạn góp ý và duyệt hướng thiết kế, agent mới bắt đầu xây sản phẩm. Cách làm này giúp bạn nhìn thấy ý tưởng sớm và tránh phải sửa lại quá nhiều khi sản phẩm đã được xây.',
+    choices: [{ label: 'Tiếp tục', next: 'module-2-html-design-prototype', primary: true }],
+    showTitle: false,
+    showPanel: false
+  },
+  'module-2-html-design-prototype': {
+    lessonId: 'module-2', checkpointId: 'm2-portfolio-brief', step: 1, totalSteps: 5,
+    lessonLabel: 'MODULE 2 · LẬP KẾ HOẠCH PORTFOLIO', mission: 'Duyệt mẫu HTML',
+    objective: 'Duyệt mẫu HTML', panelLabel: '', panelStatus: '', tone: 'neutral',
+    request: '', evidence: [],
+    dialogue: 'Bạn chỉ cần prompt bảo là:\n"tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".\n\nVà sau này, không chỉ với portfolio mà với tất cả các ứng dụng khác bạn tạo với AI, bạn nên bảo agent tạo trước một trang html mẫu để bạn duyệt thiết kế. Như vậy sẽ làm giảm trường hợp bạn nói một đằng agent làm một nẻo, vì giờ nó đã có trang html để làm reference.',
+    highlightTerms: ['"tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".'],
     choices: [{ label: 'Tìm hiểu implementation plan', next: 'module-2-implementation-plan-intro', primary: true }],
     showTitle: false,
     showPanel: false

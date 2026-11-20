@@ -162,6 +162,8 @@ describe('portfolio course registry', () => {
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-review-workflow')?.nextSceneId)
       .toBe('module-2-prd-agent-workflow')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-prd-agent-workflow')?.nextSceneId)
+      .toBe('module-2-html-design-prototype')
+    expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-html-design-prototype')?.nextSceneId)
       .toBe('module-2-implementation-plan-intro')
     expect(moduleTwo.scenes.find((scene) => scene.id === 'module-2-implementation-plan-intro')?.nextSceneId)
       .toBe('module-2-portfolio-folder')
