@@ -44,6 +44,7 @@ describe('Module 2 learner-owned start prompt', () => {
 
   it('scopes each module section of AGENTS.md to the current module only', () => {
     const headings = ['## Cách dùng tệp này', '## Thư mục làm việc', '## Tài liệu và dữ liệu',
+      '## Nền kỹ thuật của portfolio',
       '## Module 2: gói kế hoạch', '## Module 3: xây website', '## Module 4: đưa portfolio lên mạng']
     const positions = headings.map((heading) => portfolioAgentsTemplate.indexOf(heading))
     expect(positions.every((position) => position >= 0)).toBe(true)
@@ -53,6 +54,15 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(portfolioAgentsTemplate).toContain('Không thêm backend, dịch vụ xử lý dữ liệu hay triển khai lên hosting trong Module 3')
     expect(portfolioAgentsTemplate).toContain('chờ người học đồng ý cho đúng hành động đó')
     expect(portfolioAgentsTemplate).toContain('Không tự mua tên miền hay dịch vụ')
+  })
+
+  it('states the course React, TypeScript and Vite baseline from Module 2 onward', () => {
+    expect(portfolioAgentsTemplate).toContain('Dùng React, TypeScript và Vite.')
+    expect(portfolioAgentsTemplate).toContain('Lệnh `npm run check` chạy lần lượt typecheck, lint và build.')
+    expect(portfolioAgentsTemplate).toContain('Ghi một mục ngắn "Nền kỹ thuật"')
+    expect(portfolioAgentsTemplate).toContain('Tạo ứng dụng theo mục "Nền kỹ thuật của portfolio"')
+    expect(portfolioAgentsTemplate).not.toContain('Chọn công cụ và lệnh kiểm tra phù hợp với dự án.')
+    expect(portfolioAgentsTemplate).not.toContain('Không chọn công nghệ và không tạo ứng dụng')
   })
 
   it('preserves the exact course prompt in a collapsed disclosure with an always-available copy action', () => {
@@ -101,11 +111,14 @@ describe('Module 2 learner-owned start prompt', () => {
     const release = await definitions.load('m4-portfolio-release', '1.0.0')
     const checkpoint = `sha256:${'a'.repeat(64)}`
     expect(portfolioContinuationInstructions(build)).toContain(PORTFOLIO_BUILD_INSTRUCTIONS)
-    expect(PORTFOLIO_BUILD_INSTRUCTIONS).toContain('không phải khuôn mẫu bắt buộc')
+    expect(PORTFOLIO_BUILD_INSTRUCTIONS).toContain('Dùng nền kỹ thuật trong AGENTS.md của portfolio: React, TypeScript và Vite.')
+    expect(PORTFOLIO_BUILD_INSTRUCTIONS).not.toContain('không phải khuôn mẫu bắt buộc')
     expect(PORTFOLIO_BUILD_INSTRUCTIONS).toContain('Không bắt buộc tên hoặc số lượng đề mục')
     expect(PORTFOLIO_BUILD_INSTRUCTIONS).not.toContain('check chạy typecheck rồi lint rồi build')
     expect(build.criteria.find((criterion) => criterion.id === 'final-validation-current')?.assertion)
-      .toContain('equivalent command names, composition and tooling are acceptable')
+      .toContain('use the course React, TypeScript and Vite baseline')
+    expect(build.criteria.find((criterion) => criterion.id === 'technical-checks-acceptance')?.assertion)
+      .not.toContain('Static HTML is acceptable')
     expect(portfolioContinuationInstructions(release, checkpoint)).toContain(portfolioReleaseInstructions(checkpoint))
     expect(portfolioReleaseInstructions(checkpoint)).toContain('lệnh kiểm tra đã thực sự chạy')
     expect(portfolioReleaseInstructions(checkpoint)).not.toContain('command: "npm run check"')

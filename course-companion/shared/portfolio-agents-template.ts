@@ -21,6 +21,19 @@ Course Companion tạo tệp này khi bạn chọn thư mục portfolio. Codex t
 - Chờ người học đồng ý trước khi đổi tên, di chuyển, xóa hay ghi đè tài liệu hiện có.
 - Những điểm chưa biết cần được làm rõ với người học hoặc ghi nhận trung thực, không tự bịa dữ liệu.
 
+## Nền kỹ thuật của portfolio
+
+Khóa học đã chọn sẵn nền kỹ thuật cho portfolio, nên người học không cần chọn hay so sánh công nghệ. Module 2 chỉ ghi nền này vào implementation plan. Module 3 mới tạo ứng dụng.
+
+- Dùng React, TypeScript và Vite. Bật chế độ kiểm tra chặt \`strict\` của TypeScript.
+- Giữ CSS của bản mẫu HTML ở bước 3 khi chuyển giao diện sang React. Chỉ thêm Tailwind hay thư viện giao diện khác khi người học đồng ý.
+- Đặt nội dung portfolio trong một tệp dữ liệu có kiểu, ví dụ \`src/content/portfolio.ts\`.
+- Portfolio là một trang. Chỉ tạo trang riêng cho từng dự án khi PRD yêu cầu và người học đồng ý.
+- Trong \`index.html\`, ghi tiêu đề trang, mô tả và thẻ Open Graph để đường link hiện đúng khi chia sẻ.
+- Tạo các lệnh \`dev\`, \`typecheck\`, \`lint\`, \`build\` và \`preview\`. Lệnh \`npm run check\` chạy lần lượt typecheck, lint và build.
+- Không đưa máy chủ, thư viện gọi AI, khóa API hay biến môi trường bí mật vào mã chạy trên trình duyệt.
+- Chỉ thêm thư viện hiệu ứng chuyển động hoặc biểu tượng khi PRD cần và người học đồng ý.
+
 ## Module 2: gói kế hoạch
 
 Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt và một bản mẫu HTML, đúng tên và đường dẫn sau:
@@ -108,13 +121,13 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 - Không hỏi câu mới.
 - Mỗi yêu cầu REQ-* trong PRD xuất hiện đúng một lần, kèm cách kiểm tra và bằng chứng dự kiến.
 - Mỗi giai đoạn có tiêu chí hoàn thành và điểm dừng để người học xem lại.
-- Không chọn công nghệ và không tạo ứng dụng; việc đó thuộc Module 3.
+- Ghi một mục ngắn "Nền kỹ thuật" theo mục "Nền kỹ thuật của portfolio" ở trên. Không hỏi người học chọn công nghệ và không tạo ứng dụng; việc tạo ứng dụng thuộc Module 3.
 - Khi xong, hỏi đúng một câu: "Bạn duyệt PRD và implementation plan này chưa, hay muốn sửa gì?". Nếu người học sửa, cập nhật cả hai tệp cho khớp rồi hỏi lại.
 
 ## Module 3: xây website
 
 - Đọc năm tài liệu trong planning/ làm nguồn yêu cầu và dùng bản mẫu HTML ở bước 3 để tham khảo bố cục; chỉ sửa chúng khi người học yêu cầu.
-- Chọn công cụ và lệnh kiểm tra phù hợp với dự án.
+- Tạo ứng dụng theo mục "Nền kỹ thuật của portfolio" và dùng \`npm run check\` để kiểm tra kỹ thuật. Nếu implementation plan ghi nền kỹ thuật khác, báo cho người học và đề xuất làm theo nền của khóa học trước khi tạo ứng dụng.
 - Có thể thực hiện implementation plan trong một lượt. Gửi đường dẫn bản đầu để người học xem rồi quay lại bài học. Khi người học trở lại, kiểm tra bản cuối theo PRD và ghi lại quan sát thật.
 - Commit sau mỗi phần người học đã chấp nhận. Khi người học muốn thêm tính năng mới, đề xuất tạo branch riêng.
 - Không thêm backend, dịch vụ xử lý dữ liệu hay triển khai lên hosting trong Module 3.

@@ -51,6 +51,36 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Portfolio React baseline decision, 20 November 2026
+
+The owner chose one course stack for learner portfolios: React, TypeScript
+and Vite, kept lean. Learners do not choose technology. The spec and exact
+proposed wording are in
+[portfolio-react-baseline-2026-11-20.md](portfolio-react-baseline-2026-11-20.md).
+This affects M3.2 scaffolding and the Module 3 review. Today the portfolio
+`AGENTS.md` template tells Codex to choose its own tools, so it builds plain
+HTML.
+
+Implementation is `implemented`. The portfolio `AGENTS.md` template states the
+stack from Module 2. The Module 3 build instruction, criteria and reviewer
+prompt now require it. `m3-portfolio-build` stays at 2.1.0. Owner approval
+covers the stack direction, the wording and the reviewer-prompt edit. The owner
+removed the `kind` honesty-label rule after the rehearsal.
+
+Verification is `passed` for:
+
+- the Phase 2 internal rehearsal: one `codex exec` run in a disposable folder
+  used the stack unprompted, passed `npm run check`, and matched the prototype
+  at 1440 × 900 and 390 × 844;
+- typecheck, lint, build and the focused tests;
+- the Teacher chat, Practice guide and review feedback Electron scripts.
+
+The full unit suite has the same 92 failures with and without the change (807
+and 806 passes). The Electron smoke still stops at the existing Module 1 Skills
+failure. The desktop app flow, Triết's live review and a machine without
+Node.js remain unverified. Pilot acceptance is `pending`. Next step: decide the
+Node.js prerequisite (Phase 4), then rehearse Modules 2–3 in the desktop app.
+
 ### Module 2 Practice prototype, 20 November 2026
 
 M2.1, M2.4, M2.5 and M2.6 implementation is `implemented`. At the end of the reference interview, Codex offers to create `planning/reference/design-prototype.html` with the tab title `design-protoype`. Teacher reviews the actual HTML alongside the brief and reference. The learner approves the current PRD and implementation plan once. The six-file handoff includes the prototype digest. Existing completed five-file handoffs stay readable for learners already building their portfolios.
