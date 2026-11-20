@@ -438,10 +438,7 @@ try {
     assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
     await page.screenshot({ path: join(screenshots, width === 390 ? 'module-3-first-build-390.png' : 'module-3-first-build-entry.png'), animations: 'disabled' })
   }
-  await page.getByRole('button', { name: 'Mở Practice', exact: true }).click()
-  await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()
-  const confirmSwitch = page.locator('.practice-switch-dialog .practice-switch-confirm')
-  if (await confirmSwitch.count()) await confirmSwitch.click()
+  await page.getByRole('button', { name: 'Tiếp tục đến Practice', exact: true }).click()
   await page.waitForFunction(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice?.practiceId === 'm3-portfolio-build')
   const firstBuild = (await waitForPracticeState((state) =>
     state.activeRun?.practiceId === 'm3-portfolio-build', 'first build chat')).activeRun
@@ -464,6 +461,15 @@ try {
   await page.setViewportSize({ width: 1180, height: 780 })
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.locator('main[data-scene-id="module-3-debugging-intro"]').waitFor()
+  // An explicit Practice launch from the outline must keep the saved lesson.
+  await page.locator('summary[aria-label="Mở mục lục MODULE 3"]').click()
+  await page.getByRole('button', { name: 'Tạo bản portfolio đầu tiên', exact: true }).click()
+  await page.getByRole('button', { name: 'Tiếp tục đến Practice', exact: true }).click()
+  await compact.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
+  await lessonReturn.click()
+  await page.locator('main[data-scene-id="module-3-debugging-intro"]').waitFor()
+  const resumedBuild = await page.evaluate(async () => (await globalThis.courseCompanion.loadPracticeWorkspace()).activePractice)
+  assert.equal(resumedBuild.runId, firstRun)
   await page.getByText('Okay, bây giờ bạn đã có một implementation plan', { exact: false }).waitFor()
   const handoffReference = page.locator('.pixel-planning-handoff')
   assert.equal(await handoffReference.getAttribute('open'), null)

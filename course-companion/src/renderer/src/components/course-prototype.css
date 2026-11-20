@@ -4,8 +4,10 @@
 
 .pixel-learning-shell[data-scene-id="module-2-html-design-prototype"] figcaption {
   padding: 10px 14px;
+  font-size: 13px;
   font-weight: 800;
   line-height: 1.5;
+  text-align: right;
 }
 
 @media (min-width: 821px) {

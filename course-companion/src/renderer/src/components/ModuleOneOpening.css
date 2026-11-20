@@ -1,5 +1,8 @@
-.module-one-opening.opening-comparison {
+.module-one-opening.opening-comparison,
+[data-scene-id="module-1-chat-work"] .pixel-lesson-navigation {
   width: min(100%, 1070px);
+}
+.module-one-opening.opening-comparison {
   padding: clamp(24px, 4.3vw, 64px);
   border: 1px solid #3b3a32;
   border-radius: 14px;
@@ -51,7 +54,8 @@
   cursor: zoom-in;
 }
 .opening-modes .opening-photo { aspect-ratio: 1.65; }
-.opening-comparison .opening-photo img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 0; }
+.opening-comparison .opening-photo img { display: block; width: 100%; height: auto; border-radius: 0; }
+.opening-modes .opening-photo img { height: 100%; object-fit: contain; }
 .opening-photo span {
   position: absolute; right: 9px; bottom: 9px;
   width: 28px; height: 28px; border: 1px solid #ffffff48; border-radius: 6px;

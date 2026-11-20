@@ -1,0 +1,66 @@
+import teacherChat from '../assets/practice-preview/teacher-chat.webp'
+import './teacher-orientation.css'
+
+const chatAreas = [
+  {
+    label: 'Đầu khung chat',
+    description: 'Xem trạng thái kết nối của Triết. Bấm dấu × để đóng khung chat.'
+  },
+  {
+    label: 'Bước học hiện tại',
+    description: 'Triết dựa vào bài bạn đang học để trả lời câu hỏi.'
+  },
+  {
+    label: 'Cuộc trò chuyện',
+    description: 'Đọc lại câu hỏi của bạn và câu trả lời của Triết.'
+  },
+  {
+    label: 'Ô nhắn tin',
+    description: 'Nhập câu hỏi rồi bấm Gửi hoặc nhấn Enter. Nhấn Shift+Enter để xuống dòng.'
+  }
+]
+
+export function TeacherOrientation() {
+  return (
+    <section className="teacher-orientation" aria-labelledby="teacher-orientation-title">
+      <header>
+        <h2 id="teacher-orientation-title">Làm quen với Triết</h2>
+        <p>
+          Triết là trợ lý AI của khóa học. Trong lúc học, bấm <strong>Trò chuyện với Triết</strong> để hỏi về bài đang xem.
+        </p>
+      </header>
+
+      <figure>
+        <div className="teacher-orientation-shot">
+          <img src={teacherChat} width={380} height={520} alt="Khung chat Triết với bốn vị trí được giải thích trong danh sách." />
+          {chatAreas.map(({ label }, index) => <span key={label} aria-hidden="true">{index + 1}</span>)}
+        </div>
+        <figcaption>Giao diện Course Companion với tin nhắn mẫu.</figcaption>
+      </figure>
+
+      <ol className="teacher-orientation-areas" role="list">
+        {chatAreas.map(({ label, description }, index) => (
+          <li key={label}>
+            <span className="teacher-orientation-number">{index + 1}</span>
+            <div><h3>{label}</h3><p>{description}</p></div>
+          </li>
+        ))}
+      </ol>
+
+      <div className="teacher-orientation-next">
+        <p>
+          Khi vào Practice, khung chat chuyển sang chế độ hướng dẫn và duyệt bài.
+          Nếu vướng ở bước nào, bấm <strong>Cần gợi ý?</strong> Khi chỉnh xong cấu hình trong task Codex, bấm <strong>Nộp bài</strong> trong khung Triết.
+        </p>
+        <details>
+          <summary>Triết dùng Codex như thế nào?</summary>
+          <p>
+            Course Companion chuyển câu hỏi và thông tin về bài đang học cho Codex qua Codex App Server,
+            phần kết nối giữa Course Companion và Codex. Triết dùng một cuộc trò chuyện riêng ở chế độ chỉ đọc để trả lời bạn.
+            Khi bạn nộp bài, Triết dựa trên cấu hình Course Companion đọc được từ đúng task thực hành của bạn.
+          </p>
+        </details>
+      </div>
+    </section>
+  )
+}

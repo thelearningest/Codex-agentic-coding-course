@@ -1,4 +1,4 @@
-import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
+import { isPortfolioBuildLesson, isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
 import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
@@ -1063,7 +1063,11 @@ function registerIpcHandlers(): void {
     const run = (await practiceRunRepository.load()).activeRun
     if (!run || run.practiceId !== 'm3-portfolio-build' || run.runId !== runId
       || run.generation !== generation || !run.binding) throw new Error('Task portfolio đã thay đổi.')
-    await progressRepository.resumeLessonAfterFirstBuild()
+    const loaded = await progressRepository.load()
+    if ((loaded.status !== 'returning' && loaded.status !== 'recovered') || !isPortfolioBuildLesson(loaded.progress.checkpointId)) {
+      throw new Error('Lượt xây portfolio đầu tiên không còn hoạt động.')
+    }
+    if (loaded.progress.sceneId === 'module-3-first-build') await progressRepository.resumeLessonAfterFirstBuild()
     if (mainWindow?.isMinimized()) mainWindow.restore()
     mainWindow?.show()
     mainWindow?.focus()

@@ -11,7 +11,6 @@ export const courseOutline: Record<LessonId, readonly OutlineSection[]> = {
   ],
   'module-1': [
     { title: 'Chat, Work và Codex', startSceneId: 'module-1-chat-work' },
-    { title: 'Codex và coding agent', startSceneId: 'module-1-codex-orientation' },
     { title: 'Approval: quyền thực hiện thao tác', startSceneId: 'module-1-codex-examples' },
     { title: 'Model và mức suy luận', startSceneId: 'module-1-codex-model-intro' },
     { title: 'Lệnh / và menu @', startSceneId: 'module-1-codex-slash-commands' },

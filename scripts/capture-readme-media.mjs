@@ -134,7 +134,7 @@ async function main() {
     await page.waitForFunction(() => Boolean(globalThis.courseCompanion))
 
     if (!process.argv.includes('--reuse-lessons')) {
-      await openLesson('module-1', 'module-1-codex-orientation', 'm1-understand-codex', 'm1-codex-orientation')
+      await openLesson('module-1', 'module-1-why-codex', 'm1-understand-codex', 'm1-codex-orientation')
       await record('module-1-codex', async () => {
         await next()
         await delay(2500)

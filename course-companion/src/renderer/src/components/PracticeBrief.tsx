@@ -7,6 +7,7 @@ import { PracticeSwitchDialog } from './PracticeSwitchDialog'
 import { PracticeIntroduction } from './PracticeIntroduction'
 import { getPracticeIntroduction } from './practice-introduction-copy'
 import { PracticeStartPrompt } from './PracticeStartPrompt'
+import { TeacherOrientation } from './TeacherOrientation'
 
 type PracticeBriefProps = {
   identity: PracticeIdentity
@@ -242,6 +243,7 @@ export function PracticeBrief({
           <PortfolioPlanningGuide introduction={introduction} controls={controls} />
         ) : introduction ? (
           <PracticeIntroduction introduction={introduction} showReference={!hasRequestedPractice} imageFirst={setupPractice}>
+            {setupPractice && !hasRequestedPractice ? <TeacherOrientation /> : null}
             {setupPractice ? <PracticeScreenshotGuide key={courseRunId}>{controls}</PracticeScreenshotGuide> : controls}
           </PracticeIntroduction>
         ) : <>

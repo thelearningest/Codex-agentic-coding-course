@@ -8,8 +8,9 @@ export const moduleThreeScenes = {
     copyPromptTitle: 'Tạo bản portfolio đầu tiên',
     copyPrompt: 'Bắt đầu Module 3. Hãy dùng năm tài liệu planning đã duyệt để xây bản portfolio đầu tiên theo implementation plan. Chạy website và gửi tôi đường dẫn để xem trên trình duyệt.',
     tone: 'neutral', request: 'Dùng kế hoạch đã duyệt để xây portfolio.', evidence: [],
-    dialogue: 'Bạn đã có kế hoạch từ Module 2. Hãy tiếp tục trong cùng task Codex và giao cho agent xây bản portfolio đầu tiên. Khi agent gửi đường dẫn, hãy mở website. Khi thấy nội dung portfolio của mình, chọn “Quay lại bài học” trong cửa sổ Triết.',
-    choices: [{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true }]
+    showTitle: false, showPanel: false,
+    dialogue: 'Bây giờ, sau khi đã xong giai đoạn planning, chúng ta sẽ đến với bước mà ắt bạn đang rất mong chờ, tạo portfolio. Bạn chỉ cần copy prompt này và paste vào codex là được. Sau khi codex làm xong, sau khi codex làm xong và bạn thấy được portfolio hiện lên thì hãy bấm vào teacher agent và chọn quay lại bài học, chưa cần biết đẹp xấu đúng sai như nào.\n\nChắc chắn sẽ còn nhiều điểm cần cải thiện vì thường lần tạo đầu tiên không bao giờ hoàn hảo. Nhưng chúng mình sẽ cùng nhau cải thiện dần qua module 3',
+    choices: [{ label: 'Tiếp tục đến Practice', action: 'practice', preservePrimaryLabel: true, primary: true }]
   },
   'module-3-local-preview': {
     lessonId: 'module-3', checkpointId: 'm3-complete-first-version', step: 2, totalSteps: 5,

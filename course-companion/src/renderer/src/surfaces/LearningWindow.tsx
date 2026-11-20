@@ -1,10 +1,12 @@
 import { visibleLessonScene } from '../../../../shared/course/visible-scene'
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import {
   COURSE_VERSION,
   LEARNER_STATE_SCHEMA_VERSION,
   courseLessonIdForScene,
   runnableCheckpointIds,
+  isPortfolioBuildLesson,
+  portfolioBuildVersion,
   type AppSettings,
   type CourseLessonId,
   type PracticeState,
@@ -34,7 +36,6 @@ import { ProjectsLessonBoard } from '../components/ProjectsLessonBoard'
 import projectsCopy from '../../../../../pilot-workspace/course/codex-setup/projects.vi.json'
 import m1SlashCommandsImage from '../../../../../pilot-workspace/course/codex-setup/images/slash-commands.png'
 import m1AtMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/at-menu.png'
-import m1UnderstandCodexImage from '../assets/lesson-visuals/m1-understand-codex.webp'
 import m1AssessmentImage from '../assets/lesson-visuals/m1-assessment.webp'
 import m2WhenToPlanImage from '../assets/lesson-visuals/m2-when-to-plan.webp'
 import m2ProductRequirementsImage from '../assets/lesson-visuals/m2-product-requirements.webp'
@@ -57,6 +58,7 @@ import m3GithubBranchesImage from '../assets/lesson-visuals/m3-github-branches.p
 import m4ProjectsOverviewImage from '../assets/lesson-visuals/module-4/vercel-projects-overview.png'
 import m4PortfolioVideo from '../assets/lesson-visuals/module-4/vercel-portfolio-captioned.mp4'
 import { PracticeBrief } from '../components/PracticeBrief'
+import { PracticeStartPrompt } from '../components/PracticeStartPrompt'
 import { TeacherWorkspace } from '../components/TeacherWorkspace'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
 import { PortfolioWorkspacePicker } from '../components/PortfolioWorkspacePicker'
@@ -299,27 +301,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     mission: 'Codex',
     objective: 'Codex',
     dialogue: whyCodexCopy,
-    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-orientation', primary: true }]
-  },
-  'module-1-codex-orientation': {
-    lessonId: 'module-1',
-    checkpointId: 'm1-codex-orientation',
-    step: 1,
-    totalSteps: 6,
-    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
-    mission: 'Làm quen với Codex',
-    objective: 'Codex là coding agent của OpenAI',
-    panelLabel: 'CODING AGENT',
-    panelStatus: 'LÀM VIỆC CÙNG BẠN',
-    tone: 'neutral',
-    request: 'Codex là coding agent của OpenAI.',
-    evidence: [
-      { label: 'VAI TRÒ', value: 'Coding agent' },
-      { label: 'TẠO', value: 'Ứng dụng và website' },
-      { label: 'TỰ ĐỘNG HÓA', value: 'Việc lặp lại' }
-    ],
-    dialogue: 'Codex là coding agent của OpenAI. Ở bài này, mình chỉ cần bạn hiểu coding agent là một trợ lý có thể thực hiện công việc liên quan đến code: tạo ứng dụng, xây trang web, chỉnh sửa dự án và tự động hóa những việc lặp lại.',
-    choices: [{ label: 'Làm quen với giao diện Codex', next: 'module-1-codex-examples', primary: true }]
+    choices: [{ label: 'Tiếp tục', next: 'module-1-codex-examples', primary: true }]
   },
   'module-1-codex-examples': {
     lessonId: 'module-1',
@@ -1187,10 +1169,6 @@ const lessonVisuals: Partial<Record<CourseLessonId, LessonVisual>> = {
 }
 
 const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
-  'module-1-codex-orientation': {
-    image: m1UnderstandCodexImage,
-    alt: 'Giao diện Codex hiển thị danh sách công việc, dự án đang mở và ô nhập yêu cầu'
-  },
   'module-4-hosting-intro': {
     image: m4ProjectsOverviewImage,
     alt: 'Trang quản lý dự án trên Vercel hiển thị portfolio-smu và địa chỉ minhtrietportfolio.dev',
@@ -1308,7 +1286,6 @@ const courseLessonPages = {
   'm1-understand-codex': [
     ['module-1-chat-work'],
     ['module-1-why-codex'],
-    ['module-1-codex-orientation'],
     ['module-1-codex-examples'],
     ['module-1-codex-model-intro'],
     ['module-1-codex-effort-speed'],
@@ -1469,7 +1446,7 @@ function ApprovalTourDialogue({
 }) {
   return (
     <>
-      Được rồi, vậy chúng ta sẽ bắt đầu tìm hiểu Codex cùng nhau nha. Đầu tiên, hãy nhìn qua Approval. Khi nhấn vào biểu tượng Codex bên trái dấu cộng, bạn sẽ thấy một hộp gồm ba lựa chọn. Đây là phần cài đặt Approval, nơi bạn thiết lập mức độ kiểm soát đối với coding agent.
+      Được rồi, vậy chúng ta sẽ bắt đầu tìm hiểu Codex cùng nhau nha. Khi bắt đầu thực hiện một tác vụ trong Codex, có ba cài đặt căn bản bạn cần chú ý. Đầu tiên, hãy nhìn qua Approval. Khi nhấn vào biểu tượng Codex bên trái dấu cộng, bạn sẽ thấy một hộp gồm ba lựa chọn. Đây là phần cài đặt Approval, nơi bạn thiết lập mức độ kiểm soát đối với coding agent.
       <br /><br />
       Trước tiên, <ApprovalTerm activeFocus={activeFocus} focus="ask" onSelect={onSelect}>Ask for approval</ApprovalTerm> luôn hỏi bạn trước khi chỉnh sửa tệp bên ngoài dự án hoặc sử dụng Internet. Tiếp theo, <ApprovalTerm activeFocus={activeFocus} focus="approve" onSelect={onSelect}>Approve for me</ApprovalTerm> chỉ hỏi khi phát hiện một hành động có thể không an toàn. Cuối cùng, <ApprovalTerm activeFocus={activeFocus} focus="full" onSelect={onSelect}>Full access</ApprovalTerm> cho phép Codex truy cập Internet và mọi tệp trên máy tính mà không bị giới hạn.
       <br /><br />
@@ -1741,11 +1718,7 @@ function GuidanceLessonBoard({
         ) : kind === 'skills' ? (
           <>
             <header>
-              <small className="pixel-guidance-board__skill-kicker">
-                <strong>SKILL</strong>
-                <span>QUY TRÌNH CHUYÊN BIỆT CHO CODING AGENTS</span>
-              </small>
-              <h1 id={titleId}>Dạy coding agent cách thực hiện một loại công việc</h1>
+              <h1 id={titleId}><strong className="pixel-guidance-board__skill-label">Skill</strong> - Dạy coding agent cách thực hiện một loại công việc</h1>
               <p>Thông thường ta dùng <code>AGENTS.md</code> để dạy cho model làm theo những hành động ta muốn mà ta không cần phải nhắc đi nhắc lại.</p>
               <p>Nhưng giả dụ ta muốn nó làm những tác vụ cụ thể như viết lách, thì sao? Chả lẽ ta viết hết tất cả những mẹo viết hay vào <code>AGENTS.md</code>? Và giả dụ ta có 100 kỹ năng muốn agents học thì sao?</p>
               <p>Ta không thể dùng một file <code>AGENTS.md</code> để dạy coding agents tất cả kỹ năng mà ta muốn nó học. Đó là lúc ta sử dụng Skill.</p>
@@ -1773,7 +1746,6 @@ function GuidanceLessonBoard({
         {kind === 'agents' ? (
           <div className="pixel-agents-levels">
             <h2>Hai level <code>AGENTS.md</code> bạn cần biết</h2>
-            <p className="pixel-agents-levels__intro">Codex đọc cả hai level. Global <code>AGENTS.md</code> đặt ra những nguyên tắc chung. Current repo <code>AGENTS.md</code> bổ sung những quy tắc cụ thể hơn cho dự án đang mở.</p>
             <article>
               <span>GLOBAL</span>
               <code>~/.codex/AGENTS.md</code>
@@ -2489,7 +2461,17 @@ function PixelAppShell({
 export function LearningWindow() {
   const [runtime, setRuntime] = useState<RuntimeInfo | null>(null)
   const [view, setView] = useState<View>('loading')
-  const [progress, setProgress] = useState<LearnerProgress | null>(null)
+  const [savedProgress, setProgress] = useState<LearnerProgress | null>(null)
+  const progress = useMemo(() => {
+    if (!savedProgress) return null
+    const removedPage = 'module-1-codex-orientation'
+    if (savedProgress.sceneId !== removedPage && !savedProgress.sceneHistory.includes(removedPage)) return savedProgress
+    return {
+      ...savedProgress,
+      sceneId: savedProgress.sceneId === removedPage ? 'module-1-codex-examples' as const : savedProgress.sceneId,
+      sceneHistory: savedProgress.sceneHistory.filter(id => id !== removedPage)
+    }
+  }, [savedProgress])
   const [recovered, setRecovered] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -3120,6 +3102,39 @@ export function LearningWindow() {
   const usesModelLessonBoard = Boolean(modelLessonBoardKind && lessonVisual)
   const usesGuidanceLessonBoard = Boolean(guidanceLessonBoardKind)
   const usesProjectsLessonBoard = displayedSceneId === 'module-1-codex-projects'
+  const firstBuildPage = displayedSceneId === 'module-3-first-build'
+  const canEnterFirstBuild = firstBuildPage && isPortfolioBuildLesson(progress.checkpointId)
+  const enterFirstBuild = async () => {
+    const api = window.courseCompanion
+    if (busy || !canEnterFirstBuild) return
+    if (!api) {
+      setError('Hãy mở Course Companion trên máy để tiếp tục trong project Codex từ Module 2.')
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      const identity = { practiceId: 'm3-portfolio-build', practiceVersion: portfolioBuildVersion }
+      const workspace = await api.loadPracticeWorkspace(identity)
+      if (workspace.transition) {
+        setPracticeBriefOpen(true)
+        return
+      }
+      if (workspace.activePractice?.practiceId === identity.practiceId) {
+        await api.resumePractice(identity)
+      } else {
+        await api.startPractice({ ...identity, transfer: false })
+      }
+      setOutlineSceneId(null)
+      setReviewHistoryIndex(null)
+    } catch {
+      const current = await api.loadPracticeWorkspace().catch(() => null)
+      setError(current?.error || 'Chưa mở được task Codex từ Module 2. Hãy thử lại.')
+    } finally {
+      setBusy(false)
+    }
+  }
+  const floatingCopyPrompt = firstBuildPage ? undefined : scene.copyPrompt
   const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard || usesProjectsLessonBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
@@ -3154,7 +3169,7 @@ export function LearningWindow() {
   )
 
   return (
-    <main data-scene-id={displayedSceneId} data-outline-preview={outlineSceneId !== null} className={`pixel-learning-shell${scene.lessonId === 'module-2' ? ' is-module-two' : ''}${scene.lessonId === 'module-3' ? ' is-module-three' : ''}${scene.lessonId === 'module-4' ? ' is-module-four' : ''}${lessonVisual?.annotations ? ' has-publication-walkthrough' : ''}${usesLessonBoard ? ' has-model-lesson-board' : ''}${scene.copyPrompt ? ' has-stacked-copy-prompt' : ''}${usesModuleTwoVisualDialogue ? ' has-module-two-visual-dialogue' : ''}${usesModuleTwoVisualGallery ? ' has-module-two-visual-gallery' : ''}${displayedSceneId === 'module-3-git-commit' || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-1-setup-checklist' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual?.annotations ? ' has-stacked-visual-dialogue' : ''}`}>
+    <main data-scene-id={displayedSceneId} data-outline-preview={outlineSceneId !== null} className={`pixel-learning-shell${scene.lessonId === 'module-2' ? ' is-module-two' : ''}${scene.lessonId === 'module-3' ? ' is-module-three' : ''}${scene.lessonId === 'module-4' ? ' is-module-four' : ''}${lessonVisual?.annotations ? ' has-publication-walkthrough' : ''}${usesLessonBoard ? ' has-model-lesson-board' : ''}${floatingCopyPrompt ? ' has-stacked-copy-prompt' : ''}${usesModuleTwoVisualDialogue ? ' has-module-two-visual-dialogue' : ''}${usesModuleTwoVisualGallery ? ' has-module-two-visual-gallery' : ''}${displayedSceneId === 'module-3-git-commit' || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-1-setup-checklist' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual?.annotations ? ' has-stacked-visual-dialogue' : ''}`}>
       <div className="pixel-scene-world" style={sceneStyle} aria-hidden="true" />
 
       <header className="pixel-hud">
@@ -3222,10 +3237,10 @@ export function LearningWindow() {
         </aside>
       ) : null}
 
-      {scene.copyPrompt && !usesLessonBoard ? (
+      {floatingCopyPrompt && !usesLessonBoard ? (
         <CopyPromptCard
           label={scene.copyPromptLabel}
-          prompt={scene.copyPrompt}
+          prompt={floatingCopyPrompt}
           title={scene.copyPromptTitle}
         />
       ) : null}
@@ -3440,6 +3455,9 @@ export function LearningWindow() {
                 ? <HighlightedDialogue dialogue={scene.dialogue ?? ''} highlightTerms={scene.highlightTerms} />
               : scene.dialogue}</p>
         )}
+        {firstBuildPage && (
+          <PracticeStartPrompt practiceId="m3-portfolio-build" prompt={scene.copyPrompt} title={scene.copyPromptTitle} />
+        )}
         {isReviewing && assessmentQuestion ? (
           <article className="pixel-assessment-question">
             <p>{assessmentQuestion.prompt}</p>
@@ -3455,7 +3473,16 @@ export function LearningWindow() {
           </details>
         ) : null}
         {error && !(assessmentQuestion && assessmentGroup) ? <div className="pixel-save-error" role="alert">{error}</div> : null}
-        {isReviewing ? (
+        {canEnterFirstBuild ? (
+          <div className="pixel-lesson-actions is-paired">
+            {pageBackControl}
+            <div className="pixel-choices">
+              <button className="pixel-choice is-primary" type="button" disabled={busy} onClick={() => void enterFirstBuild()}>
+                {busy ? 'Đang mở task Codex…' : scene.choices[0]?.label}
+              </button>
+            </div>
+          </div>
+        ) : isReviewing ? (
           <div className="pixel-lesson-actions is-paired">
             {pageBackControl}
             <div className="pixel-choices">
@@ -3556,7 +3583,7 @@ export function LearningWindow() {
               : progress.sceneId === 'module-4-portfolio-practice'
                 ? { practiceId: 'm4-portfolio-release', practiceVersion: '1.0.0' }
               : { practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0' }}
-          firstBuild={progress.sceneId === 'module-3-first-build'}
+          firstBuild={firstBuildPage}
           courseRunId={progress.courseRunId}
           onClose={() => setPracticeBriefOpen(false)}
           onPortfolioComplete={async () => {

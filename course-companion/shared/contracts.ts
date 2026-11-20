@@ -701,6 +701,10 @@ export const portfolioPlanningArtifactPaths = [
 export type PortfolioPlanningArtifactPath = (typeof portfolioPlanningArtifactPaths)[number]
 
 export const portfolioPackageVersion = '2.0.0' as const
+export function isPortfolioBuildLesson(checkpoint?: CheckpointId): boolean {
+  return checkpoint === 'm3-complete-first-version' || checkpoint === 'm3-whole-page-revision'
+}
+
 export const portfolioBuildVersion = '2.1.0' as const
 export const isPortfolioBuildPackageVersion = (version: unknown): boolean => version === portfolioBuildVersion || version === '2.0.0'
 export const portfolioReleaseVersion = '1.0.0' as const

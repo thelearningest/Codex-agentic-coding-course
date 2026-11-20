@@ -5,6 +5,7 @@ export function PracticeStartPrompt({ practiceId, prompt, title, guideActions }:
   const titleId = useId()
   const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const text = practiceId === 'm2-portfolio-planning' ? moduleTwoStartPrompt : prompt
+  const heading = !guideActions && (practiceId === 'm2-portfolio-planning' ? 'Bắt đầu lập kế hoạch portfolio' : title)
   if (!text) return null
 
   const copyPrompt = async () => {
@@ -17,9 +18,9 @@ export function PracticeStartPrompt({ practiceId, prompt, title, guideActions }:
   }
 
   return (
-    <aside className="practice-start-prompt" data-copy-state={status} aria-label={guideActions ? 'Prompt để dán vào Codex' : undefined} aria-labelledby={guideActions ? undefined : titleId}>
+    <aside className="practice-start-prompt" data-copy-state={status} aria-label={heading ? undefined : 'Prompt để dán vào Codex'} aria-labelledby={heading ? titleId : undefined}>
       <header>
-        {!guideActions && <strong id={titleId}>{practiceId === 'm2-portfolio-planning' ? 'Bắt đầu lập kế hoạch portfolio' : title}</strong>}
+        {heading && <strong id={titleId}>{heading}</strong>}
         <button type="button" onClick={() => void copyPrompt()}>
           {status === 'copied' ? 'ĐÃ SAO CHÉP' : status === 'error' ? 'THỬ LẠI' : guideActions ? 'Sao chép prompt' : 'SAO CHÉP PROMPT'}
         </button>

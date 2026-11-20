@@ -102,6 +102,26 @@ The next step is a learner rehearsal with a live Codex Project.
 
 The first lesson opens with Chat and Work, followed by the course author's reasons for using Codex. The Pilot reading and desktop app use the same two illustrated Markdown pages. The five prior pages follow in their previous order. The new pages use the existing orientation checkpoint. The opening uses two columns on desktop and a single column in narrow windows. A disposable Electron run matched its text against the approved preview, decoded all three images, opened the 3232 × 2080 Work example at native size, and navigated to the Codex page and back.
 
+### Module 3 Practice button, 19 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| M3.1 / M3.8 first-build entry | `implemented` | `passed` for the one-click handoff and return. Full unit suite `failed` on existing failures listed below. | Direct entry from the lesson or its outline approved for implementation. | `pending` | Owner reviews the rebuilt course with their portfolio. |
+
+“Tiếp tục đến Practice” opens the portfolio task handed off by Module 2. A
+learner who opens the page from the outline during the Debug or Git lessons can
+resume the same task and return to the saved page. The normal first visit
+continues to local preview. The disposable Module 2→3→4 Electron journey
+covers both entry points, the retained run and return destinations.
+
+On macOS, Computer Use observed the full-screen lesson, clicked the button from
+the outline and observed the Practice window. The active project ID, thread ID
+and workspace matched the Module 2 receipt. The Codex chat itself could not be
+inspected with Computer Use. Typecheck, lint, build, startup checks and the
+full Electron suite passed.
+The full unit run reported two baseline issues: a Module 1 image-source manifest
+digest and an existing CSS color outside the palette.
+
 ### Module 3 first build and final review, 18 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

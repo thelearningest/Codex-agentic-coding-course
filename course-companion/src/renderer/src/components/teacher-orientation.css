@@ -1,0 +1,98 @@
+.teacher-orientation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 38%);
+  grid-template-areas: "intro shot" "areas shot" "next shot";
+  align-content: start;
+  align-items: start;
+  gap: 20px clamp(28px, 5vw, 72px);
+  padding-block: 12px 30px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--obsidian-line);
+  color: var(--pixel-white);
+  font: 400 15px/1.6 var(--app-font);
+}
+
+.teacher-orientation header { grid-area: intro; }
+.teacher-orientation h2 {
+  margin: 0 0 6px;
+  font-size: 2rem;
+  font-weight: 650;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+}
+.teacher-orientation p { margin: 0; color: var(--pixel-muted); }
+.teacher-orientation strong { color: var(--pixel-white); }
+.teacher-orientation figure {
+  grid-area: shot;
+  justify-self: center;
+  width: min(100%, 380px);
+  margin: 0;
+}
+.teacher-orientation-shot { position: relative; }
+.teacher-orientation-shot img { display: block; width: 100%; height: auto; }
+.teacher-orientation figcaption {
+  margin-top: 6px;
+  color: var(--pixel-muted);
+  font-size: .8125rem;
+  text-align: center;
+}
+.teacher-orientation-shot span,
+.teacher-orientation-number {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--pixel-yellow);
+  color: #211b0e;
+  font: 700 .8125rem/1 var(--app-font);
+  font-variant-numeric: tabular-nums;
+}
+.teacher-orientation-shot span {
+  position: absolute;
+  right: 7%;
+  transform: translate(50%, -50%);
+}
+.teacher-orientation-shot span:nth-of-type(1) { top: 7.5%; right: 17%; }
+.teacher-orientation-shot span:nth-of-type(2) { top: 25%; }
+.teacher-orientation-shot span:nth-of-type(3) { top: 68%; }
+.teacher-orientation-shot span:nth-of-type(4) { top: 82%; }
+
+.teacher-orientation-areas {
+  grid-area: areas;
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.teacher-orientation-areas li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+}
+.teacher-orientation-areas h3 { margin: 0; font: 650 .9375rem/1.6 var(--app-font); }
+.teacher-orientation-next { grid-area: next; }
+.teacher-orientation-next details { margin-top: 9px; }
+.teacher-orientation-next summary {
+  width: fit-content;
+  min-height: 32px;
+  padding-block: 4px;
+  color: var(--pixel-yellow);
+  cursor: pointer;
+  font-weight: 600;
+}
+.teacher-orientation-next summary + p { padding-block: 4px; }
+.teacher-orientation-next summary:focus-visible {
+  outline: 2px solid var(--pixel-yellow);
+  outline-offset: 4px;
+}
+
+@media (max-width: 720px) {
+  .teacher-orientation {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "intro" "shot" "areas" "next";
+    padding-top: 2px;
+  }
+  .teacher-orientation h2 { font-size: 1.625rem; }
+}

@@ -924,6 +924,11 @@ button:focus-visible {
 
 .pixel-guidance-board__skill-kicker span { font-size: 8px; }
 
+.pixel-guidance-board__skill-label {
+  color: var(--pixel-yellow);
+  font-weight: 800;
+}
+
 .pixel-guidance-board__copy h1 {
   max-width: 760px;
   margin: 10px 0 0;
@@ -5156,6 +5161,12 @@ button:focus-visible {
   font: 700 12px/1.4 var(--app-font);
 }
 
+.pixel-dialogue .practice-start-prompt > header button {
+  border-radius: var(--obsidian-radius-control);
+  background: var(--pixel-yellow);
+  color: var(--obsidian-canvas);
+  cursor: pointer;
+}
 .practice-start-prompt > details { margin-top: 10px; }
 .practice-start-prompt > details > summary {
   color: var(--pixel-muted);
@@ -6096,6 +6107,35 @@ button:focus-visible {
   .pixel-learning-shell.has-publication-walkthrough .pixel-lesson-visual { width: min(480px, 100%); }
 }
 
-.first-build-return { align-content: start; gap: 14px; }
-.first-build-return h2, .first-build-return p { margin-block: 0; }
-.first-build-return > button { min-height: 44px; }
+.first-build-return {
+  gap: 24px;
+  padding: 24px 8px 16px;
+}
+.pixel-companion-surface--expanded .first-build-return {
+  justify-content: safe center;
+}
+.first-build-return__intro {
+  display: grid;
+  gap: 10px;
+  max-width: 52ch;
+}
+.first-build-return__intro h2 {
+  margin: 0;
+  font: 600 1.25rem/1.35 var(--app-font);
+  letter-spacing: -.015em;
+}
+.first-build-return__intro p {
+  margin: 0;
+  color: var(--pixel-muted);
+  font: 400 1rem/1.65 var(--app-font);
+  text-wrap: pretty;
+}
+.first-build-return .practice-start-prompt {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.first-build-return > .pixel-review-primary {
+  margin-block: 0;
+  min-height: 44px;
+}

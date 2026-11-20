@@ -2,7 +2,9 @@
 
 ## Tạo bản portfolio đầu tiên
 
-Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết.
+Bây giờ, sau khi đã xong giai đoạn planning, chúng ta sẽ đến với bước mà ắt bạn đang rất mong chờ, tạo portfolio. Bạn chỉ cần copy prompt này và paste vào codex là được. Sau khi codex làm xong, sau khi codex làm xong và bạn thấy được portfolio hiện lên thì hãy bấm vào teacher agent và chọn quay lại bài học, chưa cần biết đẹp xấu đúng sai như nào.
+
+Chắc chắn sẽ còn nhiều điểm cần cải thiện vì thường lần tạo đầu tiên không bao giờ hoàn hảo. Nhưng chúng mình sẽ cùng nhau cải thiện dần qua module 3
 
 ## Mở portfolio trên máy
 

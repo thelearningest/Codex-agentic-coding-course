@@ -12,6 +12,7 @@ import type {
   TeacherSendRequest,
   TeacherSendResult
 } from '../../../../shared/contracts'
+import { isPortfolioBuildLesson } from '../../../../shared/contracts'
 import teacherImage from '../assets/teacher-triet.png'
 import { PracticeProgress } from './PracticeProgress'
 import { practiceGuideAnchor } from './practice-guide-anchors'
@@ -541,7 +542,7 @@ export function TeacherWorkspace({
   const setupPractice = workspace?.activePractice?.practiceId === 'm1-codex-safe-setup'
   const compactPractice = practiceMode && !embedded
   const firstBuild = workspace?.activePractice?.practiceId === 'm3-portfolio-build'
-    && context?.sceneId === 'module-3-first-build'
+    && isPortfolioBuildLesson(context?.checkpointId)
   const practicePassed = workspace?.review?.status === 'passed' && workspace.review.canReturn
   const contextFreshnessNote = teacherRuntime.contextFreshness === 'stale'
     ? 'Ngữ cảnh Codex đã cũ.'
@@ -621,10 +622,11 @@ export function TeacherWorkspace({
         </div>
       ) : firstBuild && workspace?.activePractice ? (
         <section className="pixel-practice-review first-build-return" aria-label="Xem bản đầu tiên">
-          <h2>Xem bản đầu tiên</h2>
-          <p>Mở đường dẫn agent gửi trong task Codex. Khi thấy nội dung portfolio của mình, bạn có thể quay lại bài học.</p>
-          <PracticeStartPrompt practiceId="m3-portfolio-build" prompt={workspace.startPrompt} title={workspace.title} />
-          <PracticeTaskLink task={workspace.activePractice} api={window.courseCompanion} disabled={returnBusy} />
+          <div className="first-build-return__intro">
+            <h2>Xem bản đầu tiên</h2>
+            <p>Khi nào bạn thấy agent gửi cho bạn first draft của portfolio, bất kể xấu đẹp, hãy bấm quay lại bài học</p>
+          </div>
+          <PracticeStartPrompt practiceId="m3-portfolio-build" prompt={workspace.startPrompt} />
           <button className="pixel-review-primary" type="button" disabled={workspaceRefreshing || returnBusy} onClick={async () => {
             const active = workspace.activePractice
             if (!active || !window.courseCompanion) return
