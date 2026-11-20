@@ -56,7 +56,8 @@ export const moduleTwoDefinition = {
     'planning/content-evidence-inventory.md',
     'planning/reference/reference.md',
     'planning/PRD.md',
-    'planning/implementation-plan.md'
+    'planning/implementation-plan.md',
+    'planning/reference/design-prototype.html'
   ],
   completionDestination: { moduleId: 'module-3', sceneId: 'module-3-first-build' }
 } as const

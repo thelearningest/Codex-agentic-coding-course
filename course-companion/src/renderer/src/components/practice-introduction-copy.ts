@@ -33,20 +33,21 @@ const introductions: Record<string, Introduction> = {
     portfolioProject: true,
     title: 'Lập kế hoạch cho portfolio',
     purpose: 'Bạn sẽ biến ý tưởng portfolio thành một kế hoạch rõ ràng trước khi xây website.',
-    context: 'Bạn làm việc trong một task Codex và thư mục portfolio đã chọn. Phần này chỉ lập kế hoạch, chưa viết code hay đưa website lên mạng.',
+    context: 'Bạn làm việc trong một task Codex và thư mục portfolio đã chọn. Bạn sẽ mở bản mẫu HTML để xem bố cục trước khi xây website.',
     steps: [
-      'Trao đổi với Codex về người xem, nội dung và phạm vi portfolio.',
+      'Trao đổi với Codex về người xem, nội dung và phạm vi portfolio. Khi đã chọn hướng thiết kế, hãy cùng Codex tạo bản mẫu HTML và mở xem bố cục.',
       'Đọc và duyệt PRD (bản yêu cầu cho website) cùng kế hoạch triển khai.',
-      'Nộp năm tài liệu để Triết kiểm tra. Nếu cần sửa, tiếp tục trong cùng task.'
+      'Nộp năm tài liệu và bản mẫu HTML để Triết kiểm tra. Nếu cần sửa, tiếp tục trong cùng task.'
     ],
-    referenceTitle: 'Xem năm tài liệu cần hoàn thiện',
+    referenceTitle: 'Xem sáu tệp cần nộp',
     referenceNote: 'Codex soạn và lưu tài liệu; bạn đọc, góp ý và duyệt PRD cùng kế hoạch hiện tại trước khi nộp.',
     reference: [
       ['Bản mô tả portfolio', 'planning/portfolio-brief.md', 'Người xem, mục tiêu và phạm vi của website.'],
       ['Nội dung và bằng chứng', 'planning/content-evidence-inventory.md', 'Tư liệu bạn có, nguồn và quyền sử dụng.'],
       ['Tham chiếu thiết kế', 'planning/reference/reference.md', 'Điều muốn học từ các website tham khảo và giới hạn không sao chép.'],
       ['Yêu cầu cho website', 'planning/PRD.md', 'Website cần làm được gì và cách xác nhận kết quả.'],
-      ['Kế hoạch triển khai', 'planning/implementation-plan.md', 'Thứ tự xây từng phần và cách kiểm tra.']
+      ['Kế hoạch triển khai', 'planning/implementation-plan.md', 'Thứ tự xây từng phần và cách kiểm tra.'],
+      ['Bản mẫu giao diện', 'planning/reference/design-prototype.html', 'Bố cục và thứ tự nội dung portfolio mà bạn muốn thử.']
     ]
   },
   'm3-portfolio-build': {

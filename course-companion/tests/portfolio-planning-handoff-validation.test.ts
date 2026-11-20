@@ -13,6 +13,7 @@ const time = '2026-10-22T00:00:00.000Z'
 const screenshotPath = 'planning/reference/screenshots/home.png'
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg==', 'base64')
 const documents = {
+  'planning/reference/design-prototype.html': '<title>design-protoype</title><main><h1>Product designer</h1><section>Project Alpha</section></main>',
   'planning/portfolio-brief.md': '# Brief\n\n## Audience\nHiring managers assess my design work.\n\n## Scope\nShow two case studies and contact details.',
   'planning/content-evidence-inventory.md': '# Inventory\n\n## Available\nTwo original case studies with screenshots.\n\n## Restrictions\nExclude client names and confidential metrics.',
   'planning/reference/reference.md': `# Reference\n\n## Direction\nUse generous spacing.\n\n## Source\n${screenshotPath} illustrates hierarchy; create an original design.`,
@@ -65,6 +66,25 @@ describe('portfolioPlanningHandoffIsCurrent', () => {
     expect(afterBuild.freshness).toBe('unverifiable')
     expect(afterBuild.sourceDigest).not.toBe(evidence.sourceDigest)
     expect(portfolioPlanningHandoffIsCurrent(handoff, afterBuild)).toBe(true)
+  })
+
+  it('allows an already accepted five-file handoff to continue while a new submission requires the HTML file', async () => {
+    const { workspace, collect, handoff } = await fixture()
+    const path = 'planning/reference/design-prototype.html'
+    await rm(join(workspace, path))
+    const evidence = await collect()
+    expect(evidence.freshness).toBe('unverifiable')
+    expect(portfolioPlanningHandoffIsCurrent(handoff, evidence)).toBe(false)
+    handoff.artifacts = handoff.artifacts.filter((artifact) => artifact.path !== path)
+    handoff.moduleThreeInput.artifactReferences = handoff.artifacts
+    delete handoff.approval.artifactDigests[path]
+    expect(portfolioPlanningHandoffIsCurrent(handoff, evidence)).toBe(true)
+  })
+
+  it('requires a new handoff after changing just the prototype', async () => {
+    const { workspace, collect, handoff } = await fixture()
+    await writeFile(join(workspace, 'planning/reference/design-prototype.html'), documents['planning/reference/design-prototype.html'].replace('Project Alpha', 'Selected work'))
+    expect(portfolioPlanningHandoffIsCurrent(handoff, await collect())).toBe(false)
   })
 
   it.each(['edit', 'delete', 'empty', 'invalid-utf8', 'oversized', 'directory'] as const)(

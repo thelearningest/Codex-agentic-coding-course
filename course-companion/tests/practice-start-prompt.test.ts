@@ -27,7 +27,8 @@ describe('Module 2 learner-owned start prompt', () => {
   it('keeps the learner request short and defers package rules to the portfolio AGENTS.md', () => {
     expect(moduleTwoStartPrompt).toContain('chỉ tạo hoặc cập nhật tài liệu trong thư mục planning')
     expect(moduleTwoStartPrompt.endsWith('Hãy làm theo AGENTS.md trong thư mục này.')).toBe(true)
-    for (const path of portfolioPackageArtifactPaths) expect(moduleTwoStartPrompt).not.toContain(path)
+    expect(moduleTwoStartPrompt).toContain('planning/reference/design-prototype.html')
+    expect(moduleTwoStartPrompt).toContain('tiêu đề tab design-protoype')
   })
 
   it('specifies the selected portfolio root, five separate contract paths and learner approval in AGENTS.md', () => {

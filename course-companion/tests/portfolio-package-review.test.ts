@@ -244,9 +244,10 @@ async function harness(options: {
   }
 }
 
-describe('five-document portfolio package review', () => {
+describe('six-file portfolio package review', () => {
   it.each([
     ['valid prose', 'passed', undefined],
+    ['prototype contradicts the agreed layout', 'needs-work', 'prototype-reflects-design'],
     ['missing dependencies', 'needs-work', 'plan-phased-and-bounded'],
     ['uncovered requirements', 'needs-work', 'requirements-covered-once'],
     ['unverifiable acceptance criteria', 'needs-work', 'prd-semantic-contract']
@@ -288,7 +289,7 @@ describe('five-document portfolio package review', () => {
     expect(test.evaluatorCallCount()).toBe(1)
   })
 
-  it('sends the bounded contents of exactly five canonical documents to the semantic evaluator', async () => {
+  it('sends the bounded contents of all six required files to the semantic evaluator', async () => {
     const test = await harness({ approve: true })
 
     await test.service.review()

@@ -2,9 +2,11 @@ import { createHash } from 'node:crypto'
 import type { Stats } from 'node:fs'
 import { lstat, opendir, readFile, realpath } from 'node:fs/promises'
 import { isAbsolute, posix, relative, resolve, sep } from 'node:path'
+import { parse, type DefaultTreeAdapterTypes } from 'parse5'
 import { portfolioAgentsFileName } from '../../shared/portfolio-agents-template'
 import {
   portfolioPackageArtifactPaths,
+  portfolioPrototypePath,
   type PortfolioPlanningArtifactSnapshot,
   type PortfolioPlanningIssue,
   type PortfolioPlanningStageEvidence,
@@ -386,7 +388,7 @@ async function inspectTextArtifact(
     return { issue: issue(stageId, path, entry.code, messages[entry.code]) }
   }
   if (!entry.info.isFile()) {
-    return { issue: issue(stageId, path, 'directory', 'Đường dẫn tài liệu bắt buộc phải là tệp Markdown thông thường.') }
+    return { issue: issue(stageId, path, 'directory', 'Đường dẫn này phải trỏ đến một tệp thông thường.') }
   }
   if (entry.info.size === 0) {
     return { issue: issue(stageId, path, 'empty', 'Tài liệu bắt buộc đang trống.') }
@@ -414,6 +416,27 @@ async function inspectTextArtifact(
       observedAt
     }
   }
+}
+
+function prototypeProblem(content: string): string | null {
+  const childElement = (parent: DefaultTreeAdapterTypes.ParentNode | undefined, tag: string) =>
+    parent?.childNodes.find((node): node is DefaultTreeAdapterTypes.Element => 'tagName' in node && node.tagName === tag)
+  const html = childElement(parse(content), 'html')
+  const title = childElement(childElement(html, 'head'), 'title')
+  const titleText = title?.childNodes.map((node) => 'value' in node ? node.value : '').join('').trim()
+  if (titleText !== 'design-protoype') return 'Đặt tiêu đề tab của bản mẫu là design-protoype trong thẻ <title>.'
+
+  const body = childElement(html, 'body')
+  const pending = [...(body?.childNodes ?? [])]
+  while (pending.length) {
+    const node = pending.pop()!
+    if ('value' in node && node.value.trim()) return null
+    if (!('tagName' in node) || ['script', 'style', 'template', 'noscript', 'title'].includes(node.tagName)
+      || node.attrs.some((attr) => attr.name === 'hidden')) continue
+    if (['img', 'svg', 'canvas', 'video'].includes(node.tagName)) return null
+    for (const child of node.childNodes) pending.push(child)
+  }
+  return 'Thêm bố cục và nội dung portfolio vào phần thân trang để người xem có thể xem bản mẫu.'
 }
 
 async function inspectImageArtifact(
@@ -587,7 +610,13 @@ export async function collectPortfolioPackage(
   for (const path of portfolioPackageArtifactPaths) {
     const inspected = await inspectTextArtifact(canonicalRoot, path, observedAt)
     if ('issue' in inspected) issues.push(inspected.issue)
-    else artifacts.set(path, inspected.artifact)
+    else {
+      artifacts.set(path, inspected.artifact)
+      if (path === portfolioPrototypePath) {
+        const problem = prototypeProblem(inspected.artifact.content)
+        if (problem) issues.push(issue('visual-reference', path, 'missing-section', problem))
+      }
+    }
   }
   // Content quality, organization and requirement coverage belong to the AI
   // review of the current approved package, not a heading or keyword precheck.
@@ -638,7 +667,7 @@ export async function collectPortfolioPackage(
   const stageEvidence: PortfolioPlanningStageEvidence[] = stageDescriptors.map((stage) => {
     const stageArtifacts = snapshots.filter((artifact) =>
       artifact.path === stage.path
-      || (stage.stageId === 'visual-reference' && referencedImagePaths.has(artifact.path)))
+      || (stage.stageId === 'visual-reference' && (artifact.path === portfolioPrototypePath || referencedImagePaths.has(artifact.path))))
     const stageIssues = issues.filter((item) => item.stageId === stage.stageId)
     const artifactDigests = Object.fromEntries(stageArtifacts.map((artifact) => [artifact.path, artifact.digest]))
     return {
@@ -668,7 +697,7 @@ export async function collectPortfolioPackage(
     {
       id: 'portfolio-package-workspace-scope',
       kind: 'workspace-confirmed-change',
-      text: `Đã kiểm tra độc lập phạm vi workspace: tài liệu bắt buộc=${artifacts.size}/5; ảnh được tham chiếu=${referencedImagePaths.size}; đường dẫn ngoài phạm vi=${unexpectedPaths.length}.`,
+      text: `Đã kiểm tra độc lập phạm vi workspace: tài liệu bắt buộc=${artifacts.size}/${portfolioPackageArtifactPaths.length}; ảnh được tham chiếu=${referencedImagePaths.size}; đường dẫn ngoài phạm vi=${unexpectedPaths.length}.`,
       freshness: 'fresh'
     }
   ]

@@ -11,6 +11,7 @@ import { collectPortfolioPackage } from '../../electron/main/portfolio-package-e
 export const portfolioPackageTimestamp = '2026-09-11T01:00:00.000Z'
 
 export const portfolioPackageDocuments: Record<string, string> = {
+  'planning/reference/design-prototype.html': '<title>design-protoype</title><main><h1>Product designer</h1><section>Project Alpha</section></main>',
   'planning/portfolio-brief.md': [
     '# Portfolio brief',
     '## Audience and decision',

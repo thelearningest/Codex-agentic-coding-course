@@ -1,12 +1,11 @@
 import { createHash } from 'node:crypto'
 import { lstat, readFile, readdir, realpath } from 'node:fs/promises'
 import { relative, resolve, sep } from 'node:path'
-import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, type PortfolioPlanningArtifactSnapshot, type PortfolioPlanningIssue, type PracticeAdapterEvidenceState } from '../../shared/contracts'
+import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPrototypePath, type PortfolioPackageHandoff, type PortfolioPlanningArtifactSnapshot, type PortfolioPlanningIssue, type PracticeAdapterEvidenceState } from '../../shared/contracts'
 import type { PracticeEvidenceAdapterContext } from './practice-evidence-adapter'
 import { correlateValidationSource } from './validation-source-correlation'
 
 const hash = (value: string | Uint8Array) => createHash('sha256').update(value).digest('hex')
-const documents = [...portfolioPackageArtifactPaths, ...portfolioBuildRecordPaths]
 const ignoredDirectories = new Set(['node_modules', '.git', 'dist', 'out', 'coverage', 'planning', 'evidence', '.codex', '.agents', '.openai', '.vercel'])
 
 function boundedSourceEvidence(content: string): string {
@@ -64,14 +63,16 @@ export async function containedFile(root: string, path: string): Promise<void> {
   if (canonical !== root && !canonical.startsWith(root + sep)) throw new Error('Đường dẫn thoát khỏi thư mục portfolio.')
 }
 
-export async function collectPortfolioBuildPackage(context: Readonly<PracticeEvidenceAdapterContext>, observedAt: string): Promise<PracticeAdapterEvidenceState> {
+export async function collectPortfolioBuildPackage(context: Readonly<PracticeEvidenceAdapterContext>, observedAt: string, handoff?: PortfolioPackageHandoff | null): Promise<PracticeAdapterEvidenceState> {
   const root = await realpath(resolve(context.workspaceRoot))
   const artifacts: PortfolioPlanningArtifactSnapshot[] = []
   const issues: PortfolioPlanningIssue[] = []
   const problem = (path: string, message: string, code: PortfolioPlanningIssue['code'] = 'missing-section') => {
     issues.push({ stageId: 'final-validation', path, code, message })
   }
-  for (const path of documents) {
+  // Continue previously accepted five-file handoffs with their original set of planning inputs.
+  const inputs = handoff?.artifacts.map(({ path }) => path) ?? portfolioPackageArtifactPaths
+  for (const path of [...inputs, ...portfolioBuildRecordPaths]) {
     try {
       const absolute = resolve(root, path)
       await containedFile(root, absolute)
@@ -80,7 +81,11 @@ export async function collectPortfolioBuildPackage(context: Readonly<PracticeEvi
       const bytes = await readFile(absolute)
       const content = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
       if (!content.trim()) throw new Error('Tài liệu không có nội dung.')
-      artifacts.push({ path, content, digest: hash(bytes), byteLength: bytes.length, modifiedAt: info.mtime.toISOString(), observedAt })
+      const digest = hash(bytes)
+      if (path === portfolioPrototypePath && handoff && handoff.approval.artifactDigests[path] !== digest) {
+        problem(path, 'Bản mẫu đã thay đổi từ khi Module 2 bàn giao. Hãy xem lại bản đã duyệt.')
+      }
+      artifacts.push({ path, content, digest, byteLength: bytes.length, modifiedAt: info.mtime.toISOString(), observedAt })
       // Meaning, completeness and honest deferred work are assessed by the AI
       // against the approved plan and bound task, never by heading/keyword tests.
     } catch (error) {

@@ -72,7 +72,7 @@ export class PortfolioModuleCompletionService {
     if (!active || !active.completion || !active.reviewResult
       || active.reviewStatus !== 'passed' || active.reviewResult.verdict !== 'passed' || record.pendingTransition
       || resolve(active.binding.workspaceRoot) !== resolve(workspace.selectedPath)) {
-      throw new Error('A fresh five-document submission review is required; legacy receipts remain historical')
+      throw new Error('A fresh six-file submission review is required; legacy receipts remain historical')
     }
     const definition = await this.definitionRepository.load(active.practiceId, active.practiceVersion)
     const context = { definition, runId: active.runId, generation: active.generation,

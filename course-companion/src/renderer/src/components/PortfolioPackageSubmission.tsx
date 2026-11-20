@@ -33,7 +33,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
   if (!packageView || !active) return null
   const build = packageView.kind === 'build'
   const artifactPaths = build ? portfolioBuildRecordPaths : portfolioPackageArtifactPaths
-  const accepted = approved && (!build || approvalDigest === packageView.sourceDigest)
+  const accepted = approved && approvalDigest === packageView.sourceDigest
 
   const submit = async () => {
     if (!api?.approvePortfolioPackage || !accepted || !packageView.sourceDigest || busy || disabled) return
@@ -62,9 +62,9 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
 
   return (
     <section className="practice-planning-evidence practice-package-submission" aria-label={build ? 'Nộp bài xây portfolio' : 'Nộp gói planning'}>
-      <h3 className="practice-package-heading">{build ? 'Bằng chứng từ quá trình xây website' : 'Năm tài liệu cần nộp'}</h3>
+      <h3 className="practice-package-heading">{build ? 'Bằng chứng từ quá trình xây website' : 'Sáu tệp cần nộp'}</h3>
       {!build ? <p role="status">
-        Đã đọc {artifactPaths.filter((path) => packageView.artifactPaths.includes(path)).length}/{artifactPaths.length} tài liệu.
+        Đã đọc {artifactPaths.filter((path) => packageView.artifactPaths.includes(path)).length}/{artifactPaths.length} tệp.
         {!packageView.ready || !packageView.approved ? ' Chưa duyệt nội dung.' : ''}
       </p> : null}
       {build ? <p>Trong task Codex, nêu những gì bạn đã thử và kết quả trên website. Codex ghi lại vào ba hồ sơ dưới đây.</p> : null}
@@ -82,7 +82,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
         !artifactPaths.some((path) => issue.startsWith(`${path}: `)))
         .map((issue) => <p className="practice-package-notice" key={issue}>{issue}</p>)}
       {packageView.unexpectedPaths.length > 0 ? <p className="practice-package-notice">Ngoài phạm vi: {packageView.unexpectedPaths.join(', ')}</p> : null}
-      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại kết quả kiểm tra và quan sát trên website hiện tại trước khi nộp.' : onRefresh ? 'Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.' : 'Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.'}</p> : null}
+      {!packageView.ready && packageView.issues.length === 0 ? <p className="practice-package-notice">{build ? 'Ghi lại kết quả kiểm tra và quan sát trên website hiện tại trước khi nộp.' : onRefresh ? 'Lưu đủ sáu tệp rồi làm mới bằng chứng để kiểm tra gói hiện tại.' : 'Lưu đủ sáu tệp rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.'}</p> : null}
       <label className="practice-package-approval">
         <input type="checkbox" checked={accepted} disabled={busy || disabled || !packageView.ready}
           onChange={() => { setApproved(!accepted); setApprovalDigest(packageView.sourceDigest) }} />

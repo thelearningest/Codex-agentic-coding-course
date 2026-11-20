@@ -138,7 +138,7 @@ export function PracticeProgress({
     && (!workspace.portfolioPackage!.ready || !workspace.portfolioPackage!.approved)
   const planningNextAction = workspace.portfolioPackage?.issues.length
     ? 'Sửa các mục được ghi dưới tài liệu rồi kiểm tra lại.'
-    : 'Lưu đủ năm tài liệu rồi kiểm tra lại.'
+    : 'Lưu đủ sáu tệp rồi kiểm tra lại.'
   const reviewResult = workspace.review?.result
   const unresolvedCriterion = reviewResult?.criteria.find((criterion) => criterion.status !== 'satisfied')
   const nextChecklistStep = workspace.checklist.find((step) =>

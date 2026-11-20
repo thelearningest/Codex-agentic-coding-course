@@ -23,18 +23,19 @@ Course Companion tạo tệp này khi bạn chọn thư mục portfolio. Codex t
 
 ## Module 2: gói kế hoạch
 
-Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt, đúng tên và đường dẫn sau:
+Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt và một bản mẫu HTML, đúng tên và đường dẫn sau:
 
 1. planning/portfolio-brief.md — người xem, mục tiêu và phạm vi portfolio.
 2. planning/content-evidence-inventory.md — nội dung, bằng chứng, nguồn và quyền sử dụng.
 3. planning/reference/reference.md — tham chiếu thiết kế, nguồn và giới hạn không sao chép.
 4. planning/PRD.md — yêu cầu có mã REQ-* và tiêu chí chấp nhận.
 5. planning/implementation-plan.md — các giai đoạn, phụ thuộc, thứ tự thực hiện và cách kiểm chứng từng yêu cầu REQ-* trong PRD.
+6. planning/reference/design-prototype.html — bản mẫu giao diện portfolio ở cuối bước 3.
 
-- Mỗi tài liệu phải có ít nhất hai mục Markdown với nội dung thực tế, không để mục rỗng hay chỗ giữ chỗ.
+- Mỗi tài liệu Markdown phải có ít nhất hai mục Markdown với nội dung thực tế, không để mục rỗng hay chỗ giữ chỗ.
 - Nếu có một bản kế hoạch tổng hợp như planning/portfolio-plan.md, hãy đề xuất cách tách hoặc đổi tên để hoàn thiện năm tài liệu trên.
 - Chỉ lưu ảnh tham chiếu nếu cần trong planning/reference/screenshots/ và dẫn ảnh trong planning/reference/reference.md.
-- Trước khi kết thúc, đối chiếu gói nộp với đủ năm đường dẫn trên, giải thích nội dung còn thiếu và chờ người học đọc, duyệt PRD cùng kế hoạch triển khai hiện tại.
+- Trước khi kết thúc, đối chiếu gói nộp với đủ sáu đường dẫn trên, giải thích nội dung còn thiếu và chờ người học đọc, duyệt PRD cùng kế hoạch triển khai hiện tại.
 - Sau đó nhắc người học bấm vào "Trò chuyện với Triết" để xác nhận đã duyệt và nộp gói cho Triết kiểm tra; không tự phê duyệt hoặc tuyên bố Practice đã hoàn thành.
 
 ### Cách phỏng vấn người học
@@ -86,6 +87,8 @@ Nếu không mở được link, nhờ người học gửi ảnh chụp màn h�
 
 Qua bước khi mỗi trang có link hoặc ảnh, danh sách điểm học theo đã được người học đồng ý, và tệp ghi rõ: chỉ học cách làm, không chép chữ, hình ảnh, logo hay mã nguồn.
 
+Cuối bước 3, đề nghị tạo một bản mẫu HTML từ nội dung portfolio và hướng thiết kế người học vừa chọn. Chờ người học đồng ý rồi lưu bản mẫu vào planning/reference/design-prototype.html. Đặt tiêu đề tab là design-protoype. Mời người học mở tệp trong trình duyệt, xem bố cục và thứ tự các phần, rồi ghi nhận góp ý trước khi viết PRD. Nếu tệp còn thiếu khi chuẩn bị nộp, nhắc người học bổ sung trong cùng task.
+
 ### Bước 4 — planning/PRD.md
 
 Dùng câu trả lời ở bước 1–3 để soạn. Chỉ hỏi những câu dưới đây nếu các bước trước chưa có câu trả lời, và câu nào cũng kèm đề xuất:
@@ -110,7 +113,7 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 
 ## Module 3: xây website
 
-- Đọc năm tài liệu trong planning/ làm nguồn yêu cầu; chỉ sửa chúng khi người học yêu cầu.
+- Đọc năm tài liệu trong planning/ làm nguồn yêu cầu và dùng bản mẫu HTML ở bước 3 để tham khảo bố cục; chỉ sửa chúng khi người học yêu cầu.
 - Chọn công cụ và lệnh kiểm tra phù hợp với dự án.
 - Có thể thực hiện implementation plan trong một lượt. Gửi đường dẫn bản đầu để người học xem rồi quay lại bài học. Khi người học trở lại, kiểm tra bản cuối theo PRD và ghi lại quan sát thật.
 - Commit sau mỗi phần người học đã chấp nhận. Khi người học muốn thêm tính năng mới, đề xuất tạo branch riêng.

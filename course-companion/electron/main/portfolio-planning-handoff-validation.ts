@@ -1,6 +1,8 @@
 import { isAbsolute, resolve } from 'node:path'
 import {
   portfolioPackageArtifactPaths,
+  portfolioPlanningDocumentPaths,
+  portfolioPrototypePath,
   type PortfolioPackageHandoff,
   type PracticeAdapterEvidenceState
 } from '../../shared/contracts'
@@ -41,11 +43,16 @@ export function portfolioPlanningHandoffIsCurrent(
 
   // Only later app/build files outside planning are exempt from the Module 2 scope rule.
   // All source validation failures (including symlinks and invalid images) remain fatal.
-  if (planning.issues.some((issue) => issue.code !== 'unexpected-workspace-change'
-    || issue.path === 'planning' || issue.path.startsWith('planning/'))
+  const historical = handoff.artifacts.length === portfolioPlanningDocumentPaths.length
+    && !Object.hasOwn(approval.artifactDigests, portfolioPrototypePath)
+  const paths = historical ? portfolioPlanningDocumentPaths : portfolioPackageArtifactPaths
+  if (planning.issues.some((issue) => {
+    if (historical && issue.path === portfolioPrototypePath && issue.code === 'missing') return false
+    return issue.code !== 'unexpected-workspace-change' || issue.path === 'planning' || issue.path.startsWith('planning/')
+  })
     || planning.unexpectedPaths.some((path) => path === 'planning' || path.startsWith('planning/'))) return false
 
-  const requiredPaths = new Set<string>(portfolioPackageArtifactPaths)
+  const requiredPaths = new Set<string>(paths)
   const current: Record<string, string> = {}
   for (const artifact of planning.artifacts) {
     const document = requiredPaths.has(artifact.path)
@@ -57,12 +64,12 @@ export function portfolioPlanningHandoffIsCurrent(
       || (document && (typeof artifact.content !== 'string' || !artifact.content.trim()))) return false
     current[artifact.path] = artifact.digest
   }
-  if (!portfolioPackageArtifactPaths.every((path) => Object.hasOwn(current, path))
+  if (!paths.every((path) => Object.hasOwn(current, path))
     || !sameDigests(current, approval.artifactDigests)) return false
 
-  const expectedDocuments = Object.fromEntries(portfolioPackageArtifactPaths.map((path) => [path, current[path]!]))
+  const expectedDocuments = Object.fromEntries(paths.map((path) => [path, current[path]!]))
   for (const references of [handoff.artifacts, handoff.moduleThreeInput.artifactReferences]) {
-    if (references.length !== portfolioPackageArtifactPaths.length
+    if (references.length !== paths.length
       || new Set(references.map(({ path }) => path)).size !== references.length
       || !sameDigests(Object.fromEntries(references.map(({ path, digest }) => [path, digest])), expectedDocuments)) return false
   }

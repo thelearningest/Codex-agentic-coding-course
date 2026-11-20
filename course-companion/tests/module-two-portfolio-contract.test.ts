@@ -54,17 +54,17 @@ describe('Module 2 portfolio contract', () => {
     })
   })
 
-  it('requires exactly five unique planning artifacts and preserves the existing templates', async () => {
+  it('requires five planning documents and a prototype and preserves the existing templates', async () => {
     const moduleTwo = await manifest()
     expect(moduleTwo.artifactPaths).toEqual([
       'planning/portfolio-brief.md', 'planning/content-evidence-inventory.md',
-      'planning/reference/reference.md', 'planning/PRD.md', 'planning/implementation-plan.md'
+      'planning/reference/reference.md', 'planning/PRD.md', 'planning/implementation-plan.md', 'planning/reference/design-prototype.html'
     ])
-    expect(new Set(moduleTwo.artifactPaths).size).toBe(5)
+    expect(new Set(moduleTwo.artifactPaths).size).toBe(6)
     expect(moduleTwo.artifactPaths.every((path) => path.startsWith('planning/'))).toBe(true)
     expect(moduleTwo.artifactPaths.every((path) => !path.includes('..'))).toBe(true)
 
-    const templates = await Promise.all(moduleTwo.artifactPaths.map(async (artifactPath) => ({
+    const templates = await Promise.all(moduleTwo.artifactPaths.filter((path) => path.endsWith('.md')).map(async (artifactPath) => ({
       artifactPath,
       content: await readFile(join(process.cwd(), '..', 'pilot-workspace', 'artifacts', artifactPath), 'utf8')
     })))

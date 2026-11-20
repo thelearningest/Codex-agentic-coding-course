@@ -17,6 +17,7 @@ import {
   lessonIds,
   portfolioPlanningArtifactPaths,
   portfolioPackageArtifactPaths,
+  portfolioPlanningDocumentPaths,
   sceneCheckpoint,
   sceneIds,
   type CourseLessonId,
@@ -480,9 +481,12 @@ function isPortfolioPackageHandoff(value: Record<string, unknown>): boolean {
     || !SAFE_ID.test(String(task.threadId)) || !SAFE_ID.test(String(task.runId))
     || (task.projectId !== undefined && (typeof task.projectId !== 'string' || !SAFE_ID.test(task.projectId)))
     || typeof task.name !== 'string' || !task.name.trim() || task.name.length > 500 || !isIsoDate(task.createdAt)) return false
-  if (!Array.isArray(artifacts) || artifacts.length !== portfolioPackageArtifactPaths.length
+  // Keep historical five-document receipts readable when loading learner progress.
+  if (!Array.isArray(artifacts)) return false
+  const paths = artifacts.length === portfolioPlanningDocumentPaths.length ? portfolioPlanningDocumentPaths : portfolioPackageArtifactPaths
+  if (artifacts.length !== paths.length
     || !artifacts.every((artifact) => isRecord(artifact) && hasExactKeys(artifact, ['path', 'digest'])
-      && portfolioPackageArtifactPaths.includes(artifact.path as never) && DIGEST.test(String(artifact.digest)))
+      && paths.includes(artifact.path as never) && DIGEST.test(String(artifact.digest)))
     || new Set(artifacts.map((artifact) => artifact.path)).size !== artifacts.length) return false
   if (!SAFE_ID.test(String(approval.courseRunId)) || approval.runId !== task.runId || approval.threadId !== task.threadId
     || !Number.isSafeInteger(approval.generation) || Number(approval.generation) < 1
@@ -628,7 +632,7 @@ function assertPortfolioMasteryGate(update: ProgressUpdate, current: LearnerProg
   if (!current?.practiceCompletions.some((receipt) => receipt.courseRunId === current.courseRunId
     && receipt.practiceId === 'm2-portfolio-planning' && receipt.practiceVersion === '2.0.0'
     && receipt.checkpointId === 'm2-portfolio-planning' && Boolean(receipt.submissionDigest))) {
-    throw new Error('Module 2 mastery requires a passed five-document Practice submission')
+    throw new Error('Module 2 mastery requires a passed portfolio Practice submission')
   }
 }
 
@@ -945,7 +949,8 @@ export class ProgressRepository {
         && receipt.destination.sceneId !== 'module-3-local-preview'
         && receipt.destination.sceneId !== 'module-3-debugging-intro')
       || receipt.practiceVersion !== '2.0.0'
-      || receipt.portfolioPlanningHandoff?.schemaVersion !== 2) {
+      || receipt.portfolioPlanningHandoff?.schemaVersion !== 2
+      || receipt.portfolioPlanningHandoff.artifacts.length !== portfolioPackageArtifactPaths.length) {
       return Promise.reject(new Error('Invalid Module 2 completion receipt'))
     }
     return this.runExclusive(async () => {

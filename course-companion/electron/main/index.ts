@@ -323,7 +323,17 @@ const practiceReviewActivity = useTestCodexGateway
     }
 const practiceEvidenceActivity = useTestCodexGateway ? activityObserver : persistedPracticeActivity
 const portfolioPlanningEvidenceAdapter = new PortfolioPlanningEvidenceAdapter(practiceEvidenceActivity)
-const portfolioBuildEvidenceAdapter = new PortfolioBuildEvidenceAdapter(practiceEvidenceActivity)
+const portfolioBuildEvidenceAdapter = new PortfolioBuildEvidenceAdapter(practiceEvidenceActivity, undefined, loadRecordedPlanningHandoff)
+async function loadRecordedPlanningHandoff(workspaceRoot?: string) {
+  const loaded = await progressRepository.load()
+  if (loaded.status !== 'returning' && loaded.status !== 'recovered') return null
+  const receipt = loaded.progress.practiceCompletions.findLast((item) => item.courseRunId === loaded.progress.courseRunId
+    && item.practiceId === 'm2-portfolio-planning' && item.checkpointId === 'm2-portfolio-complete'
+    && item.practiceVersion === '2.0.0' && item.portfolioPlanningHandoff?.schemaVersion === 2)
+  const handoff = receipt?.portfolioPlanningHandoff
+  if (handoff?.schemaVersion !== 2 || (workspaceRoot && resolve(workspaceRoot) !== resolve(handoff.workspace.canonicalPath))) return null
+  return handoff
+}
 async function loadPortfolioReleaseContinuation() {
   const loaded = await progressRepository.load()
   if (loaded.status !== 'returning' && loaded.status !== 'recovered') return null
@@ -380,13 +390,8 @@ const practiceCoordinator = new PracticeCoordinator(
   (receipt) => progressRepository.revokePracticeCompletion(receipt),
   (openTarget) => useTestCodexGateway ? openTarget() : appServerLifecycle.handoff(openTarget),
   async () => {
-    const loaded = await progressRepository.load()
-    if (loaded.status !== 'returning' && loaded.status !== 'recovered') return null
-    const receipt = [...loaded.progress.practiceCompletions].reverse().find((item) =>
-      item.courseRunId === loaded.progress.courseRunId && item.checkpointId === 'm2-portfolio-complete'
-      && item.practiceVersion === '2.0.0' && item.portfolioPlanningHandoff?.schemaVersion === 2)
-    const handoff = receipt?.portfolioPlanningHandoff
-    if (handoff?.schemaVersion !== 2) return null
+    const handoff = await loadRecordedPlanningHandoff()
+    if (!handoff) return null
     const definition = await practiceDefinitionRepository.load('m2-portfolio-planning', '2.0.0')
     const runRecord = await practiceRunRepository.load()
     const source = [runRecord.activeRun, ...runRecord.archivedRuns.map((item) => item.retainedRun)].find((run) =>

@@ -34,7 +34,7 @@ const approvedModuleTwoOpening = 'Sau khi hoàn thành module 1, hy vọng các 
 const approvedImplementationPlanIntro = 'Vậy, sau khi có PRD rồi thì làm gì? Ta sẽ tạo implementation plan.\n\nImplementation plan về căn bản sẽ viết ra những bước chi tiết để coding agent có thể hiện thực hoá PRD. Bạn có thể hiểu nếu PRD là bản kế hoạch tổng quan, thì implementation plan sẽ ghi chi tiết từng bước để thực hiện kế hoạch đó.\n\nThông thường một implementation plan sẽ được chia ra thành nhiều giai đoạn. Mỗi giai đoạn sẽ có tiêu chí hoàn thành rõ ràng.\n\nThường agent tạo PRD và Implementation plan khá tốt nên bạn chỉ cần bảo nó tạo rồi duyệt là được.\n\nPrompt mẫu sẽ được cung cấp ở phần thực hành cuối module.'
 const approvedPracticeTransitionCopy = 'Okay, không để các bạn đợi lâu nữa, bây giờ các bạn có thể qua Codex để tiếp tục thực hành rồi.'
 const approvedPortfolioPracticePrompt = [
-  'Tôi muốn xây dựng một portfolio cá nhân nhưng chưa biết nên bắt đầu từ đâu. Hãy giúp tôi lập kế hoạch từ đầu bằng cách phỏng vấn tôi từng câu một. Trước tiên, hãy tìm hiểu mục tiêu của portfolio, người tôi muốn thuyết phục, nội dung tôi có thể đưa vào và phiên bản đầu tiên nên gồm những gì. Nếu tôi chưa chắc về câu trả lời, hãy đưa ra một vài lựa chọn dễ hiểu để tôi cân nhắc. Sau mỗi phần quan trọng, hãy tóm tắt những gì đã thống nhất và chờ tôi xác nhận trước khi tiếp tục. Trong quá trình này, chỉ tạo hoặc cập nhật tài liệu trong thư mục planning; chưa viết code, cài gói phụ thuộc hay tạo ứng dụng.',
+  'Tôi muốn xây dựng một portfolio cá nhân nhưng chưa biết nên bắt đầu từ đâu. Hãy giúp tôi lập kế hoạch từ đầu bằng cách phỏng vấn tôi từng câu một. Trước tiên, hãy tìm hiểu mục tiêu của portfolio, người tôi muốn thuyết phục, nội dung tôi có thể đưa vào và phiên bản đầu tiên nên gồm những gì. Nếu tôi chưa chắc về câu trả lời, hãy đưa ra một vài lựa chọn dễ hiểu để tôi cân nhắc. Sau mỗi phần quan trọng, hãy tóm tắt những gì đã thống nhất và chờ tôi xác nhận trước khi tiếp tục. Trong quá trình này, chỉ tạo hoặc cập nhật tài liệu trong thư mục planning. Sau khi tôi chọn hướng thiết kế, hãy đề nghị tạo bản mẫu giao diện tại planning/reference/design-prototype.html với tiêu đề tab design-protoype. Chờ tôi đồng ý rồi tạo tệp và mời tôi mở xem trước khi viết PRD. Chưa tạo ứng dụng hay cài gói phụ thuộc.',
   'Hãy làm theo AGENTS.md trong thư mục này.'
 ].join('\n\n')
 const approvedPortfolioMasteryTransitionCopy = 'Hãy cùng ôn tập lại kiến thức một chút nhen'
@@ -1577,7 +1577,7 @@ try {
       ])],
       decisions: {
         ...loaded.progress.decisions,
-        portfolioPlanningPractice: 'simulated-five-document-review'
+        portfolioPlanningPractice: 'simulated-six-file-review'
       }
     })
   })
@@ -1637,7 +1637,7 @@ try {
   assert.equal(persisted.courseVersion, '0.3.0')
   assert.equal(persisted.currentCourseLessonId, 'm2-portfolio-brief')
   assert.ok(persisted.sceneHistory.length > 10)
-  assert.equal(persisted.decisions.portfolioPlanningPractice, 'simulated-five-document-review')
+  assert.equal(persisted.decisions.portfolioPlanningPractice, 'simulated-six-file-review')
   assert.equal(persisted.decisions.setupPractice, 'teacher-reviewed-setup')
   assert.equal(persisted.decisions.setupMastery, 'passed-three-of-four')
   assert.equal(persisted.decisions.masteryEvidence, undefined)

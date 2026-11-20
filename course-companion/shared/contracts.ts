@@ -730,13 +730,15 @@ export const portfolioBuildRecordPaths = [
   'evidence/module-3/learning-record.md',
   'evidence/module-3/browser-validation.md'
 ] as const
-export const portfolioPackageArtifactPaths = [
+export const portfolioPrototypePath = 'planning/reference/design-prototype.html'
+export const portfolioPlanningDocumentPaths = [
   'planning/portfolio-brief.md',
   'planning/content-evidence-inventory.md',
   'planning/reference/reference.md',
   'planning/PRD.md',
   'planning/implementation-plan.md'
 ] as const
+export const portfolioPackageArtifactPaths = [...portfolioPlanningDocumentPaths, portfolioPrototypePath] as const
 
 export type PortfolioPackageApproval = {
   courseRunId: string
@@ -962,8 +964,12 @@ export type LegacyPortfolioBuildHandoff = {
 
 export type PortfolioPlanningHandoff = LegacyPortfolioPlanningHandoff | PortfolioPackageHandoff
 
-export type PortfolioPackageHandoff = Omit<LegacyPortfolioPlanningHandoff, 'schemaVersion' | 'stageReceipts'> & {
+type PortfolioPackageReference = { path: (typeof portfolioPackageArtifactPaths)[number]; digest: string }
+
+export type PortfolioPackageHandoff = Omit<LegacyPortfolioPlanningHandoff, 'schemaVersion' | 'stageReceipts' | 'artifacts' | 'moduleThreeInput'> & {
   schemaVersion: 2
+  artifacts: PortfolioPackageReference[]
+  moduleThreeInput: { workspacePath: string; artifactReferences: PortfolioPackageReference[] }
   approval: PortfolioPackageApproval
   submission: { runId: string; generation: number; sourceDigest: string; reviewDigest: string; reviewedAt: string }
   task: { runId: string; threadId: string; name: string; workspaceRoot: string; createdAt: string; projectId?: string }

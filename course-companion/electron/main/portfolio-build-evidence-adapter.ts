@@ -5,6 +5,7 @@ import { isAbsolute, relative, resolve, sep } from 'node:path'
 import {
   portfolioBuildSliceIds,
   type ExecutorActivitySnapshot,
+  type PortfolioPackageHandoff,
   type PortfolioBuildSliceId,
   type PortfolioPlanningArtifactSnapshot,
   type PortfolioPlanningIssue,
@@ -96,11 +97,17 @@ function sliceVirtualPath(sliceId: PortfolioBuildSliceId): string {
 export class PortfolioBuildEvidenceAdapter implements PracticeEvidenceAdapter {
   readonly evidenceProfile = 'portfolio-build' as const
 
-  constructor(private readonly source?: ActivitySource, private readonly now: () => Date = () => new Date()) {}
+  constructor(
+    private readonly source?: ActivitySource,
+    private readonly now: () => Date = () => new Date(),
+    private readonly planningHandoff?: (workspaceRoot: string) => Promise<PortfolioPackageHandoff | null>
+  ) {}
 
   async collect(context: Readonly<PracticeEvidenceAdapterContext>): Promise<PracticeAdapterEvidenceState> {
     const observedAt = this.now().toISOString()
-    if (isPortfolioBuildPackageVersion(context.definition.version)) return collectPortfolioBuildPackage(context, observedAt)
+    if (isPortfolioBuildPackageVersion(context.definition.version)) {
+      return collectPortfolioBuildPackage(context, observedAt, await this.planningHandoff?.(context.workspaceRoot))
+    }
     const root = await realpath(resolve(context.workspaceRoot))
     const artifacts = new Map<string, TextArtifact>()
     const issues: PortfolioPlanningIssue[] = []

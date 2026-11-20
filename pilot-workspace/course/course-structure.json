@@ -110,7 +110,8 @@
         "planning/content-evidence-inventory.md",
         "planning/reference/reference.md",
         "planning/PRD.md",
-        "planning/implementation-plan.md"
+        "planning/implementation-plan.md",
+        "planning/reference/design-prototype.html"
       ],
       "artifactGateCheckpoint": "m2-portfolio-planning",
       "masteryGateCheckpoint": "m2-portfolio-mastery",

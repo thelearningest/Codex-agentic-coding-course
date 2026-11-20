@@ -15,7 +15,7 @@ function workspace(): PracticeWorkspaceView {
   }
 }
 
-describe('five-document Practice submission surface', () => {
+describe('six-file Practice submission surface', () => {
   it.each([false, true])('shows files read and the single blocker instead of five unreviewed failures in compact=%s', (compact) => {
     const view = workspace()
     const message = 'Kế hoạch cần mô tả phụ thuộc hoặc thứ tự thực hiện.'
@@ -33,7 +33,7 @@ describe('five-document Practice submission surface', () => {
       }))
     }
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact }))
-    expect(html).toContain('Đã đọc 5/5 tài liệu.')
+    expect(html).toContain('Đã đọc 6/6 tệp.')
     expect(html).toContain('Chưa duyệt nội dung.')
     expect(html.split(message)).toHaveLength(2)
     expect(html).not.toContain('bước đã xác minh')
@@ -48,7 +48,7 @@ describe('five-document Practice submission surface', () => {
     view.portfolioPackage!.approved = false
     view.portfolioPackage!.artifactPaths = portfolioPackageArtifactPaths.slice(0, 3)
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact: true }))
-    expect(html).toContain('Đã đọc 3/5 tài liệu.')
+    expect(html).toContain('Đã đọc 3/6 tệp.')
     expect(html).not.toContain('bước đã xác minh')
   })
 
@@ -102,7 +102,7 @@ describe('five-document Practice submission surface', () => {
     expect(html).toContain('Duyệt và nộp gói planning')
     expect(html).not.toContain('Hoàn thành bước hiện tại: Bản mô tả.')
     expect(html).not.toContain('checked=""')
-    expect(html).toContain('Đã đọc 5/5 tài liệu.')
+    expect(html).toContain('Đã đọc 6/6 tệp.')
     expect(html).toContain('Chưa duyệt nội dung.')
     expect(html).not.toContain('bước đã xác minh')
     if (!compact) expect(html).toContain('<li class="is-current">')
@@ -171,8 +171,8 @@ describe('five-document Practice submission surface', () => {
     view.portfolioPackage!.artifactPaths = portfolioPackageArtifactPaths.slice(0, 4)
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact }))
     expect(html).not.toContain('Làm mới bằng chứng')
-    expect(html).toContain('Lưu đủ năm tài liệu rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.')
+    expect(html).toContain('Lưu đủ sáu tệp rồi chọn “Cập nhật và kiểm tra tiến độ” để kiểm tra gói hiện tại.')
     const withRefresh = renderToStaticMarkup(createElement(PracticeProgress, { workspace: view, compact, onRefresh: () => {} }))
-    expect(withRefresh).toContain('Lưu đủ năm tài liệu rồi làm mới bằng chứng để kiểm tra gói hiện tại.')
+    expect(withRefresh).toContain('Lưu đủ sáu tệp rồi làm mới bằng chứng để kiểm tra gói hiện tại.')
   })
 })

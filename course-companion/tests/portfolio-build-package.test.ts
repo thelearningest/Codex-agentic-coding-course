@@ -221,10 +221,10 @@ describe('Module 3 plan-led build package', () => {
     expect((await f.runs.load()).activeRun?.reviewStatus).toBe('not-reviewed')
     expect((await f.runs.load()).archivedRuns).toEqual([])
   })
-  it('reads five planning inputs and three records with flexible part names and learning order; preserves v1', async () => {
+  it('reads six planning inputs and three records with flexible part names and learning order; preserves v1', async () => {
     const f = await fixture(); const evidence = await f.collect()
     expect(evidence.portfolioBuild?.issues).toEqual([])
-    expect(evidence.portfolioBuild?.artifacts).toHaveLength(9)
+    expect(evidence.portfolioBuild?.artifacts).toHaveLength(10)
     expect(portfolioPackageIsReady({ ...f.run, evidence })).toBe(true)
     expect((await f.definitions.load(f.definition.practiceId, '1.0.0')).criteria[1]?.id).toBe('four-slices-current')
     const envelope = buildPracticeReviewEnvelope({ definition: f.definition, run: { ...f.run, evidence }, activity: f.activity, generatedAt: new Date().toISOString() })

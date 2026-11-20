@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { collectPortfolioPackage } from '../electron/main/portfolio-package-evidence'
-import type { PracticeDefinition } from '../shared/contracts'
+import { portfolioPrototypePath, type PracticeDefinition } from '../shared/contracts'
 
 const temporaryDirectories: string[] = []
 
@@ -121,7 +121,7 @@ const tinyWebpBytes = Buffer.from(
 ).subarray(0, 42)
 
 async function writeValidDocuments(workspace: string, overrides: Record<string, string | Uint8Array> = {}): Promise<void> {
-  await Promise.all(Object.entries({ ...validDocuments, ...overrides }).map(async ([path, content]) => {
+  await Promise.all(Object.entries({ ...validDocuments, [portfolioPrototypePath]: '<title>design-protoype</title><main><h1>Product designer</h1><section>Project Alpha</section></main>', ...overrides }).map(async ([path, content]) => {
     await mkdir(join(workspace, path, '..'), { recursive: true })
     await writeFile(join(workspace, path), content)
   }))
@@ -142,10 +142,32 @@ describe('collectPortfolioPackage', () => {
       await writeValidDocuments(workspace, Object.fromEntries(Object.keys(validDocuments).map((path) => [path, bodies[format]!])))
       const evidence = await collectPortfolioPackage(context(workspace))
       expect(evidence.portfolioPlanning?.issues).toEqual([])
-      expect(evidence.portfolioPlanning?.artifacts).toHaveLength(5)
-      expect(evidence.portfolioPlanning?.artifacts.every((artifact) => artifact.content === bodies[format])).toBe(true)
+      expect(evidence.portfolioPlanning?.artifacts).toHaveLength(6)
+      expect(evidence.portfolioPlanning?.artifacts.filter((artifact) => artifact.path !== portfolioPrototypePath).every((artifact) => artifact.content === bodies[format])).toBe(true)
     }
   )
+
+  it.each([
+    ['<title>design-prototype</title><main>Projects</main>', 'design-protoype'],
+    ['<!-- <title>design-protoype</title> --><main>Projects</main>', 'design-protoype'],
+    ['<title>design-protoype</title><script>show()</script>', 'bố cục']
+  ])('blocks an invalid prototype and explains the correction', async (html, correction) => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace, { [portfolioPrototypePath]: html! })
+    const { portfolioPlanning } = await collectPortfolioPackage(context(workspace))
+    expect(portfolioPlanning?.issues).toContainEqual(expect.objectContaining({
+      stageId: 'visual-reference', path: portfolioPrototypePath, message: expect.stringContaining(correction!)
+    }))
+    expect(portfolioPlanning?.stages.find((stage) => stage.stageId === 'visual-reference')?.status).toBe('blocked')
+  })
+
+  it('identifies the missing file in an older five-document folder', async () => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace)
+    await rm(join(workspace, portfolioPrototypePath))
+    const { portfolioPlanning } = await collectPortfolioPackage(context(workspace))
+    expect(portfolioPlanning?.issues).toEqual([expect.objectContaining({ path: portfolioPrototypePath, code: 'missing' })])
+  })
 
   it('rejects whitespace-only documents as empty', async () => {
     const workspace = await temporaryWorkspace()
@@ -192,7 +214,7 @@ describe('collectPortfolioPackage', () => {
     expect(evidence.freshness).toBe('fresh')
     expect(evidence.portfolioPlanning?.issues).toEqual([])
     expect(evidence.portfolioPlanning?.unexpectedPaths).toEqual([])
-    expect(evidence.portfolioPlanning?.artifacts).toHaveLength(5)
+    expect(evidence.portfolioPlanning?.artifacts).toHaveLength(6)
     expect(evidence.portfolioPlanning?.artifacts.some(({ path }) => path === 'planning/portfolio-plan.md')).toBe(false)
     expect(evidence.sourceDigest).toBe(baseline.sourceDigest)
     expect(await readFile(note, 'utf8')).toContain('Keep the confirmed interview decisions.')
@@ -206,7 +228,7 @@ describe('collectPortfolioPackage', () => {
 
     expect(evidence.freshness).toBe('unverifiable')
     expect(evidence.portfolioPlanning?.artifacts).toHaveLength(0)
-    expect(evidence.portfolioPlanning?.issues.filter(({ code }) => code === 'missing')).toHaveLength(5)
+    expect(evidence.portfolioPlanning?.issues.filter(({ code }) => code === 'missing')).toHaveLength(6)
   })
 
   it.each(['directory', 'junction'])(
@@ -248,7 +270,7 @@ describe('collectPortfolioPackage', () => {
 
     expect(evidence.freshness).toBe('fresh')
     expect(evidence.portfolioPlanning?.issues).toEqual([])
-    expect(evidence.portfolioPlanning?.artifacts).toHaveLength(5)
+    expect(evidence.portfolioPlanning?.artifacts).toHaveLength(6)
     expect(evidence.portfolioPlanning?.artifacts.every((artifact) => typeof artifact.content === 'string')).toBe(true)
     expect(evidence.portfolioPlanning?.stages.map(({ stageId, status }) => [stageId, status])).toEqual([
       ['portfolio-brief', 'ready'],
@@ -295,7 +317,7 @@ describe('collectPortfolioPackage', () => {
       expect(evidence.freshness).toBe('fresh')
       expect(evidence.portfolioPlanning?.issues).toEqual([])
       expect(evidence.portfolioPlanning?.unexpectedPaths).toEqual([])
-      expect(evidence.portfolioPlanning?.artifacts).toHaveLength(5)
+      expect(evidence.portfolioPlanning?.artifacts).toHaveLength(6)
       expect(evidence.sourceDigest).toBe(baseline.sourceDigest)
     }
   })
@@ -316,8 +338,8 @@ describe('collectPortfolioPackage', () => {
 
   it('does not count regular Finder metadata toward the 500-entry workspace budget', async () => {
     const workspace = await temporaryWorkspace()
-    // Five documents, three allowed directories, and 492 screenshots fill the budget.
-    const screenshotPaths = Array.from({ length: 492 }, (_, index) =>
+    // Six files, three allowed directories, and 491 screenshots fill the budget.
+    const screenshotPaths = Array.from({ length: 491 }, (_, index) =>
       `planning/reference/screenshots/image-${index}.png`)
     await writeValidDocuments(workspace, {
       'planning/reference/reference.md': `${validDocuments['planning/reference/reference.md']}\n\n## Sources\n\n${screenshotPaths.join('\n')}`
@@ -566,7 +588,7 @@ describe('collectPortfolioPackage', () => {
       'planning/first-bounded-task.md'
     ]))
     expect(withAllowlist.portfolioPlanning?.unexpectedPaths).toEqual([])
-    expect(withAllowlist.portfolioPlanning?.artifacts).toHaveLength(5)
+    expect(withAllowlist.portfolioPlanning?.artifacts).toHaveLength(6)
   })
 
   it('keeps sourceDigest stable when only observation time changes', async () => {

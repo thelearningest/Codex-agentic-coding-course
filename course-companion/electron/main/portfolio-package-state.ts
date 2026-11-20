@@ -1,7 +1,7 @@
 import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
-import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPackageVersion, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
+import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPlanningDocumentPaths, portfolioPackageVersion, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
 import type { PortfolioPackageApproval, PracticeAdapterEvidenceState } from '../../shared/contracts'
 import type { PracticeRunRecord } from './practice-run-repository'
 
@@ -39,7 +39,7 @@ export function portfolioPackageIsReady(run: PracticeRunRecord): boolean {
   const planning = portfolioPackageEvidence(evidence)
   const paths = isPortfolioReleasePackage(run)
     ? [portfolioReleaseRecordPath, 'application/source', 'deployment/public-url'] : isPortfolioBuildPackage(run)
-    ? [...portfolioPackageArtifactPaths, ...portfolioBuildRecordPaths, 'application/source'] : portfolioPackageArtifactPaths
+    ? [...portfolioPlanningDocumentPaths, ...portfolioBuildRecordPaths, 'application/source'] : portfolioPackageArtifactPaths
   return isReviewedPortfolioPackage(run) && evidence?.freshness === 'fresh'
     && evidence.runId === run.runId && evidence.practiceId === run.practiceId
     && evidence.practiceVersion === run.practiceVersion

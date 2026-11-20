@@ -4,8 +4,8 @@
   "title": "Hoàn thiện gói planning cho portfolio",
   "version": "2.0.0",
   "checkpointId": "m2-portfolio-planning",
-  "objective": "Dùng một task Codex duy nhất để hoàn thiện năm tài liệu planning trong thư mục portfolio đã chọn. Duyệt PRD và kế hoạch triển khai, rồi nộp cả gói để Course Companion kiểm tra.",
-  "expectedOutcome": "Năm tài liệu planning nhất quán, trung thực và khả thi; PRD và kế hoạch được bạn duyệt trên phiên bản hiện tại. Không tạo ứng dụng, cài gói phụ thuộc hoặc xuất bản trong Module 2.",
+  "objective": "Dùng một task Codex duy nhất để hoàn thiện năm tài liệu planning và một bản mẫu giao diện HTML trong thư mục portfolio đã chọn. Duyệt PRD và kế hoạch triển khai, rồi nộp cả gói để Course Companion kiểm tra.",
+  "expectedOutcome": "Bản mẫu HTML thể hiện bố cục portfolio đã chọn. Năm tài liệu planning nhất quán, trung thực và khả thi; PRD và kế hoạch được bạn duyệt trên phiên bản hiện tại. Không tạo ứng dụng, cài gói phụ thuộc hoặc xuất bản trong Module 2.",
   "workspaceKind": "learner-portfolio",
   "taskPolicy": "safe-workspace-write",
   "evidenceProfile": "portfolio-planning",
@@ -31,7 +31,8 @@
       "order": 3,
       "dependsOn": [],
       "requiredArtifactPaths": [
-        "planning/reference/reference.md"
+        "planning/reference/reference.md",
+        "planning/reference/design-prototype.html"
       ]
     },
     {
@@ -64,7 +65,7 @@
     },
     {
       "id": "visual-reference",
-      "title": "Ghi nguồn và định hướng tham chiếu",
+      "title": "Chọn hướng thiết kế và tạo bản mẫu HTML",
       "dependsOn": []
     },
     {
@@ -113,6 +114,15 @@
       "freshness": "fresh"
     },
     {
+      "id": "prototype-reflects-design",
+      "description": "Bản mẫu HTML thể hiện bố cục và thứ tự nội dung phù hợp với mục tiêu portfolio và hướng thiết kế đã chọn.",
+      "required": true,
+      "checklistStepId": "visual-reference",
+      "acceptedEvidence": ["planning-artifact"],
+      "assertion": "Compare the HTML prototype with the brief and reference.md. Assess its layout, section order and content against the intended audience and agreed design choices. A static mockup is sufficient.",
+      "freshness": "fresh"
+    },
+    {
       "id": "prd-semantic-contract",
       "description": "PRD có yêu cầu ổn định, tiêu chí chấp nhận kiểm tra được, phạm vi, responsive và accessibility.",
       "required": true,
@@ -148,7 +158,7 @@
     },
     {
       "id": "scope-control-clean",
-      "description": "Thư mục chỉ chứa năm tài liệu và ảnh tham chiếu được dẫn nguồn; không có công việc tạo ứng dụng.",
+      "description": "Thư mục chỉ chứa năm tài liệu, bản mẫu HTML và ảnh tham chiếu được dẫn nguồn; không có công việc tạo ứng dụng.",
       "required": true,
       "checklistStepId": "implementation-contract",
       "acceptedEvidence": [

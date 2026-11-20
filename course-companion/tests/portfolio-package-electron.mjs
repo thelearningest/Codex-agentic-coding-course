@@ -135,8 +135,8 @@ try {
   for (const width of [360, 320]) {
     await compact.setViewportSize({ width, height: 640 })
     assert.equal(await compact.locator('.practice-package-submission details').count(), 0)
-    assert.equal(await compact.locator('.practice-package-issues > li').count(), 5)
-    assert.equal(await compact.locator('.practice-package-document-icon').count(), 5)
+    assert.equal(await compact.locator('.practice-package-issues > li').count(), 6)
+    assert.equal(await compact.locator('.practice-package-document-icon').count(), 6)
     assert.equal(await compact.locator('.practice-package-issues').evaluate((list) =>
       globalThis.getComputedStyle(list).paddingLeft), '0px')
     assert.equal(await compact.locator('.practice-package-issues strong').first().evaluate((text) =>
@@ -276,7 +276,7 @@ try {
   await writeFile(planPath, ' \n\t', 'utf8')
   await compact.evaluate(() => globalThis.courseCompanion.setCompanionMode('expanded'))
   await compact.getByRole('button', { name: 'Cập nhật và kiểm tra tiến độ Practice', exact: true }).click()
-  await compact.getByText('Đã đọc 4/5 tài liệu. Chưa duyệt nội dung.', { exact: true }).waitFor()
+  await compact.getByText('Đã đọc 5/6 tệp. Chưa duyệt nội dung.', { exact: true }).waitFor()
   const blocker = 'Tài liệu bắt buộc đang trống.'
   assert.equal(await compact.getByText(blocker, { exact: true }).count(), 1)
   assert.equal(await compact.getByText(/bước đã xác minh/).count(), 0)
@@ -288,7 +288,7 @@ try {
     await compact.screenshot({ path: join(screenshots, `portfolio-plan-blocker-${width}.png`), animations: 'disabled' })
   }
   await compact.getByRole('button', { name: 'Mở Triết toàn màn hình', exact: true }).click()
-  await page.getByText('Đã đọc 4/5 tài liệu. Chưa duyệt nội dung.', { exact: true }).waitFor()
+  await page.getByText('Đã đọc 5/6 tệp. Chưa duyệt nội dung.', { exact: true }).waitFor()
   assert.equal(await page.getByText(blocker, { exact: true }).count(), 1)
   assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
   await page.locator('.practice-package-submission').scrollIntoViewIfNeeded()
@@ -354,7 +354,7 @@ try {
   assert.equal(await submit.isEnabled(), true)
   for (const [width, height, name] of [[1180, 780, 'portfolio-package-desktop.png'], [390, 844, 'portfolio-package-narrow.png']]) {
     await page.setViewportSize({ width, height })
-    assert.equal(await page.locator('.practice-package-issues > li').count(), 5)
+    assert.equal(await page.locator('.practice-package-issues > li').count(), 6)
     const widths = await page.evaluate(() => ({ body: globalThis.document.body.scrollWidth, document: globalThis.document.documentElement.scrollWidth, viewport: globalThis.innerWidth }))
     assert.equal(widths.body, widths.viewport)
     assert.equal(widths.document, widths.viewport)
@@ -366,7 +366,7 @@ try {
   const state = await waitForPracticeState((record) => record.activeRun?.reviewStatus === 'passed',
     'The persisted current submission must pass before return')
   const originalTask = state.activeRun.binding.threadId
-  assert.equal(Object.keys(state.activeRun.packageApproval.artifactDigests).length, 5)
+  assert.equal(Object.keys(state.activeRun.packageApproval.artifactDigests).length, 6)
   for (const width of [1180, 390]) {
     await page.setViewportSize({ width, height: 844 })
     const returnAction = page.getByRole('button', { name: 'Lưu kết quả và quay lại khóa học', exact: true })
@@ -397,8 +397,8 @@ try {
       decisions: Object.fromEntries([...['mastery-1', 'mastery-4', 'mastery-5', 'mastery-6'].map((id) => ['assessment:' + id, 'correct:1'])]) })
   })
   await saveMasteryAnswers()
-  await writeFile(join(portfolio, 'planning/portfolio-brief.md'),
-    portfolioPackageDocuments['planning/portfolio-brief.md'] + '\nAdditional learner revision after returning to the course.\n', 'utf8')
+  await writeFile(join(portfolio, 'planning/reference/design-prototype.html'),
+    portfolioPackageDocuments['planning/reference/design-prototype.html'].replace('Project Alpha', 'Revised project layout'), 'utf8')
   await assert.rejects(page.evaluate(() => globalThis.courseCompanion.completePortfolioPlanningModule()), /package changed/)
   const reopened = await page.evaluate(() => globalThis.courseCompanion.loadPracticeWorkspace({ practiceId: 'm2-portfolio-planning', practiceVersion: '2.0.0' }))
   assert.equal(reopened.activePractice.runId, state.activeRun.runId)
@@ -425,7 +425,7 @@ try {
     return completed.practiceCompletions.at(-1).portfolioPlanningHandoff
   })
   assert.equal(handoff.schemaVersion, 2)
-  assert.equal(handoff.artifacts.length, 5)
+  assert.equal(handoff.artifacts.length, 6)
   assert.equal(handoff.task.threadId, originalTask)
   const moduleThreeOpening = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
   assert.equal(moduleThreeOpening.progress.sceneId, 'module-3-first-build')
@@ -468,7 +468,7 @@ try {
   const handoffReference = page.locator('.pixel-planning-handoff')
   assert.equal(await handoffReference.getAttribute('open'), null)
   await handoffReference.locator('summary').click()
-  assert.equal(await handoffReference.locator('li').count(), 5)
+  assert.equal(await handoffReference.locator('li').count(), 6)
   assert.equal((await page.locator('.pixel-dialogue > p').innerText()).includes(handoff.summary.firstBuild), false)
   const practiceScene = page.locator('main[data-scene-id="module-3-portfolio-practice"]')
   for (let i = 0; i < 15 && !(await practiceScene.count()); i++) {
@@ -664,7 +664,7 @@ try {
   assert.equal(await page.locator('.pixel-course-progress strong').innerText(), '15/19 checkpoint · 79%', 'Home counts the two Module 3 teaching checkpoints visited after returning from the first build')
   console.log('Module 4 Practice rehearsal: course-page entry, same task, real local Git revision, one record, simulated public URL/review, explicit approval, atomic return and desktop/narrow controls passed')
   console.log('Module 3 v2 rehearsal: three records, one website approval, simulated content review, dedicated build chat, archived completion, five mastery answers and desktop/narrow layouts passed')
-  console.log('Portfolio rehearsal: explicit approval, five-document simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and new Module 3 chat in the planning Project passed')
+  console.log('Portfolio rehearsal: explicit approval, six-file simulated review, desktop/narrow no-overflow, archived same-task revision, completion, and new Module 3 chat in the planning Project passed')
 } catch (error) {
   console.error(runtimeErrors)
   const diagnosticRun = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8')).activeRun

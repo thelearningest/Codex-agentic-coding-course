@@ -235,7 +235,7 @@ export class PracticeReviewService {
         ? JSON.stringify({ schemaVersion: 1, practiceId: definition.practiceId, practiceVersion: definition.version, runId: active.runId,
             verdict: 'needs-work', summary: envelope.portfolioPackage?.kind === 'release' ? 'Bài phát hành portfolio chưa sẵn sàng. Kiểm tra hồ sơ triển khai, đường link và xác nhận website hiện tại.' : envelope.portfolioPackage?.kind === 'build' ? 'Bài xây portfolio chưa sẵn sàng. Kiểm tra bằng chứng và chấp nhận website hiện tại.' : 'Gói planning chưa sẵn sàng. Kiểm tra tài liệu và duyệt PRD cùng kế hoạch hiện tại.',
             criteria: definition.criteria.map((criterion) => ({ criterionId: criterion.id, status: 'unverifiable', evidenceRefs: [],
-              explanation: (envelope.portfolioPackage!.issues.join('; ') || (envelope.portfolioPackage?.kind === 'release' ? 'Cần hồ sơ triển khai, đường link chia sẻ được và xác nhận website hiện tại.' : envelope.portfolioPackage?.kind === 'build' ? 'Cần đủ hồ sơ thực hành, tệp ứng dụng và xác nhận website hiện tại.' : 'Cần đủ năm tài liệu hợp lệ và phê duyệt PRD cùng kế hoạch hiện tại.')).slice(0, 1000) })) })
+              explanation: (envelope.portfolioPackage!.issues.join('; ') || (envelope.portfolioPackage?.kind === 'release' ? 'Cần hồ sơ triển khai, đường link chia sẻ được và xác nhận website hiện tại.' : envelope.portfolioPackage?.kind === 'build' ? 'Cần đủ hồ sơ thực hành, tệp ứng dụng và xác nhận website hiện tại.' : 'Cần đủ năm tài liệu cùng bản mẫu HTML hợp lệ và phê duyệt PRD cùng kế hoạch hiện tại.')).slice(0, 1000) })) })
         : undefined
       const result = definition.evidenceProfile === 'codex-task-configuration'
         ? evaluateConfiguration(envelope, definition, active.runId, reviewedAt)
@@ -336,7 +336,7 @@ export class PracticeReviewService {
               ? 'Đã duyệt phiên bản portfolio trên mạng, kết quả kiểm tra đường link và xác nhận hiện tại của người học. Module 4 không có bài kiểm tra cuối.' : envelope.portfolioPackage?.kind === 'build'
               ? 'Đã đối chiếu kế hoạch, kết quả kiểm tra theo PRD và xác nhận website hiện tại; phần tổng kết vẫn cần hoàn thành.'
               : portfolioPackage
-              ? 'Năm tài liệu đã được kiểm tra cấu trúc, phạm vi và nội dung; PRD và kế hoạch được người học duyệt trên phiên bản hiện tại.'
+              ? 'Năm tài liệu và bản mẫu HTML đã được kiểm tra cấu trúc, phạm vi và nội dung; PRD và kế hoạch được người học duyệt trên phiên bản hiện tại.'
               : definition.evidenceProfile === 'planning-package'
               ? 'Triết đã duyệt semantic PRD, implementation plan, alignment, phạm vi và quyền sở hữu của người học trên đúng hai digest hiện tại.'
               : 'Triết đã xác minh đủ bốn thiết lập Codex bắt buộc từ metadata hiệu lực của đúng task.',

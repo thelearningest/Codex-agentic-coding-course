@@ -363,6 +363,23 @@ describe('PortfolioModuleCompletionService', () => {
     })
   })
 
+  it('reloads an earlier five-file handoff without treating it as a new six-file completion', async () => {
+    const test = await fixture()
+    const progress = await test.service.completeModuleTwo()
+    const receipt = progress.practiceCompletions.at(-1)!
+    const handoff = receipt.portfolioPlanningHandoff!
+    if (handoff.schemaVersion !== 2) throw new Error('Expected a planning package handoff')
+    const path = 'planning/reference/design-prototype.html'
+    handoff.artifacts = handoff.artifacts.filter((artifact) => artifact.path !== path)
+    handoff.moduleThreeInput.artifactReferences = handoff.artifacts
+    delete handoff.approval.artifactDigests[path]
+    const data = join(test.root, 'data')
+    await writeFile(join(data, 'learner-state.json'), JSON.stringify(progress))
+    const restarted = new ProgressRepository(data)
+    await expect(restarted.load()).resolves.toMatchObject({ status: 'returning', progress })
+    await expect(restarted.completePortfolioPlanning(receipt)).rejects.toThrow('Invalid Module 2 completion receipt')
+  })
+
   it('restores the lesson after the first build without granting a Practice receipt', async () => {
     const test = await fixture()
     const opening = await test.service.completeModuleTwo()
@@ -474,7 +491,7 @@ describe('PortfolioModuleCompletionService', () => {
       }
     })
 
-    await expect(test.service.completeModuleTwo()).rejects.toThrow('five-document submission review')
+    await expect(test.service.completeModuleTwo()).rejects.toThrow('six-file submission review')
     expect((await test.dependencies.practiceRunRepository.load()).archivedRuns.at(-1)?.retainedRun)
       .toMatchObject({ runId: test.active.runId, reviewStatus: 'passed' })
   })
@@ -578,7 +595,7 @@ describe('PortfolioModuleCompletionService', () => {
     })
     await test.progressRepository.recordPracticeCompletion(legacyCompletion)
 
-    await expect(test.service.completeModuleTwo()).rejects.toThrow('five-document submission review')
+    await expect(test.service.completeModuleTwo()).rejects.toThrow('six-file submission review')
     expect((await test.dependencies.practiceRunRepository.load()).activeRun).toMatchObject({
       runId: 'run-legacy',
       practiceVersion: '1.0.0',

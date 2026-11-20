@@ -7,7 +7,7 @@
   the other 22 Teacher-led Practice-setup slides. The combined fictional implementation-plan page, final assessment,
   saved-progress redirects, and detailed Teacher/Executor integration handoff
   are implemented and verified for this scoped content change. The approved
-  five-document Practice runtime is implemented with final-package approval,
+  six-file Practice runtime is implemented with final-package approval,
   actual-content review, recoverable same-task migration and versioned handoff.
   Module 2 remains `in-progress` overall because owner acceptance remains
   pending. Module 3 opens with the first portfolio build, followed by local preview, debugging and a short GitHub
@@ -47,9 +47,15 @@ and must never be inferred from a passing automated check.
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
-| Module 2 | `in-progress` overall — five-document Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 2 Practice prototype, 20 November 2026
+
+M2.1, M2.4, M2.5 and M2.6 implementation is `implemented`. At the end of the reference interview, Codex offers to create `planning/reference/design-prototype.html` with the tab title `design-protoype`. Teacher reviews the actual HTML alongside the brief and reference. The learner approves the current PRD and implementation plan once. The six-file handoff includes the prototype digest. Existing completed five-file handoffs stay readable for learners already building their portfolios.
+
+Verification `passed` for the prototype checks, typecheck, lint, build, nine startup checks and a disposable Electron journey through Modules 2–4. That journey changed only the HTML after approval, required fresh review in the original planning task, and verified six references in Module 3. The isolated patch passed the Electron smoke, Teacher chat, Practice guide and review feedback checks. Its full unit run had 896 passes and two existing failures (Module 1 image-source digest and CSS palette). In the shared checkout, the full run also encountered a frozen Module 1 scene mismatch and the Electron smoke stopped at the Module 1 Skills screen. Live Teacher review and learner acceptance are `pending`. The next step is to rehearse Step 3 and the submission with a learner’s own design.
 
 ### Module 3 chat recovery, 20 November 2026
 
@@ -3465,7 +3471,7 @@ Do not begin Module 2 content implementation until:
 
 After seven focused Course Companion explanation pages, the learner
 uses one persistent Codex task to turn a vague portfolio idea into five current,
-learner-approved planning documents. The learner answers one plain-language
+planning documents and an HTML design prototype. The learner answers one plain-language
 question at a time; Executor creates and updates the documents; Course
 Companion independently inspects the files and current digests after every
 stage. Module 2 ends with an approved implementation plan. Module 3, not Module
@@ -3637,7 +3643,7 @@ or accepted learner flow.
    evidence and mastery gates pass.
 3. Replace the seven-artifact manifest with exactly five planning documents:
    the brief, evidence inventory, reference record, PRD, and implementation
-   plan. Reference screenshots remain bounded supporting evidence rather than
+   plan. Also require the HTML prototype at the end of the visual-reference stage. Reference screenshots remain bounded supporting evidence rather than
    additional planning documents.
 4. Retire `planning/requirement-validation-map.md` and
    `planning/first-bounded-task.md`; move requirement-validation coverage into
@@ -3652,7 +3658,7 @@ or accepted learner flow.
 **Verify**
 
 - Course-structure parser accepts the manifest.
-- Exactly five document paths are unique and under `planning/`.
+- All six required file paths are unique and under `planning/`.
 - Templates contain no completed learner answer or hidden portfolio solution.
 - The implementation plan contains both requirement-validation coverage and
   phased planning, but no first implementation task.
@@ -3808,7 +3814,7 @@ I1–I6 are implemented.
 1. Add the version 2 Practice definition with five descriptive document
    checklist items and one final-package submission gate.
 2. Open the learner-selected portfolio folder in one persistent Executor task.
-3. Limit write scope to the five approved planning documents and bounded
+3. Limit write scope to the five approved planning documents, the HTML prototype and bounded
    reference screenshots.
 4. Extend planning evidence collection to validate:
    - readable nonempty required files and artifact digests;
@@ -3825,7 +3831,7 @@ I1–I6 are implemented.
    heading names/counts, exact keywords or REQ/AC naming conventions. Stable
    descriptive requirement references and shared validation are acceptable
    when every required outcome remains unambiguously covered.
-5. On submission, Course Companion inspects the current five documents and
+5. On submission, Course Companion inspects the current five documents and the HTML prototype, then
    records explicit learner approval of the current PRD and plan before AI
    review. A needs-work result keeps the same task available for revision;
    do not require five separate approvals or additional interviews.
@@ -3842,7 +3848,7 @@ I1–I6 are implemented.
   remain explicitly bounded and never authorize public reuse.
 - The existing task can resume after relaunch without creating a replacement.
 - Approval and submission bind to the current course, run, task, workspace and
-  five document digests; any changed input requires fresh approval and review.
+  six file digests; any changed input requires fresh approval and review.
 - Returning from the passed submission opens Module 2 mastery, not Module 3.
 
 **Checkpoint output:** A live, resumable portfolio-planning Practice with fresh
@@ -4355,7 +4361,7 @@ remain pending.
 
 **Change**
 
-1. Require all five current documents, current final-package approval and
+1. Require all five current documents, the HTML prototype, current final-package approval and
    passed review, and the existing mastery evidence. Historical stage receipts
    do not satisfy the version 2 gate.
 2. Generate a plain-language completion summary: what the learner decided,
@@ -4363,10 +4369,10 @@ remain pending.
    and what is deliberately out of scope. Do not claim a first implementation
    task was created in Module 2.
 3. Unlock Module 3 only after the completion receipt is saved atomically.
-4. Pass Module 3 the workspace path, five artifact references/digests, verified
+4. Pass Module 3 the workspace path, six artifact references/digests, verified
    submission and exact existing task binding, not the old chat transcript as
    hidden context. Missing or mismatched task access must fail closed.
-5. Make Module 3's first action read the five current documents, propose one
+5. Make Module 3's first action read the five current documents and consult the prototype, propose one
    bounded implementation task with technology/dependency/file consequences,
    and wait for learner approval before writing application code.
 
@@ -4377,7 +4383,7 @@ remain pending.
   learner approval.
 - Relaunch after completion opens Module 3 readiness without losing Module 2
   evidence.
-- The completion handoff contains exactly the five current planning references
+- The completion handoff contains exactly the six current planning references
   and no reference to a retired validation-map or first-task document.
 - Reset and targeted Module 2 recovery remain functional.
 
@@ -4393,7 +4399,7 @@ Module 2 is accepted only when:
 - Course Companion completes the full new Module 2 journey using a disposable
   learner portfolio folder;
 - exactly five explanation pages lead to one persistent Practice task;
-- all five planning documents are reviewed semantically on their current
+- all five planning documents and the HTML prototype are reviewed semantically on their current
   digests after explicit final PRD/plan approval; the package stops at the
   implementation plan and has no five-stage approval prerequisite;
 - the same Executor thread remains bound through planning, every resubmission,

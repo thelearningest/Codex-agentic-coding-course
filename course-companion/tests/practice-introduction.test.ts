@@ -19,7 +19,7 @@ describe('beginner Practice introductions', () => {
 
   it.each([
     ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 4],
-    ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 5],
+    ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 6],
     ['m3-portfolio-build', 'Xây portfolio theo kế hoạch', 3],
     ['m4-portfolio-release', 'Đưa portfolio lên mạng', 1]
   ])('explains %s with three steps and an initially collapsed reference', (id, title, count) => {
@@ -53,7 +53,7 @@ describe('beginner Practice introductions', () => {
     const planning = getPracticeIntroduction('m2-portfolio-planning')!
     const build = getPracticeIntroduction('m3-portfolio-build')!
     const release = getPracticeIntroduction('m4-portfolio-release')!
-    expect(planning.context).toContain('chưa viết code')
+    expect(planning.context).toContain('trước khi xây website')
     expect(planning.steps.join(' ')).toContain('duyệt PRD')
     expect(build.context).toContain('từ Module 2')
     expect(build.steps.join(' ')).toContain('Kiểm tra website theo PRD')

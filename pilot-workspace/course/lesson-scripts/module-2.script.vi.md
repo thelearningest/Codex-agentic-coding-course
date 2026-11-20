@@ -98,7 +98,7 @@ nhiệm hướng dẫn các bước này sau khi Learner mở Practice.
 câu mỗi lượt. Chỉ đưa feedback và căn cứ sau câu trả lời. Không dùng ngưỡng cố
 định chưa được pilot phê duyệt.]
 
-Khi năm tài liệu hiện tại đã được duyệt, review đạt và người học hoàn thành phần kiểm tra, bàn giao đúng task và thư mục cho Module 3 để tạo bản portfolio đầu tiên.
+Khi người học đã duyệt PRD cùng kế hoạch, cả năm tài liệu và bản mẫu HTML đã được review đạt và người học hoàn thành phần kiểm tra, bàn giao đúng task và thư mục cho Module 3 để tạo bản portfolio đầu tiên.
 
 ## Phục hồi
 
