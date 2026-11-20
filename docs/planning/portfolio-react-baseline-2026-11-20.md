@@ -1,8 +1,8 @@
 # Portfolio React baseline — 20 November 2026
 
 - **Status:** Owner approved the wording on 20 November 2026. The Phase 2
-  rehearsal passed, and Phase 3 applied changes 1–5 (see below). The Node
-  prerequisite (Phase 4) is still open.
+  rehearsal passed, Phase 3 applied changes 1–5, and Phase 4 added the
+  Module 3 Node.js and Git check (see below).
 - **Decision owner:** course owner.
 - **Applies to:** the learner portfolio built in Modules 2–4.
 
@@ -262,6 +262,27 @@ Verification:
   failure recorded earlier in the ledger, and it stops before Modules 2–3.
 - The Teacher chat, Practice guide and review feedback Electron scripts all
   passed.
+
+## Phase 4 applied — 20 November 2026
+
+The owner chose a just-in-time check at the start of Module 3 instead of
+changing the frozen Module 1 setup or adding an app screen. The Module 3 section
+of the portfolio `AGENTS.md` template now begins its build rules with:
+
+```markdown
+- Trước khi tạo ứng dụng, kiểm tra máy đã có Node.js 22.12 trở lên và Git. Nếu thiếu hoặc quá cũ, dừng lại, giải thích ngắn vì sao cần, hướng dẫn người học tải bản cài đặt chính thức theo hệ điều hành của họ, rồi chờ người học cài xong. Không tự tải hay chạy tệp cài đặt thay người học.
+```
+
+The root `README.md` already lists Git and Node.js 22 or newer under "Trước
+khi bắt đầu", because the course launcher (`scripts/setup-core.mjs`) needs them,
+so it was not changed. Most learners will already have both tools. The Module 3
+check is a safety net for a missing tool, a shell that cannot find Node.js, or
+Node.js 22.0–22.11, which the launcher accepts but current Vite rejects.
+
+Verification: typecheck, lint, build and the focused tests passed. The full
+unit suite had the same 92 failures as the baseline, with 807 passes. The
+Teacher chat, Practice guide and review feedback Electron scripts passed. A
+machine without Node.js or Git has not been tested.
 
 ## Next phases
 

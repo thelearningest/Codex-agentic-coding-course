@@ -127,6 +127,7 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 ## Module 3: xây website
 
 - Đọc năm tài liệu trong planning/ làm nguồn yêu cầu và dùng bản mẫu HTML ở bước 3 để tham khảo bố cục; chỉ sửa chúng khi người học yêu cầu.
+- Trước khi tạo ứng dụng, kiểm tra máy đã có Node.js 22.12 trở lên và Git. Nếu thiếu hoặc quá cũ, dừng lại, giải thích ngắn vì sao cần, hướng dẫn người học tải bản cài đặt chính thức theo hệ điều hành của họ, rồi chờ người học cài xong. Không tự tải hay chạy tệp cài đặt thay người học.
 - Tạo ứng dụng theo mục "Nền kỹ thuật của portfolio" và dùng \`npm run check\` để kiểm tra kỹ thuật. Nếu implementation plan ghi nền kỹ thuật khác, báo cho người học và đề xuất làm theo nền của khóa học trước khi tạo ứng dụng.
 - Có thể thực hiện implementation plan trong một lượt. Gửi đường dẫn bản đầu để người học xem rồi quay lại bài học. Khi người học trở lại, kiểm tra bản cuối theo PRD và ghi lại quan sát thật.
 - Commit sau mỗi phần người học đã chấp nhận. Khi người học muốn thêm tính năng mới, đề xuất tạo branch riêng.

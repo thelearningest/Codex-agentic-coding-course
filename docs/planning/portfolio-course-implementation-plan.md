@@ -78,8 +78,12 @@ Verification is `passed` for:
 The full unit suite has the same 92 failures with and without the change (807
 and 806 passes). The Electron smoke still stops at the existing Module 1 Skills
 failure. The desktop app flow, Triết's live review and a machine without
-Node.js remain unverified. Pilot acceptance is `pending`. Next step: decide the
-Node.js prerequisite (Phase 4), then rehearse Modules 2–3 in the desktop app.
+Node.js remain unverified. Phase 4 then added a Module 3 rule: Codex checks for
+Node.js 22.12 or newer and Git before creating the app, and guides the learner
+to install anything missing. The README already lists both tools. Focused
+checks, build and the three Electron scripts passed again, and the unit suite
+kept the same 92 failures. Pilot acceptance is `pending`. Next step: rehearse
+Modules 2–3 in the desktop app, including an account without Node.js or Git.
 
 ### Module 2 Practice prototype, 20 November 2026
 
