@@ -29,6 +29,16 @@ timestamps preserve reading pauses and the timing of real UI transitions.
 Static `.png` files are retained as capture references; the main README embeds
 only the GIFs.
 
+## Codex project setup screenshots — 21 November 2026
+
+- `codex-folder-1-projects.png`, `codex-folder-2-create-project.png` and
+  `codex-folder-3-new-folder.png`: macOS screenshots supplied by the course owner
+  for the README steps that create an empty project folder in Codex.
+- The first two are unedited. The third keeps the New Folder dialog sharp and
+  blurs the Finder window behind it so personal file names cannot be read.
+- These are not produced by `scripts/capture-readme-media.mjs`; replace them by
+  hand when the Codex project dialog changes.
+
 ## Reproduce
 
 Requires the locked Course Companion dependencies, its current production build,

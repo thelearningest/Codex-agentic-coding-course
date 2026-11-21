@@ -171,6 +171,26 @@ Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ a
 **Cách dễ nhất:** tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 đoạn sau vào một task mới.
 
+Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bước sau:
+
+1. Trong Codex, bấm dấu **+** cạnh chữ **Projects** ở thanh bên trái.
+
+   ![Dấu + cạnh chữ Projects ở thanh bên trái của Codex](docs/assets/readme/codex-folder-1-projects.png)
+
+2. Hộp **Create project** hiện ra. Ở mục **Source folders**, bấm **Add**.
+
+   ![Hộp Create project với nút Add trong mục Source folders](docs/assets/readme/codex-folder-2-create-project.png)
+
+3. Cửa sổ chọn thư mục mở ra. Chọn **Documents** ở cột bên trái, bấm
+   **New Folder**, đặt tên `vibecoding-101`, bấm **Create**, rồi bấm **Open**.
+
+   ![Hộp New Folder tạo thư mục mới trong Documents](docs/assets/readme/codex-folder-3-new-folder.png)
+
+4. Kiểm tra ô **Project name**. Nếu ô còn trống, nhập `vibecoding-101`. Bấm
+   **Create project**.
+
+Ảnh được chụp trên macOS. Trên Windows, các nút có tên tương tự.
+
 ```text
 Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
 https://github.com/thelearningest/Codex-agentic-coding-course.git
