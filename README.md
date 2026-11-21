@@ -171,6 +171,16 @@ Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ a
 **Cách dễ nhất:** tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 đoạn sau vào một task mới.
 
+```text
+Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
+https://github.com/thelearningest/Codex-agentic-coding-course.git
+vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
+để mở khóa học.
+Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
+trước khi cài bất cứ thứ gì. Nếu máy chưa có Git, hãy hướng dẫn mình
+cài Git trước.
+```
+
 Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bước sau:
 
 1. Trong Codex, bấm dấu **+** cạnh chữ **Projects** ở thanh bên trái.
@@ -191,15 +201,7 @@ Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bư�
 
 Ảnh được chụp trên macOS. Trên Windows, các nút có tên tương tự.
 
-```text
-Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
-https://github.com/thelearningest/Codex-agentic-coding-course.git
-vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
-để mở khóa học.
-Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
-trước khi cài bất cứ thứ gì. Nếu máy chưa có Git, hãy hướng dẫn mình
-cài Git trước.
-```
+
 
 Nếu muốn tự làm, bạn có thể dùng các lệnh bên dưới thay cho đoạn trên.
 
