@@ -1,5 +1,11 @@
 # Repository Guidance
 
+## Learner setup
+
+- If the user is a learner asking to install, start or open the course, follow
+  `SETUP_FOR_AGENTS.md` and ignore the contributor sections below.
+- Everything after this section is for people developing the course.
+
 ## Approval before taking action
 
 - Before running commands or editing files, explain what you plan to do and wait for the user's explicit approval. This applies to read-only commands and small edits as well.
