@@ -25,6 +25,21 @@ làm việc có thể áp dụng khi muốn xây một công cụ hay ứng dụ
 > được kiểm tra tự động; trải nghiệm trên máy Mac thật và với người mới học
 > vẫn cần được kiểm chứng thêm.
 
+## Mục lục
+
+- [Từ ý tưởng đến portfolio của bạn](#từ-ý-tưởng-đến-portfolio-của-bạn)
+- [Bạn sẽ học như thế nào?](#bạn-sẽ-học-như-thế-nào)
+- [Bạn sẽ học được gì?](#bạn-sẽ-học-được-gì)
+- [Khóa học này phù hợp với ai?](#khóa-học-này-phù-hợp-với-ai)
+- [Trước khi bắt đầu](#trước-khi-bắt-đầu)
+- [Thiết lập và bắt đầu học](#thiết-lập-và-bắt-đầu-học)
+  - [Bước 1 — Tải và khởi động khóa học](#bước-1--tải-và-khởi-động-khóa-học)
+  - [Bước 2 — Xem và xác nhận phần chuẩn bị](#bước-2--xem-và-xác-nhận-phần-chuẩn-bị)
+  - [Bước 3 — Bắt đầu học](#bước-3--bắt-đầu-học)
+- [Tài khoản và tiến độ](#tài-khoản-và-tiến-độ)
+- [Khi cần trợ giúp](#khi-cần-trợ-giúp)
+- [For contributors](#for-contributors)
+
 ## Từ ý tưởng đến portfolio của bạn
 
 ```mermaid
@@ -39,7 +54,7 @@ flowchart LR
 Mỗi module có phần giải thích, ví dụ và bài thực hành để bạn thử ngay điều
 vừa học.
 
-Các GIF bên dưới được ghi trực tiếp từ Course Companion trong một hồ sơ
+Các GIF bên dưới được ghi trực tiếp từ khóa học trong một hồ sơ
 minh họa riêng. Phản hồi hỏi đáp và kết quả review được mô phỏng để giới
 thiệu cách dùng, không phải bài nộp của người học thật.
 
@@ -84,8 +99,8 @@ chuyện công việc (task) trong Codex để giữ liền mạch kế hoạch 
 
 ## Bạn sẽ học như thế nào?
 
-**Course Companion** là ứng dụng đồng hành, nơi bạn đọc bài học, xem ví dụ và
-theo dõi tiến độ. Khi đến phần **Practice** (thực hành), bạn chuyển sang task
+**Khóa học** chạy trong một ứng dụng đồng hành, nơi bạn đọc bài học, xem ví dụ
+và theo dõi tiến độ. Khi đến phần **Practice** (thực hành), bạn chuyển sang task
 Codex được liên kết với bài để làm việc trên dự án của mình.
 
 Bạn có thể hỏi Teacher khi học lý thuyết. Trong Practice, hãy làm việc trực
@@ -102,8 +117,8 @@ website và quyết định nội dung nào được đưa lên mạng.
 
 ![Màn hình Practice hiển thị hướng dẫn, checklist và kết quả review mô phỏng của bài thực hành Module 1](docs/assets/readme/practice-review.gif)
 
-Bạn có thể dừng giữa chừng và quay lại sau. Course Companion lưu tiến độ trên
-máy để bạn tiếp tục từ bước đang học.
+Bạn có thể dừng giữa chừng và quay lại sau. Khóa học lưu tiến độ trên máy để
+bạn tiếp tục từ bước đang học.
 
 ## Bạn sẽ học được gì?
 
@@ -142,7 +157,7 @@ Bạn không cần biết lập trình, Git hay dòng lệnh trước khi học.
 - Ứng dụng ChatGPT desktop phiên bản mới có Codex, đã đăng nhập bằng tài khoản ChatGPT của bạn. Khóa học dùng Codex để thực hành trên các tệp và dự án trong máy.
 - **Khuyến nghị dùng ChatGPT Plus hoặc cao hơn để có trải nghiệm học tốt nhất.**
 
-Để tải và mở Course Companion, ứng dụng học của khóa này, bạn cần chuẩn bị thêm:
+Để tải và mở khóa học, bạn cần chuẩn bị thêm:
 
 - **Git**, công cụ dùng để tải khóa học và lưu các phiên bản dự án.
 - **Node.js 22.12 trở lên**, phần mềm cần để chạy ứng dụng học. Trên macOS, bạn cần cài trước. Trên Windows, trình khởi động sẽ đề xuất cài nếu còn thiếu và hỏi bạn trước khi thực hiện.
@@ -155,13 +170,13 @@ Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ a
 
 **Cách dễ nhất:** tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 đoạn sau vào một task mới. Codex sẽ kiểm tra máy, hỏi bạn trước khi cài thêm
-và mở Course Companion.
+và mở khóa học.
 
 ```text
 Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
 https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
-vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md trong khóa học
-để mở Course Companion.
+vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
+để mở khóa học.
 Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
 trước khi cài bất cứ thứ gì. Nếu máy chưa có Git, hãy hướng dẫn mình
 cài Git trước.
@@ -172,6 +187,9 @@ Nếu muốn tự làm, bạn có thể dùng các lệnh bên dưới thay cho 
 Chọn hướng dẫn phù hợp với máy của bạn, rồi chạy lần lượt các lệnh bên dưới.
 
 #### Windows
+
+Nếu máy chưa có Git, tải Git tại https://git-scm.com/install/windows rồi cài
+với các lựa chọn mặc định. Cài xong, đóng và mở lại cửa sổ dòng lệnh.
 
 Mở **Command Prompt** hoặc **PowerShell** trong thư mục bạn muốn lưu khóa học.
 Chạy lần lượt:
@@ -184,6 +202,10 @@ cd Codex-agentic-coding-course
 
 #### macOS
 
+Nếu máy chưa có Git, chạy `xcode-select --install` rồi bấm **Cài đặt** khi
+cửa sổ của Apple hiện ra. Các cách cài khác có tại
+https://git-scm.com/install/mac.
+
 Mở **Terminal** trong thư mục bạn muốn lưu khóa học. Chạy lần lượt:
 
 ```bash
@@ -195,6 +217,10 @@ cd Codex-agentic-coding-course
 Sau khi tải repository, bạn cũng có thể nhấp đúp `start-course.command` trong
 Finder.
 
+Nếu máy chưa có Node.js 22.12 trở lên, trình khởi động sẽ mở trang tải
+Node.js. Chọn bản **LTS** (bản ổn định, được hỗ trợ lâu dài) cho macOS, tải
+tệp .pkg, nhấp đúp để cài, rồi chạy lại `./start-course.command`.
+
 ### Bước 2 — Xem và xác nhận phần chuẩn bị
 
 Sau khi chạy lệnh, bạn sẽ nhận lời chào và phần giải thích ngắn về quá trình
@@ -203,15 +229,15 @@ còn thiếu.
 
 Nếu cần cài thêm, hãy đọc lệnh và mục đích được hiển thị. Khi thấy phù hợp,
 bạn xác nhận để trình khởi động thực hiện. **Không có gì được cài nếu bạn
-chưa đồng ý.** Nếu mọi thứ đã sẵn sàng, trình khởi động sẽ mở Course Companion
+chưa đồng ý.** Nếu mọi thứ đã sẵn sàng, trình khởi động sẽ mở khóa học
 để bạn tiếp tục.
 
 Bạn có thể từ chối cài đặt. Trình khởi động sẽ dừng và giải thích bước tiếp theo
 bạn có thể tự thực hiện.
 
-### Bước 3 — Bắt đầu học trong Course Companion
+### Bước 3 — Bắt đầu học
 
-Khi Course Companion mở, bạn bắt đầu từ phần giới thiệu nếu đây là lần đầu
+Khi khóa học mở, bạn bắt đầu từ phần giới thiệu nếu đây là lần đầu
 học. Nếu đã học trước đó, ứng dụng khôi phục tiến độ đã lưu trên máy và đưa
 bạn về đúng bước đang học.
 
@@ -220,9 +246,9 @@ hướng dẫn bạn chuyển sang Codex để thực hành.
 
 ## Tài khoản và tiến độ
 
-- Luồng thiết lập Windows dùng trang đăng nhập ChatGPT chính thức của Codex và
-  không đọc hoặc lưu mật khẩu hay token đăng nhập của bạn.
-- Course Companion đọc bằng chứng có giới hạn từ đúng task Practice đã liên
+- Khóa học không có trang đăng nhập riêng, và không đọc hay lưu mật khẩu hoặc
+  thông tin đăng nhập ChatGPT của bạn.
+- Khóa học đọc bằng chứng có giới hạn từ đúng task Practice đã liên
   kết và các file liên quan trong thư mục thực hành. Teacher hướng dẫn và
   nhận xét; bạn làm việc với Codex để thay đổi dự án.
 - Cấu hình không chứa bí mật và tiến độ học được lưu trên máy của bạn.
@@ -233,7 +259,7 @@ hướng dẫn bạn chuyển sang Codex để thực hành.
 ## Khi cần trợ giúp
 
 Với hướng dẫn khởi động, kiểm chứng Practice và các giới hạn hiện tại trên
-Windows và macOS, xem [hướng dẫn Course Companion](course-companion/README.md).
+Windows và macOS, xem [hướng dẫn khóa học](course-companion/README.md).
 
 ## For contributors
 
