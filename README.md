@@ -177,8 +177,8 @@ Mở **Command Prompt** hoặc **PowerShell** trong thư mục bạn muốn lưu
 Chạy lần lượt:
 
 ```bat
-git clone https://github.com/DiligentPenguinn/codex-content-creator-course.git
-cd codex-content-creator-course
+git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+cd Codex-agentic-coding-course
 .\start-course.cmd
 ```
 
@@ -187,8 +187,8 @@ cd codex-content-creator-course
 Mở **Terminal** trong thư mục bạn muốn lưu khóa học. Chạy lần lượt:
 
 ```bash
-git clone https://github.com/DiligentPenguinn/codex-content-creator-course.git
-cd codex-content-creator-course
+git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+cd Codex-agentic-coding-course
 ./start-course.command
 ```
 
