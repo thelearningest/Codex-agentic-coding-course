@@ -380,7 +380,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: '/GOAL', value: 'Tạo mục tiêu bền vững' },
       { label: '@', value: 'Mở thêm nguồn và công cụ' }
     ],
-    dialogue: 'Một số lệnh / bạn có thể thường xuyên sử dụng là /status và /goal. Lệnh /status cho biết mức sử dụng context window — bạn có thể hiểu đây là trí nhớ ngắn hạn của model. Nếu lượng context đã dùng vượt quá 150.000 token, bạn nên chuyển sang chat mới. Lệnh /goal tạo một mục tiêu bền vững để Codex tiếp tục theo đuổi qua nhiều lượt cho đến khi hoàn thành, bị tạm dừng hoặc cần bạn cung cấp thêm thông tin.\n\nNgoài ra, @ cũng mở một danh sách chọn nhanh tương tự /. Tuy nhiên, @ cho phép bạn truy cập thêm một số nguồn và công cụ. Chẳng hạn, bạn có thể chọn một skill cụ thể hoặc một đoạn chat trong tài khoản ChatGPT.',
+    dialogue: 'Khi bạn gõ dấu / vào ô chat, Codex sẽ giới thiệu cho bạn một số lệnh có sẵn của hệ thống. Một số lệnh / bạn có thể thường xuyên sử dụng là /status và /goal. Lệnh /status cho biết mức sử dụng context window — bạn có thể hiểu đây là trí nhớ ngắn hạn của model. Nếu lượng context đã dùng vượt quá 150.000 token, bạn nên chuyển sang chat mới. Lệnh /goal tạo một mục tiêu bền vững để Codex tiếp tục theo đuổi qua nhiều lượt cho đến khi hoàn thành, bị tạm dừng hoặc cần bạn cung cấp thêm thông tin.\n\nNgoài ra, @ cũng mở một danh sách chọn nhanh tương tự /. Tuy nhiên, @ cho phép bạn truy cập thêm một số nguồn và công cụ. Chẳng hạn, bạn có thể chọn một skill cụ thể hoặc một đoạn chat trong tài khoản ChatGPT.',
     choices: [{ label: 'Tiếp theo: AGENTS.md', next: 'module-1-agents-intro', primary: true }]
   },
   'module-1-agents-intro': {
