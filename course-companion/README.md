@@ -14,7 +14,7 @@ Bạn cần:
 - máy tính Windows hoặc macOS có kết nối internet;
 - Git để tải khóa học về máy;
 - tài khoản ChatGPT có quyền dùng Codex và ứng dụng Codex để làm thực hành;
-- Node.js 22 trở lên nếu dùng macOS.
+- Node.js 22.12 trở lên nếu dùng macOS.
 
 Trên Windows, nếu thiếu Node.js, trình khởi động sẽ đề xuất cách cài và hỏi
 bạn trước khi thực hiện. Trên macOS, bạn cần cài Node.js trước khi chạy khóa
@@ -178,7 +178,7 @@ Nếu ứng dụng đề nghị đặt lại tiến độ, hãy đọc kỹ trư
 | --- | --- |
 | Lệnh `git` không được nhận diện | Kiểm tra Git đã được cài, rồi mở lại cửa sổ dòng lệnh và thử lại bước tải khóa học. |
 | Không tìm thấy `start-course.cmd` hoặc `start-course.command` | Kiểm tra bạn đang ở thư mục `Codex-agentic-coding-course`, nơi có hai file khởi động, thay vì thư mục con `course-companion`. |
-| Thông báo thiếu Node.js hoặc npm | Trên Windows, đọc đề xuất cài đặt của trình khởi động. Trên macOS, chuẩn bị Node.js 22 trở lên cùng npm, rồi chạy lại lệnh khởi động. |
+| Thông báo thiếu Node.js hoặc npm | Trên Windows, đọc đề xuất cài đặt của trình khởi động. Trên macOS, chuẩn bị Node.js 22.12 trở lên cùng npm, rồi chạy lại lệnh khởi động. |
 | Quá trình chuẩn bị dừng sau khi bạn từ chối cài | Đây là hành vi bình thường. Khi sẵn sàng, chạy lại lệnh khởi động và xem lại phần chuẩn bị. |
 | Thông báo Codex chưa tương thích | Cập nhật Codex theo thông báo, rồi đóng và mở lại Course Companion. |
 | Không mở được task hoặc chưa kết nối được với Codex | Kiểm tra Codex đã mở, bạn đã đăng nhập và có kết nối internet, rồi dùng nút thử lại nếu ứng dụng hiển thị. |
@@ -346,7 +346,7 @@ hoặc chạy:
 ./start-course.command
 ```
 
-Trình khởi động kiểm tra Node.js 22 trở lên và npm. Ở lần chạy đầu tiên hoặc
+Trình khởi động kiểm tra Node.js 22.12 trở lên và npm. Ở lần chạy đầu tiên hoặc
 sau khi file khóa phiên bản thay đổi, bạn sẽ thấy kế hoạch chuẩn bị cụ thể
 và được hỏi trước khi ứng dụng chạy `npm ci` rồi xác minh môi trường Electron
 đúng phiên bản trong `course-companion/`. Sau đó, trình khởi động build và mở
