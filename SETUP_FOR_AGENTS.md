@@ -48,7 +48,7 @@ Node must be 22.12 or newer (not just 22).
 ## Step 5 — Get the course
 
 If this folder does not contain `start-course.command`, ask, then run
-`git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git`.
+`git clone https://github.com/thelearningest/Codex-agentic-coding-course.git`.
 Use the cloned folder from now on. Never download the ZIP.
 
 ## Step 6 — Open Course Companion in its own window

@@ -174,7 +174,7 @@ và mở khóa học.
 
 ```text
 Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
-https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+https://github.com/thelearningest/Codex-agentic-coding-course.git
 vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
 để mở khóa học.
 Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
@@ -195,7 +195,7 @@ Mở **Command Prompt** hoặc **PowerShell** trong thư mục bạn muốn lưu
 Chạy lần lượt:
 
 ```bat
-git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+git clone https://github.com/thelearningest/Codex-agentic-coding-course.git
 cd Codex-agentic-coding-course
 .\start-course.cmd
 ```
@@ -209,7 +209,7 @@ https://git-scm.com/install/mac.
 Mở **Terminal** trong thư mục bạn muốn lưu khóa học. Chạy lần lượt:
 
 ```bash
-git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+git clone https://github.com/thelearningest/Codex-agentic-coding-course.git
 cd Codex-agentic-coding-course
 ./start-course.command
 ```
