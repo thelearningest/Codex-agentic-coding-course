@@ -57,9 +57,9 @@ test("root launcher defers the shared first-run presentation until Node is missi
   assert.match(source, /process\.versions\.node/);
   assert.match(source, /set \/p/i);
   assert.match(source, /%~dp0/);
-  assert.doesNotMatch(source, /Welcome to Content Builder Academy!|CONTENT BUILDER|THE WORKSHOP IS YOURS/);
-  assert.match(presentation, /Welcome to Content Builder Academy!/);
-  assert.match(presentation, /CONTENT BUILDER/);
+  assert.doesNotMatch(source, /Welcome to Vibecoding 101!|VIBECODING|THE WORKSHOP IS YOURS/);
+  assert.match(presentation, /Welcome to Vibecoding 101!/);
+  assert.match(presentation, /VIBECODING/);
   assert.match(presentation, /\[ I D E A S \]/);
   assert.match(presentation, /THE WORKSHOP IS YOURS\./);
   assert.match(presentation, /Idea in\. Working product out\. Let's begin\./);
@@ -206,20 +206,20 @@ test("declining a simulated missing Node install exits without winget", async ()
   });
 
   assert.equal(result.exitCode, 2, result.output);
-  assert.match(result.output, /Welcome to Content Builder Academy!/);
-  assert.match(result.output, /CONTENT BUILDER/);
+  assert.match(result.output, /Welcome to Vibecoding 101!/);
+  assert.match(result.output, /VIBECODING/);
   assert.match(result.output, /\[ I D E A S \]/);
   assert.match(result.output, /\\  BUILD  \/\s*\n/);
   assert.match(result.output, /\.:  SHIP  :\./);
   assert.match(result.output, /THE WORKSHOP IS YOURS\./);
   assert.match(result.output, /SETUP  \[\.\.\.\.\.\.\.\.\.\.\]\s+TOOLS  pending\s+TEACHER  waiting/);
   assert.ok(
-    result.output.indexOf("CONTENT BUILDER")
-      < result.output.indexOf("Welcome to Content Builder Academy!"),
+    result.output.indexOf("VIBECODING")
+      < result.output.indexOf("Welcome to Vibecoding 101!"),
   );
   assert.match(result.output, /Here's what we'll do:/);
   assert.ok(
-    result.output.indexOf("Welcome to Content Builder Academy!")
+    result.output.indexOf("Welcome to Vibecoding 101!")
       < result.output.indexOf("Required: Node.js 22 or newer"),
   );
   assert.match(result.output, /winget install --id OpenJS\.NodeJS\.LTS/);

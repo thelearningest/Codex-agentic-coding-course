@@ -5,8 +5,8 @@
                     _____/   / \   \_____
               _____/  [ I D E A S ]      \_____
              /      o=================o         \
-            /_______|  CONTENT BUILDER |_________\
-                    |      ACADEMY     |
+            /_______|    VIBECODING    |_________\
+                    |       101        |
                _____|__________________|_____
               /      \   \  \|/  /   /      \
              /  o  o  \   \  V  /   /  o  o  \
@@ -24,7 +24,7 @@
    SETUP  [..........]   TOOLS  pending    TEACHER  waiting
   ------------------------------------------------------------------
 
-Welcome to Content Builder Academy!
+Welcome to Vibecoding 101!
 
 Thanks for trying our course. We'll help you get everything ready.
 

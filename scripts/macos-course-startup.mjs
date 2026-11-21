@@ -67,11 +67,42 @@ async function confirmInstall(formattedPlan) {
   }
 }
 
+const welcomeArt = [
+  '██╗   ██╗██╗██████╗ ███████╗ ██████╗ ██████╗ ██████╗ ██╗███╗   ██╗ ██████╗ ',
+  '██║   ██║██║██╔══██╗██╔════╝██╔════╝██╔═══██╗██╔══██╗██║████╗  ██║██╔════╝ ',
+  '██║   ██║██║██████╔╝█████╗  ██║     ██║   ██║██║  ██║██║██╔██╗ ██║██║  ███╗',
+  '╚██╗ ██╔╝██║██╔══██╗██╔══╝  ██║     ██║   ██║██║  ██║██║██║╚██╗██║██║   ██║',
+  ' ╚████╔╝ ██║██████╔╝███████╗╚██████╗╚██████╔╝██████╔╝██║██║ ╚████║╚██████╔╝',
+  '  ╚═══╝  ╚═╝╚═════╝ ╚══════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ ',
+  '',
+  ' ██╗ ██████╗  ██╗',
+  '███║██╔═████╗███║',
+  '╚██║██║██╔██║╚██║',
+  ' ██║████╔╝██║ ██║',
+  ' ██║╚██████╔╝ ██║',
+  ' ╚═╝ ╚═════╝  ╚═╝'
+]
+
+function renderWelcomeTitle(stream = process.stdout) {
+  const width = Math.max(...welcomeArt.map((line) => line.length))
+  if (stream.columns && stream.columns < width + 2) return 'VIBECODING 101'
+  const useColor = stream.isTTY && !process.env.NO_COLOR
+  if (!useColor) return welcomeArt.map((line) => `  ${line}`).join('\n')
+  // Gold fill with a darker gold shadow, using 256-color codes that Terminal.app supports.
+  const fill = '\x1b[38;5;220m'
+  const shadow = '\x1b[38;5;136m'
+  const reset = '\x1b[0m'
+  return welcomeArt
+    .map((line) => `  ${line.replace(/█+/g, (run) => `${fill}${run}${shadow}`).replace(/^/, shadow)}${reset}`)
+    .join('\n')
+}
+
 function printWelcome() {
   process.stdout.write(
     [
       '',
-      'CONTENT BUILDER ACADEMY',
+      renderWelcomeTitle(),
+      '',
       'Đang chuẩn bị Course Companion trên máy Mac của bạn.',
       '',
       'Không có gì được cài nếu bạn chưa đồng ý.',

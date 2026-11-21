@@ -77,7 +77,7 @@ export function buildInstallPlan(report) {
   if (!report.lockMatches) {
     actions.push({
       id: 'course-companion-packages',
-      title: 'Tệp của ứng dụng học',
+      title: 'Các file cần thiết của ứng dụng học',
       reason: 'Tải đúng các thư viện mà ứng dụng học cần, theo danh sách khóa học đã chốt.',
       scope: 'Chỉ lưu trong thư mục course-companion',
       command: 'npm',
@@ -88,7 +88,7 @@ export function buildInstallPlan(report) {
 
   actions.push({
     id: 'electron-runtime',
-    title: 'Phần mở ứng dụng (Electron)',
+    title: 'Electron - phần mềm dùng để mở ứng dụng',
     reason: 'Kiểm tra hoặc tải phần giúp mở ứng dụng học trên macOS, đúng phiên bản khóa học dùng.',
     scope: 'Chỉ lưu trong thư mục course-companion/node_modules',
     command: 'node',
@@ -107,8 +107,11 @@ function displayCommand(action) {
 
 export function formatInstallPlan(actions) {
   const lines = [
-    'Để mở Course Companion, máy cần chuẩn bị thêm:',
-    'Lần đầu có thể tải khoảng 220 MB và mất vài phút. Việc này không thay đổi phần khác trên máy.'
+    'Lần đầu có thể tải khoảng 220 MB và mất vài phút.',
+    '',
+    'Bạn không cần phải đọc phần dưới đây, yên tâm là mình không bắt máy bạn tải bậy đâu :)',
+    '',
+    'Để mở Course Companion, máy cần chuẩn bị thêm:'
   ]
 
   for (const action of actions) {
@@ -117,8 +120,7 @@ export function formatInstallPlan(actions) {
       `[${action.title ?? action.id}]`,
       `Lý do: ${action.reason}`,
       `Lưu ở: ${action.scope}`,
-      `Lệnh: ${displayCommand(action)}`,
-      `Thư mục: ${action.cwd}`
+      `Lệnh: ${displayCommand(action)}`
     )
   }
 
