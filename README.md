@@ -169,8 +169,7 @@ Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ a
 ### Bước 1 — Tải và khởi động khóa học
 
 **Cách dễ nhất:** tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
-đoạn sau vào một task mới. Codex sẽ kiểm tra máy, hỏi bạn trước khi cài thêm
-và mở khóa học.
+đoạn sau vào một task mới.
 
 ```text
 Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
