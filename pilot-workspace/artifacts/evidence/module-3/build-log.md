@@ -13,3 +13,7 @@ Ghi phạm vi đã xây, phiên bản, các kiểm tra kỹ thuật và kết qu
 ## Kết quả và giới hạn
 
 Đối chiếu những gì đã xây với kế hoạch. Nêu phần chưa đạt hoặc thay đổi còn cần quyết định. Không ghi đạt cho phần chưa có bằng chứng.
+
+## Commit của phiên bản đem nộp
+
+Ghi mã commit và thông điệp commit của phiên bản người học chấp nhận. Chỉ tạo commit khi người học yêu cầu.

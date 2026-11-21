@@ -57,11 +57,10 @@ const rendererModules = [
         ['module-3-git-commit'],
         ['module-3-git-push'],
         ['module-3-git-branch'],
-        ['module-3-git-merge'],
-        ['module-3-pre-practice-summary']
+        ['module-3-git-merge']
       ],
       'm3-evidence-debugging': [
-        ['module-3-portfolio-practice']
+        ['module-3-pre-practice-summary']
       ],
       'm3-independent-enhancement': [
         ['module-3-portfolio-mastery'],

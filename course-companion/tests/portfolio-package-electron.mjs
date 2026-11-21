@@ -476,14 +476,14 @@ try {
   await handoffReference.locator('summary').click()
   assert.equal(await handoffReference.locator('li').count(), 6)
   assert.equal((await page.locator('.pixel-dialogue > p').innerText()).includes(handoff.summary.firstBuild), false)
-  const practiceScene = page.locator('main[data-scene-id="module-3-portfolio-practice"]')
+  const practiceScene = page.locator('main[data-scene-id="module-3-pre-practice-summary"]')
   for (let i = 0; i < 15 && !(await practiceScene.count()); i++) {
     const previous = await page.locator('main[data-scene-id]').getAttribute('data-scene-id')
     await page.locator('.pixel-lesson-actions button.pixel-choice.is-primary').click()
     await page.waitForFunction((id) => globalThis.document.querySelector('main[data-scene-id]')?.getAttribute('data-scene-id') !== id, previous)
   }
   await practiceScene.waitFor()
-  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
+  await page.getByRole('button', { name: 'Mở Practice', exact: true }).click()
   await page.getByRole('button', { name: 'Tiếp tục Practice', exact: true }).click()
   const continued = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8'))
   assert.equal(continued.activeRun.runId, firstRun)
@@ -528,7 +528,7 @@ try {
   }
   await page.getByRole('button', { name: 'Đóng Triết', exact: true }).click()
   await page.setViewportSize({ width: 1180, height: 780 })
-  await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
+  await page.getByRole('button', { name: 'Mở Practice', exact: true }).click()
   const buildSubmit = page.getByRole('button', { name: 'Chấp nhận website và nộp bài', exact: true })
   await buildSubmit.waitFor()
   assert.equal(await buildSubmit.isDisabled(), true)

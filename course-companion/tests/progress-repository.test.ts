@@ -581,7 +581,8 @@ describe('ProgressRepository', () => {
     const retiredSceneIds = [
       'module-3-enhancement-intro',
       'module-3-check-enhancement-boundary',
-      'module-3-practice-intro'
+      'module-3-practice-intro',
+      'module-3-portfolio-practice'
     ]
 
     for (const retiredSceneId of retiredSceneIds) {
@@ -608,13 +609,44 @@ describe('ProgressRepository', () => {
         progress: {
           currentCourseLessonId: 'm3-evidence-debugging',
           checkpointId: 'm3-portfolio-build',
-          sceneId: 'module-3-portfolio-practice',
+          sceneId: 'module-3-pre-practice-summary',
           sceneHistory: ['module-3-git-branch']
         }
       })
       const migrated = await readFile(join(directory, 'learner-state.json'), 'utf8')
       for (const sceneId of retiredSceneIds) expect(migrated).not.toContain(sceneId)
     }
+  })
+
+  it('moves a saved pre-Practice summary from the Git lesson into the Practice lesson', async () => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save(introStart)
+    await writeFile(
+      join(directory, 'learner-state.json'),
+      `${JSON.stringify({
+        ...started,
+        currentLessonId: 'module-3',
+        currentCourseLessonId: 'm3-whole-page-revision',
+        checkpointId: 'm3-whole-page-revision',
+        sceneId: 'module-3-pre-practice-summary',
+        sceneHistory: ['module-3-git-merge'],
+        completedCheckpointIds: ['m3-complete-first-version'],
+        decisions: {}
+      }, null, 2)}\n`,
+      'utf8'
+    )
+
+    await expect(repository.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: {
+        currentCourseLessonId: 'm3-evidence-debugging',
+        checkpointId: 'm3-portfolio-build',
+        sceneId: 'module-3-pre-practice-summary',
+        sceneHistory: ['module-3-git-merge'],
+        completedCheckpointIds: ['m3-complete-first-version', 'm3-whole-page-revision']
+      }
+    })
   })
 
   it('removes saved progress for retired Module 2 mastery questions', async () => {

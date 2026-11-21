@@ -161,27 +161,14 @@ export const moduleThreeScenes = {
     choices: [{ label: 'Tiếp tục', next: 'module-3-pre-practice-summary', primary: true }]
   },
   'module-3-pre-practice-summary': {
-    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonId: 'module-3', checkpointId: 'm3-portfolio-build', step: 4, totalSteps: 5,
     lessonLabel: 'MODULE 3 · TÓM LẠI', mission: 'Chuẩn bị trước khi Practice',
     objective: 'Điều cần nhớ', panelLabel: '4',
     panelStatus: 'TÓM LẠI', tone: 'good',
     request: 'trước khi bắt đầu Practice',
     evidence: [],
     dialogue: '- Khi debug, trong đa số trường hợp, bạn chỉ cần chụp screenshot và mô tả kỹ lỗi của bạn cho agent là được. Nếu vẫn không được thì bảo agent add log để xem lỗi là gì, paste cái log đó vào coding agent và bảo nó sửa lại lần nữa\n\n- Bạn nên bảo agent hãy commit sau mỗi quyết định lớn, để sau này bạn sẽ dễ quay lại phiên bản cũ hơn nếu gặp bug.\n\n- Mỗi khi muốn phát triển một tính năng mới, hãy tạo một branch mới để lỡ agent có quậy thì cũng không ảnh hưởng đến tính năng hiện tại. Bạn chỉ cần bảo agent tạo branch là nó sẽ tự động hướng dẫn cho bạn\n\n- Bạn có thể tạo một tài khoản github rồi bảo agent push code hiện tại của bạn lên đó nếu bạn muốn hợp tác với một người khác',
-    choices: [{ label: 'Mở Practice', next: 'module-3-portfolio-practice', primary: true }]
-  },
-  'module-3-portfolio-practice': {
-    lessonId: 'module-3', checkpointId: 'm3-portfolio-build', step: 4, totalSteps: 5,
-    lessonLabel: 'MODULE 3 · PRACTICE', mission: 'Xây website cùng Codex',
-    objective: 'Thực hiện plan cho đến khi website hiện tại sẵn sàng', panelLabel: 'TEACHER TRIẾT',
-    panelStatus: 'HOÀN THÀNH BÀI · XEM OBJECTIVE', tone: 'good',
-    request: 'Teacher Triết kiểm tra bằng chứng hiện tại khi bạn bấm Hoàn thành bài.',
-    evidence: [
-      { label: 'TASK', value: 'Tiếp tục từ Module 2' },
-      { label: 'REVIEW', value: 'Bằng chứng hiện tại' }
-    ],
-    dialogue: "Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.\n\nKhi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.",
-    choices: [{ label: 'Mở Practice xây portfolio', action: 'practice', primary: true }]
+    choices: [{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true }]
   },
   'module-3-portfolio-mastery': {
     lessonId: 'module-3', checkpointId: 'm3-mastery', step: 5, totalSteps: 5,

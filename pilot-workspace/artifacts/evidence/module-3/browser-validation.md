@@ -12,7 +12,7 @@ Ghi lần chạy npm run check trên phiên bản hiện tại, kết quả type
 
 ## Kiểm tra trong trình duyệt
 
-Ghi URL hoặc ảnh, thao tác, mong đợi và thực tế trên desktop và mobile theo plan. Nếu plan chưa nêu kích thước, dùng 1440 × 900 và 390 × 844. Kiểm tra nội dung, link, bàn phím/focus, cuộn ngang và console. Phân biệt điều Codex báo cáo với điều người học tự xem.
+Ghi URL hoặc ảnh, thao tác, mong đợi và thực tế trên desktop theo plan. Nếu plan chưa nêu kích thước, dùng 1440 × 900. Module 3 không yêu cầu kiểm tra mobile. Kiểm tra nội dung, link, bàn phím/focus, cuộn ngang và console. Phân biệt điều Codex báo cáo với điều người học tự xem.
 
 ## Nhận xét của người học và giới hạn
 

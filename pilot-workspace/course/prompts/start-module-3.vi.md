@@ -4,7 +4,10 @@ Dùng `$start-course-lesson module-3` để bắt đầu bài **Hiện thực ho
 
 Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Giữ thứ tự trang local, Debug, Git và GitHub rồi quay lại cùng Practice. Không chèn câu hỏi kiểm tra giữa các trang giải thích.
 
-Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.
+1. Mở lại first draft của website bạn đã tạo ở đầu module
+2. Thử website trên máy tính, đối chiếu với PRD và bản mẫu giao diện để tìm lỗi thiết kế.
+3. Áp dụng quy tắc đã được dạy để sửa lỗi nếu có. Không có lỗi nào thì có thể bỏ qua phần này
+4. Khi hài lòng, nhờ agent tạo commit cho phiên bản này rồi nộp để teacher agent duyệt.
 
 Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.
 

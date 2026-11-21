@@ -5109,6 +5109,89 @@ without verification. Remaining gap and next action: owner review of question
 not verify this replacement; overall Module 3 approval and pilot acceptance
 remain unchanged.
 
+### Practice page removal — 20 November 2026
+
+The owner explicitly requested deleting the `module-3-portfolio-practice` page
+and connecting the previous page directly to Practice. The pre-Practice recap
+(`module-3-pre-practice-summary`) now opens the Practice brief from its
+existing "Mở Practice" button and moved from the Git lesson into the
+`m3-evidence-debugging` Practice lesson with checkpoint `m3-portfolio-build`,
+so Teacher treats the session as the final build rather than the first-build
+pass. The approval gate in Electron main and the Module 3 completion handoff
+now key on the recap page. Saved progress on the removed page, or on the
+three earlier retired Practice-setup scenes, resumes on the recap; saved
+progress already on the recap is realigned to the Practice checkpoint and
+marks `m3-whole-page-revision` complete. The outline drops only the removed
+"Practice: Xây portfolio" entry; all other copy is unchanged. The Pilot
+lesson, Teacher script and start prompt that repeat the removed dialogue were
+not changed.
+
+Implementation: `implemented`; verification: `passed` for this change.
+Typecheck, lint and production build passed. The unit suite has the same 92
+failures as an unmodified baseline worktree (portfolio release/review,
+module-completion service, frozen intro hashes and UI palette), with 808
+other tests passing, including a new migration test.
+`portfolio-package-electron.mjs` passed end to end through the recap,
+submission, mastery and Module 4. `practice-guide-electron.mjs` and
+`practice-review-feedback-electron.mjs` passed. `electron-smoke.mjs` (Module 1
+Skills board) and `teacher-chat-electron.mjs` time out identically on the
+baseline. Remaining gap and next action: owner desktop review of the recap's
+"Mở Practice" entry. Overall Module 3 approval and pilot acceptance remain
+unchanged.
+
+### Practice brief: desktop only, debugging and commit — 20 November 2026
+
+The owner supplied the exact four Practice steps for `m3-portfolio-build`
+(reopen the first draft, test on desktop against the PRD and design prototype,
+fix design problems with the taught debugging rules or skip when none, then
+ask the agent to commit and submit). Phone checks are deferred because they
+need DevTools teaching; Module 4 already checks the published site on a phone.
+The Practice definition stays at `2.1.0`. Its expected outcome and criteria
+now require desktop observations only, require the Module 3 debugging format
+when the learner reports a problem (no bug is required), and require an
+executor-reported Git commit of the accepted source recorded in
+`build-log.md`, without push or branch. Codex build instructions, the Pilot
+lesson, script and start prompt, and the three evidence templates were
+synchronized. Module 3 review still reads no Git facts independently; the
+legacy v1 adapter's mobile heading check is unchanged and unused by `2.1.0`.
+
+Implementation: `implemented`; verification: `passed` for this change.
+Typecheck, lint and build passed. The unit suite has the same 92 failures as
+the unmodified baseline, with 808 other tests passing.
+`portfolio-package-electron.mjs`, `practice-guide-electron.mjs` and
+`practice-review-feedback-electron.mjs` passed. A live Teacher review of a
+real desktop-only, committed submission has not been run. Next action: owner
+review of the four-step brief in Course Companion.
+
+### Practice brief redesign to match Module 2 — 21 November 2026
+
+The owner approved redesigning the `m3-portfolio-build` Practice brief after
+the Module 2 planning guide. The new `PortfolioBuildGuide` reuses the Module 2
+window, step tabs and prompt card: a "Module 3 / Practice" header with
+"← Trang trước", the title, one illustrated scene per step (Mở bản đầu, Đối
+chiếu PRD, Sửa lỗi, Commit và nộp) captioned with the owner's four steps
+verbatim, the prompt card holding the Practice controls, and the collapsed
+evidence reference. As approved, the purpose, context and shared-project
+paragraphs are no longer shown on this screen, matching Module 2. The first
+build screen and the running-Practice progress panel are unchanged.
+
+Implementation: `implemented`; verification: `passed`. Typecheck, lint and
+build passed; a new source-contract test passed; the unit suite has the same
+92 baseline failures. `portfolio-package-electron.mjs`,
+`practice-guide-electron.mjs` and `practice-review-feedback-electron.mjs`
+passed. A disposable Electron capture at 1180×780 and 360×640 showed all four
+tabs without horizontal overflow and with keyboard tab selection; it found and
+fixed a mis-encoded check mark and an overflowing thumbnail. Next action:
+owner visual review in Course Companion.
+
+On 21 November the owner requested visual cues for switching between the four
+illustrations without adding visible text. The four existing step buttons now
+sit above the illustration in a bordered row that becomes two columns in a
+narrow window. Icon-only arrows inside the illustration frame select adjacent
+steps. Implementation: `implemented`. Verification: `passed` for typecheck
+and lint under the scoped UI gate. The earlier Electron captures predate this
+layout. Next action: owner visual review of step navigation at both widths.
+
 ### M3.2 — Implement constrained from-scratch scaffolding
 
 **Change**

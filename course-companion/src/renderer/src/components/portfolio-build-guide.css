@@ -1,0 +1,226 @@
+/* Module 3 scenes reuse the Module 2 planning-guide window and add a draft website mock. */
+.build-guide nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 8px;
+}
+
+.build-guide nav .step {
+  min-height: 44px;
+  padding: 8px 12px;
+  text-align: start;
+  border: 1px solid #66685d;
+  border-radius: 10px;
+  background: #242521;
+  color: #f5f2e9;
+  cursor: pointer;
+}
+
+.build-guide nav .step span { flex-shrink: 0; }
+.build-guide nav .step:hover { border-color: #cecab8; }
+.build-guide nav .step[aria-current=step] {
+  color: var(--pixel-yellow);
+  background: #353025;
+  border-color: var(--pixel-yellow);
+}
+.build-guide nav .step[aria-current=step] span {
+  background: var(--pixel-yellow);
+  border-color: transparent;
+  color: #252015;
+}
+
+.build-guide figure { margin-top: 0; }
+.build-guide .desk { align-content: center; gap: 10px; }
+.build-scene-arrows {
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 720px);
+  gap: 8px;
+}
+.build-scene-arrows button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #43443b;
+  border-radius: 50%;
+  background: #242521;
+  color: #fff;
+  cursor: pointer;
+}
+.build-scene-arrows button::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+  transform: translateX(-2px) rotate(45deg);
+}
+.build-scene-arrows .previous::before { transform: translateX(2px) rotate(-135deg); }
+.build-scene-arrows button:enabled:hover { color: var(--pixel-yellow); }
+.build-scene-arrows button:disabled { opacity: .32; cursor: default; }
+.build-guide nav .step:focus-visible { outline: 3px solid var(--pixel-yellow); outline-offset: 2px; }
+.build-scene-arrows button:focus-visible { outline: 3px solid #242521; outline-offset: 2px; }
+
+.build-guide .browser-view {
+  padding: 20px clamp(18px, 6vw, 70px) 24px;
+  min-height: 212px;
+  display: grid;
+  place-items: center;
+}
+
+.build-guide .draft-site {
+  width: min(100%, 460px);
+  border-radius: 8px;
+  background: #f4f0e6;
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 12px;
+  box-shadow: 0 3px 0 #9d9b8d;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.build-guide .draft-site > *, .build-guide .draft-cards span { min-width: 0; }
+
+.build-guide .draft-site.is-compact {
+  padding: 10px;
+  gap: 8px;
+  align-self: center;
+}
+
+.build-guide .draft-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.build-guide .draft-nav b {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #343729;
+  margin-right: auto;
+}
+
+.build-guide .draft-nav span {
+  width: 34px;
+  height: 7px;
+  border-radius: 4px;
+  background: #b9b4a2;
+}
+
+.build-guide .draft-hero {
+  display: grid;
+  gap: 7px;
+}
+
+.build-guide .draft-hero i {
+  display: block;
+  height: 12px;
+  border-radius: 4px;
+  background: #343729;
+  width: 78%;
+}
+
+.build-guide .draft-hero i:nth-child(2) { width: 56%; }
+.build-guide .draft-hero i:nth-child(3) { width: 34%; height: 9px; background: var(--pixel-yellow); }
+
+.build-guide .draft-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.build-guide .draft-cards span {
+  height: 54px;
+  border-radius: 6px;
+  background: #ddd6c2;
+}
+
+.build-guide .is-compact .draft-hero i { height: 8px; }
+.build-guide .is-compact .draft-cards span { height: 30px; }
+.build-guide .is-compact .draft-nav b { width: 14px; height: 14px; }
+.build-guide .is-compact .draft-nav span { width: 18px; height: 5px; }
+
+.build-guide .prd-checks {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.build-guide .prd-checks li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 6px;
+  padding: 4px 7px;
+  border-radius: 4px;
+}
+
+.build-guide .prd-checks li::before { font-weight: 800; }
+.build-guide .prd-checks .is-pass::before { content: '\2713'; color: #4f7a48; }
+.build-guide .prd-checks .is-fail { background: #f4dfa4; }
+.build-guide .prd-checks .is-fail::before { content: '\2715'; color: #b0503f; }
+
+.build-guide .bug-report {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  max-width: min(100%, 470px);
+}
+
+.build-guide .bug-report p { margin: 0; }
+.build-guide .bug-shot { display: block; min-width: 0; }
+.build-guide .bug-shot .draft-site { width: 100%; box-shadow: none; }
+.build-guide .bug-shot .draft-nav span { flex: 0 1 18px; width: auto; }
+
+.build-guide .commit-view {
+  display: grid;
+  gap: 14px;
+  border-left: 2px solid #66695c;
+  margin-left: 8px;
+  padding: 6px 0 6px 16px;
+}
+
+.build-guide .commit-line {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  color: #f5f2e9;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.build-guide .commit-line i {
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pixel-yellow);
+  border: 2px solid #242521;
+}
+
+.build-guide .commit-line.is-earlier { color: #b4b5a8; }
+.build-guide .commit-line.is-earlier i { background: #8a8c7d; }
+.build-guide .commit-line code { font: 12px/1.45 ui-monospace, monospace; color: var(--pixel-yellow); }
+.build-guide .commit-line.is-earlier code { color: #b4b5a8; }
+
+@container (max-width: 650px) {
+  .build-guide nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .build-guide .browser-view { padding: 16px 12px; min-height: 200px; }
+  .build-guide .bug-report { grid-template-columns: 64px minmax(0, 1fr); gap: 9px; }
+}
+
+@container (max-width: 420px) {
+  .build-guide .papers .draft-site { display: none; }
+}

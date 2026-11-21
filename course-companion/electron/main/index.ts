@@ -996,7 +996,7 @@ function registerIpcHandlers(): void {
       throw new Error('Portfolio approval does not match the current course run')
     }
     if (request.practiceId === 'm3-portfolio-build' && loaded.progress.currentLessonId === 'module-3'
-      && loaded.progress.sceneId !== 'module-3-portfolio-practice'
+      && loaded.progress.sceneId !== 'module-3-pre-practice-summary'
       && (loaded.progress.sceneId === 'module-3-first-build' || loaded.progress.sceneHistory.includes('module-3-first-build'))
       && loaded.progress.checkpointId !== 'm3-mastery' && loaded.progress.checkpointId !== 'm3-complete') {
       throw new Error('Hãy quay lại bài học sau khi xem bản đầu, rồi nộp website ở lượt Practice cuối.')

@@ -56,9 +56,10 @@ const introductions: Record<string, Introduction> = {
     purpose: 'Đối chiếu portfolio với PRD và tự quyết định phiên bản nào sẵn sàng để phát hành.',
     context: 'Tiếp tục task Codex và thư mục portfolio từ Module 2.',
     steps: [
-      'Mở lại website trong task Codex đã dùng để xây bản đầu.',
-      'Thử các thao tác trong kế hoạch trên máy tính và kích thước màn hình điện thoại.',
-      'Kiểm tra website theo PRD, chấp nhận phiên bản hiện tại rồi nộp để Triết duyệt.'
+      'Mở lại first draft của website bạn đã tạo ở đầu module',
+      'Thử website trên máy tính, đối chiếu với PRD và bản mẫu giao diện để tìm lỗi thiết kế.',
+      'Áp dụng quy tắc đã được dạy để sửa lỗi nếu có. Không có lỗi nào thì có thể bỏ qua phần này',
+      'Khi hài lòng, nhờ agent tạo commit cho phiên bản này rồi nộp để teacher agent duyệt.'
     ],
     referenceTitle: 'Xem ba hồ sơ Codex cần ghi lại',
     referenceNote: 'Codex ghi lại quá trình; bạn kiểm tra website và đưa ra quyết định. Sau khi Practice đạt, bạn còn năm câu tổng kết.',

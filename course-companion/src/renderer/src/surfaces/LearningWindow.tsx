@@ -2865,7 +2865,7 @@ export function LearningWindow() {
         || progress.sceneId === 'module-1-setup-checklist'
         || progress.sceneId === 'module-2-portfolio-practice'
         || progress.sceneId === 'module-3-first-build'
-        || progress.sceneId === 'module-3-portfolio-practice'
+        || progress.sceneId === 'module-3-pre-practice-summary'
         || progress.sceneId === 'module-4-portfolio-practice') {
         setBusy(true)
         setOutlineSceneId(null)
@@ -3587,7 +3587,7 @@ export function LearningWindow() {
           courseRunId={progress.courseRunId}
           onClose={() => setPracticeBriefOpen(false)}
           onPortfolioComplete={async () => {
-            const isModuleThree = progress.sceneId === 'module-3-portfolio-practice'
+            const isModuleThree = progress.sceneId === 'module-3-pre-practice-summary'
             await advanceToScene(isModuleThree ? 'module-3-portfolio-mastery' : 'module-2-portfolio-mastery', {
               ...progress.decisions,
               [isModuleThree ? 'portfolioBuildPractice' : 'portfolioPlanningPractice']:

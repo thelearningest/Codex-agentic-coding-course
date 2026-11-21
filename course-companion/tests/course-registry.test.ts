@@ -62,11 +62,13 @@ describe('portfolio course registry', () => {
     expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-git-merge')?.nextSceneId)
       .toBe('module-3-pre-practice-summary')
     expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-pre-practice-summary')?.nextSceneId)
-      .toBe('module-3-portfolio-practice')
+      .toBe('module-3-portfolio-mastery')
+    expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-pre-practice-summary')?.checkpointId)
+      .toBe('m3-portfolio-build')
     expect(moduleThree.scenes.map((scene) => String(scene.id)))
       .not.toContain('module-3-practice-intro')
     expect(moduleThree.scenes.map((scene) => String(scene.id)))
-      .toContain('module-3-portfolio-practice')
+      .not.toContain('module-3-portfolio-practice')
   })
 
   it('rejects duplicate module ids', () => {

@@ -63,7 +63,9 @@ describe('Module 3 content and evidence contract', () => {
     const templates = await Promise.all(module.artifactPaths.map((path) =>
       readFile(resolve(artifactRoot, path), 'utf8')))
     expect(templates.join('\n')).toContain('1440 × 900')
-    expect(templates.join('\n')).toContain('390 × 844')
+    // Module 3 checks desktop only; mobile is checked on a real phone in Module 4.
+    expect(templates.join('\n')).not.toContain('390 × 844')
+    expect(templates.join('\n')).toContain('Commit của phiên bản đem nộp')
   })
 
   it('widens explanatory dialogue without changing Practice or assessment layouts', async () => {
@@ -136,7 +138,8 @@ describe('Module 3 content and evidence contract', () => {
     ]
     for (const sceneId of retainedKnowledgeScenes) expect(sceneSource).toContain(`'${sceneId}': {`)
     expect(sceneSource).toContain("choices: [{ label: 'Tiếp tục', next: 'module-3-pre-practice-summary', primary: true }]")
-    expect(sceneSource).toMatch(/'module-3-pre-practice-summary': \{[\s\S]*?choices: \[\{ label: 'Mở Practice', next: 'module-3-portfolio-practice', primary: true \}\]/)
+    expect(sceneSource).toMatch(/'module-3-pre-practice-summary': \{[\s\S]*?choices: \[\{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true \}\]/)
+    expect(sceneSource).not.toContain("'module-3-portfolio-practice': {")
     expect(lesson).toContain('4 điều cần nhớ trước khi bắt đầu Practice:')
     expect(sceneSource).toContain("objective: 'Điều cần nhớ', panelLabel: '4'")
     expect(sceneSource).toContain("panelStatus: 'TÓM LẠI', tone: 'good'")
@@ -149,8 +152,8 @@ describe('Module 3 content and evidence contract', () => {
     expect(sceneSource).not.toContain('Thực hiện implementation plan theo từng phần. Sau mỗi phần, hãy xem kết quả thực tế')
     expect(sceneSource).not.toContain("'module-3-practice-intro': {")
     expect(rendererRegistry).not.toContain("['module-3-practice-intro']")
-    expect(rendererRegistry).toMatch(/'m3-evidence-debugging': \[\r?\n\s*\['module-3-portfolio-practice'\]\r?\n\s*\]/)
-    expect(rendererRegistry).toContain("['module-3-pre-practice-summary']")
+    expect(rendererRegistry).toMatch(/'m3-evidence-debugging': \[\r?\n\s*\['module-3-pre-practice-summary'\]\r?\n\s*\]/)
+    expect(rendererRegistry).not.toContain("['module-3-portfolio-practice']")
   })
 
   it('ships all six approved Module 3 illustrations', async () => {

@@ -123,7 +123,10 @@ Xử lý conflict là một chủ đề khá rộng nên mình sẽ không đi s
 
 ## Practice: Xây portfolio
 
-Tiếp tục trong cùng task Codex. Đối chiếu website với PRD rồi thử các thao tác trong implementation plan trên máy tính và kích thước màn hình điện thoại. Cho agent biết bạn đã thử gì và kết quả ra sao. Nếu cần sửa, hãy kiểm tra lại trên phiên bản mới.
+1. Mở lại first draft của website bạn đã tạo ở đầu module
+2. Thử website trên máy tính, đối chiếu với PRD và bản mẫu giao diện để tìm lỗi thiết kế.
+3. Áp dụng quy tắc đã được dạy để sửa lỗi nếu có. Không có lỗi nào thì có thể bỏ qua phần này
+4. Khi hài lòng, nhờ agent tạo commit cho phiên bản này rồi nộp để teacher agent duyệt.
 
 Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận website và nộp bài cho Triết duyệt. Sau khi đạt, bạn làm năm câu tổng kết.
 
@@ -133,7 +136,7 @@ Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của b
 
 ## Điều kiện hoàn thành
 
-Website phải được đối chiếu với PRD hiện tại, có kết quả kiểm tra kỹ thuật và quan sát trên desktop/mobile. Người học tự nêu kết quả đã quan sát và chấp nhận phiên bản hiện tại.
+Website phải được đối chiếu với PRD hiện tại, có kết quả kiểm tra kỹ thuật, quan sát trên desktop và một commit Git cho phiên bản đem nộp. Người học tự nêu kết quả đã quan sát và chấp nhận phiên bản hiện tại.
 
 Khi đã xem website và bằng chứng hiện tại, chọn **Chấp nhận website và nộp bài** trong Practice. Triết kiểm tra tệp và nội dung bằng chứng, rồi trả kết quả đạt hoặc phần cần bổ sung. Nếu chưa đạt, tiếp tục sửa trong cùng task. Thay đổi mã nguồn hoặc hồ sơ sau khi duyệt cần được kiểm tra, xác nhận và nộp lại.
 

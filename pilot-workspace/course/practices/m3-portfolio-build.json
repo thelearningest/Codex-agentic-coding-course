@@ -5,7 +5,7 @@
   "version": "2.1.0",
   "checkpointId": "m3-portfolio-build",
   "objective": "Xây portfolio theo kế hoạch đã duyệt trong cùng task Codex. Mở bản đầu, quay lại bài học rồi kiểm tra phiên bản cuối theo PRD.",
-  "expectedOutcome": "Website đáp ứng PRD hiện tại. Bạn đã thử website trên máy tính và kích thước màn hình điện thoại, nêu kết quả và chấp nhận phiên bản đem nộp.",
+  "expectedOutcome": "Website đáp ứng PRD hiện tại. Bạn đã thử website trên máy tính, sửa lỗi nếu có, nhờ agent tạo commit cho phiên bản đem nộp và chấp nhận phiên bản đó.",
   "workspaceKind": "learner-portfolio",
   "taskPolicy": "safe-workspace-write",
   "evidenceProfile": "portfolio-build",
@@ -118,7 +118,7 @@
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require a concrete observation from the learner in the bound task about a planned behavior they tried. An unchanged first build is acceptable. A bug, simulated fault, revision or improvement is optional.",
+      "assertion": "Require a concrete observation from the learner in the bound task about a planned behavior they tried on desktop, compared with the PRD and design prototype. When the learner reports a design or behavior problem, require the Module 3 debugging approach: what they did, the expected result and the actual result (with a screenshot when the problem is visible), then a recheck of the same action after the fix. When the learner found no problem, accept that statement with what they tried. An unchanged first build is acceptable; do not require a bug, simulated fault, revision or improvement.",
       "freshness": "fresh"
     },
     {
@@ -132,7 +132,7 @@
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require coverage of every current PRD acceptance criterion, passing technical checks appropriate to the application and tied to the submitted source (use the course React, TypeScript and Vite baseline; equivalent script names are acceptable when they run typecheck, lint and build), desktop and mobile browser observations including links, keyboard/focus, content and overflow. Viewports may follow the approved plan; 1440x900 and 390x844 are defaults, not exact-string requirements. Require URLs or screenshot references and reproducible observations; a hash, URL, checkbox, template or claimed success alone cannot pass. Distinguish Codex-reported observations from independently read evidence.",
+      "assertion": "Require coverage of every current PRD acceptance criterion, passing technical checks appropriate to the application and tied to the submitted source (use the course React, TypeScript and Vite baseline; equivalent script names are acceptable when they run typecheck, lint and build), desktop browser observations including links, keyboard/focus, content and horizontal overflow. The viewport may follow the approved plan; 1440x900 is the default, not an exact-string requirement. Do not require mobile or phone observations in Module 3. Require URLs or screenshot references and reproducible observations; a hash, URL, checkbox, template or claimed success alone cannot pass. Distinguish Codex-reported observations from independently read evidence.",
       "freshness": "fresh"
     },
     {
@@ -146,7 +146,7 @@
         "learner-decision",
         "learner-approval"
       ],
-      "assertion": "Require explicit learner approval of the current website and evidence, current source fingerprint, documented limits, and in-scope browser-only functionality. Cross-check learner observations and decisions with learner-authored bound-task excerpts; generated records cannot impersonate the learner. Missing conversation evidence remains unverifiable. Do not require deployment, fixed filenames beyond the three supporting records, old stage receipts or fixed slice receipts.",
+      "assertion": "Require explicit learner approval of the current website and evidence, current source fingerprint, documented limits, and in-scope browser-only functionality. Require a Git commit of the accepted website source, made after the learner asked for it in the bound task and recorded in build-log.md with its commit hash; the commit may be executor-reported. Do not require pushing to GitHub or creating a branch. Cross-check learner observations and decisions with learner-authored bound-task excerpts; generated records cannot impersonate the learner. Missing conversation evidence remains unverifiable. Do not require deployment, fixed filenames beyond the three supporting records, old stage receipts or fixed slice receipts.",
       "freshness": "fresh"
     }
   ],

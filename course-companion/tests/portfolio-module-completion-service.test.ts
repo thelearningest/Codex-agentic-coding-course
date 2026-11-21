@@ -53,7 +53,7 @@ async function moduleThreeV2Fixture() {
   await runs.saveReview({ ...run, result, checklist: definition.checklist.map((step) => ({ ...step, status: 'completed' as const })), completion: receipt, expectedPackageDigest: evidence.sourceDigest!, updatedAt: observedAt })
   await base.progressRepository.recordPracticeCompletion(receipt)
   await runs.closeCompletedRun({ ...run, updatedAt: observedAt })
-  const mastery = await base.progressRepository.save({ currentLessonId: 'module-3', currentCourseLessonId: 'm3-independent-enhancement', checkpointId: 'm3-mastery', sceneId: 'module-3-mastery-summary', sceneHistory: ['module-3-portfolio-practice'], completedCheckpointIds: ready.completedCheckpointIds,
+  const mastery = await base.progressRepository.save({ currentLessonId: 'module-3', currentCourseLessonId: 'm3-independent-enhancement', checkpointId: 'm3-mastery', sceneId: 'module-3-mastery-summary', sceneHistory: ['module-3-pre-practice-summary'], completedCheckpointIds: ready.completedCheckpointIds,
     decisions: { ...ready.decisions, ...Object.fromEntries(['m3-mastery-plan', 'm3-mastery-visible-error', 'm3-mastery-logs', 'm3-mastery-repeated-error', 'm3-mastery-branch'].map((id) => ['assessment:' + id, 'correct:1'])) } })
   const service = new PortfolioModuleCompletionService(base.progressRepository, workspaceRepository, runs, definitions, base.dependencies.evidenceAdapter, () => new Date(observedAt), adapter)
   return { ...base, service, runs, mastery, receipt }
@@ -215,7 +215,7 @@ async function moduleThreeFixture() {
     currentCourseLessonId: 'm3-independent-enhancement',
     checkpointId: 'm3-mastery',
     sceneId: 'module-3-mastery-summary',
-    sceneHistory: ['module-3-portfolio-practice'],
+    sceneHistory: ['module-3-pre-practice-summary'],
     completedCheckpointIds: [...moduleThreeReady.completedCheckpointIds, 'm3-portfolio-build'],
     decisions
   })

@@ -80,7 +80,11 @@ describe('course outline coverage and reading order', () => {
   it('keeps Practice in all modules and assessments only in Modules 1-3', () => {
     for (const moduleId of ['module-1', 'module-2', 'module-3', 'module-4'] as const) {
       const sections = courseOutline[moduleId]
-      expect(sections.filter((section) => /^(Thực hành|Practice):/.test(section.title))).toHaveLength(1)
+      // Module 3 opens Practice directly from its pre-Practice summary page.
+      const practiceSections = moduleId === 'module-3'
+        ? sections.filter((section) => section.startSceneId === 'module-3-pre-practice-summary')
+        : sections.filter((section) => /^(Thực hành|Practice):/.test(section.title))
+      expect(practiceSections).toHaveLength(1)
       expect(sections.filter((section) => section.title.startsWith('Kiểm tra cuối'))).toHaveLength(moduleId === 'module-4' ? 0 : 1)
       expect(sections.filter((section) => section.title.startsWith('Tổng kết'))).toHaveLength(moduleId === 'module-4' ? 0 : 1)
     }

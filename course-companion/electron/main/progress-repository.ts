@@ -159,9 +159,10 @@ const RETIRED_MODULE_THREE_SCENE_DESTINATIONS = new Map<string, SceneId>([
   ['module-3-revision-intro', 'module-3-git-intro'],
   ['module-3-check-revision-scope', 'module-3-git-intro'],
   ['module-3-check-debug-order', 'module-3-repeated-error'],
-  ['module-3-enhancement-intro', 'module-3-portfolio-practice'],
-  ['module-3-check-enhancement-boundary', 'module-3-portfolio-practice'],
-  ['module-3-practice-intro', 'module-3-portfolio-practice'],
+  ['module-3-enhancement-intro', 'module-3-pre-practice-summary'],
+  ['module-3-check-enhancement-boundary', 'module-3-pre-practice-summary'],
+  ['module-3-practice-intro', 'module-3-pre-practice-summary'],
+  ['module-3-portfolio-practice', 'module-3-pre-practice-summary'],
   ['module-3-mastery-scaffold', 'module-3-portfolio-mastery'],
   ['module-3-mastery-slice', 'module-3-portfolio-mastery'],
   ['module-3-mastery-debug', 'module-3-portfolio-mastery'],
@@ -344,6 +345,20 @@ function redirectRetiredModuleTwoReferences(raw: Record<string, unknown>): Recor
           !key.startsWith('assessment:')
           || !RETIRED_MODULE_TWO_MASTERY_QUESTION_IDS.has(key.slice('assessment:'.length))))
       : raw.decisions
+  }
+}
+
+// The pre-Practice summary moved from the Git lesson into the Practice lesson.
+function realignModuleThreePracticeSummary(raw: Record<string, unknown>): Record<string, unknown> {
+  const summary: SceneId = 'module-3-pre-practice-summary'
+  if (raw.sceneId !== summary || raw.checkpointId !== 'm3-whole-page-revision') return raw
+  return {
+    ...raw,
+    checkpointId: sceneCheckpoint[summary],
+    currentCourseLessonId: courseLessonIdForScene(summary),
+    completedCheckpointIds: Array.isArray(raw.completedCheckpointIds)
+      ? [...new Set([...raw.completedCheckpointIds, 'm3-whole-page-revision'])]
+      : raw.completedCheckpointIds
   }
 }
 
@@ -785,9 +800,9 @@ function migrateLearnerProgress(value: unknown): LearnerProgress | null {
   if (!isIsoDate(startedAt) || !isIsoDate(updatedAt)) return null
 
   if (schemaVersion === LEARNER_STATE_SCHEMA_VERSION && courseVersion === COURSE_VERSION) {
-    const redirected = redirectRetiredModuleThreeReferences(
+    const redirected = realignModuleThreePracticeSummary(redirectRetiredModuleThreeReferences(
       redirectRetiredModuleTwoReferences(redirectRetiredModuleOneAssessment(redirectRetiredModuleOneReferences(raw)))
-    )
+    ))
     const compatible = {
       ...redirected,
       ...(redirected.courseRunId === undefined ? { courseRunId: courseRunId(startedAt) } : {}),

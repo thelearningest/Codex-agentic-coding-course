@@ -18,11 +18,11 @@ describe('beginner Practice introductions', () => {
   )
 
   it.each([
-    ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 4],
-    ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 6],
-    ['m3-portfolio-build', 'Xây portfolio theo kế hoạch', 3],
-    ['m4-portfolio-release', 'Đưa portfolio lên mạng', 1]
-  ])('explains %s with three steps and an initially collapsed reference', (id, title, count) => {
+    ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 4, 3],
+    ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 6, 3],
+    ['m3-portfolio-build', 'Xây portfolio theo kế hoạch', 3, 4],
+    ['m4-portfolio-release', 'Đưa portfolio lên mạng', 1, 3]
+  ])('explains %s with its steps and an initially collapsed reference', (id, title, count, stepCount) => {
     const introduction = getPracticeIntroduction(String(id))!
     const html = renderToStaticMarkup(createElement(PracticeIntroduction, {
       introduction, showReference: true,
@@ -30,7 +30,7 @@ describe('beginner Practice introductions', () => {
     }))
     expect(html).toContain(title)
     expect(html).toContain(introduction.purpose)
-    expect(html.match(/<li>/g)).toHaveLength(3)
+    expect(html.match(/<li>/g)).toHaveLength(Number(stepCount))
     expect(html.match(/<dt>/g)).toHaveLength(Number(count))
     expect(html).toContain('<details')
     expect(html).not.toContain('open=""')
@@ -56,7 +56,9 @@ describe('beginner Practice introductions', () => {
     expect(planning.context).toContain('trước khi xây website')
     expect(planning.steps.join(' ')).toContain('duyệt PRD')
     expect(build.context).toContain('từ Module 2')
-    expect(build.steps.join(' ')).toContain('Kiểm tra website theo PRD')
+    expect(build.steps.join(' ')).toContain('đối chiếu với PRD')
+    expect(build.steps.join(' ')).toContain('tạo commit')
+    expect(build.steps.join(' ')).not.toContain('điện thoại')
     expect(build.referenceNote).toContain('năm câu tổng kết')
     expect(release.context).toContain('từ Module 3')
     expect(release.context).toContain('Bạn tự đăng nhập, cấp quyền và quyết định phát hành')

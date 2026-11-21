@@ -39,9 +39,9 @@ describe('GitHub and Vercel publication content', () => {
 
   it('routes Merge to the recap and reminds learners to publish before mastery', async () => {
     const ids = moduleThreeDefinition.scenes.map((scene) => String(scene.id))
-    expect(ids.slice(ids.indexOf('module-3-git-merge'), ids.indexOf('module-3-portfolio-practice') + 1)).toEqual([
+    expect(ids.slice(ids.indexOf('module-3-git-merge'), ids.indexOf('module-3-portfolio-mastery') + 1)).toEqual([
       'module-3-git-merge',
-      'module-3-pre-practice-summary', 'module-3-portfolio-practice'
+      'module-3-pre-practice-summary', 'module-3-portfolio-mastery'
     ])
     const source = await read(rendererPath(3))
     const mastery = sceneBlocks(source).find((scene) => scene.id === 'module-3-portfolio-mastery')!

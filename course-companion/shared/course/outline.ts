@@ -35,7 +35,6 @@ export const courseOutline: Record<LessonId, readonly OutlineSection[]> = {
     { title: 'Debug cùng coding agent', startSceneId: 'module-3-debugging-intro' },
     { title: 'Git và GitHub', startSceneId: 'module-3-git-intro' },
     { title: 'Tổng hợp trước Practice', startSceneId: 'module-3-pre-practice-summary' },
-    { title: 'Practice: Xây portfolio', startSceneId: 'module-3-portfolio-practice' },
     { title: 'Kiểm tra cuối Module 3', startSceneId: 'module-3-portfolio-mastery' },
     { title: 'Tổng kết Module 3', startSceneId: 'module-3-mastery-summary' }
   ],

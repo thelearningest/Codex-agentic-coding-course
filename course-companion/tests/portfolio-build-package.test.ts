@@ -210,7 +210,7 @@ describe('Module 3 plan-led build package', () => {
         moduleThreeInput: { workspacePath: f.workspace, artifactReferences: artifacts } }
     })
     await f.progress.save({ currentLessonId: 'module-3', currentCourseLessonId: 'm3-evidence-debugging',
-      checkpointId: 'm3-portfolio-build', sceneId: 'module-3-portfolio-practice', sceneHistory: [], completedCheckpointIds: [], decisions: {} })
+      checkpointId: 'm3-portfolio-build', sceneId: 'module-3-pre-practice-summary', sceneHistory: [], completedCheckpointIds: [], decisions: {} })
     await f.approve()
     await f.service.review()
     f.activity.learnerAuthoredPrompts!.push('I found private project information; I withdraw acceptance until it is removed.')
