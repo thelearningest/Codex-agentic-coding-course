@@ -322,7 +322,7 @@ Từ thư mục gốc của repository, chạy:
 .\start-course.cmd
 ```
 
-Trình khởi động kiểm tra Node.js 22 trở lên, npm, Codex, khả năng hỗ trợ App
+Trình khởi động kiểm tra Node.js 22.12 trở lên, npm, Codex, khả năng hỗ trợ App
 Server, các gói cục bộ theo file khóa phiên bản và môi trường Electron đúng
 phiên bản đã chốt. Bạn sẽ thấy kế hoạch chuẩn bị cụ thể và được hỏi trước khi
 cài bất kỳ thứ gì. Cả lần mở đầu tiên và những lần quay lại đều mở ứng dụng

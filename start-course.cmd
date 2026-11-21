@@ -9,15 +9,15 @@ if "%COURSE_MOCK_BOOTSTRAP_TEST%"=="1" if "%COURSE_MOCK_FORCE_NODE_MISSING%"=="1
 where node >nul 2>&1
 if errorlevel 1 goto :node_missing
 
-for /f "usebackq delims=" %%V in (`node -p "Number(process.versions.node.split('.')[0])"`) do set "COURSE_NODE_MAJOR=%%V"
-if not defined COURSE_NODE_MAJOR goto :node_missing
-if %COURSE_NODE_MAJOR% LSS 22 goto :node_missing
+rem Vite and electron-vite need Node.js 22.12 or newer, not just any 22.x.
+for /f "usebackq delims=" %%V in (`node -p "const [a,b]=process.versions.node.split('.').map(Number); a>22||(a===22&&b>=12)?1:0"`) do set "COURSE_NODE_OK=%%V"
+if not "%COURSE_NODE_OK%"=="1" goto :node_missing
 goto :run_setup
 
 :node_missing
 type "%COURSE_ROOT%scripts\startup-first-run.txt"
 echo.
-echo Required: Node.js 22 or newer
+echo Required: Node.js 22.12 or newer
 echo Command: winget install --id OpenJS.NodeJS.LTS
 echo Scope: system application
 echo.

@@ -102,6 +102,9 @@ test("reports incompatible Node, missing npm, and unavailable App Server", async
   assert.equal(report.npmAvailable, false);
   assert.equal(report.codexAvailable, true);
   assert.equal(report.appServerAvailable, false);
+
+  const earlyNode22 = await detectSetup(fakeDeps({ nodeVersion: "22.11.0" }));
+  assert.equal(earlyNode22.nodeCompatible, false);
 });
 
 test("formats the full plan before asking once for permission", async () => {

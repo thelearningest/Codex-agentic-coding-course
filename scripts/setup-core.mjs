@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { readFile as readFileDefault } from "node:fs/promises";
 
+import { nodeVersionSupported } from "./macos-course-startup-core.mjs";
+
 function majorOf(version) {
   const match = String(version ?? "").match(/^v?(\d+)/);
   return match ? Number(match[1]) : 0;
@@ -55,7 +57,7 @@ export async function detectSetup({
   return Object.freeze({
     platformSupported: platform === "win32",
     nodeMajor,
-    nodeCompatible: nodeMajor >= 22,
+    nodeCompatible: nodeVersionSupported(nodeVersion),
     npmAvailable,
     codexAvailable,
     appServerAvailable,

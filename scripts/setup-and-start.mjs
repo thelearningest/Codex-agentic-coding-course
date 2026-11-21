@@ -169,7 +169,7 @@ export async function main({
     });
   }
   if (!report.nodeCompatible || !report.npmAvailable) {
-    throw Object.assign(new Error("Node.js 22+ with npm is required."), {
+    throw Object.assign(new Error("Node.js 22.12+ with npm is required."), {
       code: "PREREQUISITE_MISSING",
       layer: "prerequisite",
     });
