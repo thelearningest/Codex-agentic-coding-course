@@ -26,7 +26,7 @@ export function TeacherOrientation() {
       <header>
         <h2 id="teacher-orientation-title">Làm quen với Triết</h2>
         <p>
-          Triết là trợ lý AI của khóa học. Trong lúc học, bấm <strong>Trò chuyện với Triết</strong> để hỏi về bài đang xem.
+          Triết là trợ lý AI của khóa học. Trong lúc học, bấm <strong>Trò chuyện với Triết</strong> nếu bạn không biết phải làm gì tiếp theo.
         </p>
       </header>
 
@@ -50,16 +50,8 @@ export function TeacherOrientation() {
       <div className="teacher-orientation-next">
         <p>
           Khi vào Practice, khung chat chuyển sang chế độ hướng dẫn và duyệt bài.
-          Nếu vướng ở bước nào, bấm <strong>Cần gợi ý?</strong> Khi chỉnh xong cấu hình trong task Codex, bấm <strong>Nộp bài</strong> trong khung Triết.
+          Nếu vướng ở bước nào, bấm <strong>Cần gợi ý?</strong> Khi chỉnh xong cấu hình trong task Codex, hãy bấm <strong>nút Nộp bài</strong> để Triết check bài cho bạn.
         </p>
-        <details>
-          <summary>Triết dùng Codex như thế nào?</summary>
-          <p>
-            Course Companion chuyển câu hỏi và thông tin về bài đang học cho Codex qua Codex App Server,
-            phần kết nối giữa Course Companion và Codex. Triết dùng một cuộc trò chuyện riêng ở chế độ chỉ đọc để trả lời bạn.
-            Khi bạn nộp bài, Triết dựa trên cấu hình Course Companion đọc được từ đúng task thực hành của bạn.
-          </p>
-        </details>
       </div>
     </section>
   )
