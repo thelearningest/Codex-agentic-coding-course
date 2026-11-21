@@ -5,6 +5,9 @@
   "description": "Local desktop learning companion for Codex Content Builder Academy",
   "main": "./out/main/index.js",
   "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "electron-vite dev",
     "start": "npm run build && electron .",

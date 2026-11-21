@@ -9,23 +9,30 @@ import {
   buildInstallPlan,
   detectSetup,
   executeInstallPlan,
-  minimumNodeMajor,
-  startupNpmArgs
+  minimumNodeVersion,
+  nodeDownloadUrl,
+  startupCommands
 } from './macos-course-startup-core.mjs'
 
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const appRoot = path.join(repositoryRoot, 'course-companion')
 
-function runProcess(command, args, { cwd, stdio = 'ignore', env } = {}) {
+function runProcess(command, args, { cwd, stdio = 'ignore', env, capture = false, onSpawn } = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd,
       env: env ?? process.env,
       shell: false,
-      stdio
+      stdio: capture ? ['ignore', 'pipe', 'pipe'] : stdio
     })
+    let output = ''
+    if (capture) {
+      child.stdout.on('data', (chunk) => { output += chunk })
+      child.stderr.on('data', (chunk) => { output += chunk })
+    }
+    if (onSpawn) child.once('spawn', onSpawn)
     child.once('error', reject)
-    child.once('exit', (exitCode) => resolve({ exitCode: exitCode ?? 1 }))
+    child.once('exit', (exitCode) => resolve({ exitCode: exitCode ?? 1, output }))
   })
 }
 
@@ -51,7 +58,9 @@ async function confirmInstall(formattedPlan) {
   const terminal = readline.createInterface({ input: process.stdin, output: process.stdout })
   try {
     process.stdout.write(`${formattedPlan}\n\n`)
-    const answer = await terminal.question('Run this exact preparation plan? [y/N] ')
+    const answer = await terminal.question(
+      'Nhập y rồi nhấn Enter để tiếp tục, hoặc chỉ nhấn Enter để dừng. [y/N] '
+    )
     return /^(y|yes)$/i.test(answer.trim())
   } finally {
     terminal.close()
@@ -63,9 +72,9 @@ function printWelcome() {
     [
       '',
       'CONTENT BUILDER ACADEMY',
-      'Preparing your Course Companion on macOS.',
+      'Đang chuẩn bị Course Companion trên máy Mac của bạn.',
       '',
-      'Nothing will be installed without your approval.',
+      'Không có gì được cài nếu bạn chưa đồng ý.',
       ''
     ].join('\n')
   )
@@ -101,25 +110,32 @@ export async function main({ smoke = process.argv.includes('--smoke') } = {}) {
   const report = await detectSetup(setupDependencies)
 
   if (!report.platformSupported) {
-    throw Object.assign(new Error('This launcher supports macOS only.'), {
+    throw Object.assign(new Error('Trình khởi động này chỉ dành cho macOS.'), {
       code: 'UNSUPPORTED_PLATFORM',
-      layer: 'macOS compatibility'
+      layer: 'kiểm tra hệ điều hành'
     })
   }
   if (!report.nodeCompatible) {
-    throw Object.assign(new Error(`Node.js ${minimumNodeMajor}+ is required.`), {
-      code: 'PREREQUISITE_MISSING',
-      layer: 'Node.js prerequisite'
-    })
+    throw Object.assign(
+      new Error(
+        `Máy cần Node.js ${minimumNodeVersion} trở lên. Bản hiện có là ${process.versions.node}.`
+      ),
+      {
+        code: 'PREREQUISITE_MISSING',
+        layer: 'kiểm tra Node.js',
+        openDownload: true
+      }
+    )
   }
   if (!report.npmAvailable) {
-    throw Object.assign(new Error('npm is required.'), {
+    throw Object.assign(new Error('Máy chưa có npm, công cụ đi kèm Node.js.'), {
       code: 'PREREQUISITE_MISSING',
-      layer: 'npm prerequisite'
+      layer: 'kiểm tra npm',
+      openDownload: true
     })
   }
 
-  process.stdout.write(`Found Node.js ${process.versions.node} and npm.\n`)
+  process.stdout.write(`Đã có Node.js ${process.versions.node} và npm.\n`)
   const plan = buildInstallPlan(report)
   if (plan.length > 0) {
     await executeInstallPlan(plan, {
@@ -132,35 +148,59 @@ export async function main({ smoke = process.argv.includes('--smoke') } = {}) {
     })
     const finalReport = await detectSetup(setupDependencies)
     if (!finalReport.lockMatches || !finalReport.electronRuntimeAvailable) {
-      throw Object.assign(new Error('The Electron runtime is still incomplete.'), {
+      throw Object.assign(new Error('Phần mở ứng dụng (Electron) vẫn chưa đầy đủ.'), {
         code: 'INSTALL_FAILED',
         actionId: 'electron-runtime'
       })
     }
   } else {
-    process.stdout.write('Course Companion dependencies already match the lockfile.\n')
+    process.stdout.write('Các tệp của ứng dụng học đã sẵn sàng.\n')
   }
 
-  process.stdout.write(
-    smoke
-      ? 'Running the complete Electron startup rehearsal...\n\n'
-      : 'Everything is ready. Opening Course Companion...\n\n'
-  )
-  const result = await runProcess('npm', startupNpmArgs({ smoke }), {
-    cwd: appRoot,
-    stdio: 'inherit'
-  })
-  if (result.exitCode !== 0) {
-    throw Object.assign(new Error('Course Companion exited unexpectedly.'), {
-      code: 'APP_FAILED',
-      layer: smoke ? 'Electron rehearsal' : 'Course Companion'
+  if (smoke) process.stdout.write('Running the complete Electron startup rehearsal...\n\n')
+
+  for (const step of startupCommands({ smoke, electronRuntimePath })) {
+    if (step.id === 'build') {
+      process.stdout.write('Đang chuẩn bị ứng dụng, thường mất khoảng 10 giây...\n')
+    }
+    const result = await runProcess(step.command, step.args, {
+      cwd: appRoot,
+      stdio: 'inherit',
+      capture: step.quiet,
+      onSpawn:
+        step.id === 'app'
+          ? () =>
+              process.stdout.write(
+                [
+                  '',
+                  'Course Companion đang mở trong một cửa sổ riêng.',
+                  'Nếu chưa thấy cửa sổ, hãy nhấn Cmd+Tab và chọn Electron.',
+                  'Đừng đóng cửa sổ Terminal này khi đang học, vì ứng dụng sẽ tắt theo.',
+                  ''
+                ].join('\n') + '\n'
+              )
+          : undefined
     })
+    if (result.exitCode !== 0) {
+      if (step.quiet && result.output) process.stderr.write(`\n${result.output}\n`)
+      throw Object.assign(
+        new Error(
+          step.id === 'build'
+            ? 'Chưa chuẩn bị xong ứng dụng học.'
+            : 'Course Companion đã dừng bất ngờ.'
+        ),
+        {
+          code: 'APP_FAILED',
+          layer: smoke ? 'Electron rehearsal' : step.id === 'build' ? 'chuẩn bị ứng dụng' : 'Course Companion'
+        }
+      )
+    }
   }
 
   process.stdout.write(
     smoke
       ? '\nThe macOS startup rehearsal passed.\n'
-      : '\nCourse Companion closed. Your local progress is saved.\n'
+      : '\nCourse Companion đã đóng. Tiến độ của bạn đã được lưu trên máy. Bạn có thể đóng cửa sổ này.\n'
   )
 }
 
@@ -168,28 +208,30 @@ function safeFailure(error) {
   if (error?.code === 'INSTALL_DECLINED') {
     return {
       exitCode: 2,
-      layer: 'course files',
-      recovery: 'Run start-course.command again when you are ready to approve the displayed plan.'
+      layer: 'chuẩn bị tệp',
+      recovery: 'Khi sẵn sàng, chạy lại start-course.command và đồng ý với kế hoạch chuẩn bị.'
     }
   }
   if (error?.code === 'INSTALL_FAILED') {
     return {
       exitCode: 4,
-      layer: 'course files',
-      recovery: 'Check the npm error above, then run start-course.command again.'
+      layer: 'chuẩn bị tệp',
+      recovery: 'Xem lỗi npm phía trên, rồi chạy lại start-course.command.'
     }
   }
   if (error?.code === 'APP_FAILED') {
     return {
       exitCode: 5,
       layer: error.layer,
-      recovery: 'Check the app error above, then run start-course.command again.'
+      recovery: 'Xem lỗi phía trên, rồi chạy lại start-course.command.'
     }
   }
   return {
     exitCode: 3,
-    layer: error?.layer ?? 'prerequisite',
-    recovery: `Install Node.js ${minimumNodeMajor}+ with npm, then run start-course.command again.`
+    layer: error?.layer ?? 'kiểm tra công cụ',
+    recovery: error?.openDownload
+      ? `Trang tải Node.js vừa được mở. Tải bản LTS cho macOS (tệp .pkg), nhấp đúp để cài, rồi chạy lại start-course.command.`
+      : `Cài Node.js ${minimumNodeVersion} trở lên từ ${nodeDownloadUrl}, rồi chạy lại start-course.command.`
   }
 }
 
@@ -199,8 +241,11 @@ const isDirect =
 if (isDirect) {
   main().catch((error) => {
     const failure = safeFailure(error)
+    if (error?.openDownload) {
+      spawn('open', [nodeDownloadUrl], { stdio: 'ignore', detached: true }).on('error', () => {}).unref()
+    }
     process.stderr.write(
-      `\nStartup failed in ${failure.layer}.\n${error.message}\nRecovery: ${failure.recovery}\n`
+      `\nChưa mở được Course Companion (bước: ${failure.layer}).\n${error.message}\n${failure.recovery}\n`
     )
     process.exitCode = failure.exitCode
   })

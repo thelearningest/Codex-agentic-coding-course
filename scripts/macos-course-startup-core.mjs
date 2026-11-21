@@ -2,10 +2,21 @@ import { createHash } from 'node:crypto'
 import { readFile as readFileDefault } from 'node:fs/promises'
 
 export const minimumNodeMajor = 22
+export const minimumNodeMinor = 12
+export const minimumNodeVersion = `${minimumNodeMajor}.${minimumNodeMinor}`
+export const nodeDownloadUrl = 'https://nodejs.org/en/download'
 
 export function nodeMajor(version) {
   const match = String(version ?? '').match(/^v?(\d+)/)
   return match ? Number(match[1]) : 0
+}
+
+// Vite and electron-vite need Node.js 22.12 or newer, not just any 22.x.
+export function nodeVersionSupported(version) {
+  const match = String(version ?? '').match(/^v?(\d+)\.(\d+)/)
+  if (!match) return false
+  const [major, minor] = [Number(match[1]), Number(match[2])]
+  return major > minimumNodeMajor || (major === minimumNodeMajor && minor >= minimumNodeMinor)
 }
 
 async function readOptional(targetPath, readFile) {
@@ -46,7 +57,7 @@ export async function detectSetup({
   return Object.freeze({
     platformSupported: platform === 'darwin',
     nodeMajor: nodeMajor(nodeVersion),
-    nodeCompatible: nodeMajor(nodeVersion) >= minimumNodeMajor,
+    nodeCompatible: nodeVersionSupported(nodeVersion),
     npmAvailable,
     electronRuntimeAvailable,
     electronRuntimePath,
@@ -66,20 +77,20 @@ export function buildInstallPlan(report) {
   if (!report.lockMatches) {
     actions.push({
       id: 'course-companion-packages',
-      title: 'Course Companion files',
-      reason: 'Installs the exact desktop-app dependencies recorded by the course.',
-      scope: 'Stored only inside the course-companion folder',
+      title: 'Tệp của ứng dụng học',
+      reason: 'Tải đúng các thư viện mà ứng dụng học cần, theo danh sách khóa học đã chốt.',
+      scope: 'Chỉ lưu trong thư mục course-companion',
       command: 'npm',
-      args: ['ci'],
+      args: ['ci', '--no-audit', '--no-fund'],
       cwd: report.appRoot
     })
   }
 
   actions.push({
     id: 'electron-runtime',
-    title: 'Electron desktop runtime',
-    reason: 'Verifies or downloads the pinned macOS runtime used to open the app.',
-    scope: 'Stored only inside course-companion/node_modules',
+    title: 'Phần mở ứng dụng (Electron)',
+    reason: 'Kiểm tra hoặc tải phần giúp mở ứng dụng học trên macOS, đúng phiên bản khóa học dùng.',
+    scope: 'Chỉ lưu trong thư mục course-companion/node_modules',
     command: 'node',
     args: ['node_modules/electron/install.js'],
     cwd: report.appRoot,
@@ -95,16 +106,19 @@ function displayCommand(action) {
 }
 
 export function formatInstallPlan(actions) {
-  const lines = ['Course Companion needs this local preparation plan:']
+  const lines = [
+    'Để mở Course Companion, máy cần chuẩn bị thêm:',
+    'Lần đầu có thể tải khoảng 220 MB và mất vài phút. Việc này không thay đổi phần khác trên máy.'
+  ]
 
   for (const action of actions) {
     lines.push(
       '',
       `[${action.title ?? action.id}]`,
-      `Why: ${action.reason}`,
-      `Scope: ${action.scope}`,
-      `Command: ${displayCommand(action)}`,
-      `Directory: ${action.cwd}`
+      `Lý do: ${action.reason}`,
+      `Lưu ở: ${action.scope}`,
+      `Lệnh: ${displayCommand(action)}`,
+      `Thư mục: ${action.cwd}`
     )
   }
 
@@ -151,6 +165,11 @@ export async function executeInstallPlan(
   }
 }
 
-export function startupNpmArgs({ smoke = false } = {}) {
-  return smoke ? ['run', 'test:electron'] : ['start']
+// Learners get a quiet build and then the app; rehearsals run the full Electron suite.
+export function startupCommands({ smoke = false, electronRuntimePath } = {}) {
+  if (smoke) return [{ id: 'rehearsal', command: 'npm', args: ['run', 'test:electron'], quiet: false }]
+  return [
+    { id: 'build', command: 'npm', args: ['run', 'build', '--silent'], quiet: true },
+    { id: 'app', command: electronRuntimePath, args: ['.'], quiet: false }
+  ]
 }
