@@ -145,7 +145,7 @@ Bạn không cần biết lập trình, Git hay dòng lệnh trước khi học.
 Để tải và mở Course Companion, ứng dụng học của khóa này, bạn cần chuẩn bị thêm:
 
 - **Git**, công cụ dùng để tải khóa học và lưu các phiên bản dự án.
-- **Node.js 22 trở lên**, phần mềm cần để chạy ứng dụng học. Trên macOS, bạn cần cài trước. Trên Windows, trình khởi động sẽ đề xuất cài nếu còn thiếu và hỏi bạn trước khi thực hiện.
+- **Node.js 22.12 trở lên**, phần mềm cần để chạy ứng dụng học. Trên macOS, bạn cần cài trước. Trên Windows, trình khởi động sẽ đề xuất cài nếu còn thiếu và hỏi bạn trước khi thực hiện.
 
 Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ agent giúp bạn làm theo phần hướng dẫn thiết lập bên dưới.
 

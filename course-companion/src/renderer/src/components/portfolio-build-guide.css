@@ -162,6 +162,8 @@
   border-radius: 4px;
 }
 
+.build-guide .practice-task-note { margin: 0; color: #b4b5a8; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+
 .build-guide .prd-checks li::before { font-weight: 800; }
 .build-guide .prd-checks .is-pass::before { content: '\2713'; color: #4f7a48; }
 .build-guide .prd-checks .is-fail { background: #f4dfa4; }

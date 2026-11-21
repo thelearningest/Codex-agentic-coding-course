@@ -484,8 +484,9 @@ try {
   }
   await practiceScene.waitFor()
   await page.getByRole('button', { name: 'Mở Practice', exact: true }).click()
-  await page.getByRole('button', { name: 'Tiếp tục Practice', exact: true }).click()
-  const continued = JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8'))
+  await page.getByText('nơi agent đã xây bản đầu', { exact: false }).waitFor()
+  await page.getByRole('button', { name: 'Mở lại task Module 3', exact: true }).click()
+  const continued =JSON.parse(await readFile(join(userData, 'practice-runs.json'), 'utf8'))
   assert.equal(continued.activeRun.runId, firstRun)
   assert.equal(continued.activeRun.binding.threadId, buildThread)
   const firstPassRecords = {

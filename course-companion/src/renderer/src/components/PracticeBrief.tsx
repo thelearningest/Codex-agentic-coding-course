@@ -198,9 +198,11 @@ export function PracticeBrief({
     ? 'Tiếp tục Module 3 trên bản portfolio hiện tại. Hãy giúp tôi đối chiếu từng yêu cầu PRD theo cách kiểm tra trong implementation plan. Tôi sẽ tự thử website, nêu kết quả và quyết định có cần sửa trước khi nộp.'
     : workspace.startPrompt
   const preferResume = Boolean(introduction && hasRequestedPractice && workspace.capabilities.canResume)
+  // Module 3 Practice reopens the task where Codex built the first version.
+  const reopensBuildTask = buildGuide && preferResume
   const resumeButton = workspace.capabilities.canResume ? (
     <button className={preferResume ? 'is-primary' : undefined} type="button" disabled={busy || switching} onClick={() => void resume()}>
-      Tiếp tục Practice
+      {reopensBuildTask ? 'Mở lại task Module 3' : 'Tiếp tục Practice'}
     </button>
   ) : null
   const controls = <>
@@ -211,6 +213,11 @@ export function PracticeBrief({
       </button>}
       {!preferResume ? resumeButton : null}
     </div>
+    {reopensBuildTask && workspace.activePractice ? (
+      <p className="practice-task-note">
+        Codex sẽ mở lại task “{workspace.activePractice.executorChatName}” trong project portfolio, nơi agent đã xây bản đầu. Bạn kiểm tra và sửa tiếp ngay trong task đó.
+      </p>
+    ) : null}
 
     {switching && workspace.transition ? (
       <div className="practice-transition" aria-live="polite">
