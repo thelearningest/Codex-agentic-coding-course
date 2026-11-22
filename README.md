@@ -216,8 +216,5 @@ Bạn sẽ thấy nội dung của khoá học hiện ra sau khi coding agents �
 - Một bản tải khóa học mới trên cùng máy và tài khoản hệ điều hành vẫn dùng
   tiến độ đã lưu trước đó. Tải lại repository không đặt lại hồ sơ học tập.
 
-## Khi cần trợ giúp
 
-Với hướng dẫn khởi động, kiểm chứng Practice và các giới hạn hiện tại trên
-Windows và macOS, xem [hướng dẫn khóa học](course-companion/README.md).
 
