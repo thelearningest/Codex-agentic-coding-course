@@ -120,7 +120,10 @@ export function ModelLessonBoard({ busy, canOpenPreviousPage, initialTopic, kind
                 <p key={paragraph}>{topic === 'model' && index > 0
                   ? paragraph.split(/\b(Astra|Sol|Terra|Luna)\b/g).map((part, partIndex) =>
                     /^(Astra|Sol|Terra|Luna)$/.test(part) ? <strong key={partIndex}>{part}</strong> : part)
-                  : paragraph}</p>
+                  : topic === 'effort'
+                    ? paragraph.split(/\b(Extra High|Medium|medium|high)\b/g).map((part, partIndex) =>
+                      /^(Extra High|Medium|medium|high)$/.test(part) ? <strong key={partIndex}>{part}</strong> : part)
+                    : paragraph}</p>
               ))}
             </div>
           )}
