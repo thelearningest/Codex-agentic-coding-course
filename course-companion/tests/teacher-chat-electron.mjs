@@ -198,6 +198,36 @@ try {
     assert.equal(await formatted.locator('ol > li').count(), 2)
     assert.equal(await formatted.locator('ul > li').count(), 2)
     assert.equal(await formatted.locator('a').getAttribute('target'), '_blank')
+    await app.evaluate(({ session }) => {
+      session.fromPartition('course-web-links').protocol.handle('https', () =>
+        new Response('<a href="/next" target="_blank">Next page</a>', {
+          headers: { 'Content-Type': 'text/html' }
+        }))
+    })
+    const sourceLink = formatted.getByRole('link', { name: 'Tài liệu' })
+    await sourceLink.scrollIntoViewIfNeeded()
+    const log = panel.locator('.pixel-chat-log')
+    const scrollBefore = await log.evaluate((element) => element.scrollTop)
+    const sourceUrl = page.url()
+    const newWindow = app.waitForEvent('window')
+    await sourceLink.click()
+    const viewer = await newWindow
+    await viewer.waitForURL('https://example.com/docs')
+    assert.equal(await viewer.evaluate(() => typeof globalThis.courseCompanion), 'undefined')
+    await viewer.getByRole('link', { name: 'Next page' }).click()
+    await viewer.waitForURL('https://example.com/next')
+    const viewerWindow = await app.browserWindow(viewer)
+    const closed = viewer.waitForEvent('close')
+    await viewerWindow.evaluate((window) => {
+      window.focus()
+      window.webContents.focus()
+      window.webContents.sendInputEvent({ type: 'keyDown', keyCode: 'Escape' })
+      window.webContents.sendInputEvent({ type: 'keyUp', keyCode: 'Escape' })
+    })
+    await closed
+    assert.equal(page.url(), sourceUrl)
+    assert.equal(await sourceLink.isVisible(), true)
+    assert.equal(await log.evaluate((element) => element.scrollTop), scrollBefore)
     assert.equal(await panel.locator('.pixel-chat-message.is-learner').last().locator('strong').count(), 1) // Only the speaker label.
     assert.equal(await panel.locator('.pixel-chat-message.is-learner p').last().innerText(), 'Giữ nguyên **nội dung tôi nhập**.')
     for (const width of [390, 1180]) {

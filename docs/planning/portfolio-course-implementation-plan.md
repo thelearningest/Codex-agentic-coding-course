@@ -47,9 +47,27 @@ and must never be inferred from a passing automated check.
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
+| Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Web links in Course Companion, 22 November 2026
+
+Lesson, Teacher and portfolio review links open HTTPS pages in a sandboxed
+child window. Follow-up links use the same window. Closing it or pressing
+Escape returns to the course. Module 2 reference tooltips describe the new
+behavior. Practice still launches the bound Codex task.
+
+Disposable macOS desktop checks used local responses for remote URLs. They
+covered the Module 2 Mobbin link at 1180px and 390px, a same-window link in
+the compact Teacher, and a Markdown link in the full Teacher chat. The lesson
+and chat retained their scroll positions. Typecheck, lint, build, the focused
+link test and all nine startup tests passed. With a canonical temporary path,
+900 unit tests passed and three failed on Module 1 content hashes and CSS
+palette values. The full Electron smoke run stopped at its Module 1 home
+button selector before reaching Module 2. Live website compatibility and
+learner acceptance remain open.
 
 ### Portfolio React baseline decision, 20 November 2026
 

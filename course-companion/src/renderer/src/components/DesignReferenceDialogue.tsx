@@ -28,7 +28,7 @@ export function DesignReferenceDialogue({ dialogue }: { dialogue: string }) {
                 key={`${segment}-${segmentIndex}`}
                 rel="noreferrer"
                 target="_blank"
-                title={`Mở ${segment} trong trình duyệt mặc định`}
+                title={`Mở ${segment} trong ứng dụng`}
               >
                 {segment}
               </a>

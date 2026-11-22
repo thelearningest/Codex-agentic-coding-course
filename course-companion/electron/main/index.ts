@@ -57,6 +57,7 @@ import { TeacherMemoryRepository } from './teacher-memory-repository'
 import { TeacherService } from './teacher-service'
 import { TeacherCourseContextRepository } from './teacher-course-context-repository'
 import { getCompanionBounds } from './window-layout'
+import { configureWebLinkSession, routeWebLinks } from './web-link-popup'
 import { TestCodexGateway } from './test-codex-gateway'
 import { PracticeEvidenceAdapterRegistry } from './practice-evidence-adapter-registry'
 import { CodexConfigurationEvidenceAdapter } from './codex-configuration-evidence-adapter'
@@ -514,21 +515,6 @@ async function loadSurface(
   })
 }
 
-function openNewWindowsInDefaultBrowser(targetWindow: BrowserWindow): void {
-  targetWindow.webContents.setWindowOpenHandler(({ url }) => {
-    try {
-      const destination = new URL(url)
-      if (destination.protocol === 'https:') {
-        void shell.openExternal(destination.toString())
-      }
-    } catch {
-      // Reject malformed or non-web destinations without navigating the app.
-    }
-
-    return { action: 'deny' }
-  })
-}
-
 function createMainWindow(): BrowserWindow {
   const window = new BrowserWindow({
     width: 1180,
@@ -546,7 +532,7 @@ function createMainWindow(): BrowserWindow {
     }
   })
 
-  openNewWindowsInDefaultBrowser(window)
+  routeWebLinks(window)
   window.once('ready-to-show', () => {
     window.maximize()
     window.show()
@@ -601,6 +587,7 @@ function createCompanionWindow(mode: CompanionMode): BrowserWindow {
     }
   })
 
+  routeWebLinks(window)
   applyCompanionTopmost(window)
   window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
 
@@ -1196,6 +1183,7 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(async () => {
+  configureWebLinkSession()
   registerIpcHandlers()
   const settings = await teacherRepository.loadSettings()
   companionMode = settings.companionMode

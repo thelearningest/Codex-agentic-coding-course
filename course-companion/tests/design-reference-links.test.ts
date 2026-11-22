@@ -23,14 +23,6 @@ describe('Module 2 design-reference links', () => {
     expect(component).toContain('className="pixel-dialogue-link"')
     expect(component).toContain('target="_blank"')
     expect(component).toContain('rel="noreferrer"')
-  })
-
-  it('routes HTTPS links to the default browser and keeps Course Companion in place', async () => {
-    const mainProcess = await readFile(resolve(process.cwd(), 'electron/main/index.ts'), 'utf8')
-
-    expect(mainProcess).toContain('setWindowOpenHandler')
-    expect(mainProcess).toContain("destination.protocol === 'https:'")
-    expect(mainProcess).toContain('shell.openExternal(destination.toString())')
-    expect(mainProcess).toContain("return { action: 'deny' }")
+    expect(component).toContain('Mở ${segment} trong ứng dụng')
   })
 })
