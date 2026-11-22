@@ -247,6 +247,22 @@ async function walkHomeOnboardingTour(page) {
   await page.locator('[data-onboarding-tour]').waitFor({ state: 'detached' })
 }
 
+// Locked modules stay on Home: pressing one (mouse or keyboard) only nudges it.
+async function verifyLockedModuleNudge(page) {
+  const locked = page.locator('button.pixel-roadmap-stage.is-locked').first()
+  assert.equal(await locked.getAttribute('aria-disabled'), 'true')
+  assert.equal(await locked.locator('svg.pixel-roadmap-lock').count(), 1)
+  // Playwright treats aria-disabled as not clickable; a real pointer press still reaches it.
+  await locked.click({ force: true })
+  assert.ok(await locked.evaluate((card) => card.classList.contains('is-nudged')))
+  await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
+  await locked.evaluate((card) => card.classList.remove('is-nudged'))
+  await locked.focus()
+  await page.keyboard.press('Enter')
+  assert.ok(await locked.evaluate((card) => card.classList.contains('is-nudged')))
+  await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
+}
+
 async function skipHomeOnboardingTour(page) {
   await page.getByRole('dialog', { name: 'Đây là Triết' }).waitFor()
   await page.keyboard.press('Escape')
@@ -1307,6 +1323,7 @@ try {
     .getByRole('button', { name: 'Bắt đầu Module 1', exact: true })
     .click()
   await walkHomeOnboardingTour(firstWindows.learningPage)
+  await verifyLockedModuleNudge(firstWindows.learningPage)
   await verifyHomeBase(firstWindows.learningPage)
   await completeSetupModule(firstWindows.learningPage, firstWindows.companionPage, firstLaunch, false, true)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)

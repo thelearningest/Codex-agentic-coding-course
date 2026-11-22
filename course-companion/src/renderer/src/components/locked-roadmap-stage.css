@@ -1,0 +1,42 @@
+/* Locked modules look like the other roadmap cards but do not lift on hover. */
+.pixel-roadmap-stage.is-locked { cursor: not-allowed; }
+.pixel-roadmap-stage.is-locked:hover {
+  transform: none;
+  border-color: var(--pixel-line-soft);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, .7);
+}
+.pixel-roadmap-stage.is-locked:focus-visible {
+  transform: none;
+  outline: 3px solid var(--pixel-yellow);
+  outline-offset: 3px;
+}
+
+.pixel-roadmap-stage.is-locked > em {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pixel-roadmap-lock {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+.pixel-roadmap-stage.is-locked.is-nudged { animation: locked-roadmap-shake .42s ease; }
+.pixel-roadmap-stage.is-locked.is-nudged p { animation: locked-roadmap-note 1.4s ease; }
+
+@keyframes locked-roadmap-shake {
+  0%, 100% { translate: 0; }
+  20% { translate: -6px 0; }
+  40% { translate: 6px 0; }
+  60% { translate: -4px 0; }
+  80% { translate: 3px 0; }
+}
+@keyframes locked-roadmap-note {
+  0%, 70% { color: var(--pixel-yellow); }
+  100% { color: var(--pixel-muted); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-roadmap-stage.is-locked.is-nudged { animation: none; }
+}

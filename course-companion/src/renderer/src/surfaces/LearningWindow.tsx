@@ -60,6 +60,7 @@ import { PracticeBrief } from '../components/PracticeBrief'
 import { PracticeStartPrompt } from '../components/PracticeStartPrompt'
 import { TeacherWorkspace } from '../components/TeacherWorkspace'
 import { OnboardingTour, ONBOARDING_ANCHOR_ATTRIBUTE, type OnboardingTourStep } from '../components/OnboardingTour'
+import { LockedRoadmapStage } from '../components/LockedRoadmapStage'
 import {
   ONBOARDING_TOUR_DECISION_KEY,
   readOnboardingTourState,
@@ -2255,8 +2256,6 @@ const lessonTipSteps = [
   }
 ] as const satisfies readonly OnboardingTourStep[]
 
-const lockedModuleAnchor = { [ONBOARDING_ANCHOR_ATTRIBUTE]: 'locked-module' }
-
 type TeacherOverlayProps = {
   onClose: () => void
   practiceMode?: boolean
@@ -2283,8 +2282,10 @@ function RoadmapStage({ children, status, className, onReview }: {
       </button>
     )
   }
-  const anchor = className.split(' ').includes('is-locked') ? lockedModuleAnchor : undefined
-  return <article className={className} {...anchor}>{children}<em>{status}</em></article>
+  if (className.split(' ').includes('is-locked')) {
+    return <LockedRoadmapStage status={status}>{children}</LockedRoadmapStage>
+  }
+  return <article className={className}>{children}<em>{status}</em></article>
 }
 
 type PixelAppShellProps = {
@@ -2423,9 +2424,9 @@ function PixelAppShell({
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <article className="is-locked" key={title} {...lockedModuleAnchor}>
-                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Đăng tải portfolio lên mạng và học cách cập nhật khi cần</p></div><em>SẮP TỚI</em>
-                </article>
+                <LockedRoadmapStage key={title} status="SẮP TỚI">
+                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Đăng tải portfolio lên mạng và học cách cập nhật khi cần</p></div>
+                </LockedRoadmapStage>
               ))}
             </div>
           </div>
