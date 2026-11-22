@@ -1,0 +1,142 @@
+.onboarding-tour {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--app-font);
+}
+
+.onboarding-tour__blocker,
+.onboarding-tour__guard {
+  position: fixed;
+  pointer-events: auto;
+}
+.onboarding-tour__blocker { background: rgba(0, 0, 0, .74); }
+
+.onboarding-tour__hole {
+  position: fixed;
+  border: 3px solid var(--pixel-yellow);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, .6);
+  pointer-events: none;
+  transition: left .25s ease, top .25s ease, width .25s ease, height .25s ease;
+}
+.onboarding-tour__hole.is-pulsing::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 3px solid var(--pixel-yellow);
+  animation: onboarding-tour-ring 1.5s ease-out infinite;
+}
+
+.onboarding-tour__bubble {
+  position: fixed;
+  width: min(340px, calc(100vw - 32px));
+  padding: 16px 16px 14px;
+  border: 3px solid var(--pixel-yellow);
+  color: var(--pixel-white);
+  background: #000;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, .8);
+  pointer-events: auto;
+}
+.onboarding-tour__bubble.is-wiggle { animation: onboarding-tour-wiggle .35s ease; }
+
+.onboarding-tour__arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--pixel-yellow);
+  background: #000;
+  transform: rotate(45deg);
+}
+.onboarding-tour__bubble[data-side="below"] .onboarding-tour__arrow { top: -9px; border-right: 0; border-bottom: 0; }
+.onboarding-tour__bubble[data-side="above"] .onboarding-tour__arrow { bottom: -9px; border-top: 0; border-left: 0; }
+.onboarding-tour__bubble[data-side="left"] .onboarding-tour__arrow { right: -9px; border-bottom: 0; border-left: 0; }
+.onboarding-tour__bubble[data-side="right"] .onboarding-tour__arrow { left: -9px; border-top: 0; border-right: 0; }
+.onboarding-tour__bubble[data-side="sheet"] .onboarding-tour__arrow { display: none; }
+
+.onboarding-tour__head { display: flex; align-items: center; gap: 10px; }
+/* Same face crop as the lesson HUD Triết button. */
+.onboarding-tour__avatar {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  overflow: hidden;
+  border: 2px solid var(--pixel-yellow);
+  background: var(--pixel-yellow);
+}
+.onboarding-tour__avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transform: scale(2.1);
+  transform-origin: 50% 12%;
+}
+.onboarding-tour__head small {
+  display: block;
+  color: var(--pixel-yellow);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+.onboarding-tour__head h2 { margin: 3px 0 0; font-size: 16px; font-weight: 800; line-height: 1.3; }
+
+.onboarding-tour__body { margin: 10px 0 0; color: rgba(255, 255, 255, .86); font-size: 14px; line-height: 1.5; }
+.onboarding-tour__hint { display: block; margin-top: 8px; color: var(--pixel-yellow); font-size: 12px; font-weight: 600; }
+
+.onboarding-tour__foot { margin-top: 14px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.onboarding-tour__dots { margin-right: auto; display: flex; gap: 5px; }
+.onboarding-tour__dots i { width: 7px; height: 7px; background: var(--pixel-line-soft); }
+.onboarding-tour__dots i.is-on { background: var(--pixel-yellow); }
+
+.onboarding-tour__link,
+.onboarding-tour__bubble.is-action .onboarding-tour__back {
+  min-height: 0;
+  padding: 6px 4px;
+  border: 0;
+  color: var(--pixel-muted);
+  background: none;
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.onboarding-tour__back {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 2px solid var(--pixel-line);
+  color: var(--pixel-white);
+  background: #000;
+  font-size: 13px;
+  font-weight: 600;
+}
+.onboarding-tour__next {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 2px solid var(--pixel-yellow);
+  color: #000;
+  background: var(--pixel-yellow);
+  font-size: 13px;
+  font-weight: 800;
+}
+.onboarding-tour__link:hover,
+.onboarding-tour__back:hover { color: var(--pixel-white); }
+.onboarding-tour button:focus-visible { outline: 3px solid var(--pixel-yellow); outline-offset: 3px; }
+.onboarding-tour__next:focus-visible { outline-color: var(--pixel-white); }
+
+@keyframes onboarding-tour-ring {
+  0% { opacity: .9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+@keyframes onboarding-tour-wiggle {
+  0%, 100% { translate: 0; }
+  30% { translate: -5px 0; }
+  60% { translate: 5px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-tour__hole { transition: none; }
+  .onboarding-tour__hole.is-pulsing::after,
+  .onboarding-tour__bubble.is-wiggle { animation: none; }
+}

@@ -30,6 +30,7 @@
     "src/renderer/src/components/PracticeReturnAction.tsx",
     "src/renderer/src/components/TeacherMarkdown.tsx",
     "src/renderer/src/components/practice-guide-anchors.ts",
+    "src/renderer/src/components/onboarding-tour-rules.ts",
     "tests/**/*.ts"
   ]
 }

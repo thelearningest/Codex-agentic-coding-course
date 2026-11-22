@@ -67,7 +67,7 @@ try {
   })
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^02.*MỞ BÀI HỌC/ }).click()
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
   await page.getByRole('button', { name: 'Chọn thư mục', exact: true }).click()
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
@@ -105,7 +105,7 @@ try {
   })
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^02.*MỞ BÀI HỌC/ }).click()
   await page.getByRole('heading', { name: 'Project Codex đã sẵn sàng', exact: true }).waitFor()
   assert.equal(await page.locator('.portfolio-codex-project input').count(), 0)
   await folderContinue.click()
@@ -431,7 +431,7 @@ try {
   assert.equal(moduleThreeOpening.progress.sceneId, 'module-3-first-build')
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 3.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^03.*MỞ BÀI HỌC/ }).click()
   await page.locator('main[data-scene-id="module-3-first-build"]').waitFor()
   for (const width of [390, 1180]) {
     await page.setViewportSize({ width, height: 780 })
@@ -502,7 +502,7 @@ try {
   }
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 3.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^03.*MỞ BÀI HỌC/ }).click()
   await app.evaluate(({ BrowserWindow }) => {
     const learning = BrowserWindow.getAllWindows().find((window) => window.webContents.getURL().includes('#/learning'))
     learning?.restore()
@@ -593,7 +593,7 @@ try {
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.locator('main[data-scene-id="module-4-hosting-intro"]').waitFor()
   await page.getByRole('button', { name: 'VIBECODING 101 VỀ HOME BASE', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 4.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^04.*MỞ BÀI HỌC/ }).click()
   for (const sceneId of ['module-4-hosting-intro', 'module-4-vercel-benefits', 'module-4-after-video', 'module-4-vercel-preview']) {
     await page.locator(`main[data-scene-id="${sceneId}"]`).waitFor()
     await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
@@ -610,7 +610,7 @@ try {
   }), /reviewed Practice/)
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 4.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^04.*MỞ BÀI HỌC/ }).click()
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   await page.getByRole('heading', { name: 'Đưa portfolio lên mạng', exact: true }).waitFor()
   await page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true }).click()

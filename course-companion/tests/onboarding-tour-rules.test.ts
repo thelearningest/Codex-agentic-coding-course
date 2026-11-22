@@ -1,0 +1,37 @@
+import { describe, expect, it } from 'vitest'
+import {
+  ONBOARDING_TOUR_DECISION_KEY,
+  readOnboardingTourState,
+  shouldShowHomeTour,
+  shouldShowLessonTip
+} from '../src/renderer/src/components/onboarding-tour-rules'
+
+describe('onboarding tour rules', () => {
+  it('reads only known saved states and treats anything else as not started', () => {
+    expect(readOnboardingTourState(undefined)).toBe('not-started')
+    expect(readOnboardingTourState({})).toBe('not-started')
+    expect(readOnboardingTourState({ [ONBOARDING_TOUR_DECISION_KEY]: 'home-done' })).toBe('home-done')
+    expect(readOnboardingTourState({ [ONBOARDING_TOUR_DECISION_KEY]: 'skipped' })).toBe('skipped')
+    expect(readOnboardingTourState({ [ONBOARDING_TOUR_DECISION_KEY]: 'complete' })).toBe('complete')
+    expect(readOnboardingTourState({ [ONBOARDING_TOUR_DECISION_KEY]: 'something-else' })).toBe('not-started')
+  })
+
+  it('shows the Home tour only to Module 1 learners who have not seen it or finished Module 1', () => {
+    const moduleOne = { currentLessonId: 'module-1' as const, completedCheckpointIds: [] }
+    expect(shouldShowHomeTour(moduleOne, 'not-started')).toBe(true)
+    expect(shouldShowHomeTour(moduleOne, 'home-done')).toBe(false)
+    expect(shouldShowHomeTour(moduleOne, 'skipped')).toBe(false)
+    expect(shouldShowHomeTour(moduleOne, 'complete')).toBe(false)
+    expect(shouldShowHomeTour({ currentLessonId: 'intro', completedCheckpointIds: [] }, 'not-started')).toBe(false)
+    expect(shouldShowHomeTour({ currentLessonId: 'module-2', completedCheckpointIds: [] }, 'not-started')).toBe(false)
+    expect(shouldShowHomeTour({ currentLessonId: 'module-1', completedCheckpointIds: ['m1-complete'] }, 'not-started')).toBe(false)
+  })
+
+  it('shows the lesson tip once, only after the Home tour was finished and outside the intro', () => {
+    expect(shouldShowLessonTip('home-done', 'module-1')).toBe(true)
+    expect(shouldShowLessonTip('home-done', 'intro')).toBe(false)
+    expect(shouldShowLessonTip('not-started', 'module-1')).toBe(false)
+    expect(shouldShowLessonTip('skipped', 'module-1')).toBe(false)
+    expect(shouldShowLessonTip('complete', 'module-1')).toBe(false)
+  })
+})

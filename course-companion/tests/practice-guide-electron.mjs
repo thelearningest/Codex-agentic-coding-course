@@ -21,11 +21,13 @@ try {
     await app.waitForEvent('window', { predicate: w => w.url().includes('#/learning') })
   await page.evaluate(() => globalThis.courseCompanion.saveProgress({
     currentLessonId: 'module-1', currentCourseLessonId: 'm1-agents-and-skills',
-    checkpointId: 'm1-agents-and-skills', sceneId: 'module-1-codex-projects', sceneHistory: [], completedCheckpointIds: [], decisions: {}
+    checkpointId: 'm1-agents-and-skills', sceneId: 'module-1-codex-projects', sceneHistory: [], completedCheckpointIds: [],
+    // Onboarding is covered by electron-smoke; start this run past it.
+    decisions: { onboardingTour: 'complete' }
   }))
   await page.reload()
   await page.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await page.getByRole('button', { name: /MODULE 1.*MỞ BÀI HỌC/ }).click()
+  await page.getByRole('button', { name: /^01.*MỞ BÀI HỌC/ }).click()
   await page.getByRole('button', { name: 'Chuyển sang Codex để thực hành', exact: true }).click()
   const start = page.getByRole('button', { name: 'Bắt đầu thực hành', exact: true })
   const guide = page.locator('.practice-screenshot-guide')

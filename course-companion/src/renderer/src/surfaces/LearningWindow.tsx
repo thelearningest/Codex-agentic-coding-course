@@ -59,6 +59,14 @@ import m4PortfolioVideo from '../assets/lesson-visuals/module-4/vercel-portfolio
 import { PracticeBrief } from '../components/PracticeBrief'
 import { PracticeStartPrompt } from '../components/PracticeStartPrompt'
 import { TeacherWorkspace } from '../components/TeacherWorkspace'
+import { OnboardingTour, ONBOARDING_ANCHOR_ATTRIBUTE, type OnboardingTourStep } from '../components/OnboardingTour'
+import {
+  ONBOARDING_TOUR_DECISION_KEY,
+  readOnboardingTourState,
+  shouldShowHomeTour,
+  shouldShowLessonTip,
+  type OnboardingTourState
+} from '../components/onboarding-tour-rules'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
 import { PortfolioWorkspacePicker } from '../components/PortfolioWorkspacePicker'
 import { HighlightedDialogue } from '../components/HighlightedDialogue'
@@ -2218,6 +2226,37 @@ const futureModules = ['Đăng tải portfolio lên mạng']
 
 
 
+// Onboarding copy approved in the 22 November 2026 prototype review.
+const homeTourSteps = [
+  {
+    id: 'home-teacher',
+    anchor: 'home-teacher',
+    title: 'Đây là Triết',
+    body: 'Có gì chưa rõ về nội dung khóa học, cứ hỏi Triết nhé.'
+  },
+  {
+    id: 'locked-modules',
+    anchor: 'locked-module',
+    title: 'Các module mở lần lượt',
+    body: 'Học xong Module 1 thì Module 2 mới mở.',
+    nextLabel: 'Đã hiểu'
+  }
+] as const satisfies readonly OnboardingTourStep[]
+
+const lessonTipSteps = [
+  {
+    id: 'lesson-teacher',
+    anchor: 'lesson-teacher',
+    title: 'Triết luôn ở góc trên này',
+    body: 'Trong lúc học, bấm vào đây bất cứ lúc nào để hỏi Triết.',
+    hint: 'Bấm thử để mở khung chat.',
+    action: true,
+    nextLabel: 'Đã hiểu'
+  }
+] as const satisfies readonly OnboardingTourStep[]
+
+const lockedModuleAnchor = { [ONBOARDING_ANCHOR_ATTRIBUTE]: 'locked-module' }
+
 type TeacherOverlayProps = {
   onClose: () => void
   practiceMode?: boolean
@@ -2244,7 +2283,8 @@ function RoadmapStage({ children, status, className, onReview }: {
       </button>
     )
   }
-  return <article className={className}>{children}<em>{status}</em></article>
+  const anchor = className.split(' ').includes('is-locked') ? lockedModuleAnchor : undefined
+  return <article className={className} {...anchor}>{children}<em>{status}</em></article>
 }
 
 type PixelAppShellProps = {
@@ -2258,6 +2298,9 @@ type PixelAppShellProps = {
   onCloseTeacher: () => void
   onQuit: () => void
   onReset: () => void
+  showHomeTour: boolean
+  onHomeTourComplete: () => void
+  onHomeTourSkip: () => void
 }
 
 function PixelAppShell({
@@ -2270,7 +2313,10 @@ function PixelAppShell({
   onOpenTeacher,
   onCloseTeacher,
   onQuit,
-  onReset
+  onReset,
+  showHomeTour,
+  onHomeTourComplete,
+  onHomeTourSkip
 }: PixelAppShellProps) {
   const resetDialogRef = useRef<HTMLDialogElement>(null)
   const resetOpenerRef = useRef<HTMLButtonElement>(null)
@@ -2377,14 +2423,14 @@ function PixelAppShell({
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <article className="is-locked" key={title}>
+                <article className="is-locked" key={title} {...lockedModuleAnchor}>
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Đăng tải portfolio lên mạng và học cách cập nhật khi cần</p></div><em>SẮP TỚI</em>
                 </article>
               ))}
             </div>
           </div>
 
-          <button className="pixel-home-teacher" type="button" onClick={onOpenTeacher} aria-label="Mở Triết, giáo viên đồng hành">
+          <button className="pixel-home-teacher" type="button" onClick={onOpenTeacher} aria-label="Mở Triết, giáo viên đồng hành" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'home-teacher' }}>
             <img src={teacherImage} alt="" />
             <span><small>TEACHER</small><strong>Triết</strong><em>Hỏi khi cần</em></span>
           </button>
@@ -2486,6 +2532,10 @@ function PixelAppShell({
       {teacherOpen ? (
         <TeacherOverlay onClose={onCloseTeacher} />
       ) : null}
+
+      {showHomeTour && destination === 'home' && !teacherOpen ? (
+        <OnboardingTour steps={homeTourSteps} onComplete={onHomeTourComplete} onSkip={onHomeTourSkip} />
+      ) : null}
     </main>
   )
 }
@@ -2509,6 +2559,8 @@ export function LearningWindow() {
   const [error, setError] = useState('')
   const [destination, setDestination] = useState<AppDestination>('home')
   const [teacherOpen, setTeacherOpen] = useState(false)
+  // Applied immediately so a slow or failed save never shows the tour twice in one session.
+  const [onboardingOverride, setOnboardingOverride] = useState<OnboardingTourState | null>(null)
   const [practiceBriefOpen, setPracticeBriefOpen] = useState(false)
   const [practiceFullOpen, setPracticeFullOpen] = useState(false)
   const [outlineSceneId, setOutlineSceneId] = useState<SceneId | null>(null)
@@ -2637,9 +2689,27 @@ export function LearningWindow() {
     return saved
   }
 
+  const onboardingState = onboardingOverride ?? readOnboardingTourState(progress?.decisions)
+  const saveOnboardingState = (value: OnboardingTourState) => {
+    setOnboardingOverride(value)
+    if (!progress) return
+    void persist({
+      currentLessonId: progress.currentLessonId,
+      currentCourseLessonId: progress.currentCourseLessonId,
+      checkpointId: progress.checkpointId,
+      sceneId: progress.sceneId,
+      sceneHistory: progress.sceneHistory,
+      completedCheckpointIds: progress.completedCheckpointIds,
+      decisions: { ...progress.decisions, [ONBOARDING_TOUR_DECISION_KEY]: value }
+    }).catch(() => {
+      // Not critical: the in-session override keeps it hidden; it may show again next launch.
+    })
+  }
+
   const startNew = async () => {
     setBusy(true)
     setError('')
+    setOnboardingOverride(null)
     try {
       await persist(initialUpdate())
       setRecovered(false)
@@ -2661,6 +2731,7 @@ export function LearningWindow() {
     try {
       await window.courseCompanion?.resetProgress()
       setProgress(null)
+      setOnboardingOverride(null)
       setDestination('home')
       setTeacherOpen(false)
       setOutlineSceneId(null)
@@ -2993,6 +3064,9 @@ export function LearningWindow() {
         onCloseTeacher={() => setTeacherOpen(false)}
         onQuit={() => void window.courseCompanion?.quitApp()}
         onReset={() => void reset()}
+        showHomeTour={shouldShowHomeTour(progress, onboardingState)}
+        onHomeTourComplete={() => saveOnboardingState('home-done')}
+        onHomeTourSkip={() => saveOnboardingState('skipped')}
       />
     )
   }
@@ -3233,7 +3307,7 @@ export function LearningWindow() {
           </div>
         </details>
         <div className="pixel-hud-actions">
-          <button className="pixel-hud-teacher" type="button" onClick={() => setTeacherOpen(true)} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết">
+          <button className="pixel-hud-teacher" type="button" onClick={() => setTeacherOpen(true)} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'lesson-teacher' }}>
             <img src={teacherImage} alt="" />
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path fill="currentColor" stroke="var(--pixel-yellow)" d="M4 2h8a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H8l-4 3v-3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3Z" />
@@ -3622,6 +3696,14 @@ export function LearningWindow() {
             setPracticeFullOpen(false)
             if (returningToLesson) void refreshAfterPractice()
           }}
+        />
+      ) : null}
+
+      {shouldShowLessonTip(onboardingState, scene.lessonId) && !teacherOpen && !practiceBriefOpen && !practiceFullOpen ? (
+        <OnboardingTour
+          steps={lessonTipSteps}
+          onComplete={() => saveOnboardingState('complete')}
+          onSkip={() => saveOnboardingState('complete')}
         />
       ) : null}
     </main>

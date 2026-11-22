@@ -228,9 +228,44 @@ async function answerAssessmentGroup(page, groupId, { retryFirstChoice = false }
   await page.getByRole('button', { name: continueLabel, exact: true }).click()
 }
 
-async function completeSetupModule(page, companionPage, electronApp, verifyResponsiveLayout = false) {
-  await page.getByRole('button', { name: /MODULE 1.*MỞ BÀI HỌC/ }).click()
+// First-run Home tour: Triết card, then locked modules; "Đã hiểu" closes it.
+async function walkHomeOnboardingTour(page) {
+  const tour = page.getByRole('dialog', { name: 'Đây là Triết' })
+  await tour.waitFor()
+  const highlighted = await page.locator('[data-onboarding-anchor="home-teacher"]').boundingBox()
+  assert.ok(highlighted)
+  await capture(page, 'onboarding-home-teacher.png')
+  // Clicking outside the bubble does not dismiss the tour.
+  await page.mouse.click(20, 400)
+  await tour.waitFor()
+  await tour.getByRole('button', { name: 'Tiếp', exact: true }).click()
+  const lockedStep = page.getByRole('dialog', { name: 'Các module mở lần lượt' })
+  await lockedStep.waitFor()
+  assert.ok(await page.locator('[data-onboarding-anchor="locked-module"]').count() >= 2)
+  await capture(page, 'onboarding-locked-modules.png')
+  await lockedStep.getByRole('button', { name: 'Đã hiểu', exact: true }).click()
+  await page.locator('[data-onboarding-tour]').waitFor({ state: 'detached' })
+}
+
+async function skipHomeOnboardingTour(page) {
+  await page.getByRole('dialog', { name: 'Đây là Triết' }).waitFor()
+  await page.keyboard.press('Escape')
+  await page.locator('[data-onboarding-tour]').waitFor({ state: 'detached' })
+}
+
+async function closeLessonOnboardingTip(page) {
+  const tip = page.getByRole('dialog', { name: 'Triết luôn ở góc trên này' })
+  await tip.waitFor()
+  await capture(page, 'onboarding-lesson-teacher.png')
+  await tip.getByRole('button', { name: 'Đã hiểu', exact: true }).click()
+  await page.locator('[data-onboarding-tour]').waitFor({ state: 'detached' })
+}
+
+async function completeSetupModule(page, companionPage, electronApp, verifyResponsiveLayout = false, expectLessonTip = false) {
+  await page.getByRole('button', { name: /^01.*MỞ BÀI HỌC/ }).click()
   await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 1/6', { exact: true }).first().waitFor()
+  if (expectLessonTip) await closeLessonOnboardingTip(page)
+  assert.equal(await page.locator('[data-onboarding-tour]').count(), 0)
   await verifyOutlineNavigation(page, 'module-1', join(userDataDirectory, 'learner-state.json'), screenshotDirectory)
   assert.ok(await page.getByRole('button', { name: '← Trang trước', exact: true }).isDisabled())
   for (const id of ['module-1-chat-work', 'module-1-why-codex']) {
@@ -1271,12 +1306,13 @@ try {
   await firstWindows.learningPage
     .getByRole('button', { name: 'Bắt đầu Module 1', exact: true })
     .click()
+  await walkHomeOnboardingTour(firstWindows.learningPage)
   await verifyHomeBase(firstWindows.learningPage)
-  await completeSetupModule(firstWindows.learningPage, firstWindows.companionPage, firstLaunch)
+  await completeSetupModule(firstWindows.learningPage, firstWindows.companionPage, firstLaunch, false, true)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)
   await verifyHomeBase(firstWindows.learningPage)
   await firstWindows.learningPage
-    .getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ })
+    .getByRole('button', { name: /^02.*MỞ BÀI HỌC/ })
     .click()
   await firstWindows.learningPage
     .locator('main[data-scene-id="module-2-portfolio-workspace"]')
@@ -1465,6 +1501,8 @@ try {
   await learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await learningPage.getByRole('button', { name: 'Bắt đầu Module 1', exact: true }).click()
   await learningPage.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
+  // "Xóa và học lại" brings the tour back; skipping it also skips the lesson tip.
+  await skipHomeOnboardingTour(learningPage)
   await completeSetupModule(learningPage, companionPage, resumedLaunch)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)
   await learningPage.getByRole('button', { name: 'Mở Triết, giáo viên đồng hành' }).click()
@@ -1484,7 +1522,7 @@ try {
   await learningPage.getByRole('heading', { name: 'Bắt đầu lại từ đầu?' }).waitFor({ state: 'hidden' })
   await learningPage.locator('.pixel-app-brand').click()
   await learningPage
-    .getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ })
+    .getByRole('button', { name: /^02.*MỞ BÀI HỌC/ })
     .click()
   await learningPage
     .locator('main[data-scene-id="module-2-portfolio-workspace"]')
@@ -1563,7 +1601,7 @@ try {
   await learningPage.reload()
   await learningPage.getByRole('heading', { name: 'Tiếp tục đúng nơi bạn dừng lại' }).waitFor()
   await learningPage.getByRole('button', { name: 'Mở Course Companion', exact: true }).click()
-  await learningPage.getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ }).click({ force: true })
+  await learningPage.getByRole('button', { name: /^02.*MỞ BÀI HỌC/ }).click({ force: true })
   await learningPage.getByText(approvedPortfolioMasteryTransitionCopy, { exact: true }).waitFor()
   assert.equal(await learningPage.locator('.pixel-scene-title').count(), 0)
   assert.equal(await learningPage.locator('.pixel-consequence').count(), 0)
