@@ -255,11 +255,16 @@ async function verifyLockedModuleNudge(page) {
   // Playwright treats aria-disabled as not clickable; a real pointer press still reaches it.
   await locked.click({ force: true })
   assert.ok(await locked.evaluate((card) => card.classList.contains('is-nudged')))
+  const hint = locked.locator('.pixel-roadmap-hint')
+  assert.equal(await hint.innerText(), 'Học xong Module 1 để mở')
+  assert.equal(await page.getByRole('status').filter({ hasText: 'Học xong Module 1 để mở' }).count(), 1)
   await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
-  await locked.evaluate((card) => card.classList.remove('is-nudged'))
+  // The hint fades back to "SẮP TỚI" after a short moment.
+  await hint.waitFor({ state: 'detached', timeout: 5000 })
   await locked.focus()
   await page.keyboard.press('Enter')
   assert.ok(await locked.evaluate((card) => card.classList.contains('is-nudged')))
+  assert.equal(await hint.innerText(), 'Học xong Module 1 để mở')
   await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
 }
 

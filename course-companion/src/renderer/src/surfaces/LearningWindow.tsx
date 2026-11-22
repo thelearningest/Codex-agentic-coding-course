@@ -2269,11 +2269,15 @@ function TeacherOverlay({ onClose, practiceMode = false }: TeacherOverlayProps) 
   )
 }
 
-function RoadmapStage({ children, status, className, onReview }: {
+// Shown for a moment when a learner presses a locked module (approved 23 November 2026).
+const unlockHintFor = (previousModule: number) => `Học xong Module ${previousModule} để mở`
+
+function RoadmapStage({ children, status, className, onReview, unlockHint = '' }: {
   children: ReactNode
   status: string
   className: string
   onReview?: () => void
+  unlockHint?: string
 }) {
   if (onReview) {
     return (
@@ -2283,7 +2287,7 @@ function RoadmapStage({ children, status, className, onReview }: {
     )
   }
   if (className.split(' ').includes('is-locked')) {
-    return <LockedRoadmapStage status={status}>{children}</LockedRoadmapStage>
+    return <LockedRoadmapStage status={status} unlockHint={unlockHint}>{children}</LockedRoadmapStage>
   }
   return <article className={className}>{children}<em>{status}</em></article>
 }
@@ -2401,6 +2405,7 @@ function PixelAppShell({
                 <RoadmapStage
                   className={moduleTwoComplete ? 'is-complete' : 'is-locked'}
                   status={moduleTwoComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
+                  unlockHint={unlockHintFor(1)}
                   onReview={moduleTwoComplete ? () => onReviewModule('module-2') : undefined}
                 >
                   <span>02</span><div><strong>{planningModule?.titleVi ?? 'Lên kế hoạch sao cho hiệu quả?'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Học cách viết PRD và implementation plan, để coding agent không hiểu sai ý bạn'}</p></div>
@@ -2414,6 +2419,7 @@ function PixelAppShell({
                 <RoadmapStage
                   className={moduleThreeComplete ? 'is-complete' : 'is-locked'}
                   status={moduleThreeComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
+                  unlockHint={unlockHintFor(2)}
                   onReview={moduleThreeComplete ? () => onReviewModule('module-3') : undefined}
                 >
                   <span>03</span><div><strong>Bắt đầu tạo portfolio</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Học cách sửa lỗi và lưu lại các phiên bản làm việc'}</p></div>
@@ -2424,7 +2430,7 @@ function PixelAppShell({
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
-                <LockedRoadmapStage key={title} status="SẮP TỚI">
+                <LockedRoadmapStage key={title} status="SẮP TỚI" unlockHint={unlockHintFor(index + 3)}>
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Đăng tải portfolio lên mạng và học cách cập nhật khi cần</p></div>
                 </LockedRoadmapStage>
               ))}
