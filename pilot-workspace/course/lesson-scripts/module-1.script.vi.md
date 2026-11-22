@@ -120,7 +120,7 @@ Teacher nói: "Project giúp Codex làm việc với ngữ cảnh liên quan đ�
 
 Teacher nói: "Ở bước này, bạn chỉ cần biết cách nhận ra project của khóa học trong mục Projects. Chúng mình sẽ hướng dẫn các thao tác cần thiết khi bạn bắt đầu thực hành."
 
-[Dừng chờ Learner xem đủ bốn trang của bài `AGENTS.md` và Skills. Khi chuyển sang
+[Dừng chờ Learner xem đủ năm trang của bài `AGENTS.md` và Skills. Khi chuyển sang
 phần thực hành, lưu checkpoint `m1-agents-and-skills`. Không kiểm tra tệp và không
 yêu cầu ảnh chụp.]
 

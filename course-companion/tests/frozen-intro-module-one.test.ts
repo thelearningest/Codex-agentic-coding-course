@@ -7,7 +7,7 @@ const frozenFiles: Record<string, string> = {
   '../pilot-workspace/course/lessons/intro.vi.md': '85b293c5ecf0d07f5aba6ad00181be185f4def7da0faaadcde40aaaf01b39ed9',
   '../pilot-workspace/course/lessons/module-1.vi.md': '40ac15b9c35a474d4b5530fb4b1373d58ec6554c44c5878849212f8468e51c12',
   '../pilot-workspace/course/lesson-scripts/intro.script.vi.md': 'ac50c545ed4c301b7fee15f5277d7b482fef34c980d4102513c1fd2cf9a54d82',
-  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': 'd25596b6f577fd513ee35146fbb7be995b1e1e70a5c5b251937c1513270bdc6b',
+  '../pilot-workspace/course/lesson-scripts/module-1.script.vi.md': 'b6e4ed239fc8698de1fc7b880611d9774efd2893cf61caa5ffb3e181b4612217',
   '../pilot-workspace/course/prompts/start-intro.vi.md': '1092f834e3dd9859a00469342ac828a388a806e202796d3171cd76b9fba09863',
   '../pilot-workspace/course/prompts/start-module-1.vi.md': '3121227b2754738ae1e967a660c965d2e6d3a8994a031349963984d15d735653',
   '../pilot-workspace/course/quizzes/intro.quiz.json': 'c9e61547579f9a07389c4f9498dd8a23c674c71f0860181c5fe22021f1c220e1',

@@ -2982,8 +2982,9 @@ there first and remain synchronized with Course Companion.
   failing at `70de984` (scene digest and `SOURCES.md` digest), and its digest
   was not changed. Per the narrow UI gate, `npm test`, build and
   `test:electron` were not run. The owner manually checked the integrated
-  pages before requesting the commit. The Teacher script still says the lesson has
-  four pages; that copy is unchanged pending owner approval. This scoped UI
+  pages before requesting the commit. With the owner's approval, the Module 1
+  Teacher script now tells the Teacher to wait for five pages instead of four,
+  and the pinned frozen digest for that one file was updated. This scoped UI
   approval does not mark overall Foundation owner approval or pilot acceptance
   complete.
 - On 24 August 2026, the owner approved splitting the crowded Module 1
