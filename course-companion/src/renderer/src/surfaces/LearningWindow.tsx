@@ -399,6 +399,25 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'CURRENT REPO', value: 'Chỉ áp dụng cho repo đang mở' }
     ],
     dialogue: 'Vậy, giả dụ có một thông tin mình muốn agent ghi nhớ mà không cần phải nhắc đi nhắc lại thì mình sẽ làm gì? Bạn có thể lưu thông tin đó trong AGENTS.md. Đây là một tệp văn bản chứa các quy tắc và thông tin coding agent cần biết trước khi bắt đầu công việc. Codex đọc tệp này để hiểu cách bạn muốn dự án được xử lý.',
+    choices: [{ label: 'Tiếp theo: hai level AGENTS.md', next: 'module-1-agents-levels', primary: true }]
+  },
+  'module-1-agents-levels': {
+    lessonId: 'module-1',
+    checkpointId: 'm1-agents-and-skills',
+    step: 2,
+    totalSteps: 6,
+    lessonLabel: 'MODULE 1 · AGENTS.MD VÀ SKILLS',
+    mission: 'Hai level AGENTS.md',
+    objective: 'Biết AGENTS.md nằm ở đâu và áp dụng cho dự án nào',
+    panelLabel: 'AGENTS.md',
+    panelStatus: 'GLOBAL VÀ CURRENT REPO',
+    tone: 'neutral',
+    request: 'Global đặt nguyên tắc chung. Current repo bổ sung quy tắc cho dự án đang mở.',
+    evidence: [
+      { label: 'GLOBAL', value: 'Áp dụng cho mọi repo' },
+      { label: 'CURRENT REPO', value: 'Chỉ áp dụng cho repo đang mở' }
+    ],
+    dialogue: 'Hai level AGENTS.md bạn cần biết. Global (~/.codex/AGENTS.md) áp dụng cho bất kỳ dự án nào mà bạn xây dựng với coding agent sau này. Current repo (AGENTS.md) chỉ áp dụng cho dự án hiện tại. Ở Module 2, Course Companion sẽ tạo sẵn một tệp AGENTS.md cho thư mục portfolio của bạn.',
     choices: [{ label: 'Tiếp theo: Skill', next: 'module-1-skills-intro', primary: true }]
   },
   'module-1-skills-intro': {
@@ -1292,6 +1311,7 @@ const courseLessonPages = {
   ],
   'm1-agents-and-skills': [
     ['module-1-agents-intro'],
+    ['module-1-agents-levels'],
     ['module-1-skills-intro'],
     ['module-1-skills-portfolio'],
     ['module-1-codex-projects']
@@ -1645,10 +1665,29 @@ const modelLessonSceneByKind: Record<ModelLessonBoardKind, SceneId> = {
   settings: 'module-1-codex-effort-speed'
 }
 
-type GuidanceLessonBoardKind = 'agents' | 'skills' | 'skills-portfolio'
+type GuidanceLessonBoardKind = 'agents' | 'agents-levels' | 'skills' | 'skills-portfolio'
+
+// Short global example; the full format lives at agents.md.
+const agentsExampleLines = [
+  '# Quy tắc chung cho mọi dự án',
+  '',
+  '## Trước khi làm',
+  '- Nêu kế hoạch và chờ mình đồng ý rồi mới sửa tệp.',
+  '',
+  '## An toàn',
+  '- Không push hay đưa thay đổi lên mạng khi mình chưa yêu cầu.',
+  '- Không ghi khóa API hay mật khẩu vào tệp.'
+] as const
+
+function agentsExampleLineKind(line: string): string | undefined {
+  if (line.startsWith('# ')) return 'is-title'
+  if (line.startsWith('## ')) return 'is-section'
+  return undefined
+}
 
 const guidanceLessonBoardByScene: Partial<Record<SceneId, GuidanceLessonBoardKind>> = {
   'module-1-agents-intro': 'agents',
+  'module-1-agents-levels': 'agents-levels',
   'module-1-skills-intro': 'skills',
   'module-1-skills-portfolio': 'skills-portfolio'
 }
@@ -1709,6 +1748,31 @@ function GuidanceLessonBoard({
               <p>Đây là một tệp văn bản chứa các quy tắc và thông tin coding agent cần biết trước khi bắt đầu công việc. Codex đọc tệp này để hiểu cách bạn muốn dự án được xử lý.</p>
             </header>
           </>
+        ) : kind === 'agents-levels' ? (
+          <>
+            <header>
+              <h1 id={titleId}>Hai level <code>AGENTS.md</code> bạn cần biết</h1>
+            </header>
+            <div className="pixel-agents-levels">
+              <article>
+                <span>GLOBAL</span>
+                <ul className="pixel-agents-levels__tree" aria-label="~/.codex/AGENTS.md">
+                  <li>~/.codex/</li>
+                  <li className="is-file">AGENTS.md</li>
+                </ul>
+                <p>Áp dụng cho bất kỳ dự án nào mà bạn xây dựng với coding agent sau này.</p>
+              </article>
+              <article>
+                <span>CURRENT REPO</span>
+                <ul className="pixel-agents-levels__tree" aria-label="portfolio/AGENTS.md">
+                  <li>portfolio/</li>
+                  <li className="is-file">AGENTS.md</li>
+                </ul>
+                <p>Chỉ áp dụng cho dự án hiện tại.</p>
+                <p>Ở Module 2, Course Companion sẽ tạo sẵn một tệp <code>AGENTS.md</code> cho thư mục portfolio của bạn.</p>
+              </article>
+            </div>
+          </>
         ) : kind === 'skills' ? (
           <>
             <header>
@@ -1736,22 +1800,19 @@ function GuidanceLessonBoard({
         )}
       </div>
 
-      <aside className="pixel-guidance-board__panel">
+      {kind === 'agents-levels' ? null : <aside className="pixel-guidance-board__panel">
         {kind === 'agents' ? (
-          <div className="pixel-agents-levels">
-            <h2>Hai level <code>AGENTS.md</code> bạn cần biết</h2>
-            <article>
-              <span>GLOBAL</span>
-              <code>~/.codex/AGENTS.md</code>
-              <p>Áp dụng cho bất kỳ dự án nào mà bạn xây dựng với coding agent sau này.</p>
-            </article>
-            <article>
-              <span>CURRENT REPO</span>
-              <code>AGENTS.md</code>
-              <p>Chỉ áp dụng cho dự án hiện tại.</p>
-              <p>Ở Module 2, Course Companion sẽ tạo sẵn một tệp <code>AGENTS.md</code> cho thư mục portfolio của bạn.</p>
-            </article>
-          </div>
+          <>
+            <div className="pixel-agents-example" role="group" aria-label="Ví dụ tệp AGENTS.md">
+              <div className="pixel-agents-example__bar"><span aria-hidden="true"><i /><i /><i /></span><code>AGENTS.md</code></div>
+              <ol>
+                {agentsExampleLines.map((line, index) => (
+                  <li key={index} className={agentsExampleLineKind(line)}><span>{line || ' '}</span></li>
+                ))}
+              </ol>
+            </div>
+            <p className="pixel-guidance-board__directory">Xem định dạng đầy đủ và thêm ví dụ tại <a href="https://agents.md/" target="_blank" rel="noreferrer">agents.md ↗</a></p>
+          </>
         ) : kind === 'skills' ? (
           <>
             <div className="pixel-skill-excerpt" aria-label="Ví dụ rút gọn từ skill frontend-design">
@@ -1766,7 +1827,7 @@ function GuidanceLessonBoard({
             <p className="pixel-guidance-board__directory">Khám phá thêm skill do cộng đồng chia sẻ tại <a href="https://skills.sh/" target="_blank" rel="noreferrer">skills.sh</a>. Bạn chưa cần cài thêm skill trong Module 1.</p>
           </div>
         )}
-      </aside>
+      </aside>}
 
       <footer className="pixel-guidance-board__actions">
         <button className="pixel-page-back" disabled={!canOpenPreviousPage} type="button" onClick={onBack}>← Trang trước</button>

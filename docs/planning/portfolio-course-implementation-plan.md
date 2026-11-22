@@ -2969,6 +2969,23 @@ there first and remain synchronized with Course Companion.
   build, full responsive Electron smoke, and `git diff --check` passed. This is
   part of the scoped two-page Skill approval and does not mark overall
   Foundation owner approval or pilot acceptance complete.
+- On 22 November 2026, after reviewing a clickable HTML prototype, the owner
+  approved splitting the crowded `AGENTS.md` page into two pages inside the
+  same `m1-agents-and-skills` lesson. The first page keeps the existing
+  heading and two paragraphs and adds an eight-line example `AGENTS.md` plus a
+  link to the official format at agents.md. The new `module-1-agents-levels`
+  page holds the unchanged "Hai level `AGENTS.md` bạn cần biết" copy, with a
+  small folder tree on each level card. The lesson now has five pages. Scene
+  contracts, lesson pages, focused Electron smoke assertions and the frozen
+  text checks are updated. Typecheck and lint passed; the frozen text checks
+  pass when evaluated directly. `frozen-intro-module-one.test.ts` was already
+  failing at `70de984` (scene digest and `SOURCES.md` digest), and its digest
+  was not changed. Per the narrow UI gate, `npm test`, build and
+  `test:electron` were not run. The owner manually checked the integrated
+  pages before requesting the commit. The Teacher script still says the lesson has
+  four pages; that copy is unchanged pending owner approval. This scoped UI
+  approval does not mark overall Foundation owner approval or pilot acceptance
+  complete.
 - On 24 August 2026, the owner approved splitting the crowded Module 1
   Model/Effort/Speed surface into two pages. The Model page now contains only
   the main introduction and the Sol, Terra, and Luna cards. The new Effort and
