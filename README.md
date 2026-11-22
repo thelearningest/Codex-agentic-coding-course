@@ -204,17 +204,6 @@ Sau khi bạn gửi prompt cho Codex, một cửa sổ terminal sẽ hiện ra. 
 
 Bạn sẽ thấy nội dung của khoá học hiện ra sau khi coding agents đã tải các công cụ cần thiết. Việc của bạn sau đó chỉ đơn giản là tận hưởng khoá học!
 
-## Tài khoản và tiến độ
-
-- Khóa học không có trang đăng nhập riêng, và không đọc hay lưu mật khẩu hoặc
-  thông tin đăng nhập ChatGPT của bạn.
-- Khóa học đọc bằng chứng có giới hạn từ đúng task Practice đã liên
-  kết và các file liên quan trong thư mục thực hành. Teacher hướng dẫn và
-  nhận xét; bạn làm việc với Codex để thay đổi dự án.
-- Cấu hình không chứa bí mật và tiến độ học được lưu trên máy của bạn.
-- Khi mở lại, ứng dụng kiểm tra bản lưu và đưa bạn về đúng bước đang học.
-- Một bản tải khóa học mới trên cùng máy và tài khoản hệ điều hành vẫn dùng
-  tiến độ đã lưu trước đó. Tải lại repository không đặt lại hồ sơ học tập.
 
 
 
