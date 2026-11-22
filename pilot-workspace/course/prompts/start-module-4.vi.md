@@ -1,4 +1,4 @@
-Dùng `$start-course-lesson module-4` để mở **Kiểm chứng, phát hành và chứng minh quyền sở hữu**.
+Dùng `$start-course-lesson module-4` để mở **Đăng tải portfolio lên mạng**.
 
 Đọc `course/lesson-scripts/module-4.script.vi.md` và lesson tương ứng. Kiểm tra repo GitHub từ Module 3 trước khi import. Dạy hosting bằng phần mở đầu đã duyệt, rồi cho người học làm theo video để đăng portfolio. Sau video, kiểm tra website và quyền truy cập thực tế, rồi nhắc cách sửa ở Local và cập nhật từ GitHub như trong lesson. Không lặp lại các trang thao tác đăng lần đầu đã thay bằng video.
 

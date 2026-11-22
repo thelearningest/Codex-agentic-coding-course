@@ -1,7 +1,7 @@
 export const moduleFourDefinition = {
   id: 'module-4',
   order: 4,
-  titleVi: 'Kiểm chứng, phát hành và chứng minh quyền sở hữu',
+  titleVi: 'Đăng tải portfolio lên mạng',
   lessons: [
     { id: 'm4-release-validation', titleVi: 'Hosting và chuẩn bị triển khai' },
     { id: 'm4-security-publication', titleVi: 'Bảo mật và quyền truy cập' },

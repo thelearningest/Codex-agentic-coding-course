@@ -1,4 +1,4 @@
-# Kịch bản Teacher — Module 2: Planning và PRD trước khi code với AI
+# Kịch bản Teacher — Module 2: Lên kế hoạch sao cho hiệu quả?
 
 ## Phần 1 — Tại sao cần planning trước khi code với AI?
 

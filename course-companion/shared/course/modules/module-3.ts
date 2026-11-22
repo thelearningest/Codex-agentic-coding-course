@@ -1,7 +1,7 @@
 export const moduleThreeDefinition = {
   id: 'module-3',
   order: 3,
-  titleVi: 'Hiện thực hoá sản phẩm cùng coding agent',
+  titleVi: 'Bắt đầu tạo portfolio',
   lessons: [
     { id: 'm3-complete-first-version', titleVi: 'Debug cùng coding agent' },
     { id: 'm3-whole-page-revision', titleVi: 'Git và GitHub' },

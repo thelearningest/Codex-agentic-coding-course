@@ -35,7 +35,7 @@ describe('Module 2 portfolio contract', () => {
   it('preserves the lesson and requires final-package review with current approval', async () => {
     const moduleTwo = await manifest()
 
-    expect(moduleTwo.titleVi).toBe('Planning và PRD trước khi code với AI')
+    expect(moduleTwo.titleVi).toBe('Lên kế hoạch sao cho hiệu quả?')
     expect(moduleTwo.estimatedMinutes).toBeUndefined()
     expect(moduleTwo.lessons.map((lesson) => lesson.id)).toEqual([
       'm2-portfolio-brief'

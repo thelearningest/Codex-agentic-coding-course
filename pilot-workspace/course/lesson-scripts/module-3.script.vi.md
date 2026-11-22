@@ -1,4 +1,4 @@
-# Kịch bản Teacher — Module 3: Hiện thực hoá sản phẩm cùng coding agent
+# Kịch bản Teacher — Module 3: Bắt đầu tạo portfolio
 
 ## Hợp đồng điều phối
 

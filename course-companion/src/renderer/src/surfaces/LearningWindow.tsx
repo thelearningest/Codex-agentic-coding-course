@@ -2153,7 +2153,7 @@ const coursePractices = [
   { moduleLabel: 'Module 4', title: 'Practice: Phát hành portfolio', checkpointId: 'm4-portfolio-release' }
 ] as const satisfies readonly { moduleLabel: string; title: string; checkpointId: CheckpointId }[]
 
-const futureModules = ['Kiểm chứng, phát hành và chứng minh quyền làm chủ']
+const futureModules = ['Đăng tải portfolio lên mạng']
 
 
 
@@ -2287,7 +2287,7 @@ function PixelAppShell({
               )}
               {currentModuleId === 'module-2' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleTwoComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
-                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Lên kế hoạch sao cho hiệu quả?'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <RoadmapStage
@@ -2295,12 +2295,12 @@ function PixelAppShell({
                   status={moduleTwoComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
                   onReview={moduleTwoComplete ? () => onReviewModule('module-2') : undefined}
                 >
-                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Hoàn thành Module 1 để mở phần Planning.'}</p></div>
+                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Lên kế hoạch sao cho hiệu quả?'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Học cách viết PRD và implementation plan, để coding agent không hiểu sai ý bạn'}</p></div>
                 </RoadmapStage>
               )}
               {currentModuleId === 'module-3' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleThreeComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
-                  <span>03</span><div><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>03</span><div><strong>Bắt đầu tạo portfolio</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <RoadmapStage
@@ -2308,7 +2308,7 @@ function PixelAppShell({
                   status={moduleThreeComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
                   onReview={moduleThreeComplete ? () => onReviewModule('module-3') : undefined}
                 >
-                  <span>03</span><div><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Hoàn thành gate bằng chứng và mastery của Module 2 để mở.'}</p></div>
+                  <span>03</span><div><strong>Bắt đầu tạo portfolio</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Học cách sửa lỗi và lưu lại các phiên bản làm việc'}</p></div>
                 </RoadmapStage>
               )}
               {futureModules.map((title, index) => currentModuleId === `module-${index + 4}` ? (
@@ -2317,7 +2317,7 @@ function PixelAppShell({
                 </button>
               ) : (
                 <article className="is-locked" key={title}>
-                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Sẽ mở trong phần học tiếp theo</p></div><em>SẮP TỚI</em>
+                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Đăng tải portfolio lên mạng và học cách cập nhật khi cần</p></div><em>SẮP TỚI</em>
                 </article>
               ))}
             </div>

@@ -29,7 +29,7 @@ async function moduleFour() {
 describe('Module 4 content-first contract', () => {
   it('locks five ordered content milestones without claiming Practice completion', async () => {
     const module = await moduleFour()
-    expect(module.titleVi).toBe('Kiểm chứng, phát hành và chứng minh quyền sở hữu')
+    expect(module.titleVi).toBe('Đăng tải portfolio lên mạng')
     expect(module.estimatedMinutes).toBeUndefined()
     expect(module.lessons.map((lesson) => lesson.id)).toEqual([
       'm4-release-validation',

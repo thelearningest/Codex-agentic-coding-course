@@ -1,5 +1,5 @@
 Dùng `$start-course-lesson module-2` để bắt đầu bài
-**Planning và PRD trước khi code với AI**.
+**Lên kế hoạch sao cho hiệu quả?**
 
 Đọc `course/lesson-scripts/module-2.script.vi.md` làm nguồn điều phối và dạy đúng
 bốn phần kiến thức tổng quát:

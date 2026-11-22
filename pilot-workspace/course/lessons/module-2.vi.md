@@ -1,4 +1,4 @@
-# Module 2 — Planning và PRD trước khi code với AI
+# Module 2 — Lên kế hoạch sao cho hiệu quả?
 
 ## Phần 1 — Tại sao cần planning trước khi code với AI?
 

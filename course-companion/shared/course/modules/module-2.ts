@@ -12,7 +12,7 @@ export const moduleTwoOutlineSections = [
 export const moduleTwoDefinition = {
   id: 'module-2',
   order: 2,
-  titleVi: 'Planning và PRD trước khi code với AI',
+  titleVi: 'Lên kế hoạch sao cho hiệu quả?',
   lessons: [
     { id: 'm2-portfolio-brief', titleVi: 'Mục đích của portfolio này là gì?' }
   ],

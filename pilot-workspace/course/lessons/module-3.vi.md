@@ -1,4 +1,4 @@
-# Module 3 — Hiện thực hoá sản phẩm cùng coding agent
+# Module 3 — Bắt đầu tạo portfolio
 
 ## Tạo bản portfolio đầu tiên
 

@@ -34,7 +34,7 @@ async function moduleThree() {
 describe('Module 3 content and evidence contract', () => {
   it('registers the four remaining learner-facing sections and viewport pair', async () => {
     const module = await moduleThree()
-    expect(module.titleVi).toBe('Hiện thực hoá sản phẩm cùng coding agent')
+    expect(module.titleVi).toBe('Bắt đầu tạo portfolio')
     expect(module.estimatedMinutes).toBeUndefined()
     expect(module.lessons.map((lesson) => lesson.titleVi)).toEqual([
       'Debug cùng coding agent',

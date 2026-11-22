@@ -1066,7 +1066,7 @@ async function verifyHomeBase(page) {
     .getByText('Bắt đầu làm việc với Codex', { exact: true })
     .waitFor()
   await page
-    .getByText('Planning và PRD trước khi code với AI', { exact: true })
+    .getByText('Lên kế hoạch sao cho hiệu quả?', { exact: true })
     .waitFor()
   await capture(page, 'home-base.png')
   if (screenshotDirectory) {

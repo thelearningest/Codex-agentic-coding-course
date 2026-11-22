@@ -1,4 +1,4 @@
-Dùng `$start-course-lesson module-3` để bắt đầu bài **Hiện thực hoá sản phẩm cùng coding agent**.
+Dùng `$start-course-lesson module-3` để bắt đầu bài **Bắt đầu tạo portfolio**.
 
 Đọc `course/lesson-scripts/module-3.script.vi.md` làm nguồn điều phối. Xác nhận Module 2 đã có PRD và implementation plan được duyệt, rồi mở Module 3 bằng đúng wording trong lesson.
 

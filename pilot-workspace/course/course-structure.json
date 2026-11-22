@@ -99,7 +99,7 @@
     {
       "id": "module-2",
       "kind": "module",
-      "titleVi": "Planning và PRD trước khi code với AI",
+      "titleVi": "Lên kế hoạch sao cho hiệu quả?",
       "titleEn": "Planning and PRDs before coding with AI",
       "lessonPath": "course/lessons/module-2.vi.md",
       "scriptPath": "course/lesson-scripts/module-2.script.vi.md",
@@ -153,7 +153,7 @@
     {
       "id": "module-3",
       "kind": "module",
-      "titleVi": "Hiện thực hoá sản phẩm cùng coding agent",
+      "titleVi": "Bắt đầu tạo portfolio",
       "titleEn": "Build the product with a coding agent",
       "lessonPath": "course/lessons/module-3.vi.md",
       "scriptPath": "course/lesson-scripts/module-3.script.vi.md",
@@ -221,7 +221,7 @@
     {
       "id": "module-4",
       "kind": "module",
-      "titleVi": "Kiểm chứng, phát hành và chứng minh quyền sở hữu",
+      "titleVi": "Đăng tải portfolio lên mạng",
       "titleEn": "Validate, publish, and prove ownership",
       "lessonPath": "course/lessons/module-4.vi.md",
       "scriptPath": "course/lesson-scripts/module-4.script.vi.md",
