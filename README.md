@@ -167,7 +167,7 @@ Tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 
 ```text
 Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
-https://github.com/thelearningest/Codex-agentic-coding-course.git
+https://github.com/thelearningest/Vibe-coding-101-with-Codex.git
 vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
 để mở khóa học.
 Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
