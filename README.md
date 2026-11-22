@@ -196,28 +196,14 @@ Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bư�
 
 Ảnh được chụp trên macOS. Trên Windows, các nút có tên tương tự.
 
-### Bước 2 — Xem và xác nhận phần chuẩn bị
+### Bước 2 — Trước khi bắt đầu khoá học
 
-Sau khi Codex mở trình khởi động, bạn sẽ nhận lời chào và phần giải thích ngắn về quá trình
-chuẩn bị. Trình khởi động kiểm tra các công cụ cần thiết và cho biết phần nào
-còn thiếu.
+Sau khi bạn gửi prompt cho Codex, một cửa sổ terminal sẽ hiện ra. Sau khi đọc các lời giới thiệu khoá học, ở cuối bạn sẽ thấy một câu hỏi rằng bạn có đồng ý để tải các công cụ cần thiết cho khoá học không. Bạn có thể bấm có mà yên tâm rằng mình không gửi mã độc vào máy bạn :) 
 
-Nếu cần cài thêm, hãy đọc lệnh và mục đích được hiển thị. Khi thấy phù hợp,
-bạn xác nhận để trình khởi động thực hiện. **Không có gì được cài nếu bạn
-chưa đồng ý.** Nếu mọi thứ đã sẵn sàng, trình khởi động sẽ mở khóa học
-để bạn tiếp tục.
-
-Bạn có thể từ chối cài đặt. Trình khởi động sẽ dừng và giải thích bước tiếp theo
-bạn có thể tự thực hiện.
 
 ### Bước 3 — Bắt đầu học
 
-Khi khóa học mở, bạn bắt đầu từ phần giới thiệu nếu đây là lần đầu
-học. Nếu đã học trước đó, ứng dụng khôi phục tiến độ đã lưu trên máy và đưa
-bạn về đúng bước đang học.
-
-Bạn chỉ cần làm theo hướng dẫn trong bài. Khi đến phần Practice, khóa học sẽ
-hướng dẫn bạn chuyển sang Codex để thực hành.
+Bạn sẽ thấy nội dung của khoá học hiện ra sau khi coding agents đã tải các công cụ cần thiết. Việc của bạn sau đó chỉ đơn giản là tận hưởng khoá học!
 
 ## Tài khoản và tiến độ
 
