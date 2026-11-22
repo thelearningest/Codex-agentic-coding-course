@@ -1,6 +1,6 @@
 {
   "name": "course-companion",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Local desktop learning companion for Codex Content Builder Academy",
   "main": "./out/main/index.js",
