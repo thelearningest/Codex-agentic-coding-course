@@ -480,17 +480,15 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.doesNotMatch(await skillBoard.textContent(), /copywriting/)
   assert.doesNotMatch(await skillBoard.textContent(), /skills\.sh/)
   assert.match(await skillBoard.textContent(), /Bạn vẫn có thể trao đổi với Codex bằng tiếng Việt/)
-  const skillKickerTypography = await skillBoard.locator('.pixel-guidance-board__skill-kicker').evaluate((element) => {
-    const skillName = element.querySelector('strong')
-    const skillDescription = element.querySelector('span')
-    if (!skillName || !skillDescription) return null
-    return {
-      name: Number.parseFloat(globalThis.getComputedStyle(skillName).fontSize),
-      description: Number.parseFloat(globalThis.getComputedStyle(skillDescription).fontSize)
-    }
-  })
-  assert.ok(skillKickerTypography)
-  assert.ok(skillKickerTypography.name > skillKickerTypography.description)
+  const skillHeading = skillBoard.locator('h1')
+  assert.match(await skillHeading.textContent(), /^Skill - Dạy coding agent cách thực hiện một loại công việc$/)
+  const skillLabelEmphasis = await skillHeading.locator('.pixel-guidance-board__skill-label').evaluate((element) => ({
+    text: element.textContent,
+    labelColor: globalThis.getComputedStyle(element).color,
+    headingColor: globalThis.getComputedStyle(element.parentElement).color
+  }))
+  assert.equal(skillLabelEmphasis.text, 'Skill')
+  assert.notEqual(skillLabelEmphasis.labelColor, skillLabelEmphasis.headingColor)
   if (verifyResponsiveLayout) {
     await page.setViewportSize({ width: 390, height: 844 })
     const skillsNarrowWidths = await page.evaluate(() => ({
@@ -1452,23 +1450,12 @@ try {
   await learningPage.getByRole('button', { name: 'Cài đặt', exact: true }).click()
   assert.equal(await learningPage.getByRole('button', { name: 'Thu nhỏ', exact: true }).count(), 0)
   await capture(learningPage, 'settings.png')
-  const alwaysOnTopSwitch = learningPage.getByRole('switch', {
-    name: 'Luôn ở phía trên cửa sổ khác'
-  })
-  await alwaysOnTopSwitch.click()
-  const notFloating = await waitForSnapshot(
-    resumedLaunch,
-    (windows) => companionWindow(windows)?.alwaysOnTop === false,
-    'Expected Settings to disable always-on-top for the Teacher companion'
-  )
-  assert.equal(companionWindow(notFloating)?.alwaysOnTop, false)
-  await alwaysOnTopSwitch.click()
-  await waitForSnapshot(
-    resumedLaunch,
-    (windows) => companionWindow(windows)?.alwaysOnTop === true,
-    'Expected Settings to restore always-on-top for the Teacher companion'
-  )
-  await learningPage.getByRole('button', { name: 'Về Home Base', exact: true }).click()
+  assert.equal(await learningPage.getByRole('button', { name: 'Hồ sơ học tập', exact: true }).count(), 0)
+  await learningPage.getByRole('button', { name: 'Xóa và học lại', exact: true }).click()
+  await learningPage.getByRole('heading', { name: 'Bắt đầu lại từ đầu?' }).waitFor()
+  await learningPage.getByRole('button', { name: 'Giữ tiến trình', exact: true }).click()
+  await learningPage.getByRole('heading', { name: 'Bắt đầu lại từ đầu?' }).waitFor({ state: 'hidden' })
+  await learningPage.locator('.pixel-app-brand').click()
   await learningPage
     .getByRole('button', { name: /MODULE 2.*MỞ BÀI HỌC/ })
     .click()

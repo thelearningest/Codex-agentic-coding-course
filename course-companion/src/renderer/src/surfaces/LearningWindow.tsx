@@ -7,7 +7,6 @@ import {
   runnableCheckpointIds,
   isPortfolioBuildLesson,
   portfolioBuildVersion,
-  type AppSettings,
   type CourseLessonId,
   type PracticeState,
   type CheckpointId,
@@ -1337,7 +1336,7 @@ const learningPositionByScene = Object.fromEntries(
 ) as Record<SceneId, LearningPosition>
 
 type View = 'loading' | 'welcome' | 'resume' | 'app' | 'reset-confirm' | 'reset-required' | 'error'
-type AppDestination = 'home' | 'lesson' | 'progress' | 'settings'
+type AppDestination = 'home' | 'lesson' | 'settings'
 type ApprovalFocus = 'ask' | 'approve' | 'full'
 
 const sceneStyle = { '--pixel-room-image': `url("${roomImage}")` } as CSSProperties
@@ -1356,11 +1355,6 @@ function initialUpdate(): ProgressUpdate {
 
 function emptyPracticeState(): PracticeState {
   return { missionId: 'm2-planning-package', status: 'idle' }
-}
-
-const defaultAppSettings: AppSettings = {
-  companionMode: 'compact',
-  companionAlwaysOnTop: true
 }
 
 function previewProgress(update: ProgressUpdate, previous?: LearnerProgress): LearnerProgress {
@@ -2196,7 +2190,6 @@ type PixelAppShellProps = {
   progress: LearnerProgress
   runtime: RuntimeInfo | null
   destination: AppDestination
-  settings: AppSettings
   teacherOpen: boolean
   onNavigate: (destination: AppDestination) => void
   onReviewModule: (moduleId: Exclude<LessonId, 'intro'>) => void
@@ -2204,24 +2197,22 @@ type PixelAppShellProps = {
   onCloseTeacher: () => void
   onQuit: () => void
   onReset: () => void
-  onSettingsChange: (alwaysOnTop: boolean) => void
 }
 
 function PixelAppShell({
   progress,
   runtime,
   destination,
-  settings,
   teacherOpen,
   onNavigate,
   onReviewModule,
   onOpenTeacher,
   onCloseTeacher,
   onQuit,
-  onReset,
-  onSettingsChange
+  onReset
 }: PixelAppShellProps) {
-  const [confirmReset, setConfirmReset] = useState(false)
+  const resetDialogRef = useRef<HTMLDialogElement>(null)
+  const resetOpenerRef = useRef<HTMLButtonElement>(null)
   const scene = scenes[progress.sceneId]
   const learningPosition = learningPositionByScene[visibleLessonScene(progress.sceneId)]
   const completed = new Set(progress.completedCheckpointIds)
@@ -2246,16 +2237,6 @@ function PixelAppShell({
   const firstOpenPractice = practiceDone.indexOf(false)
   const practiceStatuses = practiceDone.map((done, index) => done ? 'done' : index === firstOpenPractice ? 'next' : 'todo')
 
-  const surfaceCopy: Record<Exclude<AppDestination, 'home' | 'lesson'>, { kicker?: string; title: string; description?: string }> = {
-    progress: {
-      title: 'Hồ sơ học tập'
-    },
-    settings: {
-      kicker: 'CÀI ĐẶT',
-      title: 'Điều khiển hành vi ứng dụng và dữ liệu cục bộ',
-      description: 'Chỉ các cài đặt đang hoạt động thật mới xuất hiện ở đây.'
-    }
-  }
 
   return (
     <main className="pixel-course-app">
@@ -2267,12 +2248,6 @@ function PixelAppShell({
           <span><strong>VIBECODING 101</strong><small>COURSE COMPANION · TRIẾT &amp; DUY</small></span>
         </button>
         <div className="pixel-app-actions">
-          <button
-            aria-current={destination === 'progress' ? 'page' : undefined}
-            className={destination === 'progress' ? 'is-active' : ''}
-            type="button"
-            onClick={() => onNavigate('progress')}
-          >Hồ sơ học tập</button>
           <button
             aria-current={destination === 'settings' ? 'page' : undefined}
             className={destination === 'settings' ? 'is-active' : ''}
@@ -2356,16 +2331,8 @@ function PixelAppShell({
         </section>
       ) : destination === 'lesson' ? null : (
         <section className={`pixel-app-surface is-${destination}`}>
-          {destination === 'progress' ? null : <header className="pixel-surface-heading">
-            <div>
-              {surfaceCopy[destination].kicker ? <small>{surfaceCopy[destination].kicker}</small> : null}
-              <h1>{surfaceCopy[destination].title}</h1>
-              {surfaceCopy[destination].description ? <p>{surfaceCopy[destination].description}</p> : null}
-            </div>
-            <button type="button" onClick={() => onNavigate('home')}>Về Home Base</button>
-          </header>}
 
-          {destination === 'progress' ? (
+          {destination === 'settings' ? (
             <div className="pixel-progress-surface">
               <section className="pixel-progress-position" aria-labelledby="progress-position-title">
                 <div>
@@ -2427,32 +2394,30 @@ function PixelAppShell({
                   <div><span>{practice.latestEvent.evidence.prdArtifact}</span><span>{practice.latestEvent.evidence.implementationPlanArtifact}</span><span>{practice.latestEvent.evidence.alignment}</span></div>
                 </section>
               ) : null}
-            </div>
-          ) : null}
-
-          {destination === 'settings' ? (
-            <div className="pixel-settings">
-              <section>
-                <div><small>TRIẾT NỔI</small><h2>Luôn ở phía trên cửa sổ khác</h2><p>Tắt tùy chọn này nếu Triết che khuất công việc trong Codex.</p></div>
-                <button
-                  aria-label="Luôn ở phía trên cửa sổ khác"
-                  aria-checked={settings.companionAlwaysOnTop}
-                  className={settings.companionAlwaysOnTop ? 'is-on' : ''}
-                  role="switch"
-                  type="button"
-                  onClick={() => onSettingsChange(!settings.companionAlwaysOnTop)}
-                ><span>{settings.companionAlwaysOnTop ? 'BẬT' : 'TẮT'}</span></button>
+              <section className="pixel-settings-data" aria-labelledby="settings-data-title">
+                <small id="settings-data-title">Dữ liệu trên máy này</small>
+                <div>
+                  <div>
+                    <strong>Học lại từ đầu</strong>
+                    <span>Xóa toàn bộ tiến độ, bài thực hành, tin nhắn với Triết và cài đặt trên máy này.</span>
+                  </div>
+                  <button ref={resetOpenerRef} type="button" onClick={() => resetDialogRef.current?.showModal()}>Xóa và học lại</button>
+                </div>
               </section>
-              <section>
-                <div><small>KẾT NỐI</small><h2>Teacher và Codex</h2><p>Phần luyện tập hiện dùng kịch bản cục bộ và chưa quan sát trực tiếp Codex.</p></div>
-                <strong className="pixel-settings-status">CHẾ ĐỘ LUYỆN TẬP</strong>
-              </section>
-              <section className="is-danger-zone">
-                <div><small>DỮ LIỆU CỤC BỘ</small><h2>Xóa hành trình và bắt đầu lại</h2><p>Xóa checkpoint, quyết định, chat, thực hành và cài đặt trên máy này.</p></div>
-                {confirmReset ? (
-                  <div className="pixel-settings-confirm"><button type="button" onClick={() => setConfirmReset(false)}>Hủy</button><button type="button" onClick={onReset}>Xóa toàn bộ dữ liệu</button></div>
-                ) : <button type="button" onClick={() => setConfirmReset(true)}>Bắt đầu lại</button>}
-              </section>
+              <dialog
+                ref={resetDialogRef}
+                className="pixel-reset-dialog"
+                aria-labelledby="reset-dialog-title"
+                aria-describedby="reset-dialog-description"
+                onClose={() => window.setTimeout(() => resetOpenerRef.current?.focus(), 0)}
+              >
+                <h2 id="reset-dialog-title">Bắt đầu lại từ đầu?</h2>
+                <p id="reset-dialog-description">Toàn bộ tiến trình và lựa chọn cục bộ của hành trình này sẽ bị xóa.</p>
+                <div>
+                  <button type="button" autoFocus onClick={() => resetDialogRef.current?.close()}>Giữ tiến trình</button>
+                  <button type="button" onClick={() => { resetDialogRef.current?.close(); onReset() }}>Xóa và bắt đầu lại</button>
+                </div>
+              </dialog>
             </div>
           ) : null}
         </section>
@@ -2492,7 +2457,6 @@ export function LearningWindow() {
   const [approvalFocus, setApprovalFocus] = useState<ApprovalFocus | null>(null)
   const [visualExpanded, setVisualExpanded] = useState(false)
   const [secondaryVisualExpanded, setSecondaryVisualExpanded] = useState(false)
-  const [appSettings, setAppSettings] = useState<AppSettings>(defaultAppSettings)
   const [modelLessonEntry, setModelLessonEntry] = useState<{ sceneId: SceneId, topic: ModelLessonTopic } | null>(null)
   const practiceAdvanceRef = useRef<Promise<LearnerProgress> | null>(null)
 
@@ -2545,13 +2509,11 @@ export function LearningWindow() {
     const load = async () => {
       try {
         const api = window.courseCompanion
-        const [runtimeInfo, loadResult, loadedSettings]: [RuntimeInfo | null, ProgressLoadResult, AppSettings] = await Promise.all([
+        const [runtimeInfo, loadResult]: [RuntimeInfo | null, ProgressLoadResult] = await Promise.all([
           api?.getRuntimeInfo() ?? Promise.resolve(null),
-          api?.loadProgress() ?? Promise.resolve({ status: 'new' as const }),
-          api?.loadAppSettings() ?? Promise.resolve(defaultAppSettings)
+          api?.loadProgress() ?? Promise.resolve({ status: 'new' as const })
         ])
         setRuntime(runtimeInfo)
-        setAppSettings(loadedSettings)
 
         if (loadResult.status === 'new') {
           setView('welcome')
@@ -2639,7 +2601,6 @@ export function LearningWindow() {
     try {
       await window.courseCompanion?.resetProgress()
       setProgress(null)
-      setAppSettings(defaultAppSettings)
       setDestination('home')
       setTeacherOpen(false)
       setOutlineSceneId(null)
@@ -2654,17 +2615,6 @@ export function LearningWindow() {
     }
   }
 
-  const updateAppSettings = async (companionAlwaysOnTop: boolean) => {
-    setError('')
-    try {
-      const saved = window.courseCompanion
-        ? await window.courseCompanion.saveAppSettings({ companionAlwaysOnTop })
-        : { ...appSettings, companionAlwaysOnTop }
-      setAppSettings(saved)
-    } catch {
-      setError('Không thể lưu cài đặt Triết nổi.')
-    }
-  }
 
   const completePortfolioPlanningModule = async () => {
     if (!window.courseCompanion || busy) return
@@ -2968,7 +2918,6 @@ export function LearningWindow() {
         progress={progress}
         runtime={runtime}
         destination={destination}
-        settings={appSettings}
         teacherOpen={teacherOpen}
         onNavigate={(nextDestination) => {
           setTeacherOpen(false)
@@ -2984,7 +2933,6 @@ export function LearningWindow() {
         onCloseTeacher={() => setTeacherOpen(false)}
         onQuit={() => void window.courseCompanion?.quitApp()}
         onReset={() => void reset()}
-        onSettingsChange={(alwaysOnTop) => void updateAppSettings(alwaysOnTop)}
       />
     )
   }
