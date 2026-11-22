@@ -548,6 +548,7 @@ function createMainWindow(): BrowserWindow {
 
   openNewWindowsInDefaultBrowser(window)
   window.once('ready-to-show', () => {
+    window.maximize()
     window.show()
     // macOS does not activate an app started from Terminal, so the window would open behind others.
     if (process.platform === 'darwin') app.focus({ steal: true })

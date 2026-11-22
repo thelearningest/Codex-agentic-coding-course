@@ -1068,8 +1068,6 @@ async function verifyHomeBase(page) {
   await page
     .getByText('Planning và PRD trước khi code với AI', { exact: true })
     .waitFor()
-  await page.getByText('MODULE 1 · 3 BÀI HỌC', { exact: true }).waitFor()
-  await page.getByText('MODULE 2 · 1 BÀI HỌC', { exact: true }).waitFor()
   await capture(page, 'home-base.png')
   if (screenshotDirectory) {
     await page.setViewportSize({ width: 390, height: 844 })

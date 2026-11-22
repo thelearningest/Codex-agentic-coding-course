@@ -2244,8 +2244,8 @@ function PixelAppShell({
 
       <header className="pixel-app-header">
         <button className="pixel-app-brand" type="button" onClick={() => onNavigate('home')}>
-          <span>C</span>
-          <span><strong>VIBECODING 101</strong><small>COURSE COMPANION · TRIẾT &amp; DUY</small></span>
+          <span aria-hidden="true"><img src={teacherImage} alt="" /></span>
+          <span><strong>VIBECODING 101</strong></span>
         </button>
         <div className="pixel-app-actions">
           <button
@@ -2263,7 +2263,6 @@ function PixelAppShell({
           <div className="pixel-home-roadmap-shell">
             <div className="pixel-home-heading">
               <div>
-                <small>HOME BASE · LỘ TRÌNH</small>
                 <h1 id="homeBaseTitle">Lộ trình khóa học</h1>
               </div>
               <div className="pixel-course-progress">
@@ -2275,7 +2274,7 @@ function PixelAppShell({
             <div className="pixel-roadmap" aria-label="Lộ trình học">
               {currentModuleId === 'module-1' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleOneComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
-                  <span>01</span><div><small>MODULE 1 · {moduleOneLessonCount} BÀI HỌC</small><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleOneLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleOneComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>01</span><div><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleOneLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleOneComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <RoadmapStage
@@ -2283,12 +2282,12 @@ function PixelAppShell({
                   status={moduleOneMigrated ? 'ĐÃ CHUYỂN TIẾP' : 'HOÀN THÀNH'}
                   onReview={moduleOneMigrated ? undefined : () => onReviewModule('module-1')}
                 >
-                  <span>01</span><div><small>MODULE 1 · {moduleOneLessonCount} BÀI HỌC</small><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>{moduleOneMigrated ? 'Tiến độ Planning cũ được giữ nguyên; học phần setup không được tự đánh dấu hoàn thành.' : 'Bạn đã hoàn tất nền tảng làm việc với Codex.'}</p></div>
+                  <span>01</span><div><strong>{setupModule?.titleVi ?? 'Bắt đầu làm việc với Codex'}</strong><p>{moduleOneMigrated ? 'Tiến độ Planning cũ được giữ nguyên; học phần setup không được tự đánh dấu hoàn thành.' : 'Bạn đã hoàn tất nền tảng làm việc với Codex.'}</p></div>
                 </RoadmapStage>
               )}
               {currentModuleId === 'module-2' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleTwoComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
-                  <span>02</span><div><small>MODULE 2 · {moduleTwoLessonCount} BÀI HỌC</small><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <RoadmapStage
@@ -2296,12 +2295,12 @@ function PixelAppShell({
                   status={moduleTwoComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
                   onReview={moduleTwoComplete ? () => onReviewModule('module-2') : undefined}
                 >
-                  <span>02</span><div><small>MODULE 2 · {moduleTwoLessonCount} BÀI HỌC</small><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Hoàn thành Module 1 để mở phần Planning.'}</p></div>
+                  <span>02</span><div><strong>{planningModule?.titleVi ?? 'Giao tiếp hiệu quả với coding agent: Planning, PRD và prompt'}</strong><p>{moduleTwoComplete ? 'Bộ tài liệu planning và kết quả làm chủ đã được lưu trong biên nhận hoàn thành.' : 'Hoàn thành Module 1 để mở phần Planning.'}</p></div>
                 </RoadmapStage>
               )}
               {currentModuleId === 'module-3' ? (
                 <button className={`pixel-roadmap-stage is-current${moduleThreeComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
-                  <span>03</span><div><small>MODULE 3 · ĐIỂM SẴN SÀNG</small><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>03</span><div><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <RoadmapStage
@@ -2309,16 +2308,16 @@ function PixelAppShell({
                   status={moduleThreeComplete ? 'HOÀN THÀNH' : 'SẮP TỚI'}
                   onReview={moduleThreeComplete ? () => onReviewModule('module-3') : undefined}
                 >
-                  <span>03</span><div><small>MODULE 3</small><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Hoàn thành gate bằng chứng và mastery của Module 2 để mở.'}</p></div>
+                  <span>03</span><div><strong>Xây dựng và gỡ lỗi theo từng phần đã kiểm chứng</strong><p>{moduleThreeComplete ? scenes['module-3-complete'].objective : 'Hoàn thành gate bằng chứng và mastery của Module 2 để mở.'}</p></div>
                 </RoadmapStage>
               )}
               {futureModules.map((title, index) => currentModuleId === `module-${index + 4}` ? (
                 <button className={`pixel-roadmap-stage is-current${completed.has('m4-complete') ? ' is-complete' : ''}`} type="button" key={title} onClick={() => onNavigate('lesson')}>
-                  <span>{String(index + 4).padStart(2, '0')}</span><div><small>MODULE {index + 4}</small><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
+                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
                 <article className="is-locked" key={title}>
-                  <span>{String(index + 4).padStart(2, '0')}</span><div><small>MODULE {index + 4}</small><strong>{title}</strong><p>Sẽ mở trong phần học tiếp theo</p></div><em>SẮP TỚI</em>
+                  <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>Sẽ mở trong phần học tiếp theo</p></div><em>SẮP TỚI</em>
                 </article>
               ))}
             </div>
