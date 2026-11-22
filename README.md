@@ -1,16 +1,11 @@
 # Vibecoding 101
 
-> Cùng Codex xây một portfolio của riêng bạn — và học cách biến ý tưởng thành
-> phần mềm có thể chạy, kiểm tra và chia sẻ.
+> Dùng Codex để học Codex
+> Khoá học vibecoding cho người non-technical
 
-Chào mừng bạn đến với Vibecoding 101. Nếu bạn muốn tự làm một website nhưng
-chưa biết bắt đầu từ đâu, mình sẽ cùng bạn đi từng bước: từ ý tưởng ban đầu,
-lên kế hoạch, xây thử trên máy cho đến khi có một đường link để gửi cho người
-khác xem. Bạn không cần biết lập trình trước khi bắt đầu.
 
-Trong khóa học, bạn sẽ làm việc cùng **Codex**, một coding agent có thể đọc
-dự án, viết code và chạy các bước kiểm tra theo yêu cầu của bạn. Bạn mang đến
-câu chuyện, trải nghiệm và ý tưởng cho portfolio; Codex giúp thực hiện phần
+Trong khóa học, bạn sẽ làm việc cùng **Codex**, một coding agent từ OpenAI. Nếu bạn đã quyết định xem qua khoá học này, mình tin rằng mình không cần thuyết phục bạn về lợi ích của việc dùng Codex thay vì chỉ dùng chế độ chat của chatGPT. 
+Bạn mang đến câu chuyện, trải nghiệm và ý tưởng cho portfolio; Codex giúp thực hiện phần
 kỹ thuật. Bạn sẽ học cách giao việc rõ ràng, xem kết quả và quyết định bước
 tiếp theo.
 
@@ -168,7 +163,7 @@ Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ a
 
 ### Bước 1 — Tải và khởi động khóa học
 
-**Cách dễ nhất:** tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
+Tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 đoạn sau vào một task mới.
 
 ```text
@@ -201,50 +196,9 @@ Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bư�
 
 Ảnh được chụp trên macOS. Trên Windows, các nút có tên tương tự.
 
-
-
-Nếu muốn tự làm, bạn có thể dùng các lệnh bên dưới thay cho đoạn trên.
-
-Chọn hướng dẫn phù hợp với máy của bạn, rồi chạy lần lượt các lệnh bên dưới.
-
-#### Windows
-
-Nếu máy chưa có Git, tải Git tại https://git-scm.com/install/windows rồi cài
-với các lựa chọn mặc định. Cài xong, đóng và mở lại cửa sổ dòng lệnh.
-
-Mở **Command Prompt** hoặc **PowerShell** trong thư mục bạn muốn lưu khóa học.
-Chạy lần lượt:
-
-```bat
-git clone https://github.com/thelearningest/Codex-agentic-coding-course.git
-cd Codex-agentic-coding-course
-.\start-course.cmd
-```
-
-#### macOS
-
-Nếu máy chưa có Git, chạy `xcode-select --install` rồi bấm **Cài đặt** khi
-cửa sổ của Apple hiện ra. Các cách cài khác có tại
-https://git-scm.com/install/mac.
-
-Mở **Terminal** trong thư mục bạn muốn lưu khóa học. Chạy lần lượt:
-
-```bash
-git clone https://github.com/thelearningest/Codex-agentic-coding-course.git
-cd Codex-agentic-coding-course
-./start-course.command
-```
-
-Sau khi tải repository, bạn cũng có thể nhấp đúp `start-course.command` trong
-Finder.
-
-Nếu máy chưa có Node.js 22.12 trở lên, trình khởi động sẽ mở trang tải
-Node.js. Chọn bản **LTS** (bản ổn định, được hỗ trợ lâu dài) cho macOS, tải
-tệp .pkg, nhấp đúp để cài, rồi chạy lại `./start-course.command`.
-
 ### Bước 2 — Xem và xác nhận phần chuẩn bị
 
-Sau khi chạy lệnh, bạn sẽ nhận lời chào và phần giải thích ngắn về quá trình
+Sau khi Codex mở trình khởi động, bạn sẽ nhận lời chào và phần giải thích ngắn về quá trình
 chuẩn bị. Trình khởi động kiểm tra các công cụ cần thiết và cho biết phần nào
 còn thiếu.
 

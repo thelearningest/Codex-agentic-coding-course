@@ -37,7 +37,7 @@ hoặc **Terminal** trên macOS, trong thư mục bạn muốn lưu khóa học.
 lượt:
 
 ```text
-git clone https://github.com/DiligentPenguinn/Codex-agentic-coding-course.git
+git clone https://github.com/thelearningest/Codex-agentic-coding-course.git
 cd Codex-agentic-coding-course
 ```
 
