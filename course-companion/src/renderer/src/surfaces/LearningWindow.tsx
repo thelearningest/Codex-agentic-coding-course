@@ -2150,48 +2150,18 @@ function EntryScreen({
   )
 }
 
+// The four course Practices, in order. A Practice counts as done once its
+// checkpoint is recorded; titles match the course outline wording.
+const coursePractices = [
+  { moduleLabel: 'Module 1', title: 'Thực hành: Thiết lập Codex', checkpointId: 'm1-setup-checklist' },
+  { moduleLabel: 'Module 2', title: 'Thực hành: Lập kế hoạch cho portfolio', checkpointId: 'm2-portfolio-planning' },
+  { moduleLabel: 'Module 3', title: 'Practice: Xây portfolio', checkpointId: 'm3-portfolio-build' },
+  { moduleLabel: 'Module 4', title: 'Practice: Phát hành portfolio', checkpointId: 'm4-portfolio-release' }
+] as const satisfies readonly { moduleLabel: string; title: string; checkpointId: CheckpointId }[]
+
 const futureModules = ['Kiểm chứng, phát hành và chứng minh quyền làm chủ']
 
-const decisionLabels: Record<string, string> = {
-  approvalApproach: 'Thiết lập approval',
-  guidanceBoundary: 'Ranh giới hướng dẫn',
-  skillBoundary: 'Cách dùng Skill',
-  setupChecklist: 'Checklist thiết lập',
-  setupPractice: 'Bằng chứng cấu hình',
-  setupMastery: 'Kết quả Module 1',
-  setupModuleMigration: 'Module 1',
-  planningApproach: 'Cách bắt đầu',
-  clarificationFocus: 'Điều cần làm rõ',
-  prdClassification: 'Phân loại yêu cầu',
-  promptMethod: 'Cách phỏng vấn',
-  prdApproval: 'Duyệt PRD',
-  planStructure: 'Cấu trúc plan',
-  alignmentDecision: 'Xử lý scope creep',
-  masteryEvidence: 'Bằng chứng hoàn thành'
-}
 
-const decisionValues: Record<string, string> = {
-  'approve-for-me-no-full-access': 'Approve for me · Full access tắt',
-  'teacher-reviewed-setup': 'Triết đã duyệt bằng chứng cấu hình',
-  'recommended-default': 'Giữ thiết lập được đề xuất',
-  'learner-selected': 'Dùng thiết lập do người học chọn',
-  'review-purpose-source-impact': 'Xem mục đích, nguồn và tác động trước khi duyệt',
-  'durable-vs-task-specific': 'AGENTS.md cho quy tắc bền vững; prompt cho task hiện tại',
-  'repeatable-workflow': 'Skill cho quy trình có thể tái sử dụng',
-  'reviewed-in-companion': 'Đã xem lại trong Course Companion',
-  'passed-four-of-five': 'Đạt ít nhất 4/5 câu',
-  'passed-three-of-four': 'Đạt ít nhất 3/4 câu',
-  'passed-five-of-six': 'Đạt ít nhất 5/6 câu',
-  'continued-existing-planning-progress': 'Đã chuyển tiếp từ lộ trình Planning cũ',
-  'plan-first': 'Planning trước khi code',
-  'product-requirements': 'Luồng sử dụng, đầu vào, đầu ra và phạm vi V1',
-  'scope-in-prd': 'Quyết định phạm vi thuộc PRD',
-  'one-question-at-a-time': 'Một câu hỏi mỗi lượt',
-  'reviewed-eight-sections': 'Đã xem xét đủ tám phần',
-  'observable-and-verifiable': 'Có kết quả và cách kiểm tra',
-  'remove-scope-creep': 'Loại nội dung ngoài PRD',
-  'artifacts-approved-and-aligned': 'Hai artifact đã duyệt và khớp nhau'
-}
 
 type TeacherOverlayProps = {
   onClose: () => void
@@ -2268,6 +2238,13 @@ function PixelAppShell({
   const moduleOneLessonCount = setupModule?.lessons?.length ?? 5
   const moduleTwoLessonCount = planningModule?.lessons?.length ?? 6
   const practice = progress.practice
+  const currentModule = courseStructure.modules.find((module) => module.id === progress.currentLessonId)
+  const currentModuleLabel = progress.currentLessonId === 'intro' ? 'Giới thiệu' : `Module ${progress.currentLessonId.slice(-1)}`
+  const currentModuleTitle = currentModule?.titleVi ?? scene.mission
+  const practiceDone = coursePractices.map((item) => completed.has(item.checkpointId))
+  const practicesDone = practiceDone.filter(Boolean).length
+  const firstOpenPractice = practiceDone.indexOf(false)
+  const practiceStatuses = practiceDone.map((done, index) => done ? 'done' : index === firstOpenPractice ? 'next' : 'todo')
 
   const surfaceCopy: Record<Exclude<AppDestination, 'home' | 'lesson'>, { kicker?: string; title: string; description?: string }> = {
     progress: {
@@ -2379,39 +2356,69 @@ function PixelAppShell({
         </section>
       ) : destination === 'lesson' ? null : (
         <section className={`pixel-app-surface is-${destination}`}>
-          <header className="pixel-surface-heading">
+          {destination === 'progress' ? null : <header className="pixel-surface-heading">
             <div>
               {surfaceCopy[destination].kicker ? <small>{surfaceCopy[destination].kicker}</small> : null}
               <h1>{surfaceCopy[destination].title}</h1>
               {surfaceCopy[destination].description ? <p>{surfaceCopy[destination].description}</p> : null}
             </div>
             <button type="button" onClick={() => onNavigate('home')}>Về Home Base</button>
-          </header>
+          </header>}
 
           {destination === 'progress' ? (
             <div className="pixel-progress-surface">
-              <section className="pixel-progress-summary">
-                <div><small>CHECKPOINT</small><strong>{completedCheckpointCount}/{runnableCheckpointIds.length}</strong><span>Đã ghi nhận</span></div>
-                <div><small>BÀI HIỆN TẠI</small><strong>{learningPosition.lessonIndex}/{learningPosition.totalLessons}</strong><span>{learningPosition.lessonTitle}</span></div>
-                <div><small>THỰC HÀNH</small><strong>{practice.status === 'idle' ? 'Chưa bắt đầu' : practice.status}</strong><span>{practice.latestEvent ? 'Bài luyện tập đã lưu' : 'Chưa có kết quả'}</span></div>
+              <section className="pixel-progress-position" aria-labelledby="progress-position-title">
+                <div>
+                  <small>Bạn đang ở bước</small>
+                  <h1 id="progress-position-title">{learningPosition.lessonTitle}</h1>
+                  <p>{currentModuleLabel} · Bài {learningPosition.lessonIndex}/{learningPosition.totalLessons} · {currentModuleTitle}</p>
+                </div>
+                <button type="button" onClick={() => onNavigate('lesson')}>
+                  {completedCheckpointCount === 0 ? 'Bắt đầu học' : 'Học tiếp'} <span aria-hidden="true">→</span>
+                </button>
+                <div className="pixel-progress-bar-row">
+                  <div><span>Tiến độ khóa học</span><span><b>{completedCheckpointCount}/{runnableCheckpointIds.length}</b> bước đã xong · {progressPercent}%</span></div>
+                  <div
+                    className="pixel-progress-bar"
+                    role="progressbar"
+                    aria-label="Tiến độ khóa học"
+                    aria-valuemin={0}
+                    aria-valuemax={runnableCheckpointIds.length}
+                    aria-valuenow={completedCheckpointCount}
+                  ><i style={{ width: `${progressPercent}%` }} /></div>
+                </div>
               </section>
-              <section className="pixel-progress-detail">
-                <div>
-                  <small>CHECKPOINT HIỆN TẠI</small>
-                  <h2>{scene.objective}</h2>
-                  <p>{scene.mission}</p>
-                  <button type="button" onClick={() => onNavigate('lesson')}>Mở bài học</button>
+              <section className="pixel-progress-practice" aria-labelledby="progress-practice-title">
+                <div className="pixel-progress-practice-head">
+                  <small>Thực hành</small>
+                  <span>{practicesDone}/{coursePractices.length} bài đã xong</span>
                 </div>
-                <div>
-                  <small>QUYẾT ĐỊNH ĐÃ LƯU</small>
-                  {Object.keys(progress.decisions).length === 0 ? <p>Chưa có quyết định nào.</p> : (
-                    <dl>
-                      {Object.entries(progress.decisions).map(([key, value]) => (
-                        <div key={key}><dt>{decisionLabels[key] ?? key}</dt><dd>{key === 'timeBudget' ? `${value} phút` : decisionValues[value] ?? value}</dd></div>
-                      ))}
-                    </dl>
-                  )}
-                </div>
+                <h2 id="progress-practice-title">
+                  {practicesDone === 0 ? 'Chưa có bài thực hành nào' : practicesDone === coursePractices.length ? 'Đã xong cả 4 bài thực hành' : 'Bài thực hành của bạn'}
+                </h2>
+                {practicesDone === coursePractices.length ? null : (
+                  <p>
+                    {practicesDone === 0
+                      ? 'Bài thực hành là nơi bạn tự làm với Codex. Mỗi bài xong và được Triết duyệt sẽ hiện ở đây.'
+                      : `Bạn chỉ còn ${coursePractices.length - practicesDone} bài để trở thành cao thủ vibe coding thôii`}
+                  </p>
+                )}
+                <ul>
+                  {coursePractices.map((item, index) => {
+                    const status = practiceStatuses[index]
+                    return (
+                      <li key={item.checkpointId} className={`is-${status}`}>
+                        <span className="pixel-progress-practice-icon" aria-hidden="true">{status === 'done' ? '✓' : index + 1}</span>
+                        <span>
+                          <small>{item.moduleLabel}</small>
+                          <strong>{item.title}</strong>
+                          {status === 'done' ? <em>Thầy giáo Triết đã xem bài tập của bạn</em> : null}
+                        </span>
+                        <b>{status === 'done' ? 'Đã duyệt' : status === 'next' ? 'Bài tiếp theo' : 'Chưa làm'}</b>
+                      </li>
+                    )
+                  })}
+                </ul>
               </section>
               {practice.latestEvent?.evidence ? (
                 <section className="pixel-evidence-receipt">
