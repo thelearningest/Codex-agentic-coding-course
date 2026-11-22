@@ -58,6 +58,13 @@
   directory. That is separate from Git. Do not delete local progress or alter
   normal resume behavior unless the user explicitly requests a reset.
 
+## Commit and pull request attribution
+
+- This is a Codex course. Do not add AI tool attribution to commits or pull
+  requests: no `Co-Authored-By:` trailers for Claude or other assistants, and no
+  "Generated with Claude Code" or similar lines. Keep the contributor list to the
+  human authors.
+
 ## Implementation-plan synchronization
 
 - Treat `docs/planning/portfolio-course-implementation-plan.md` as part of the definition of done for work that implements, verifies, changes, or blocks a numbered checkpoint or acceptance gate.
