@@ -61,11 +61,14 @@ import { PracticeStartPrompt } from '../components/PracticeStartPrompt'
 import { TeacherWorkspace } from '../components/TeacherWorkspace'
 import { OnboardingTour, ONBOARDING_ANCHOR_ATTRIBUTE, type OnboardingTourStep } from '../components/OnboardingTour'
 import { LockedRoadmapStage } from '../components/LockedRoadmapStage'
+import { TeacherNewDot } from '../components/TeacherNewDot'
 import {
   ONBOARDING_TOUR_DECISION_KEY,
   readOnboardingTourState,
   shouldShowHomeTour,
   shouldShowLessonTip,
+  shouldShowTeacherDot,
+  TEACHER_CHAT_OPENED_DECISION_KEY,
   type OnboardingTourState
 } from '../components/onboarding-tour-rules'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
@@ -2304,6 +2307,7 @@ type PixelAppShellProps = {
   onQuit: () => void
   onReset: () => void
   showHomeTour: boolean
+  showTeacherDot: boolean
   onHomeTourComplete: () => void
   onHomeTourSkip: () => void
 }
@@ -2320,6 +2324,7 @@ function PixelAppShell({
   onQuit,
   onReset,
   showHomeTour,
+  showTeacherDot,
   onHomeTourComplete,
   onHomeTourSkip
 }: PixelAppShellProps) {
@@ -2440,6 +2445,7 @@ function PixelAppShell({
           <button className="pixel-home-teacher" type="button" onClick={onOpenTeacher} aria-label="Mở Triết, giáo viên đồng hành" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'home-teacher' }}>
             <img src={teacherImage} alt="" />
             <span><small>TEACHER</small><strong>Triết</strong><em>Hỏi khi cần</em></span>
+            {showTeacherDot ? <TeacherNewDot /> : null}
           </button>
         </section>
       ) : destination === 'lesson' ? null : (
@@ -2566,8 +2572,10 @@ export function LearningWindow() {
   const [error, setError] = useState('')
   const [destination, setDestination] = useState<AppDestination>('home')
   const [teacherOpen, setTeacherOpen] = useState(false)
-  // Applied immediately so a slow or failed save never shows the tour twice in one session.
-  const [onboardingOverride, setOnboardingOverride] = useState<OnboardingTourState | null>(null)
+  const [decisionOverrides, setDecisionOverrides] = useState<Record<string, string>>({})
+  const pendingDecisionsRef = useRef<Record<string, string>>({})
+  // null while unknown; learners with an existing Triết conversation never see the "new" dot.
+  const [hasTeacherConversation, setHasTeacherConversation] = useState<boolean | null>(null)
   const [practiceBriefOpen, setPracticeBriefOpen] = useState(false)
   const [practiceFullOpen, setPracticeFullOpen] = useState(false)
   const [outlineSceneId, setOutlineSceneId] = useState<SceneId | null>(null)
@@ -2659,15 +2667,19 @@ export function LearningWindow() {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = window.courseCompanion?.onFullTeacherRequested(() => {
-      setPracticeBriefOpen(false)
-      setPracticeFullOpen(true)
-      setTeacherOpen(true)
-    })
-    return () => {
-      unsubscribe?.()
-    }
-  })
+    if (view !== 'app' || hasTeacherConversation !== null) return
+    let cancelled = false
+    void (async () => {
+      try {
+        const state = await window.courseCompanion?.loadCompanionState()
+        if (!cancelled) setHasTeacherConversation((state?.conversation.messages.length ?? 0) > 0)
+      } catch {
+        // History unknown: stay quiet rather than mark Triết as new.
+        if (!cancelled) setHasTeacherConversation(true)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [view, hasTeacherConversation])
 
   useEffect(() => {
     const unsubscribe = window.courseCompanion?.onPracticeReturned(() => {
@@ -2696,9 +2708,14 @@ export function LearningWindow() {
     return saved
   }
 
-  const onboardingState = onboardingOverride ?? readOnboardingTourState(progress?.decisions)
-  const saveOnboardingState = (value: OnboardingTourState) => {
-    setOnboardingOverride(value)
+  // Onboarding flags are applied immediately (so a slow or failed save never shows
+  // them twice in a session) and every save carries all of them, so two flags saved
+  // back to back — e.g. closing the lesson tip by opening chat — never undo each other.
+  const effectiveDecisions = { ...progress?.decisions, ...decisionOverrides }
+  const onboardingState = readOnboardingTourState(effectiveDecisions)
+  const saveOnboardingDecision = (key: string, value: string) => {
+    pendingDecisionsRef.current = { ...pendingDecisionsRef.current, [key]: value }
+    setDecisionOverrides(pendingDecisionsRef.current)
     if (!progress) return
     void persist({
       currentLessonId: progress.currentLessonId,
@@ -2707,16 +2724,41 @@ export function LearningWindow() {
       sceneId: progress.sceneId,
       sceneHistory: progress.sceneHistory,
       completedCheckpointIds: progress.completedCheckpointIds,
-      decisions: { ...progress.decisions, [ONBOARDING_TOUR_DECISION_KEY]: value }
+      decisions: { ...progress.decisions, ...pendingDecisionsRef.current }
     }).catch(() => {
       // Not critical: the in-session override keeps it hidden; it may show again next launch.
     })
   }
+  const saveOnboardingState = (value: OnboardingTourState) => saveOnboardingDecision(ONBOARDING_TOUR_DECISION_KEY, value)
+  const showTeacherDot = shouldShowTeacherDot(effectiveDecisions, hasTeacherConversation)
+  const clearOnboardingDecisions = () => {
+    pendingDecisionsRef.current = {}
+    setDecisionOverrides({})
+  }
+  // Every way into Triết chat from this window goes through here.
+  const openTeacher = () => {
+    setTeacherOpen(true)
+    if (effectiveDecisions[TEACHER_CHAT_OPENED_DECISION_KEY] !== 'yes') {
+      saveOnboardingDecision(TEACHER_CHAT_OPENED_DECISION_KEY, 'yes')
+    }
+  }
+
+  // Declared after openTeacher so the listener always uses the current version.
+  useEffect(() => {
+    const unsubscribe = window.courseCompanion?.onFullTeacherRequested(() => {
+      setPracticeBriefOpen(false)
+      setPracticeFullOpen(true)
+      openTeacher()
+    })
+    return () => {
+      unsubscribe?.()
+    }
+  })
 
   const startNew = async () => {
     setBusy(true)
     setError('')
-    setOnboardingOverride(null)
+    clearOnboardingDecisions()
     try {
       await persist(initialUpdate())
       setRecovered(false)
@@ -2738,7 +2780,9 @@ export function LearningWindow() {
     try {
       await window.courseCompanion?.resetProgress()
       setProgress(null)
-      setOnboardingOverride(null)
+      clearOnboardingDecisions()
+      // Reset also clears Teacher history, so the "new" dot comes back.
+      setHasTeacherConversation(null)
       setDestination('home')
       setTeacherOpen(false)
       setOutlineSceneId(null)
@@ -3067,11 +3111,12 @@ export function LearningWindow() {
           setOutlineSceneId(courseOutline[moduleId][0]!.startSceneId)
           setDestination('lesson')
         }}
-        onOpenTeacher={() => setTeacherOpen(true)}
+        onOpenTeacher={openTeacher}
         onCloseTeacher={() => setTeacherOpen(false)}
         onQuit={() => void window.courseCompanion?.quitApp()}
         onReset={() => void reset()}
         showHomeTour={shouldShowHomeTour(progress, onboardingState)}
+        showTeacherDot={showTeacherDot}
         onHomeTourComplete={() => saveOnboardingState('home-done')}
         onHomeTourSkip={() => saveOnboardingState('skipped')}
       />
@@ -3314,13 +3359,17 @@ export function LearningWindow() {
           </div>
         </details>
         <div className="pixel-hud-actions">
-          <button className="pixel-hud-teacher" type="button" onClick={() => setTeacherOpen(true)} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'lesson-teacher' }}>
-            <img src={teacherImage} alt="" />
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path fill="currentColor" stroke="var(--pixel-yellow)" d="M4 2h8a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H8l-4 3v-3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3Z" />
-              <path stroke="var(--pixel-yellow)" strokeLinecap="round" strokeWidth="1.6" d="M5 7h.1M8 7h.1M11 7h.1" />
-            </svg>
-          </button>
+          {/* The button clips its zoomed portrait, so the dot sits on a wrapper. */}
+          <span className="pixel-teacher-dot-anchor">
+            <button className="pixel-hud-teacher" type="button" onClick={openTeacher} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'lesson-teacher' }}>
+              <img src={teacherImage} alt="" />
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path fill="currentColor" stroke="var(--pixel-yellow)" d="M4 2h8a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H8l-4 3v-3a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3Z" />
+                <path stroke="var(--pixel-yellow)" strokeLinecap="round" strokeWidth="1.6" d="M5 7h.1M8 7h.1M11 7h.1" />
+              </svg>
+            </button>
+            {showTeacherDot ? <TeacherNewDot /> : null}
+          </span>
           <button className="pixel-quit" type="button" onClick={() => void window.courseCompanion?.quitApp()}>
             THOÁT <span className="pixel-quit-version">· v{runtime?.appVersion ?? '…'}</span>
           </button>

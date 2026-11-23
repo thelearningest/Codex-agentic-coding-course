@@ -268,6 +268,20 @@ async function verifyLockedModuleNudge(page) {
   await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
 }
 
+// A new learner sees a dot on Triết until chat is opened once; it stays gone after that.
+async function verifyTeacherNewDot(page) {
+  const homeDot = page.locator('.pixel-home-teacher [data-teacher-new-dot]')
+  await homeDot.waitFor()
+  await page.getByRole('button', { name: 'Mở Triết, giáo viên đồng hành', exact: true }).click()
+  const overlay = page.locator('.pixel-teacher-overlay')
+  await overlay.waitFor()
+  await overlay.getByRole('button', { name: 'Đóng Triết', exact: true }).click()
+  await overlay.waitFor({ state: 'detached' })
+  assert.equal(await homeDot.count(), 0)
+  const saved = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
+  assert.equal(saved.progress.decisions.teacherChatOpened, 'yes')
+}
+
 async function skipHomeOnboardingTour(page) {
   await page.getByRole('dialog', { name: 'Đây là Triết' }).waitFor()
   await page.keyboard.press('Escape')
@@ -1329,6 +1343,7 @@ try {
     .click()
   await walkHomeOnboardingTour(firstWindows.learningPage)
   await verifyLockedModuleNudge(firstWindows.learningPage)
+  await verifyTeacherNewDot(firstWindows.learningPage)
   await verifyHomeBase(firstWindows.learningPage)
   await completeSetupModule(firstWindows.learningPage, firstWindows.companionPage, firstLaunch, false, true)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)

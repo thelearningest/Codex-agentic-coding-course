@@ -3,7 +3,9 @@ import {
   ONBOARDING_TOUR_DECISION_KEY,
   readOnboardingTourState,
   shouldShowHomeTour,
-  shouldShowLessonTip
+  shouldShowLessonTip,
+  shouldShowTeacherDot,
+  TEACHER_CHAT_OPENED_DECISION_KEY
 } from '../src/renderer/src/components/onboarding-tour-rules'
 
 describe('onboarding tour rules', () => {
@@ -33,5 +35,14 @@ describe('onboarding tour rules', () => {
     expect(shouldShowLessonTip('not-started', 'module-1')).toBe(false)
     expect(shouldShowLessonTip('skipped', 'module-1')).toBe(false)
     expect(shouldShowLessonTip('complete', 'module-1')).toBe(false)
+  })
+
+  it('shows the Triết dot until chat is opened, never for learners with a conversation', () => {
+    expect(shouldShowTeacherDot({}, false)).toBe(true)
+    expect(shouldShowTeacherDot(undefined, false)).toBe(true)
+    expect(shouldShowTeacherDot({ [TEACHER_CHAT_OPENED_DECISION_KEY]: 'yes' }, false)).toBe(false)
+    expect(shouldShowTeacherDot({}, true)).toBe(false)
+    // Still checking history: stay hidden instead of flashing.
+    expect(shouldShowTeacherDot({}, null)).toBe(false)
   })
 })

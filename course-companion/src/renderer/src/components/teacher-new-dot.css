@@ -1,0 +1,37 @@
+.pixel-teacher-dot-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.pixel-teacher-new-dot {
+  position: absolute;
+  z-index: 1;
+  top: -6px;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: var(--pixel-yellow);
+  pointer-events: none;
+}
+.pixel-teacher-new-dot::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--pixel-yellow);
+  border-radius: 50%;
+  animation: pixel-teacher-new-dot-ping 1.6s ease-out infinite;
+}
+
+/* The Home card is larger, so its dot sits slightly further out. */
+.pixel-home-teacher .pixel-teacher-new-dot { top: -8px; right: -8px; width: 16px; height: 16px; }
+
+@keyframes pixel-teacher-new-dot-ping {
+  0% { opacity: .9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-teacher-new-dot::after { animation: none; opacity: 0; }
+}
