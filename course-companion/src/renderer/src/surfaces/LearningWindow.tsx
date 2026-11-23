@@ -3634,8 +3634,8 @@ export function LearningWindow() {
               ? 'Bạn có thể xem toàn bộ câu hỏi trước khi nộp.'
             : displayedSceneId === 'module-1-codex-examples'
               ? <ApprovalTourDialogue activeFocus={approvalFocus} onSelect={setApprovalFocus} />
-              : displayedSceneId === 'module-2-prd-agent-workflow'
-                ? <DesignReferenceDialogue dialogue={scene.dialogue ?? ''} />
+              : displayedSceneId === 'module-2-prd-agent-workflow' || displayedSceneId === 'module-2-impeccable-skill'
+                ? <DesignReferenceDialogue dialogue={scene.dialogue ?? ''} highlightTerms={scene.highlightTerms} />
               : scene.highlightTerms
                 ? <HighlightedDialogue dialogue={scene.dialogue ?? ''} highlightTerms={scene.highlightTerms} />
               : scene.dialogue}</p>

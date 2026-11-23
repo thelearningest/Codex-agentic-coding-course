@@ -1,19 +1,21 @@
 import { Fragment } from 'react'
+import { HighlightedDialogue } from './HighlightedDialogue'
 
 const designReferenceLinks = [
   { label: 'Pafolios', href: 'https://pafolios.com/' },
   { label: 'Awwwards', href: 'https://www.awwwards.com/' },
   { label: 'Dribbble', href: 'https://dribbble.com/' },
   { label: 'Mobbin', href: 'https://mobbin.com/' },
-  { label: 'Pinterest', href: 'https://www.pinterest.com/' }
+  { label: 'Pinterest', href: 'https://www.pinterest.com/' },
+  { label: 'tài liệu chính thức của Impeccable', href: 'https://impeccable.style/docs/' }
 ] as const
 
 const linkByLabel = new Map<string, string>(
   designReferenceLinks.map(({ href, label }) => [label, href])
 )
-const linkPattern = /(Pafolios|Awwwards|Dribbble|Mobbin|Pinterest)/g
+const linkPattern = /(Pafolios|Awwwards|Dribbble|Mobbin|Pinterest|tài liệu chính thức của Impeccable)/g
 
-export function DesignReferenceDialogue({ dialogue }: { dialogue: string }) {
+export function DesignReferenceDialogue({ dialogue, highlightTerms }: { dialogue: string; highlightTerms?: readonly string[] }) {
   return (
     <>
       {dialogue.split('\n\n').map((paragraph, paragraphIndex) => (
@@ -32,7 +34,7 @@ export function DesignReferenceDialogue({ dialogue }: { dialogue: string }) {
               >
                 {segment}
               </a>
-            ) : segment
+            ) : highlightTerms ? <HighlightedDialogue key={segmentIndex} dialogue={segment} highlightTerms={highlightTerms} /> : segment
           })}
         </Fragment>
       ))}
