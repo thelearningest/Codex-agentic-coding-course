@@ -254,7 +254,7 @@ export function PracticeBrief({
         ) : buildGuide && introduction ? (
           <PortfolioBuildGuide introduction={introduction} controls={controls} prompt={startPrompt} />
         ) : introduction ? (
-          <PracticeIntroduction introduction={introduction} showReference={!hasRequestedPractice} imageFirst={setupPractice}>
+          <PracticeIntroduction introduction={introduction} showReference={setupPractice && !hasRequestedPractice} imageFirst={setupPractice}>
             {setupPractice && !hasRequestedPractice ? <TeacherOrientation /> : null}
             {setupPractice ? <PracticeScreenshotGuide key={courseRunId}>{controls}</PracticeScreenshotGuide> : controls}
           </PracticeIntroduction>

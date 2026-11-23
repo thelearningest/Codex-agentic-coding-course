@@ -82,13 +82,6 @@ export function PortfolioBuildGuide({ introduction, controls, prompt }: {
       </figure>
       <PracticeStartPrompt practiceId="m3-portfolio-build" prompt={prompt} guideActions={controls} />
       {!prompt && controls}
-      <details className="practice-setup-reference">
-        <summary>{introduction.referenceTitle}</summary>
-        {introduction.referenceNote ? <p>{introduction.referenceNote}</p> : null}
-        <dl>{introduction.reference.map(([label, path, note]) => <div key={path}>
-          <dt>{label}</dt><dd><code>{path}</code><br />{note}</dd>
-        </div>)}</dl>
-      </details>
     </div>
   )
 }

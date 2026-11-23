@@ -42,13 +42,6 @@ export function PortfolioPlanningGuide({ introduction, controls }: { introductio
         </button>)}
       </nav>
       <PracticeStartPrompt practiceId="m2-portfolio-planning" guideActions={controls} />
-      <details className="practice-setup-reference">
-        <summary>{introduction.referenceTitle}</summary>
-        <p>{introduction.referenceNote}</p>
-        <dl>{introduction.reference.map(([label, path, note]) => <div key={path}>
-          <dt>{label}</dt><dd><code>{path}</code><br />{note}</dd>
-        </div>)}</dl>
-      </details>
     </div>
   )
 }
