@@ -18,6 +18,8 @@ import { PracticeProgress } from './PracticeProgress'
 import { practiceGuideAnchor } from './practice-guide-anchors'
 import { PracticeReturnAction } from './PracticeReturnAction'
 import { PracticeTaskLink } from './PracticeTaskLink'
+import { starterQuestionsFor } from './teacher-starter-questions'
+import './teacher-starter-questions.css'
 import { PracticeStartPrompt } from './PracticeStartPrompt'
 import { PracticeReviewElapsed } from './PracticeReviewElapsed'
 import { TeacherMarkdown } from './TeacherMarkdown'
@@ -415,8 +417,9 @@ export function TeacherWorkspace({
     }
   }
 
-  const sendMessage = async (retryMessage?: TeacherMessage) => {
-    const content = (retryMessage?.content ?? draft).trim()
+  // `starterQuestion` sends an example-question chip as is, leaving any typed draft alone.
+  const sendMessage = async (retryMessage?: TeacherMessage, starterQuestion?: string) => {
+    const content = (retryMessage?.content ?? starterQuestion ?? draft).trim()
     if (!content || sendingRef.current) return
 
     sendingRef.current = true
@@ -431,7 +434,7 @@ export function TeacherWorkspace({
     }
     const knownIds = new Set(messages.map((message) => message.id))
     setPendingMessage(optimisticMessage)
-    if (!retryMessage) setDraft('')
+    if (!retryMessage && !starterQuestion) setDraft('')
     setBusy(true)
     setError('')
     setTeacherRuntime((current) => ({ ...current, error: undefined }))
@@ -741,6 +744,13 @@ export function TeacherWorkspace({
               <div className="pixel-chat-empty">
                 <strong>Chưa có tin nhắn</strong>
                 <span>Hỏi Triết điều bạn cần làm rõ ở bước học này.</span>
+                <div className="pixel-chat-starters" aria-label="Câu hỏi gợi ý">
+                  {starterQuestionsFor(context?.lessonId).map((question) => (
+                    <button key={question} type="button" disabled={busy} onClick={() => void sendMessage(undefined, question)}>
+                      {question}
+                    </button>
+                  ))}
+                </div>
               </div>
             ) : (
               visibleMessages.map((message) => (

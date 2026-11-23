@@ -38,6 +38,11 @@ try {
   assert.equal(await panel.getByRole('tablist').count(), 0)
   const prompt = 'Tại sao cần lập kế hoạch trước khi nhờ coding agent xây portfolio? Giải thích ngắn gọn cho người mới.'
   const before = await page.evaluate(() => globalThis.courseCompanion.loadProgress())
+  // The empty chat offers Module 2 example questions; they go away after the first message.
+  const starters = panel.locator('.pixel-chat-starters button')
+  await starters.first().waitFor()
+  assert.equal(await starters.count(), 3)
+  assert.equal(await starters.first().innerText(), 'Vì sao nên lập kế hoạch trước khi nhờ agent code?')
   await composer.fill(prompt)
   await composer.press('Enter')
   if (!live) {
@@ -51,6 +56,7 @@ try {
     assert.equal(await composer.inputValue(), '')
     assert.equal(await panel.locator('.pixel-chat-message.is-learner p').innerText(), prompt)
     assert.equal(await panel.locator('.pixel-chat-empty').count(), 0)
+    assert.equal(await starters.count(), 0)
     assert.equal(await panel.locator('.pixel-chat-message.is-teacher').count(), 0)
     assert.equal(await panel.getByRole('button', { name: 'ĐANG GỬI…', exact: true }).isDisabled(), true)
     if (process.env.COURSE_COMPANION_SCREENSHOT_DIR) {

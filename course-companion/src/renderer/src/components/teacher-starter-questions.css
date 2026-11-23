@@ -1,0 +1,23 @@
+/* Example questions under Triết's empty-chat text. */
+.pixel-chat-starters {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+}
+.pixel-chat-starters button {
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid var(--pixel-line-soft);
+  border-radius: var(--obsidian-radius-control);
+  color: var(--pixel-white);
+  background: var(--obsidian-surface);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+.pixel-chat-starters button:hover:not(:disabled) { border-color: var(--pixel-yellow); }
+.pixel-chat-starters button:focus-visible { outline: 3px solid var(--pixel-yellow); outline-offset: 2px; }
+.pixel-chat-starters button:disabled { cursor: default; opacity: .6; }
