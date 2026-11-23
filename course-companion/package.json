@@ -16,7 +16,7 @@
     "typecheck": "tsc --build --pretty false",
     "lint": "eslint .",
     "test": "vitest run && npm run test:startup",
-    "test:startup": "node --test tests/disposable-practice-workspace.test.mjs tests/macos-startup.test.mjs",
+    "test:startup": "node --test tests/agent-launch.test.mjs tests/disposable-practice-workspace.test.mjs tests/macos-startup.test.mjs",
     "test:practice-runtime": "node --experimental-strip-types tests/practice-app-server-runtime.mjs",
     "test:practice-bound-runtime": "node --experimental-strip-types tests/practice-bound-run-runtime.mjs",
     "test:electron": "npm run build && node tests/electron-smoke.mjs && node tests/teacher-chat-electron.mjs && node tests/practice-guide-electron.mjs && node tests/practice-review-feedback-electron.mjs"

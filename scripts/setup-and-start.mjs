@@ -1,3 +1,4 @@
+import { agentInstallConsent, openCourseWindow } from "./agent-launch.mjs";
 import { spawn } from "node:child_process";
 import { access, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -101,7 +102,19 @@ async function confirmInstall(formattedPlan) {
 export async function launchElectron({
   root = appRoot,
   run = runProcess,
+  agent = process.argv.includes("--agent"),
+  openWindow = openCourseWindow,
 } = {}) {
+  if (agent) {
+    const build = await run("npm", ["run", "build"], { cwd: root, stdio: "inherit" });
+    if (build.exitCode !== 0) return build.exitCode;
+    const runtime = path.join(root, "node_modules", "electron", "dist", "electron.exe");
+    try {
+      return await openWindow(runtime, root);
+    } catch (error) {
+      throw Object.assign(error, { code: "ELECTRON_FAILED", layer: "Electron" });
+    }
+  }
   const result = await run("npm", ["start"], {
     cwd: root,
     stdio: "inherit",
@@ -144,18 +157,21 @@ export async function main({
     "dist",
     "electron.exe",
   );
+  // Codex Desktop can supply a native CLI even when it is absent from PATH.
+  const inheritedCli = process.env.CODEX_APP_RUNTIME_CLI_PATH;
+  const desktopCli = inheritedCli && await fileExists(inheritedCli) ? inheritedCli : null;
   const deps = {
     platform: process.platform,
     nodeVersion: process.versions.node,
-    commandExists,
-    commandSucceeds,
+    commandExists: (name) => name === "codex" && desktopCli ? true : commandExists(name),
+    commandSucceeds: (name, args) => commandSucceeds(name === "codex" && desktopCli ? desktopCli : name, args),
     fileExists,
     appRoot,
     lockPath,
     stampPath,
     electronRuntimePath,
     readFile,
-    confirm: confirmInstall,
+    confirm: process.argv.includes("--agent") ? agentInstallConsent : confirmInstall,
     run: runProcess,
     writeFile,
     ...dependencyOverrides,
@@ -235,7 +251,7 @@ if (isDirect) {
   main().catch((error) => {
     const failure = safeFailure(error);
     process.stderr.write(
-      `Startup failed in ${failure.layer}.\nRecovery: ${failure.recovery}\n`,
+      `Startup failed in ${failure.layer}.\n${error.message}\nRecovery: ${failure.recovery}\n`,
     );
     if (error?.code === "INSTALL_DECLINED") {
       process.exitCode = 2;

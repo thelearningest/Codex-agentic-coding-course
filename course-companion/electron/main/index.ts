@@ -3,6 +3,8 @@ import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
 import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
+import { writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import type {
   CompanionMode,
@@ -75,6 +77,44 @@ import {
 if (process.env.COURSE_COMPANION_USER_DATA_DIR) {
   app.setPath('userData', process.env.COURSE_COMPANION_USER_DATA_DIR)
 }
+
+// A returning launch must restore the window belonging to this learner profile.
+const launchTicket = process.argv.find((arg) => arg.startsWith('--course-launch='))?.split('=')[1]
+if (!app.requestSingleInstanceLock({ launchTicket: launchTicket ?? '' })) {
+  app.exit(0)
+  process.exit(0)
+}
+const launchTickets = new Set<string>()
+let courseWindowLoaded = false
+
+function rememberLaunch(ticket: unknown): void {
+  if (typeof ticket === 'string' && /^course-launch-[A-Za-z0-9]{6}$/.test(ticket)) {
+    launchTickets.add(ticket)
+  }
+}
+
+function confirmVisibleWindow(window: BrowserWindow): void {
+  if (!courseWindowLoaded || !window.isVisible() || window.isMinimized()) return
+  for (const ticket of launchTickets) {
+    launchTickets.delete(ticket)
+    // The launcher owns this temporary directory and removes it on timeout.
+    void writeFile(join(tmpdir(), ticket, 'visible'), String(process.pid), { flag: 'wx' })
+      .catch((error: NodeJS.ErrnoException) => {
+        if (error.code !== 'ENOENT') console.error('Could not confirm the course window:', error.code)
+      })
+  }
+}
+
+rememberLaunch(launchTicket)
+app.on('second-instance', (_event, _argv, _cwd, data) => {
+  if (data && typeof data === 'object' && 'launchTicket' in data) rememberLaunch(data.launchTicket)
+  if (!mainWindow || !courseWindowLoaded) return
+  if (mainWindow.isMinimized()) mainWindow.restore()
+  mainWindow.show()
+  if (process.platform === 'darwin') app.focus({ steal: true })
+  mainWindow.focus()
+  confirmVisibleWindow(mainWindow)
+})
 
 let mainWindow: BrowserWindow | null = null
 let companionWindow: BrowserWindow | null = null
@@ -538,6 +578,7 @@ function createMainWindow(): BrowserWindow {
     window.show()
     // macOS does not activate an app started from Terminal, so the window would open behind others.
     if (process.platform === 'darwin') app.focus({ steal: true })
+    confirmVisibleWindow(window)
   })
 
   window.on('minimize', () => {
@@ -559,7 +600,11 @@ function createMainWindow(): BrowserWindow {
     companionWindow?.show()
   })
 
-  void loadSurface(window, 'learning')
+  courseWindowLoaded = false
+  void loadSurface(window, 'learning').then(() => {
+    courseWindowLoaded = true
+    confirmVisibleWindow(window)
+  })
   return window
 }
 

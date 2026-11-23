@@ -166,13 +166,13 @@ Tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 đoạn sau vào một task mới.
 
 ```text
-Mình muốn học khóa Vibecoding 101. Hãy tải khóa học từ
-https://github.com/thelearningest/Vibe-coding-101-with-Codex.git
-vào thư mục này, rồi làm theo tệp SETUP_FOR_AGENTS.md
-để mở khóa học.
-Mình không rành kỹ thuật. Hãy giải thích ngắn từng bước và hỏi mình
-trước khi cài bất cứ thứ gì. Nếu máy chưa có Git, hãy hướng dẫn mình
-cài Git trước.
+Mở khóa học Vibecoding 101 giúp mình. Nếu thư mục này chưa có khóa học,
+hãy tải từ https://github.com/thelearningest/Vibe-coding-101-with-Codex.git.
+
+Mình đồng ý cho bạn tải khóa học và cài các công cụ cần thiết để mở
+Course Companion. Hãy làm theo SETUP_FOR_AGENTS.md và mở ứng dụng giúp mình.
+Chỉ nhắn khi cửa sổ khóa học đã mở hoặc khi có bước mình phải tự làm,
+chẳng hạn như nhập mật khẩu hay bấm cho phép.
 ```
 
 Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bước sau:
@@ -197,7 +197,7 @@ Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bư�
 
 ### Bước 2 — Trước khi bắt đầu khoá học
 
-Sau khi bạn gửi prompt cho Codex, một cửa sổ terminal sẽ hiện ra. Sau khi đọc các lời giới thiệu khoá học, ở cuối bạn sẽ thấy một câu hỏi rằng bạn có đồng ý để tải các công cụ cần thiết cho khoá học không. Bạn có thể bấm có mà yên tâm rằng mình không gửi mã độc vào máy bạn :) 
+Gửi tin nhắn xong, bạn chỉ cần chờ Course Companion mở. Nếu máy yêu cầu nhập mật khẩu hoặc bấm cho phép, Codex sẽ hướng dẫn bạn. Lần sau, mở lại thư mục khóa học trong Codex và nhắn “Mở khóa học giúp mình”.
 
 
 ### Bước 3 — Bắt đầu học

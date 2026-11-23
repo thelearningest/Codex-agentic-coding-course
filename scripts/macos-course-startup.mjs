@@ -1,3 +1,4 @@
+import { agentInstallConsent, openCourseWindow } from './agent-launch.mjs'
 import { spawn } from 'node:child_process'
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -112,7 +113,8 @@ function printWelcome() {
 }
 
 export async function main({ smoke = process.argv.includes('--smoke') } = {}) {
-  printWelcome()
+  const agent = process.argv.includes('--agent')
+  if (!agent) printWelcome()
 
   const lockPath = path.join(appRoot, 'package-lock.json')
   const stampPath = path.join(appRoot, 'node_modules', '.course-lock.sha256')
@@ -170,7 +172,7 @@ export async function main({ smoke = process.argv.includes('--smoke') } = {}) {
   const plan = buildInstallPlan(report)
   if (plan.length > 0) {
     await executeInstallPlan(plan, {
-      confirm: confirmInstall,
+      confirm: agent ? agentInstallConsent : confirmInstall,
       run: runProcess,
       writeFile: async (targetPath, contents, encoding) => {
         await mkdir(path.dirname(targetPath), { recursive: true })
@@ -193,6 +195,14 @@ export async function main({ smoke = process.argv.includes('--smoke') } = {}) {
   for (const step of startupCommands({ smoke, electronRuntimePath })) {
     if (step.id === 'build') {
       process.stdout.write('Đang chuẩn bị ứng dụng, thường mất khoảng 10 giây...\n')
+    }
+    if (agent && step.id === 'app') {
+      try {
+        await openCourseWindow(step.command, appRoot)
+      } catch (error) {
+        throw Object.assign(error, { code: 'APP_FAILED', layer: 'mở cửa sổ khóa học' })
+      }
+      return
     }
     const result = await runProcess(step.command, step.args, {
       cwd: appRoot,

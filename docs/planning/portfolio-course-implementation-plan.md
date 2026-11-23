@@ -53,6 +53,28 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### One-prompt desktop launch, 24 November 2026
+
+Agent-assisted launch is `implemented`. The README prompt gives consent for
+the course download and required tools. The launchers can prepare the app
+without terminal input and wait for the learning window to load and appear.
+Another launch brings the same profile's learning window forward.
+
+Mac launcher verification `passed` on a clean disposable course copy using
+the Mac's existing Git and Node. Course dependencies installed unattended.
+The process remained alive after the command returned. A repeat request
+reached the same process and macOS reported it frontmost with a window on screen.
+Typecheck, lint, build, 14 startup checks and four portable Windows setup
+checks passed. The Electron smoke, Practice guide and review feedback checks
+passed. Teacher chat timed out during the combined run and passed in isolation.
+The unit suite with a canonical temporary path had 905 passes and the same
+three frozen-content and palette failures as the unchanged checkout.
+
+Supported-platform launch verification remains `pending`. Next, run the README
+prompt on a learner's Windows machine, including missing prerequisites and
+repeat launch. Native prerequisite installer dialogs and learner acceptance
+still need direct observation.
+
 ### Impeccable skill in Module 2, 23 November 2026
 
 Module 2 now introduces the Impeccable design skill. A new page,

@@ -3,6 +3,9 @@ setlocal EnableExtensions
 
 set "COURSE_ROOT=%~dp0"
 set "COURSE_NODE=node"
+set "COURSE_AGENT_FLAGS="
+if /I "%~1"=="--agent" set "COURSE_AGENT_FLAGS=--agent"
+if /I "%~1"=="--agent" if /I "%~2"=="--install" set "COURSE_AGENT_FLAGS=--agent --install"
 
 if "%COURSE_MOCK_BOOTSTRAP_TEST%"=="1" if "%COURSE_MOCK_FORCE_NODE_MISSING%"=="1" goto :node_missing
 
@@ -30,6 +33,12 @@ if errorlevel 1 (
   exit /b 2
 )
 
+if defined COURSE_AGENT_FLAGS (
+  if "%COURSE_AGENT_FLAGS%"=="--agent --install" goto :install_node
+  echo Node.js installation needs learner consent.
+  exit /b 2
+)
+
 set "COURSE_INSTALL_NODE="
 set /p "COURSE_INSTALL_NODE=Run the displayed Node.js installation? [y/N] "
 if /I "%COURSE_INSTALL_NODE%"=="Y" goto :install_node
@@ -46,6 +55,7 @@ if errorlevel 1 (
 
 if exist "%ProgramFiles%\nodejs\node.exe" (
   set "COURSE_NODE=%ProgramFiles%\nodejs\node.exe"
+  set "PATH=%ProgramFiles%\nodejs;%PATH%"
 ) else (
   where node >nul 2>&1
   if errorlevel 1 (
@@ -56,7 +66,7 @@ if exist "%ProgramFiles%\nodejs\node.exe" (
 )
 
 :run_setup
-"%COURSE_NODE%" "%COURSE_ROOT%scripts\setup-and-start.mjs"
+"%COURSE_NODE%" "%COURSE_ROOT%scripts\setup-and-start.mjs" %COURSE_AGENT_FLAGS%
 set "COURSE_RESULT=%ERRORLEVEL%"
 
 if "%COURSE_RESULT%"=="0" exit /b 0
