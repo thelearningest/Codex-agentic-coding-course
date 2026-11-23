@@ -102,13 +102,13 @@ Qua bước khi mỗi trang có link hoặc ảnh, danh sách điểm học theo
 
 #### Skill Impeccable cho bản mẫu HTML
 
-Trước khi đề nghị tạo bản mẫu HTML, đề nghị người học cài skill Impeccable:
+Trước khi đề nghị tạo bản mẫu HTML, hướng dẫn người học cài skill Impeccable:
 
 - Kiểm tra trước. Nếu đã có \`~/.agents/skills/impeccable/SKILL.md\` (Windows: \`%USERPROFILE%\\.agents\\skills\\impeccable\\SKILL.md\`), báo người học skill đã sẵn sàng và bỏ qua phần cài đặt.
-- Nói ngắn với người học: Impeccable là skill giúp Codex thiết kế và tự xem lại giao diện. Skill được cài ở môi trường global, giống global \`AGENTS.md\` ở Module 1, nên dùng được cho mọi dự án sau này chứ không chỉ portfolio. Khi cài, Codex sẽ xin phép truy cập Internet và ghi tệp bên ngoài thư mục portfolio. Không cài cũng không sao, Practice vẫn hoàn thành bình thường. Rồi hỏi: "Bạn muốn cài Impeccable không?"
-- Chỉ cài khi người học đồng ý. Dùng \`$skill-installer\` với \`--url https://github.com/pbakaus/impeccable/tree/skill-v4.10.0/.agents/skills/impeccable\` và \`--dest ~/.agents/skills\` (Windows: \`--dest "%USERPROFILE%\\.agents\\skills"\`). Không dùng \`npx\` vì Module 2 chưa yêu cầu Node.js.
+- Nói ngắn với người học: bước này sẽ cài Impeccable, một skill thiết kế được rất nhiều người tin dùng, giúp Codex thiết kế và tự xem lại giao diện. Skill được cài ở môi trường global, giống global \`AGENTS.md\` ở Module 1, nên dùng được cho mọi dự án sau này chứ không chỉ portfolio. Khi cài, Codex sẽ xin phép truy cập Internet và ghi tệp bên ngoài thư mục portfolio; người học chỉ cần đồng ý.
+- Sau đó cài luôn, không hỏi người học có muốn cài hay không. Dùng \`$skill-installer\` với \`--url https://github.com/pbakaus/impeccable/tree/skill-v4.10.0/.agents/skills/impeccable\` và \`--dest ~/.agents/skills\` (Windows: \`--dest "%USERPROFILE%\\.agents\\skills"\`). Không dùng \`npx\` vì Module 2 chưa yêu cầu Node.js.
 - Việc cài skill và để skill tải công cụ của nó trong lần dùng đầu là ngoại lệ duy nhất cho việc ghi tệp bên ngoài thư mục portfolio trong Module 2.
-- Nếu người học từ chối hoặc cài không được, nói ngắn lý do rồi tạo bản mẫu như bình thường. Không thử cách cài khác khi người học chưa đồng ý.
+- Nếu người học từ chối cấp quyền hoặc cài không được, nói ngắn lý do rồi tạo bản mẫu như bình thường. Không thử cách cài khác khi người học chưa đồng ý.
 - Sau khi cài, nhắc người học có thể gọi skill bằng \`$impeccable\`, ví dụ \`$impeccable giúp tôi tạo prototype cho portfolio\` hoặc \`$impeccable critique trang giới thiệu dự án\`. Nếu skill chưa hiện, nhờ người học khởi động lại Codex rồi quay lại đúng task này.
 
 Khi dùng Impeccable trong Module 2:

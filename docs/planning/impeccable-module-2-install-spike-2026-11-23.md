@@ -102,11 +102,13 @@ network approval for the first run and, if it fails, continue without it.
   the brief and `reference.md` as product context.
 - `shape` asks two or three questions per round; the template's step 3 rule of
   one question per turn must take precedence.
-- The install offer must explain: what Impeccable is, that it goes to the global
-  skills folder (like global `AGENTS.md`), that Codex will ask for internet and
-  write permission, and that declining is fine.
-- The prototype requirement and review criteria stay as they are; the skill is
-  optional and its use is not assessed.
+- Before installing, Codex must explain: what Impeccable is, that it goes to the
+  global skills folder (like global `AGENTS.md`), and that Codex will ask for
+  internet and write permission. The owner later chose no yes/no question: Codex
+  presents it as a widely trusted design skill and installs it.
+- The prototype requirement and review criteria stay as they are; using the
+  skill is not assessed, and a refused permission or failed install does not
+  block the prototype.
 
 ## Implemented after this spike
 
