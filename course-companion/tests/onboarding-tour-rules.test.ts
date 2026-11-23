@@ -5,6 +5,7 @@ import {
   shouldShowHomeTour,
   shouldShowLessonTip,
   shouldShowTeacherDot,
+  moduleUnlockedBetween,
   TEACHER_CHAT_OPENED_DECISION_KEY
 } from '../src/renderer/src/components/onboarding-tour-rules'
 
@@ -44,5 +45,17 @@ describe('onboarding tour rules', () => {
     expect(shouldShowTeacherDot({}, true)).toBe(false)
     // Still checking history: stay hidden instead of flashing.
     expect(shouldShowTeacherDot({}, null)).toBe(false)
+  })
+
+  it('announces a module only when it unlocks during the session', () => {
+    expect(moduleUnlockedBetween('module-1', 'module-2')).toBe('module-2')
+    expect(moduleUnlockedBetween('module-2', 'module-3')).toBe('module-3')
+    expect(moduleUnlockedBetween('module-3', 'module-4')).toBe('module-4')
+    // Loading saved progress, the intro → Module 1 step, staying put or going back never count.
+    expect(moduleUnlockedBetween(null, 'module-2')).toBeNull()
+    expect(moduleUnlockedBetween('intro', 'module-1')).toBeNull()
+    expect(moduleUnlockedBetween('module-2', 'module-2')).toBeNull()
+    expect(moduleUnlockedBetween('module-3', 'module-2')).toBeNull()
+    expect(moduleUnlockedBetween('module-2', null)).toBeNull()
   })
 })

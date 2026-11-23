@@ -282,6 +282,15 @@ async function verifyTeacherNewDot(page) {
   assert.equal(saved.progress.decisions.teacherChatOpened, 'yes')
 }
 
+// Finishing Module 1 returns Home, where Triết announces Module 2 on its glowing card.
+async function verifyUnlockMoment(page) {
+  const announcement = page.getByRole('dialog', { name: 'Module 2 đã mở' })
+  await announcement.waitFor()
+  assert.equal(await page.locator('button.pixel-roadmap-stage.is-current.is-just-unlocked').count(), 1)
+  await capture(page, 'onboarding-module-2-unlocked.png')
+  return announcement
+}
+
 async function skipHomeOnboardingTour(page) {
   await page.getByRole('dialog', { name: 'Đây là Triết' }).waitFor()
   await page.keyboard.press('Escape')
@@ -1347,10 +1356,13 @@ try {
   await verifyHomeBase(firstWindows.learningPage)
   await completeSetupModule(firstWindows.learningPage, firstWindows.companionPage, firstLaunch, false, true)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)
+  const unlockAnnouncement = await verifyUnlockMoment(firstWindows.learningPage)
   await verifyHomeBase(firstWindows.learningPage)
+  // Clicking the highlighted card itself opens Module 2 and closes the announcement.
   await firstWindows.learningPage
     .getByRole('button', { name: /^02.*MỞ BÀI HỌC/ })
     .click()
+  await unlockAnnouncement.waitFor({ state: 'detached' })
   await firstWindows.learningPage
     .locator('main[data-scene-id="module-2-portfolio-workspace"]')
     .waitFor()
@@ -1546,6 +1558,11 @@ try {
   await skipHomeOnboardingTour(learningPage)
   await completeSetupModule(learningPage, companionPage, resumedLaunch)
   assert.equal(await fingerprintTree(practiceWorkspace.canonicalStarter), canonicalStarterFingerprint)
+  // "Đã hiểu" closes the announcement without opening Module 2.
+  const resetUnlockAnnouncement = await verifyUnlockMoment(learningPage)
+  await resetUnlockAnnouncement.getByRole('button', { name: 'Đã hiểu', exact: true }).click()
+  await resetUnlockAnnouncement.waitFor({ state: 'detached' })
+  await learningPage.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
   await learningPage.getByRole('button', { name: 'Mở Triết, giáo viên đồng hành' }).click()
   await learningPage.getByText('TRIẾT ĐÃ SẴN SÀNG', { exact: true }).waitFor()
   const teacherBounds = await learningPage.locator('.pixel-teacher-overlay').boundingBox()

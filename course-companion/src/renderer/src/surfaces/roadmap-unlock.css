@@ -1,0 +1,15 @@
+/* The module that was just unlocked glows gold while Triết announces it. */
+.pixel-roadmap-stage.is-current.is-just-unlocked {
+  border-color: var(--pixel-yellow);
+  animation: roadmap-unlock-glow 1.6s ease-out 2;
+}
+
+@keyframes roadmap-unlock-glow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 214, 102, .55); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 214, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 214, 102, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-roadmap-stage.is-current.is-just-unlocked { animation: none; }
+}

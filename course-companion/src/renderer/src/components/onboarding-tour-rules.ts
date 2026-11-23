@@ -30,6 +30,19 @@ export function shouldShowLessonTip(state: OnboardingTourState, lessonId: Lesson
   return state === 'home-done' && lessonId !== 'intro'
 }
 
+const courseOrder: readonly LessonId[] = ['intro', 'module-1', 'module-2', 'module-3', 'module-4']
+
+// The module just unlocked when the current module advances during this session
+// (e.g. finishing Module 1 makes Module 2 current). Loading saved progress
+// (`previous === null`) never counts, so returning learners are not congratulated
+// for something they unlocked long ago.
+export function moduleUnlockedBetween(previous: LessonId | null, current: LessonId | null): LessonId | null {
+  if (!previous || !current) return null
+  const from = courseOrder.indexOf(previous)
+  const to = courseOrder.indexOf(current)
+  return to > from && to >= courseOrder.indexOf('module-2') ? current : null
+}
+
 // Saved the first time the learner opens Triết chat from the learning window.
 export const TEACHER_CHAT_OPENED_DECISION_KEY = 'teacherChatOpened'
 

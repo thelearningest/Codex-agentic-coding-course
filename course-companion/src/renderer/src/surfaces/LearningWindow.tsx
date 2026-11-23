@@ -62,12 +62,14 @@ import { TeacherWorkspace } from '../components/TeacherWorkspace'
 import { OnboardingTour, ONBOARDING_ANCHOR_ATTRIBUTE, type OnboardingTourStep } from '../components/OnboardingTour'
 import { LockedRoadmapStage } from '../components/LockedRoadmapStage'
 import { TeacherNewDot } from '../components/TeacherNewDot'
+import './roadmap-unlock.css'
 import {
   ONBOARDING_TOUR_DECISION_KEY,
   readOnboardingTourState,
   shouldShowHomeTour,
   shouldShowLessonTip,
   shouldShowTeacherDot,
+  moduleUnlockedBetween,
   TEACHER_CHAT_OPENED_DECISION_KEY,
   type OnboardingTourState
 } from '../components/onboarding-tour-rules'
@@ -2259,6 +2261,22 @@ const lessonTipSteps = [
   }
 ] as const satisfies readonly OnboardingTourStep[]
 
+// Unlock moment: wording from the approved prototype, numbered for each module.
+const unlockStepsFor = (lessonId: LessonId): OnboardingTourStep[] => {
+  const module = Number(lessonId.slice(-1))
+  return [{
+    id: `unlock-${lessonId}`,
+    anchor: 'current-module',
+    title: `Module ${module} đã mở`,
+    body: `Bạn đã xong Module ${module - 1}. Module ${module} giờ đã sẵn sàng.`,
+    hint: `Bấm vào Module ${module} để học tiếp.`,
+    action: true,
+    nextLabel: 'Đã hiểu'
+  }]
+}
+
+const currentModuleAnchor = { [ONBOARDING_ANCHOR_ATTRIBUTE]: 'current-module' }
+
 type TeacherOverlayProps = {
   onClose: () => void
   practiceMode?: boolean
@@ -2308,6 +2326,8 @@ type PixelAppShellProps = {
   onReset: () => void
   showHomeTour: boolean
   showTeacherDot: boolean
+  unlockedModule: LessonId | null
+  onUnlockSeen: () => void
   onHomeTourComplete: () => void
   onHomeTourSkip: () => void
 }
@@ -2325,6 +2345,8 @@ function PixelAppShell({
   onReset,
   showHomeTour,
   showTeacherDot,
+  unlockedModule,
+  onUnlockSeen,
   onHomeTourComplete,
   onHomeTourSkip
 }: PixelAppShellProps) {
@@ -2339,6 +2361,7 @@ function PixelAppShell({
   const completedCheckpointCount = runnableCheckpointIds.filter((id) => completed.has(id)).length
   const progressPercent = Math.round((completedCheckpointCount / runnableCheckpointIds.length) * 100)
   const currentModuleId = progress.currentLessonId === 'intro' ? 'module-1' : progress.currentLessonId
+  const justUnlocked = unlockedModule === currentModuleId
   const moduleOneComplete = completed.has('m1-complete')
   const moduleOneMigrated = progress.decisions.setupModuleMigration === 'continued-existing-planning-progress'
   const moduleTwoComplete = completed.has('m2-portfolio-complete')
@@ -2403,7 +2426,7 @@ function PixelAppShell({
                 </RoadmapStage>
               )}
               {currentModuleId === 'module-2' ? (
-                <button className={`pixel-roadmap-stage is-current${moduleTwoComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
+                <button className={`pixel-roadmap-stage is-current${moduleTwoComplete ? ' is-complete' : ''}${justUnlocked ? ' is-just-unlocked' : ''}`} type="button" onClick={() => onNavigate('lesson')} {...currentModuleAnchor}>
                   <span>02</span><div><strong>{planningModule?.titleVi ?? 'Lên kế hoạch sao cho hiệu quả?'}</strong><p>Bài {learningPosition.lessonIndex}/{moduleTwoLessonCount} · {learningPosition.lessonTitle} · Trang {learningPosition.page}/{learningPosition.totalPages}</p></div><em>{moduleTwoComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
@@ -2417,7 +2440,7 @@ function PixelAppShell({
                 </RoadmapStage>
               )}
               {currentModuleId === 'module-3' ? (
-                <button className={`pixel-roadmap-stage is-current${moduleThreeComplete ? ' is-complete' : ''}`} type="button" onClick={() => onNavigate('lesson')}>
+                <button className={`pixel-roadmap-stage is-current${moduleThreeComplete ? ' is-complete' : ''}${justUnlocked ? ' is-just-unlocked' : ''}`} type="button" onClick={() => onNavigate('lesson')} {...currentModuleAnchor}>
                   <span>03</span><div><strong>Bắt đầu tạo portfolio</strong><p>Năm tệp planning hiện tại đã được bàn giao; nội dung chat cũ không được dùng làm đầu vào.</p></div><em>{moduleThreeComplete ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
@@ -2431,7 +2454,7 @@ function PixelAppShell({
                 </RoadmapStage>
               )}
               {futureModules.map((title, index) => currentModuleId === `module-${index + 4}` ? (
-                <button className={`pixel-roadmap-stage is-current${completed.has('m4-complete') ? ' is-complete' : ''}`} type="button" key={title} onClick={() => onNavigate('lesson')}>
+                <button className={`pixel-roadmap-stage is-current${completed.has('m4-complete') ? ' is-complete' : ''}${justUnlocked ? ' is-just-unlocked' : ''}`} type="button" key={title} onClick={() => onNavigate('lesson')} {...currentModuleAnchor}>
                   <span>{String(index + 4).padStart(2, '0')}</span><div><strong>{title}</strong><p>{scene.mission}</p></div><em>{completed.has('m4-complete') ? 'HOÀN THÀNH' : <><span>BẠN ĐANG Ở ĐÂY</span><b>MỞ BÀI HỌC →</b></>}</em>
                 </button>
               ) : (
@@ -2546,6 +2569,10 @@ function PixelAppShell({
         <TeacherOverlay onClose={onCloseTeacher} />
       ) : null}
 
+      {justUnlocked && unlockedModule && destination === 'home' && !teacherOpen && !showHomeTour ? (
+        <OnboardingTour steps={unlockStepsFor(unlockedModule)} onComplete={onUnlockSeen} onSkip={onUnlockSeen} />
+      ) : null}
+
       {showHomeTour && destination === 'home' && !teacherOpen ? (
         <OnboardingTour steps={homeTourSteps} onComplete={onHomeTourComplete} onSkip={onHomeTourSkip} />
       ) : null}
@@ -2574,6 +2601,17 @@ export function LearningWindow() {
   const [teacherOpen, setTeacherOpen] = useState(false)
   const [decisionOverrides, setDecisionOverrides] = useState<Record<string, string>>({})
   const pendingDecisionsRef = useRef<Record<string, string>>({})
+  // Unlock moment: compare the current module with the one seen on the previous render.
+  // Updating state during render (instead of in an effect) is React's pattern for
+  // reacting to a changed value; loading saved progress starts from null, so it never counts.
+  const [seenLessonId, setSeenLessonId] = useState<LessonId | null>(null)
+  const [unlockedModule, setUnlockedModule] = useState<LessonId | null>(null)
+  const currentLessonId = progress?.currentLessonId ?? null
+  if (currentLessonId !== seenLessonId) {
+    setSeenLessonId(currentLessonId)
+    const unlocked = moduleUnlockedBetween(seenLessonId, currentLessonId)
+    if (unlocked) setUnlockedModule(unlocked)
+  }
   // null while unknown; learners with an existing Triết conversation never see the "new" dot.
   const [hasTeacherConversation, setHasTeacherConversation] = useState<boolean | null>(null)
   const [practiceBriefOpen, setPracticeBriefOpen] = useState(false)
@@ -3117,6 +3155,8 @@ export function LearningWindow() {
         onReset={() => void reset()}
         showHomeTour={shouldShowHomeTour(progress, onboardingState)}
         showTeacherDot={showTeacherDot}
+        unlockedModule={unlockedModule}
+        onUnlockSeen={() => setUnlockedModule(null)}
         onHomeTourComplete={() => saveOnboardingState('home-done')}
         onHomeTourSkip={() => saveOnboardingState('skipped')}
       />

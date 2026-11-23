@@ -6,7 +6,7 @@ import './onboarding-tour.css'
 
 export const ONBOARDING_ANCHOR_ATTRIBUTE = 'data-onboarding-anchor'
 
-export type OnboardingAnchorId = 'home-teacher' | 'locked-module' | 'lesson-teacher'
+export type OnboardingAnchorId = 'home-teacher' | 'locked-module' | 'lesson-teacher' | 'current-module'
 
 export type OnboardingTourStep = {
   id: string
