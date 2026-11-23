@@ -56,6 +56,25 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(portfolioAgentsTemplate).toContain('Không tự mua tên miền hay dịch vụ')
   })
 
+  it('offers an optional global Impeccable install in Module 2 step 3 without widening the package scope', () => {
+    const moduleTwo = portfolioAgentsTemplate.slice(
+      portfolioAgentsTemplate.indexOf('## Module 2: gói kế hoạch'),
+      portfolioAgentsTemplate.indexOf('## Module 3: xây website')
+    )
+    const impeccable = moduleTwo.indexOf('#### Skill Impeccable cho bản mẫu HTML')
+    expect(impeccable).toBeGreaterThan(moduleTwo.indexOf('### Bước 3 — planning/reference/reference.md'))
+    expect(impeccable).toBeLessThan(moduleTwo.indexOf('Cuối bước 3, đề nghị tạo một bản mẫu HTML'))
+    expect(moduleTwo).toContain('https://github.com/pbakaus/impeccable/tree/skill-v4.10.0/.agents/skills/impeccable')
+    expect(moduleTwo).toContain('`--dest ~/.agents/skills`')
+    expect(moduleTwo).toContain('Skill được cài ở môi trường global, giống global `AGENTS.md` ở Module 1')
+    expect(moduleTwo).toContain('Chỉ cài khi người học đồng ý.')
+    expect(moduleTwo).toContain('Không cài cũng không sao, Practice vẫn hoàn thành bình thường.')
+    expect(moduleTwo).toContain('Không dùng `npx`')
+    expect(moduleTwo).toContain('Không chạy `init`, không tạo PRODUCT.md, DESIGN.md')
+    expect(moduleTwo).toContain('mỗi lượt chỉ hỏi một câu, kể cả khi skill gợi ý hỏi nhiều câu cùng lúc')
+    expect(moduleTwo).toContain('%USERPROFILE%\\.agents\\skills')
+  })
+
   it('states the course React, TypeScript and Vite baseline from Module 2 onward', () => {
     expect(portfolioAgentsTemplate).toContain('Dùng React, TypeScript và Vite.')
     expect(portfolioAgentsTemplate).toContain('Lệnh `npm run check` chạy lần lượt typecheck, lint và build.')

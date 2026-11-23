@@ -115,6 +115,17 @@ const instructionalScenes = {
     request: '', evidence: [],
     dialogue: 'Bạn chỉ cần prompt bảo là:\n"tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".\n\nVà sau này, không chỉ với portfolio mà với tất cả các ứng dụng khác bạn tạo với AI, bạn nên bảo agent tạo trước một trang html mẫu để bạn duyệt thiết kế. Như vậy sẽ làm giảm trường hợp bạn nói một đằng agent làm một nẻo, vì giờ nó đã có trang html để làm reference.',
     highlightTerms: ['"tạo mẫu cho tui một thiết kế của portfolio dưới dạng html page để tui có thể duyệt, trước khi tạo một portfolio thật".'],
+    choices: [{ label: 'Tìm hiểu skill Impeccable', next: 'module-2-impeccable-skill', primary: true }],
+    showTitle: false,
+    showPanel: false
+  },
+  'module-2-impeccable-skill': {
+    lessonId: 'module-2', checkpointId: 'm2-portfolio-brief', step: 1, totalSteps: 5,
+    lessonLabel: 'MODULE 2 · LẬP KẾ HOẠCH PORTFOLIO', mission: 'Skill Impeccable',
+    objective: 'Skill Impeccable', panelLabel: '', panelStatus: '', tone: 'neutral',
+    request: '', evidence: [],
+    dialogue: 'Để agent thiết kế giao diện tốt hơn, mình hay dùng thêm một skill tên là Impeccable. Impeccable là một skill (a.k.a file hướng dẫn) giúp agent thực hiện những tác vụ thiết kế một cách chuyên nghiệp hơn, sử dụng những từ vựng và workflow mà một designer thường sử dụng.\n\nMột số tác vụ bạn có thể làm với impeccable:\n\n• Bắt đầu tạo một thiết kế: $impeccable [prompt để tạo sản phẩm]; VD: $impeccable giúp tôi tạo prototype cho portfolio\n• Thấy thiết kế xấu nhưng không biết cải thiện thế nào: $impeccable critique [tên chi tiết]; VD: $impeccable critique trang giới thiệu dự án\n\nThực ra $ hay / đều có thể dùng để gọi skill, nhưng tài liệu chính thức của Impeccable dùng $ nên mình cũng sẽ tuân thủ.\n\nTẹo nữa phần thực hành bạn sẽ được hướng dẫn chi tiết hơn cách cài đặt và sử dụng skill impeccable',
+    highlightTerms: ['$impeccable giúp tôi tạo prototype cho portfolio', '$impeccable critique trang giới thiệu dự án'],
     choices: [{ label: 'Tìm hiểu implementation plan', next: 'module-2-implementation-plan-intro', primary: true }],
     showTitle: false,
     showPanel: false

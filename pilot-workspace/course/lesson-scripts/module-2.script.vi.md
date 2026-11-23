@@ -48,6 +48,23 @@ Và sau này, không chỉ với portfolio mà với tất cả các ứng dụn
 
 [Mình cũng tạo design prototype trước khi thực hiện khoá này](../../../plan/module-3-prototype/index.html)
 
+### Skill Impeccable
+
+Teacher dùng nguyên văn lời dẫn của tác giả:
+
+> Để agent thiết kế giao diện tốt hơn, mình hay dùng thêm một skill tên là Impeccable. Impeccable là một skill (a.k.a file hướng dẫn) giúp agent thực hiện những tác vụ thiết kế một cách chuyên nghiệp hơn, sử dụng những từ vựng và workflow mà một designer thường sử dụng.
+>
+> Một số tác vụ bạn có thể làm với impeccable:
+>
+> - Bắt đầu tạo một thiết kế: `$impeccable [prompt để tạo sản phẩm]`; VD: `$impeccable giúp tôi tạo prototype cho portfolio`
+> - Thấy thiết kế xấu nhưng không biết cải thiện thế nào: `$impeccable critique [tên chi tiết]`; VD: `$impeccable critique trang giới thiệu dự án`
+>
+> Thực ra `$` hay `/` đều có thể dùng để gọi skill, nhưng tài liệu chính thức của Impeccable dùng `$` nên mình cũng sẽ tuân thủ.
+>
+> Tẹo nữa phần thực hành bạn sẽ được hướng dẫn chi tiết hơn cách cài đặt và sử dụng skill impeccable
+
+Teacher không hướng dẫn cài đặt skill. Executor sẽ đề nghị cài và hướng dẫn cách dùng trong Practice.
+
 ## Phần 4 — Đọc một implementation plan mẫu
 
 Teacher mở phần bằng nguyên văn lời dẫn của tác giả:

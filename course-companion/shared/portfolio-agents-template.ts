@@ -100,6 +100,24 @@ Nếu không mở được link, nhờ người học gửi ảnh chụp màn h�
 
 Qua bước khi mỗi trang có link hoặc ảnh, danh sách điểm học theo đã được người học đồng ý, và tệp ghi rõ: chỉ học cách làm, không chép chữ, hình ảnh, logo hay mã nguồn.
 
+#### Skill Impeccable cho bản mẫu HTML
+
+Trước khi đề nghị tạo bản mẫu HTML, đề nghị người học cài skill Impeccable:
+
+- Kiểm tra trước. Nếu đã có \`~/.agents/skills/impeccable/SKILL.md\` (Windows: \`%USERPROFILE%\\.agents\\skills\\impeccable\\SKILL.md\`), báo người học skill đã sẵn sàng và bỏ qua phần cài đặt.
+- Nói ngắn với người học: Impeccable là skill giúp Codex thiết kế và tự xem lại giao diện. Skill được cài ở môi trường global, giống global \`AGENTS.md\` ở Module 1, nên dùng được cho mọi dự án sau này chứ không chỉ portfolio. Khi cài, Codex sẽ xin phép truy cập Internet và ghi tệp bên ngoài thư mục portfolio. Không cài cũng không sao, Practice vẫn hoàn thành bình thường. Rồi hỏi: "Bạn muốn cài Impeccable không?"
+- Chỉ cài khi người học đồng ý. Dùng \`$skill-installer\` với \`--url https://github.com/pbakaus/impeccable/tree/skill-v4.10.0/.agents/skills/impeccable\` và \`--dest ~/.agents/skills\` (Windows: \`--dest "%USERPROFILE%\\.agents\\skills"\`). Không dùng \`npx\` vì Module 2 chưa yêu cầu Node.js.
+- Việc cài skill và để skill tải công cụ của nó trong lần dùng đầu là ngoại lệ duy nhất cho việc ghi tệp bên ngoài thư mục portfolio trong Module 2.
+- Nếu người học từ chối hoặc cài không được, nói ngắn lý do rồi tạo bản mẫu như bình thường. Không thử cách cài khác khi người học chưa đồng ý.
+- Sau khi cài, nhắc người học có thể gọi skill bằng \`$impeccable\`, ví dụ \`$impeccable giúp tôi tạo prototype cho portfolio\` hoặc \`$impeccable critique trang giới thiệu dự án\`. Nếu skill chưa hiện, nhờ người học khởi động lại Codex rồi quay lại đúng task này.
+
+Khi dùng Impeccable trong Module 2:
+
+- Dùng planning/portfolio-brief.md, planning/content-evidence-inventory.md và planning/reference/reference.md làm bối cảnh sản phẩm. Không chạy \`init\`, không tạo PRODUCT.md, DESIGN.md hay bất kỳ tệp nào ngoài planning/reference/design-prototype.html, vì Course Companion sẽ báo lỗi khi thư mục có tệp ngoài phạm vi.
+- Quy tắc phỏng vấn ở trên vẫn áp dụng: mỗi lượt chỉ hỏi một câu, kể cả khi skill gợi ý hỏi nhiều câu cùng lúc.
+- Lần đầu dùng, skill có thể cần tải thêm công cụ từ Internet và sẽ xin phép. Nếu không tải được, tiếp tục làm theo hướng dẫn trong skill mà không cần công cụ đó.
+- Sau khi tạo bản mẫu, đề nghị dùng \`$impeccable critique\` để xem lại bản mẫu và giải thích kết quả bằng lời dễ hiểu. Chỉ sửa bản mẫu theo những góp ý người học đồng ý.
+
 Cuối bước 3, đề nghị tạo một bản mẫu HTML từ nội dung portfolio và hướng thiết kế người học vừa chọn. Chờ người học đồng ý rồi lưu bản mẫu vào planning/reference/design-prototype.html. Đặt tiêu đề tab là design-protoype. Mời người học mở tệp trong trình duyệt, xem bố cục và thứ tự các phần, rồi ghi nhận góp ý trước khi viết PRD. Nếu tệp còn thiếu khi chuẩn bị nộp, nhắc người học bổ sung trong cùng task.
 
 ### Bước 4 — planning/PRD.md

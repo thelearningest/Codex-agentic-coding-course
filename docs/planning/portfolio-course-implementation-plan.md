@@ -48,9 +48,35 @@ and must never be inferred from a passing automated check.
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
+| Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; optional global install offered in Practice step 3 | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
 | Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Impeccable skill in Module 2, 23 November 2026
+
+Module 2 now introduces the Impeccable design skill. A new page,
+`module-2-impeccable-skill`, follows the HTML prototype example with the
+owner's copy and `$impeccable` examples. The lesson and Teacher script carry
+the same text. In Practice step 3, the portfolio `AGENTS.md` tells Codex to
+offer an optional global install before the prototype. Codex reminds the
+learner that global works like global `AGENTS.md`. It installs upstream
+`skill-v4.10.0` into `~/.agents/skills` with `$skill-installer`, without Node.js.
+In Module 2, Codex must not run `init` or write files other than the prototype.
+The package scope check, criteria and Practice version (2.0.0) are unchanged.
+The template only reaches folders whose `AGENTS.md` is created after this
+change.
+
+The install spike is in
+[impeccable-module-2-install-spike-2026-11-23.md](impeccable-module-2-install-spike-2026-11-23.md).
+Verification `passed` for typecheck, lint, build, the focused registry and
+template tests, the Electron smoke (which now passes through the new page), the
+Practice guide and the review feedback scripts. The full unit suite kept its
+92 existing failures (815 passes). The Teacher chat script timed out twice at
+the windowed Teacher step and passed on a third run, which this change does not
+touch. Another session edited onboarding files in the same checkout during
+these runs. Live installs on a fresh Mac and on Windows, and learner acceptance,
+are `pending`. Impeccable versus `frontend-design` in Module 1 is undecided.
 
 ### Web links in Course Companion, 22 November 2026
 
