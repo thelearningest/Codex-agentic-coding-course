@@ -124,7 +124,7 @@ skill, các bước cần thực hiện và những điều cần kiểm tra tr�
 
 ## Hai skill bạn sẽ dùng để xây portfolio
 
-- `frontend-design` dùng khi thiết kế hoặc chỉnh sửa giao diện portfolio. Skill
+- `impeccable` dùng khi thiết kế hoặc chỉnh sửa giao diện portfolio. Skill
   giúp Codex xác định mục tiêu của trang, chọn hướng thiết kế, xây giao diện
   responsive và kiểm tra kết quả thực tế.
 - `copywriting` dùng khi viết nội dung cho portfolio. Skill giúp Codex viết tiêu

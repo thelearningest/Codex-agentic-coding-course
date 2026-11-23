@@ -79,7 +79,15 @@ Practice guide and the review feedback scripts. The full unit suite kept its
 the windowed Teacher step and passed on a third run, which this change does not
 touch. Another session edited onboarding files in the same checkout during
 these runs. Live installs on a fresh Mac and on Windows, and learner acceptance,
-are `pending`. Impeccable versus `frontend-design` in Module 1 is undecided.
+are `pending`.
+
+Later the same day the owner chose Impeccable to replace `frontend-design` in
+Module 1 and approved a name-only swap. The lesson, Teacher script, the two
+Skill pages' labels, dialogue and card now say `impeccable`. The `SKILL.md`
+excerpt shows Impeccable's frontmatter and four of its commands. The frozen
+Module 1 digests were updated only for the lesson and script, which matched
+before the change. The frozen `SOURCES.md` and renderer-scene digests were
+already failing and stay failing.
 
 ### Web links in Course Companion, 22 November 2026
 

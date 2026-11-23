@@ -95,13 +95,13 @@ Teacher giải thích mỗi skill có tệp chính `SKILL.md`, trong đó mô t�
 dùng, các bước cần thực hiện và điều cần kiểm tra.
 
 Ở trang Skill đầu tiên, Teacher mở một panel duy nhất chứa đoạn trích tiếng Anh
-từ `frontend-design`; không dùng ảnh chụp và không hiển thị toàn bộ skill.
+từ `impeccable`; không dùng ảnh chụp và không hiển thị toàn bộ skill.
 
 Teacher nói: "Theo kinh nghiệm của mình, agent thường xử lý chỉ dẫn kỹ thuật
 bằng tiếng Anh ổn định hơn. Vì vậy, phần hướng dẫn dành cho agent trong khóa học
 này sẽ ưu tiên tiếng Anh. Bạn vẫn có thể trao đổi với Codex bằng tiếng Việt."
 
-Ở trang Skill thứ hai, Teacher giới thiệu `frontend-design` cho giao diện
+Ở trang Skill thứ hai, Teacher giới thiệu `impeccable` cho giao diện
 portfolio và `copywriting` cho nội dung dựa trên thông tin thật. Teacher giới
 thiệu `skills.sh` là nơi khám phá skill do cộng đồng chia sẻ và nói rõ Learner
 chưa cần cài thêm skill trong Module 1.

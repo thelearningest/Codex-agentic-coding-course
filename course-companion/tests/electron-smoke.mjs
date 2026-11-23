@@ -45,7 +45,7 @@ const designReferenceLinks = [
   ['Mobbin', 'https://mobbin.com/'],
   ['Pinterest', 'https://www.pinterest.com/']
 ]
-async function openModuleTwoPractice(page, stepsRemaining = 6) {
+async function openModuleTwoPractice(page, stepsRemaining = 7) {
   for (let index = 0; index < stepsRemaining; index += 1) {
     await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }
@@ -584,7 +584,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.equal(await skillBoard.locator('figure, img').count(), 0)
   assert.match(await skillBoard.textContent(), /Thông thường ta dùng AGENTS\.md để dạy cho model/)
   assert.match(await skillBoard.textContent(), /Đó là lúc ta sử dụng Skill/)
-  assert.match(await skillBoard.textContent(), /name: frontend-design/)
+  assert.match(await skillBoard.textContent(), /name: impeccable/)
   assert.doesNotMatch(await skillBoard.textContent(), /copywriting/)
   assert.doesNotMatch(await skillBoard.textContent(), /skills\.sh/)
   assert.match(await skillBoard.textContent(), /Bạn vẫn có thể trao đổi với Codex bằng tiếng Việt/)
@@ -615,7 +615,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await portfolioSkillsBoard.waitFor()
   assert.equal(await portfolioSkillsBoard.locator('.pixel-skill-excerpt').count(), 0)
   assert.match(await portfolioSkillsBoard.textContent(), /Hai skill bạn sẽ dùng để xây portfolio/)
-  assert.match(await portfolioSkillsBoard.textContent(), /frontend-design/)
+  assert.match(await portfolioSkillsBoard.textContent(), /impeccable/)
   assert.match(await portfolioSkillsBoard.textContent(), /copywriting/)
   assert.match(await portfolioSkillsBoard.textContent(), /skills\.sh/)
   if (verifyResponsiveLayout) {

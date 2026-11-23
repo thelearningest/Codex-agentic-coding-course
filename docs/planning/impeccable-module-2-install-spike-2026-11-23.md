@@ -12,10 +12,8 @@ HTML prototype). No course, app or Practice file was changed in this phase.
   current-repo `AGENTS.md`.
 - Learners install upstream `skill-v4.10.0`, pinned by tag, not the locally
   edited 4.9.2 copy (decided 23 November 2026).
-- Impeccable vs `frontend-design`: recommended Impeccable as the single design
-  skill, teaching only `shape` and `critique` by name. Not yet decided; Module 1
-  copy that names `frontend-design` stays unchanged until the owner approves exact
-  replacement wording.
+- Impeccable replaces `frontend-design` in Module 1 with a name-only swap of
+  the approved copy (decided 23 November 2026).
 
 ## Findings
 
@@ -118,6 +116,5 @@ Phases 2 and 3 added the lesson page and the step 3 install guidance. See the
 
 ## Open questions for the owner
 
-1. Impeccable replaces `frontend-design` in Module 1, or both stay?
-2. A Windows check (`impeccable.cmd`, `%USERPROFILE%\.agents\skills`, bundled
+1. A Windows check (`impeccable.cmd`, `%USERPROFILE%\.agents\skills`, bundled
    Python) needs a Windows machine; run it before pilot.

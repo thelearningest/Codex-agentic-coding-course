@@ -447,7 +447,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'neutral',
     request: 'Mỗi skill hướng dẫn một loại công việc theo quy trình có thể dùng lại.',
     evidence: [
-      { label: 'FRONTEND-DESIGN', value: 'Thiết kế và kiểm tra giao diện' },
+      { label: 'IMPECCABLE', value: 'Thiết kế và kiểm tra giao diện' },
       { label: 'COPYWRITING', value: 'Viết nội dung dựa trên thông tin thật' }
     ],
     dialogue: 'Thông thường ta dùng AGENTS.md để dạy cho model làm theo những hành động ta muốn mà ta không cần phải nhắc đi nhắc lại. Nhưng giả dụ ta muốn nó làm những tác vụ cụ thể như viết lách, thì sao? Chả lẽ ta viết hết tất cả những mẹo viết hay vào AGENTS.md? Và giả dụ ta có 100 kỹ năng muốn agents học thì sao? Ta không thể dùng một file AGENTS.md để dạy coding agents tất cả kỹ năng mà ta muốn nó học. Đó là lúc ta sử dụng Skill.',
@@ -462,14 +462,14 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     mission: 'Skills cho portfolio',
     objective: 'Biết hai skill sẽ được dùng trong khóa học',
     panelLabel: 'SKILL',
-    panelStatus: 'FRONTEND-DESIGN VÀ COPYWRITING',
+    panelStatus: 'IMPECCABLE VÀ COPYWRITING',
     tone: 'neutral',
     request: 'Mỗi skill hỗ trợ một loại công việc cụ thể trong portfolio.',
     evidence: [
-      { label: 'FRONTEND-DESIGN', value: 'Thiết kế và kiểm tra giao diện' },
+      { label: 'IMPECCABLE', value: 'Thiết kế và kiểm tra giao diện' },
       { label: 'COPYWRITING', value: 'Viết nội dung dựa trên thông tin thật' }
     ],
-    dialogue: 'Trong quá trình xây portfolio, bạn sẽ dùng frontend-design cho giao diện và copywriting cho nội dung. Bạn cũng có thể tự khám phá thêm skill tại skills.sh.',
+    dialogue: 'Trong quá trình xây portfolio, bạn sẽ dùng impeccable cho giao diện và copywriting cho nội dung. Bạn cũng có thể tự khám phá thêm skill tại skills.sh.',
     choices: [{ label: 'Tiếp tục', next: 'module-1-codex-projects', primary: true }]
   },
   'module-1-codex-projects': {
@@ -1706,26 +1706,22 @@ const guidanceLessonBoardByScene: Partial<Record<SceneId, GuidanceLessonBoardKin
   'module-1-skills-portfolio': 'skills-portfolio'
 }
 
-const frontendDesignSkillExcerpt = `SKILL.md                                  EXCERPT
+const impeccableSkillExcerpt = `SKILL.md                                  EXCERPT
 
 ---
-name: frontend-design
-description: Design and implement distinctive,
-production-grade frontend interfaces with a
-restrained visual language.
+name: impeccable
+description: Use when the user wants to design,
+redesign, critique, audit, polish or otherwise
+improve a frontend interface…
 ---
 
-# Workflow
+# Commands
 
-1. Inspect the existing product, audience,
-   content, framework, and constraints before
-   choosing a direction.
-
-2. Classify the surface and read only the
-   references required for the task.
-
-3. Choose one restrained aesthetic direction
-   and one distinguishing visual idea.
+shape      Plan UX/UI before writing code
+critique   UX design review with heuristic scoring
+polish     Final quality pass before shipping
+audit      Technical quality checks (a11y, perf,
+           responsive)
 
 …`
 
@@ -1807,7 +1803,7 @@ function GuidanceLessonBoard({
               <h1 id={titleId}>Hai skill bạn sẽ dùng để xây portfolio</h1>
             </header>
             <div className="pixel-guidance-board__skills">
-              <article><strong>frontend-design</strong><p>Dùng khi thiết kế hoặc chỉnh sửa giao diện portfolio. Skill giúp Codex xác định mục tiêu của trang, chọn hướng thiết kế, xây giao diện responsive và kiểm tra kết quả thực tế.</p></article>
+              <article><strong>impeccable</strong><p>Dùng khi thiết kế hoặc chỉnh sửa giao diện portfolio. Skill giúp Codex xác định mục tiêu của trang, chọn hướng thiết kế, xây giao diện responsive và kiểm tra kết quả thực tế.</p></article>
               <article><strong>copywriting</strong><p>Dùng khi viết nội dung cho portfolio. Skill giúp Codex viết tiêu đề, phần giới thiệu, mô tả dự án và lời kêu gọi hành động dựa trên thông tin thật của bạn.</p></article>
             </div>
           </>
@@ -1829,8 +1825,8 @@ function GuidanceLessonBoard({
           </>
         ) : kind === 'skills' ? (
           <>
-            <div className="pixel-skill-excerpt" aria-label="Ví dụ rút gọn từ skill frontend-design">
-              <pre><code>{frontendDesignSkillExcerpt}</code></pre>
+            <div className="pixel-skill-excerpt" aria-label="Ví dụ rút gọn từ skill impeccable">
+              <pre><code>{impeccableSkillExcerpt}</code></pre>
             </div>
             <p className="pixel-guidance-board__language">Phần ví dụ dùng tiếng Anh vì theo kinh nghiệm của mình, agent thường xử lý chỉ dẫn kỹ thuật bằng tiếng Anh ổn định hơn. Bạn vẫn có thể trao đổi với Codex bằng tiếng Việt.</p>
           </>
