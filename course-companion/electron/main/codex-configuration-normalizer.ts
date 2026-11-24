@@ -39,8 +39,10 @@ export function isCodexTaskConfigurationSnapshot(
     && (item.connection === 'connected' || item.connection === 'disconnected')
     && configurationValue(item.model)
     && configurationValue(item.reasoningEffort)
+    && (item.reasoningEffortSource === undefined || item.reasoningEffortSource === 'desktop-picker-default')
     && configurationValue(item.serviceTier)
     && configurationValue(item.approvalPolicy)
+    && (item.approvalMode === undefined || configurationValue(item.approvalMode))
     && configurationValue(item.fullAccess)
     && (item.sandboxType === null || typeof item.sandboxType === 'string')
     && (item.activePermissionProfile === null || Boolean(profile
@@ -76,14 +78,14 @@ const tierLabels: Record<string, string> = {
 }
 
 const approvalLabels: Record<string, string> = {
-  'on-request': 'Approve for me',
+  'on-request': 'On request',
   untrusted: 'Untrusted only',
   never: 'Never'
 }
 
 function normalizeString(
   raw: unknown,
-  labels: Record<string, string>
+  labels: Record<string, string | null>
 ): CodexConfigurationValue {
   if (typeof raw !== 'string') return value(null, null)
   return value(raw, labels[raw] ?? null)
@@ -135,6 +137,24 @@ function normalizeFullAccess(
   return { value: value(null, null), sandboxType }
 }
 
+function normalizeApprovalMode(
+  policy: unknown,
+  reviewer: unknown,
+  fullAccess: CodexConfigurationValue,
+  sandboxType: string | null,
+  profile: CodexTaskConfigurationSnapshot['activePermissionProfile']
+): CodexConfigurationValue {
+  if (fullAccess.protocolValue === 'on') return value('full-access', 'Full access')
+  if (policy === 'on-request' && reviewer === 'user' && fullAccess.protocolValue === 'off') {
+    return value('ask-for-approval', 'Ask for approval')
+  }
+  if (policy === 'on-request' && (reviewer === 'auto_review' || reviewer === 'guardian_subagent')) {
+    const workspace = profile ? profile.id === ':workspace' : sandboxType === 'workspaceWrite'
+    if (workspace && fullAccess.protocolValue === 'off') return value('approve-for-me', 'Approve for me')
+  }
+  return value(null, null)
+}
+
 export function normalizeCodexTaskConfiguration(input: {
   runId: string
   threadId: string
@@ -167,6 +187,7 @@ export function normalizeCodexTaskConfiguration(input: {
     reasoningEffort,
     serviceTier,
     approvalPolicy,
+    approvalMode: normalizeApprovalMode(source.approvalPolicy, source.approvalsReviewer, fullAccess.value, fullAccess.sandboxType, profile),
     fullAccess: fullAccess.value,
     sandboxType: fullAccess.sandboxType,
     activePermissionProfile: profile

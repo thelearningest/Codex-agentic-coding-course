@@ -39,7 +39,8 @@ function configuration(
     model: { protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' },
     reasoningEffort: { protocolValue: 'high', label: 'High' },
     serviceTier: { protocolValue: 'standard', label: 'Standard' },
-    approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
+    approvalPolicy: { protocolValue: 'on-request', label: 'On request' },
+    approvalMode: { protocolValue: 'approve-for-me', label: 'Approve for me' },
     fullAccess: { protocolValue: 'off', label: 'Off' },
     sandboxType: 'workspaceWrite',
     activePermissionProfile: null,
@@ -181,7 +182,7 @@ async function harness(
 }
 
 describe('Module 1 Practice review service', () => {
-  it('passes only all three required fresh values and persists the observed task configuration', async () => {
+  it('passes only both required fresh values and persists the observed task configuration', async () => {
     const { progress, runs, service, releaseCount } = await harness()
 
     const response = await service.review()
@@ -209,8 +210,8 @@ describe('Module 1 Practice review service', () => {
 
   it.each([
     ['Effort', { reasoningEffort: { protocolValue: 'low', label: 'Low' } }],
-    ['Approval', { approvalPolicy: { protocolValue: 'never', label: 'Never' } }],
-    ['Full access', { fullAccess: { protocolValue: 'on', label: 'On' } }]
+    ['Approval', { approvalMode: { protocolValue: 'ask-for-approval', label: 'Ask for approval' } }],
+    ['Full access', { approvalMode: { protocolValue: 'full-access', label: 'Full access' } }]
   ])('rejects a %s mismatch and gives exactly one next settings action', async (
     label,
     overrides
@@ -232,16 +233,23 @@ describe('Module 1 Practice review service', () => {
       const { workspace } = await service.review()
       expect(workspace.review?.status).toBe('passed')
       expect(workspace.review?.result?.criteria.map(item => item.criterionId))
-        .toEqual(['effort-matches', 'approval-matches', 'full-access-off'])
+        .toEqual(['effort-matches', 'approval-matches'])
       expect((await service.passedCompletion()).approvedConfiguration).not.toHaveProperty('serviceTier')
     })
 
-  it('credits Approval and Full access when only Effort is unset', async () => {
+  it('credits Approval when only Effort is unset', async () => {
     const { service } = await harness(configuration({ reasoningEffort: { protocolValue: null, label: null } }))
     const { workspace } = await service.review()
     expect(workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
-    expect(workspace.review?.result?.criteria.map(c => c.status)).toEqual(['unverifiable', 'satisfied', 'satisfied'])
-    expect(workspace.checklist.map(step => step.status)).toEqual(['current', 'completed', 'completed'])
+    expect(workspace.review?.result?.criteria.map(c => c.status)).toEqual(['unverifiable', 'satisfied'])
+    expect(workspace.checklist.map(step => step.status)).toEqual(['current', 'completed'])
+  })
+
+  it('requires preset evidence rather than accepting an old on-request policy', async () => {
+    const { service } = await harness(configuration({ approvalMode: undefined }))
+    const { workspace } = await service.review()
+    expect(workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
+    expect(workspace.review?.result?.criteria.map(c => c.status)).toEqual(['satisfied', 'unverifiable'])
   })
 
   it('preserves Medium in the approved configuration for the next module', async () => {
@@ -255,7 +263,7 @@ describe('Module 1 Practice review service', () => {
     const { service } = await harness(configuration({ model: { protocolValue: model, label: model } }))
     const response = await service.review()
     expect(response.workspace.review?.status).toBe('passed')
-    expect(response.workspace.review?.result?.criteria).toHaveLength(3)
+    expect(response.workspace.review?.result?.criteria).toHaveLength(2)
     const receipt = await service.passedCompletion()
     expect(receipt.approvedConfiguration?.model).toBe(model ?? undefined)
   })

@@ -85,13 +85,11 @@ window.feedbackFixture = {
       activePractice: { practiceId: 'm1-codex-safe-setup' },
       checklist: [
         { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'completed' },
-        { id: 'set-approval', title: 'Chọn Approval', status: 'current' },
-        { id: 'disable-full-access', title: 'Tắt Full access', status: 'upcoming' }
+        { id: 'set-approval', title: 'Chọn Approval', status: 'current' }
       ],
       review: { status: 'needs-work', result: { criteria: [
         { criterionId: 'effort-matches', status: 'satisfied', explanation: 'Effort đang khớp: Medium.' },
-        { criterionId: 'approval-matches', status: 'unverifiable', explanation: 'Triết chưa đọc được Approval hiện tại. Mở đúng task Codex rồi thử kiểm tra lại.' },
-        { criterionId: 'full-access-off', status: 'unsatisfied', explanation: 'Full access hiện là On; cần Off.' }
+        { criterionId: 'approval-matches', status: 'unsatisfied', explanation: 'Approval hiện là Full access. Chọn Approve for me rồi bấm Nộp bài.' }
       ] } }
     }} /></div>)
   },
@@ -129,15 +127,15 @@ try {
     await page.setViewportSize({ width, height: 720 })
     await page.evaluate(compact => globalThis.feedbackFixture.mountSetup(compact), compact)
     const next = page.locator(compact ? '.practice-compact-next' : '.practice-review-next-action')
-    assert.match(await next.innerText(), /chưa đọc được Approval/)
+    assert.match(await next.innerText(), /Approval hiện là Full access/)
     const toggle = page.locator('.practice-setup-feedback > summary')
     const list = page.getByRole('list', { name: 'Kết quả kiểm tra từng thiết lập' })
     assert.equal(await list.isVisible(), false)
     await toggle.focus()
     await toggle.press('Enter')
     assert.match(await list.innerText(), /Effort · Đã xác minh/)
-    assert.match(await list.innerText(), /Approval · Chưa xác minh được/)
-    assert.match(await list.innerText(), /Full access hiện là On/)
+    assert.match(await list.innerText(), /Approval · Cần chỉnh sửa/)
+    assert.match(await list.innerText(), /Chọn Approve for me/)
     assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
     await page.screenshot({ path: join(screenshots, `setup-feedback-${width}.png`), animations: 'disabled' })
     await toggle.click()

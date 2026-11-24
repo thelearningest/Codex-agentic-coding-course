@@ -103,8 +103,7 @@ function digest(value: unknown): string {
 const configurationFields = [
   ['model', 'Model'],
   ['reasoningEffort', 'Effort'],
-  ['approvalPolicy', 'Approval'],
-  ['fullAccess', 'Full access']
+  ['approvalMode', 'Approval']
 ] as const
 
 export function buildPracticeReviewEnvelope(input: {
@@ -179,8 +178,8 @@ export function buildPracticeReviewEnvelope(input: {
         ? configurationFields.map(([key, label]) => ({
             id: 'configuration-' + key,
             kind: 'codex-task-configuration' as const,
-            text: label + ': ' + (accepted[key].label ?? 'không xác minh được'),
-            freshness: accepted[key].label === null ? 'stale' as const : freshness
+            text: label + ': ' + (accepted[key]?.label ?? 'không xác minh được'),
+            freshness: !accepted[key]?.label ? 'stale' as const : freshness
           }))
         : [],
       ...(accepted ? { configuration: structuredClone(accepted) } : {}),

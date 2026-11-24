@@ -137,7 +137,7 @@ export class TeacherService {
       const active = workspace.activeRun
       const configuration = activity.configuration
       const configurationMatches = configuration
-        ? setupSettings.map(setting => setting.matches(configuration[setting.key].protocolValue))
+        ? setupSettings.map(setting => setting.matches(configuration[setting.key]?.protocolValue))
         : []
       const firstConfigurationMismatch = configurationMatches.findIndex((matches) => !matches)
       const setupChecklist = active.checklist.filter(step => step.id !== 'set-model')

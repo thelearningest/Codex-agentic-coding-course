@@ -100,11 +100,8 @@ try {
   const workspace = {
     schemaVersion: 1, phase: 'active', title: 'Practice', objective: 'Practice', expectedOutcome: 'Practice',
     checklist: [
-      { id: 'set-model', title: 'Chọn Model 5.6 Sol', status: 'completed' },
       { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'current' },
-      { id: 'set-speed', title: 'Chọn Speed Standard', status: 'completed' },
-      { id: 'set-approval', title: 'Chọn Approval: Approve for me', status: 'completed' },
-      { id: 'disable-full-access', title: 'Giữ Full access ở trạng thái tắt', status: 'pending' }
+      { id: 'set-approval', title: 'Chọn Approval: Approve for me', status: 'completed' }
     ],
     review: { status: 'needs-work', canReview: true, canReturn: false,
       result: { criteria: [{ criterionId: 'effort-matches', status: 'unsatisfied', explanation: 'Effort cần là Medium hoặc High.' }] },

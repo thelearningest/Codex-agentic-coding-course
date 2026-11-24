@@ -117,6 +117,47 @@ describe('ExecutorActivitySnapshotReader', () => {
     expect(saved).toHaveLength(1)
   })
 
+  it.each([
+    [null, true, 'medium'],
+    [null, false, null],
+    ['low', true, 'low'],
+    ['medium', true, 'medium'],
+    ['high', true, 'high']
+  ])('resolves a saved effort of %s when the model supports Medium: %s', async (savedEffort, supportsMedium, expected) => {
+    const calls: string[] = []
+    const configuration = normalizeCodexTaskConfiguration({
+      ...binding,
+      source: 'thread-settings-snapshot',
+      payload: {
+        model: 'gpt-6.2-astra', reasoningEffort: savedEffort, approvalPolicy: 'on-request',
+        approvalsReviewer: 'auto_review', sandbox: { type: 'workspaceWrite' }
+      },
+      observedAt: '2026-08-19T12:00:00.000Z',
+      eventTimestampMs: 1
+    })
+    const reader = new ExecutorActivitySnapshotReader(
+      {
+        async request(method) {
+          calls.push(method)
+          if (method === 'thread/read') {
+            return { thread: { id: binding.threadId, cwd: binding.workspaceRoot, turns: [] } }
+          }
+          if (method !== 'model/list') throw new Error('Unexpected request')
+          return { data: [
+            { model: 'another-model', supportedReasoningEfforts: [{ reasoningEffort: 'medium' }] },
+            { model: 'gpt-6.2-astra', supportedReasoningEfforts: supportsMedium ? [{ reasoningEffort: 'medium' }] : [] }
+          ] }
+        }
+      },
+      { async load() { return null }, async save(snapshot) { return snapshot } },
+      { async read() { return structuredClone(configuration) } }
+    )
+    const activity = await reader.read(binding, { setupReview: true })
+    expect(activity.configuration?.reasoningEffort.protocolValue).toBe(expected)
+    expect(activity.configuration?.approvalMode?.protocolValue).toBe('approve-for-me')
+    expect(calls).toEqual(savedEffort === null ? ['thread/read', 'model/list'] : ['thread/read'])
+  })
+
   it('fails closed without saving when the read resolves a different task', async () => {
     let saves = 0
     const reader = new ExecutorActivitySnapshotReader(

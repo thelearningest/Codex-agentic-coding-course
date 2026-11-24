@@ -243,6 +243,10 @@ The setup review now checks each observed setting independently. A missing Effor
 
 Typecheck, lint, build, 70 focused tests, 15 startup checks and the full Electron suite passed. The final Electron run passed the Module 2 link-color and Teacher chat checks that had failed on earlier attempts. The full unit run passed 917 tests with the same two recorded failures. Next, rehearse an untouched inherited setting through the desktop Practice submission with a learner. Pilot acceptance is pending.
 
+The owner approved a two-setting Module 1 setup review. It accepts Medium or High and verifies the Approve for me preset from the task's approval reviewer and workspace permissions. Full access is no longer a separate checklist step. Older active attempts keep their task and review history when the retired step is removed. The setup guide tells learners to submit as-is when both settings already match.
+
+When Codex leaves Effort unset, review checks the bound task's model catalog for support for the Medium fallback used by Codex Desktop's picker. An explicitly saved effort takes precedence. The standalone Codex and production Electron rehearsal submitted a disposable task with no saved Effort and zero turns, and passed both criteria without editing the task during the review. Typecheck, lint, build, all 15 startup checks and the full Electron suite passed. The setup guide and feedback were inspected at narrow and desktop widths. The unit suite passed 930 tests with the two previously recorded failures. Pilot acceptance is pending. The next step is to observe a learner submit an already-configured task in their own Codex profile.
+
 ### Module 1 orientation and final quiz, 24 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

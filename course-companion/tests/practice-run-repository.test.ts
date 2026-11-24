@@ -63,7 +63,7 @@ function activeRecord(run = activeRun()): PracticeWorkspaceRecord {
 }
 
 describe('PracticeRunRepository', () => {
-  it('resumes a four-setting setup attempt without its retired speed step or correction', async () => {
+  it('resumes a four-setting setup attempt without its retired Speed and Full access steps or correction', async () => {
     const directory = await temporaryDirectory()
     const run = activeRun()
     run.checklist = [
@@ -80,7 +80,7 @@ describe('PracticeRunRepository', () => {
     run.reviewHistory = [run.reviewResult]
     await writeFile(join(directory, 'practice-runs.json'), JSON.stringify(activeRecord(run)))
     const loaded = (await new PracticeRunRepository(directory).load()).activeRun
-    expect(loaded?.checklist.map(step => step.id)).toEqual(['set-effort', 'set-approval', 'disable-full-access'])
+    expect(loaded?.checklist.map(step => step.id)).toEqual(['set-effort', 'set-approval'])
     expect(loaded?.checklist[1]?.status).toBe('current')
     expect(loaded?.reviewStatus).toBe('not-reviewed')
     expect(loaded?.reviewResult).toBeUndefined()

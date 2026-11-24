@@ -157,24 +157,23 @@ Project giúp Codex làm việc với ngữ cảnh liên quan đến dự án, c
 
 ## Practice cuối Module 1
 
-Bạn sẽ mở một task Codex riêng và chỉnh trực tiếp ba thiết lập
-của task: Effort, Approval và Full access. Model do bạn tự chọn. Bạn không cần chụp ảnh,
-đính kèm tệp hay yêu cầu Codex lập báo cáo.
+Mở task Codex của bài và kiểm tra Effort là **Medium** hoặc **High** và Approval là
+**Approve for me**. Nếu hai mục đã đúng, bạn có thể nộp bài ngay. Model do bạn tự chọn.
 
 Course Companion chỉ đọc metadata cấu hình hiệu lực của đúng task Codex đang
-được liên kết. Ứng dụng hiển thị ba giá trị được phát hiện, độ mới và mục nào
+được liên kết. Ứng dụng hiển thị hai giá trị được phát hiện, độ mới và mục nào
 chưa khớp; ứng dụng không tự thay đổi cài đặt của bạn.
 
 Course Companion không gửi task hay lệnh nào vào Codex trước khi cấu hình
 đạt. Cơ chế này không chặn việc bạn tự nhập vào Codex, vì vậy ở bước thiết lập
-hãy chỉ đổi ba cài đặt rồi quay lại chọn **Yêu cầu Triết duyệt tiến độ**.
+hãy kiểm tra hai cài đặt rồi quay lại bấm **Nộp bài**.
 
 > Hãy kiểm tra cấu hình trong hai ảnh. Chỉ quan sát, không thay đổi cài đặt.
-> Báo cáo dưới tiêu đề `Verification`, gồm Effort, Approval và
-> trạng thái Full access. Cảnh báo nếu có mục nào khác cấu hình Triết khuyên dùng.
+> Báo cáo dưới tiêu đề `Verification`, gồm Effort và Approval.
+> Cảnh báo nếu có mục nào khác cấu hình Triết khuyên dùng.
 
 Sau đó, quay lại Course Companion và chọn **Yêu cầu Triết duyệt tiến độ**.
-Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ ba mục.
+Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ hai mục.
 Nếu chưa đạt, mình sẽ chỉ rõ mục cần sửa để bạn nộp lại.
 
 ## Bài ôn tập cuối Module 1

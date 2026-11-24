@@ -146,7 +146,7 @@ describe('Teacher Practice review controls', () => {
       source('electron/main/executor-activity-snapshot-reader.ts')
     ])
 
-    expect(main).toContain("if (method !== 'thread/read') throw new Error('Practice snapshot transport is read-only')")
+    expect(main).toContain("if (method !== 'thread/read' && method !== 'model/list') throw new Error('Practice snapshot transport is read-only')")
     expect(main).toContain('return await activitySnapshotReader.read(binding, options)')
     expect(main).toContain('await practiceSnapshotLifecycle.release()')
     expect(main).toContain('const practiceEvidenceActivity = useTestCodexGateway ? activityObserver : persistedPracticeActivity')

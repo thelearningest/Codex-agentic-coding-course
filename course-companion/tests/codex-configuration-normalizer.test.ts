@@ -13,6 +13,7 @@ function startPayload(overrides: Record<string, unknown> = {}): Record<string, u
     reasoningEffort: 'high',
     serviceTier: null,
     approvalPolicy: 'on-request',
+    approvalsReviewer: 'auto_review',
     sandbox: { type: 'workspaceWrite', writableRoots: ['D:\\course'] },
     ...overrides
   }
@@ -41,7 +42,7 @@ describe('Codex configuration normalizer', () => {
     expect(result.model).toEqual({ protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' })
     expect(result.reasoningEffort).toEqual({ protocolValue: 'high', label: 'High' })
     expect(result.serviceTier).toEqual({ protocolValue: 'standard', label: 'Standard' })
-    expect(result.approvalPolicy).toEqual({ protocolValue: 'on-request', label: 'Approve for me' })
+    expect(result.approvalMode).toEqual({ protocolValue: 'approve-for-me', label: 'Approve for me' })
     expect(result.fullAccess).toEqual({ protocolValue: 'off', label: 'Off' })
   })
 
@@ -75,6 +76,18 @@ describe('Codex configuration normalizer', () => {
     delete missing.reasoningEffort
     expect(normalize(missing)).toMatchObject({ freshness: 'fresh', reasoningEffort: { protocolValue: null } })
     expect(normalize({}).freshness).toBe('unverifiable')
+  })
+
+  it.each([
+    ['user', { type: 'workspaceWrite' }, 'ask-for-approval'],
+    ['auto_review', { type: 'workspaceWrite' }, 'approve-for-me'],
+    ['guardian_subagent', { type: 'workspaceWrite' }, 'approve-for-me'],
+    ['auto_review', { type: 'dangerFullAccess' }, 'full-access'],
+    ['auto_review', { type: 'readOnly' }, null],
+    [undefined, { type: 'workspaceWrite' }, null]
+  ])('recognizes the approval preset for %s with %j', (reviewer, sandbox, mode) => {
+    const result = normalize(startPayload({ approvalsReviewer: reviewer, sandbox }))
+    expect(result.approvalMode?.protocolValue).toBe(mode)
   })
 
   it('reads settings-update field names and treats a full-access profile as on', () => {

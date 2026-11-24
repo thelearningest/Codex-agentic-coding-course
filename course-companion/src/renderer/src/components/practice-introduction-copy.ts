@@ -11,8 +11,7 @@ export type Introduction = {
 
 const settings = [
   ['Effort', 'Medium hoặc High', 'Mức độ suy luận của Codex khi xử lý yêu cầu.'],
-  ['Approval', 'Approve for me', 'Cách Codex xử lý yêu cầu phê duyệt hành động.'],
-  ['Full access', 'Tắt', 'Giữ chế độ toàn quyền ở trạng thái tắt.']
+  ['Approval', 'Approve for me', 'Cách Codex xử lý yêu cầu phê duyệt hành động.']
 ] as const
 
 const introductions: Record<string, Introduction> = {
@@ -22,10 +21,10 @@ const introductions: Record<string, Introduction> = {
     context: 'Task là cuộc trò chuyện với Codex dành riêng cho bài thực hành này.',
     steps: [
       'Mở task thực hành trong Codex.',
-      'Kiểm tra ba cài đặt theo hướng dẫn bên dưới. Bạn tự chọn Model phù hợp.',
+      'Kiểm tra Effort và Approval trong task. Nếu hai mục đã đúng, bạn có thể nộp bài ngay. Bạn tự chọn Model phù hợp.',
       'Nhờ Triết kiểm tra kết quả. Nếu cần sửa, bạn tiếp tục trong cùng task.'
     ],
-    referenceTitle: 'Xem ba cài đặt cần kiểm tra',
+    referenceTitle: 'Xem hai cài đặt cần kiểm tra',
     reference: settings
   },
   'm2-portfolio-planning': {

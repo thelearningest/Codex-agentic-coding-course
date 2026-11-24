@@ -26,7 +26,8 @@ function configuration(
     model: { protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' },
     reasoningEffort: { protocolValue: 'high', label: 'High' },
     serviceTier: { protocolValue: 'standard', label: 'Standard' },
-    approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
+    approvalPolicy: { protocolValue: 'on-request', label: 'On request' },
+    approvalMode: { protocolValue: 'approve-for-me', label: 'Approve for me' },
     fullAccess: { protocolValue: 'off', label: 'Off' },
     sandboxType: 'workspaceWrite',
     activePermissionProfile: null,
@@ -78,7 +79,7 @@ describe('Module 1 Practice renderer', () => {
     ), 'utf8')
     expect(source).toContain('PRACTICE · METADATA TRỰC TIẾP')
     expect(source).toContain('KHÔNG CẦN ẢNH CHỤP')
-    expect(source).toContain('Triết duyệt trực tiếp ba giá trị')
+    expect(source).toContain('kiểm tra Effort là Medium hoặc High và Approval là Approve for me')
     expect(source).not.toContain('PRACTICE · 2 ẢNH')
   })
 
@@ -117,7 +118,7 @@ describe('Module 1 Practice renderer', () => {
     expect(source).toContain('aria-live')
   })
 
-  it('shows the three required values and a fresh Effort mismatch without assessing Model', () => {
+  it('shows the two required values and a fresh Effort mismatch without assessing Model', () => {
     const html = renderToStaticMarkup(createElement(PracticeProgress, {
       workspace: workspace(configuration({
         model: { protocolValue: 'gpt-6-astra', label: null },
@@ -126,7 +127,7 @@ describe('Module 1 Practice renderer', () => {
     }))
     expect(html).toContain('Cấu hình task được phát hiện')
     expect(html).not.toContain('Cần 5.6 Sol')
-    expect(html.match(/<dt>/g)).toHaveLength(3)
+    expect(html.match(/<dt>/g)).toHaveLength(2)
     expect(html).toContain('Cần kiểm tra: Effort.')
     expect(html.indexOf('Cần kiểm tra: Effort.')).toBeLessThan(html.indexOf('<details'))
     expect(html).not.toContain('<dt>Model</dt>')

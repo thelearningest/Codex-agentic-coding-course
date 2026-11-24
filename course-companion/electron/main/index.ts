@@ -347,7 +347,7 @@ const taskMetadataReader = new CodexTaskMetadataReader(
 const activitySnapshotReader = new ExecutorActivitySnapshotReader(
   {
     async request(method, params) {
-      if (method !== 'thread/read') throw new Error('Practice snapshot transport is read-only')
+      if (method !== 'thread/read' && method !== 'model/list') throw new Error('Practice snapshot transport is read-only')
       await practiceSnapshotLifecycle.ensure()
       return practiceSnapshotClient.request(method, params)
     }
@@ -359,7 +359,7 @@ const practiceReviewActivity = useTestCodexGateway
   ? {
       read: (
         binding: Parameters<ExecutorActivityObserver['bind']>[0],
-        options?: Parameters<ExecutorActivityObserver['bind']>[1]
+        options?: Parameters<ExecutorActivitySnapshotReader['read']>[1]
       ) => activityObserver.bind(binding, options)
     }
   : {

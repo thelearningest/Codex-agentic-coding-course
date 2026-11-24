@@ -328,8 +328,8 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.equal(await page.locator('.pixel-lesson-visual').count(), 1)
   assert.equal(await page.locator('.pixel-lesson-visual img').getAttribute('data-fit'), 'contain')
   assert.match(await page.locator('.pixel-dialogue > p').textContent(), /Được rồi, vậy chúng ta sẽ bắt đầu tìm hiểu Codex cùng nhau nha/)
-  assert.match(await page.locator('.pixel-dialogue > p').textContent(), /Ask for approval luôn hỏi bạn trước khi chỉnh sửa tệp bên ngoài dự án hoặc sử dụng Internet/)
-  assert.match(await page.locator('.pixel-dialogue > p').textContent(), /mình khuyên bạn dùng Approve for me/)
+  assert.match(await page.locator('.pixel-dialogue > p').textContent(), /Ask for approval \(Yêu cầu phê duyệt\) luôn hỏi bạn trước khi chỉnh sửa tệp bên ngoài dự án hoặc sử dụng Internet/)
+  assert.match(await page.locator('.pixel-dialogue > p').textContent(), /mình khuyên bạn dùng Approve for me \(Phê duyệt giúp tôi\)/)
   assert.equal(await page.locator('.pixel-approval-focus').count(), 3)
   assert.equal(await page.locator('.pixel-approval-term').count(), 4)
   const approvalFocus = (focus) => page.locator(`.pixel-approval-focus[data-approval-focus="${focus}"]`)
@@ -606,7 +606,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     name: 'Làm quen với cài đặt Codex',
     exact: true
   }).waitFor()
-  assert.equal(await practiceBrief.locator('.practice-setup-guide li').count(), 3)
+  assert.equal(await practiceBrief.locator('.practice-setup-guide li').count(), 2)
   assert.equal(await practiceBrief.locator('.practice-progress').count(), 0)
   assert.equal(await practiceBrief.getByText('Không xác minh được', { exact: true }).count(), 0)
   const setupReference = practiceBrief.locator('.practice-setup-reference')
@@ -618,7 +618,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     && desktopStartBounds.y + desktopStartBounds.height <= await page.evaluate(() => globalThis.innerHeight))
   await capture(page, 'module-1-codex-setup-practice.png')
   const setupGuide = practiceBrief.locator('.practice-setup-guide')
-  for (const value of ['Medium (Vừa)', 'Approve for me (Phê duyệt giúp tôi)', 'Tắt']) {
+  for (const value of ['Medium (Vừa)', 'Approve for me (Phê duyệt giúp tôi)']) {
     await setupGuide.getByText(value, { exact: true }).waitFor()
   }
   assert.ok(await setupGuide.evaluate((guide) =>
@@ -673,10 +673,10 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.deepEqual(hintAfter.checklist, hintBefore.checklist)
   assert.equal(await companionPage.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
   await capture(companionPage, 'practice-hint-compact.png')
-  await compactReview.getByText('Xem tất cả 3 bước', { exact: true }).click()
+  await compactReview.getByText('Xem tất cả 2 bước', { exact: true }).click()
   const compactSteps = compactReview.locator('.practice-compact-checklist > li > button')
-  assert.equal(await compactSteps.count(), 3)
-  for (let index = 0; index < 3; index += 1) {
+  assert.equal(await compactSteps.count(), 2)
+  for (let index = 0; index < 2; index += 1) {
     assert.equal(await compactSteps.nth(index).getAttribute('aria-expanded'), 'false')
   }
   await compactSteps.nth(0).click()
@@ -727,8 +727,8 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   const repeatedReview = await page.evaluate(() => globalThis.courseCompanion?.reviewPractice())
   assert.equal('error' in repeatedReview, false)
   assert.equal(repeatedReview.workspace.review.comparison.kind, 'unchanged')
-  assert.equal(repeatedReview.workspace.review.comparison.previousCompletedCount, 3)
-  assert.equal(repeatedReview.workspace.review.comparison.currentCompletedCount, 3)
+  assert.equal(repeatedReview.workspace.review.comparison.previousCompletedCount, 2)
+  assert.equal(repeatedReview.workspace.review.comparison.currentCompletedCount, 2)
   assert.deepEqual(repeatedReview.workspace.review.comparison.needsReverification, [])
   assert.deepEqual(repeatedReview.workspace.review.comparison.newlyVerified, [])
   await fullTeacher.getByRole('button', { name: 'Lưu kết quả và quay lại khóa học', exact: true }).click()

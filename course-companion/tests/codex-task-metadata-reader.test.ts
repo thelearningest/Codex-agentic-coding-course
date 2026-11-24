@@ -60,6 +60,7 @@ async function fixture(overrides: {
           collaboration_mode: { settings: { model: 'gpt-5.6-sol', reasoning_effort: overrides.modeEffort ?? null } },
           ...(!overrides.omitServiceTier ? { service_tier: overrides.serviceTier ?? null } : {}),
           approval_policy: 'on-request',
+          approvals_reviewer: 'auto_review',
           permission_profile: {
             type: 'managed',
             file_system: { type: 'restricted', entries: [] }
@@ -97,6 +98,7 @@ async function fixture(overrides: {
       reasoningEffort: 'high',
       serviceTier: 'priority',
       approvalPolicy: 'on-request',
+      approvalsReviewer: 'guardian_subagent',
       sandbox: { type: 'workspaceWrite' },
       activePermissionProfile: { id: ':workspace', extends: null }
     },
@@ -130,7 +132,7 @@ describe('CodexTaskMetadataReader', () => {
       model: { protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' },
       reasoningEffort: { protocolValue: 'high', label: 'High' },
       serviceTier: { protocolValue: 'standard', label: 'Standard' },
-      approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
+      approvalMode: { protocolValue: 'approve-for-me', label: 'Approve for me' },
       fullAccess: { protocolValue: 'off', label: 'Off' },
       activePermissionProfile: { id: ':workspace', extends: null }
     })
@@ -180,7 +182,7 @@ describe('CodexTaskMetadataReader', () => {
       model: { protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' },
       reasoningEffort: { protocolValue: 'high', label: 'High' },
       serviceTier: { protocolValue: 'priority', label: 'Fast' },
-      approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
+      approvalMode: { protocolValue: 'approve-for-me', label: 'Approve for me' },
       fullAccess: { protocolValue: 'off', label: 'Off' }
     })
   })
@@ -194,6 +196,15 @@ describe('CodexTaskMetadataReader', () => {
     })
     expect(await reader.read(binding, { id: THREAD_ID, model: 'gpt-5.6-sol', reasoningEffort: 'medium' }))
       .toMatchObject({ freshness: 'fresh', reasoningEffort: { protocolValue: 'medium' } })
+  })
+
+  it('does not reuse a previously resolved picker fallback as a saved effort', async () => {
+    const { reader, binding } = await fixture({ omitSettings: true })
+    binding.configuration!.reasoningEffort = { protocolValue: 'medium', label: 'Medium' }
+    binding.configuration!.reasoningEffortSource = 'desktop-picker-default'
+    const snapshot = await reader.read(binding)
+    expect(snapshot.reasoningEffort.protocolValue).toBeNull()
+    expect(snapshot.reasoningEffortSource).toBeUndefined()
   })
 
   it('preserves the persisted priority tier as Fast', async () => {

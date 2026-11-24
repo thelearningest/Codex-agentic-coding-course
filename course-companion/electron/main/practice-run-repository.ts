@@ -651,15 +651,16 @@ function normalizeWorkspaceRecord(record: PracticeWorkspaceRecord, recoverInterr
   }))
   if (!record.activeRun) return { ...record, archivedRuns }
   const active = record.activeRun
-  const retiredSpeedStep = active.practiceId === 'm1-codex-safe-setup'
-    ? active.checklist.find(step => step.id === 'set-speed')
-    : undefined
-  const checklist = retiredSpeedStep ? active.checklist.filter(step => step !== retiredSpeedStep) : active.checklist
-  if (retiredSpeedStep?.status === 'current') {
+  const retiredSetupSteps = active.practiceId === 'm1-codex-safe-setup'
+    ? active.checklist.filter(step => step.id === 'set-speed' || step.id === 'disable-full-access')
+    : []
+  const retryOldReview = retiredSetupSteps.length > 0 && active.reviewResult?.verdict === 'needs-work'
+  const checklist = active.checklist.filter(step => !retiredSetupSteps.includes(step)).map(step =>
+    retryOldReview && step.id === 'set-approval' ? { ...step, status: 'pending' as const } : step)
+  if (retryOldReview || retiredSetupSteps.some(step => step.status === 'current')) {
     const nextStep = checklist.findIndex(step => step.status !== 'completed')
     if (nextStep >= 0) checklist[nextStep] = { ...checklist[nextStep]!, status: 'current' }
   }
-  const retryOldReview = retiredSpeedStep && active.reviewResult?.verdict === 'needs-work'
   const reviewStatus = recoverInterruptedReview && active.reviewStatus === 'reviewing'
     ? active.reviewResult?.verdict ?? 'not-reviewed'
     : active.reviewStatus

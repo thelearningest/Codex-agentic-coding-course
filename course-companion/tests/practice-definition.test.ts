@@ -62,8 +62,7 @@ describe('Module 1 Practice definition', () => {
       practice.requiredSettings.map((setting) => [setting.label, setting.value])
     )).toEqual({
       Effort: 'Medium hoặc High',
-      Approval: 'Approve for me',
-      'Full access': 'Tắt'
+      Approval: 'Approve for me'
     })
     expect(practice.criteria).toHaveLength(5)
     expect(new Set(practice.criteria.map((criterion) => criterion.id)).size).toBe(5)

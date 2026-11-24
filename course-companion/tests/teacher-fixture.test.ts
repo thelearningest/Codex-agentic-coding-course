@@ -80,8 +80,8 @@ describe('FixtureTeacherAdapter', () => {
       }
     })
 
-    expect(moduleOne.teacherMessage.content).toContain('đối chiếu trực tiếp')
-    expect(moduleOne.teacherMessage.content).toContain('không thể tự đánh dấu đạt')
+    expect(moduleOne.teacherMessage.content).toContain('bấm Nộp bài để Triết kiểm tra')
+    expect(moduleOne.teacherMessage.content).toContain('kiểm tra trực tiếp cài đặt trong task')
     expect(moduleOne.teacherMessage.content).not.toContain('nộp hai ảnh')
     expect(moduleTwo.teacherMessage.content).toContain('đúng các bước bị đánh dấu cũ')
     expect(moduleTwo.teacherMessage.checkpointId).toBe('m2-planning-package')

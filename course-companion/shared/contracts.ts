@@ -467,8 +467,10 @@ export type CodexTaskConfigurationSnapshot = {
   connection: 'connected' | 'disconnected'
   model: CodexConfigurationValue
   reasoningEffort: CodexConfigurationValue
+  reasoningEffortSource?: 'desktop-picker-default'
   serviceTier: CodexConfigurationValue
   approvalPolicy: CodexConfigurationValue
+  approvalMode?: CodexConfigurationValue
   fullAccess: CodexConfigurationValue
   sandboxType: string | null
   activePermissionProfile: { id: string; extends: string | null } | null

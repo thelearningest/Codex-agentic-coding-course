@@ -38,6 +38,7 @@ function effectiveThread(thread: TestThread): Record<string, unknown> {
     reasoningEffort: thread.reasoningEffort,
     serviceTier: thread.serviceTier,
     approvalPolicy: thread.approvalPolicy,
+    approvalsReviewer: thread.configurationStage >= 4 ? 'auto_review' : 'user',
     sandbox: thread.sandbox
   }
 }
@@ -117,7 +118,7 @@ export class TestCodexGateway implements CodexRequestClient {
         : configurationExercise && !this.configurationReady ? 'gpt-5.6-terra' : 'gpt-5.6-sol'
       const reasoningEffort = typeof config.model_reasoning_effort === 'string'
         ? config.model_reasoning_effort
-        : configurationExercise && !this.configurationReady ? 'medium' : 'high'
+        : configurationExercise ? 'medium' : 'high'
       const serviceTier = typeof params.serviceTier === 'string'
         ? params.serviceTier
         : configurationExercise ? this.configurationReady ? 'standard' : 'fast' : null
@@ -288,7 +289,7 @@ export class TestCodexGateway implements CodexRequestClient {
     if (!thread) throw new Error(`Unknown smoke-test thread: ${threadId}`)
     thread.configurationStage = Math.min(5, thread.configurationStage + 1)
     if (thread.configurationStage >= 1) thread.model = 'gpt-5.6-sol'
-    if (thread.configurationStage >= 2) thread.reasoningEffort = 'high'
+    if (!this.configurationReady && thread.configurationStage >= 2) thread.reasoningEffort = 'high'
     if (thread.configurationStage >= 3) thread.serviceTier = 'standard'
     if (thread.configurationStage >= 4) thread.approvalPolicy = 'on-request'
     if (thread.configurationStage >= 5) {
@@ -305,6 +306,7 @@ export class TestCodexGateway implements CodexRequestClient {
       effort: thread.reasoningEffort,
       serviceTier: thread.serviceTier,
       approvalPolicy: thread.approvalPolicy,
+      approvalsReviewer: thread.configurationStage >= 4 ? 'auto_review' : 'user',
       sandboxPolicy: thread.sandbox,
       activePermissionProfile: thread.sandbox.type === 'dangerFullAccess'
         ? { id: ':danger-full-access', extends: null }

@@ -2,6 +2,7 @@ import { resolve, win32 } from 'node:path'
 import type { ExecutorActivitySnapshot } from '../../shared/contracts'
 import type { ExecutorChatBinding } from './practice-run-repository'
 import type { ExecutorActivityRepository } from './executor-activity-repository'
+import { configurationFreshness, normalizeCodexEffort } from './codex-configuration-normalizer'
 import type { CodexTaskMetadataReader } from './codex-task-metadata-reader'
 import {
   initialActivity,
@@ -59,7 +60,7 @@ export class ExecutorActivitySnapshotReader {
 
   async read(
     binding: ExecutorChatBinding,
-    options: { captureBaseline?: boolean } = {}
+    options: { captureBaseline?: boolean; setupReview?: boolean } = {}
   ): Promise<ExecutorActivitySnapshot> {
     let previous = await this.repository.load(binding.runId) ?? initialActivity(binding, this.now)
     if (options.captureBaseline && !previous.workspaceBaseline) {
@@ -79,6 +80,16 @@ export class ExecutorActivitySnapshotReader {
       throw new Error('PRACTICE_SNAPSHOT_BUSY')
     }
     const configuration = await this.metadata.read(binding, { id: thread.id, model: thread.model, reasoningEffort: thread.reasoningEffort })
+    const model = configuration.model.protocolValue
+    if (options.setupReview && model && configuration.reasoningEffort.protocolValue === null
+      && configuration.freshness !== 'stale' && configuration.connection === 'connected'
+      && await this.modelSupportsMedium(model, thread.modelProvider)) {
+      // Codex Desktop's picker maps unset effort to Medium when rendering the
+      // supported effort choices. A specific saved choice takes precedence.
+      configuration.reasoningEffort = normalizeCodexEffort('medium')
+      configuration.reasoningEffortSource = 'desktop-picker-default'
+      configuration.freshness = configurationFreshness(configuration)
+    }
     const projected = projectExecutorActivity(previous, binding, thread, configuration, this.now)
     const reconciled = await reconcileExecutorActivity(
       projected,
@@ -87,5 +98,17 @@ export class ExecutorActivitySnapshotReader {
       this.workspaceEvidence
     )
     return this.repository.save(reconciled)
+  }
+  private async modelSupportsMedium(model: string, provider: unknown): Promise<boolean> {
+    const response = record(await this.client.request('model/list', {
+      includeHidden: true,
+      limit: 100,
+      ...(typeof provider === 'string' ? { modelProvider: provider } : {})
+    }).catch(() => null))
+    const entry = Array.isArray(response?.data)
+      ? response.data.map(record).find(item => item?.model === model)
+      : null
+    return Array.isArray(entry?.supportedReasoningEfforts)
+      && entry.supportedReasoningEfforts.some(option => record(option)?.reasoningEffort === 'medium')
   }
 }

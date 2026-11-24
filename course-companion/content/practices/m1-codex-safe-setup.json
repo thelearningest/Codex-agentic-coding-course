@@ -5,19 +5,17 @@
   "version": "2.0.0",
   "checkpointId": "m1-setup-checklist",
   "objective": "Thiết lập task Codex của Practice theo cấu hình khuyến nghị và để Triết duyệt trực tiếp từ metadata hiệu lực của đúng task đó.",
-  "expectedOutcome": "Course Companion xác minh trực tiếp Effort Medium hoặc High, Approval Approve for me và Full access đang tắt; người học tự chọn Model và không cần chụp màn hình hay yêu cầu Codex lập báo cáo.",
+  "expectedOutcome": "Course Companion xác minh trực tiếp Effort Medium hoặc High, và Approval Approve for me. Người học tự chọn Model và không cần chụp màn hình hay yêu cầu Codex lập báo cáo.",
   "workspaceKind": "pilot-workspace",
   "taskPolicy": "inherit-configuration-only",
   "evidenceProfile": "codex-task-configuration",
   "checklist": [
     { "id": "set-effort", "title": "Chọn Effort Medium hoặc High", "dependsOn": [] },
-    { "id": "set-approval", "title": "Chọn Approval: Approve for me", "dependsOn": ["set-effort"] },
-    { "id": "disable-full-access", "title": "Giữ Full access ở trạng thái tắt", "dependsOn": ["set-approval"] }
+    { "id": "set-approval", "title": "Chọn Approval: Approve for me", "dependsOn": ["set-effort"] }
   ],
   "criteria": [
     { "id": "effort-matches", "description": "Effort hiệu lực của task là Medium hoặc High.", "required": true, "checklistStepId": "set-effort", "acceptedEvidence": ["codex-task-configuration"], "assertion": "The effective reasoning effort protocol value is medium or high.", "freshness": "fresh" },
-    { "id": "approval-matches", "description": "Approval hiệu lực của task là Approve for me.", "required": true, "checklistStepId": "set-approval", "acceptedEvidence": ["codex-task-configuration"], "assertion": "The effective approval policy protocol value is exactly on-request.", "freshness": "fresh" },
-    { "id": "full-access-off", "description": "Full access được xác minh là đang tắt.", "required": true, "checklistStepId": "disable-full-access", "acceptedEvidence": ["codex-task-configuration"], "assertion": "The effective sandbox is a recognized non-danger sandbox and no full-access permission profile is active.", "freshness": "fresh" }
+    { "id": "approval-matches", "description": "Approval hiệu lực của task là Approve for me.", "required": true, "checklistStepId": "set-approval", "acceptedEvidence": ["codex-task-configuration"], "assertion": "The linked task uses the workspace-scoped Approve for me preset with an automated approvals reviewer.", "freshness": "fresh" }
   ],
   "completionDestination": { "lessonId": "module-1", "checkpointId": "m1-mastery", "sceneId": "module-1-mastery", "label": "Phần tổng kết Module 1" }
 }

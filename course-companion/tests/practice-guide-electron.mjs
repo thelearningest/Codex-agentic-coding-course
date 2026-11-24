@@ -62,6 +62,11 @@ try {
   await panel.screenshot({ path: join(shots, 'triet-panel.png') })
   await panel.getByRole('button', { name: 'Nộp bài', exact: true }).click()
   await panel.locator('.practice-success').waitFor()
+  const submitted = await compact.evaluate(() => globalThis.courseCompanion.loadPracticeWorkspace())
+  assert.equal(submitted.configuration.reasoningEffort.protocolValue, 'medium')
+  assert.deepEqual(submitted.review.result.criteria.map(({ criterionId, status }) => [criterionId, status]), [
+    ['effort-matches', 'satisfied'], ['approval-matches', 'satisfied']
+  ])
   await panel.getByRole('button', { name: 'Lưu kết quả và quay lại khóa học', exact: true }).click()
   await page.locator('main[data-scene-id="module-1-mastery"]').waitFor()
   console.log('Desktop and narrow screenshot guide, direct Practice start, submit, reviewed return passed')

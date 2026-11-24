@@ -134,6 +134,11 @@ export class CodexTaskMetadataReader {
         throw new Error('PRACTICE_METADATA_UNAVAILABLE')
       }
       const snapshot = structuredClone(baseline)
+      if (snapshot.reasoningEffortSource === 'desktop-picker-default') {
+        // Resolve the display fallback again from the current model catalog.
+        snapshot.reasoningEffort = normalizeCodexEffort(null)
+        delete snapshot.reasoningEffortSource
+      }
       if (thread && typeof thread.model === 'string' && thread.model === snapshot.model.protocolValue
         && typeof thread.reasoningEffort === 'string') {
         snapshot.reasoningEffort = normalizeCodexEffort(thread.reasoningEffort)
@@ -229,6 +234,7 @@ export class CodexTaskMetadataReader {
             model: source.model,
             reasoningEffort: source.reasoning_effort ?? (modeSettings?.model === source.model ? modeSettings?.reasoning_effort : null),
             approvalPolicy: source.approval_policy,
+            approvalsReviewer: source.approvals_reviewer,
             sandboxPolicy: source.permission_profile,
             activePermissionProfile: activeProfile ? {
               id: activeProfile.id,

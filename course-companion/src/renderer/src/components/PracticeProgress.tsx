@@ -171,8 +171,8 @@ export function PracticeProgress({
     : configurationMismatches.length
       ? `Cần kiểm tra: ${configurationMismatches.map((row) => row.label).join(', ')}.`
       : reviewStatus === 'passed'
-          ? 'Ba cài đặt đang khớp.'
-          : 'Ba cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
+          ? 'Hai cài đặt đang khớp.'
+          : 'Hai cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
   const planning = workspace.planning
   const portfolioStages = workspace.portfolioPlanning ?? workspace.portfolioBuild
   const currentPlanningStep = workspace.checklist.find((step) =>
@@ -206,8 +206,7 @@ export function PracticeProgress({
   } as const
   const compactConfigurationGuidance: Record<string, string> = {
     'set-effort': 'Mở Effort trong task Codex và chọn Medium hoặc High.',
-    'set-approval': 'Mở Approval trong task Codex và chọn Approve for me.',
-    'disable-full-access': 'Giữ Full access ở trạng thái tắt trong task Codex.'
+    'set-approval': 'Mở Approval trong task Codex và chọn Approve for me.'
   }
   const compactGuidance = (step: PracticeWorkspaceView['checklist'][number]) =>
     setupFeedback.find(({ setting }) => setting.stepId === step.id)?.result.explanation

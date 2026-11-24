@@ -49,9 +49,9 @@ function evaluateConfiguration(
         ? check.label + ' đang khớp: ' + (value?.label ?? value?.protocolValue) + '.'
         : status === 'unsatisfied'
           ? check.label + ' hiện là ' + (value?.label ?? value?.protocolValue ?? 'không rõ')
-            + '; cần ' + check.expectedLabel + '.'
+            + '. Chọn ' + check.expectedLabel + ' rồi bấm Nộp bài.'
           : fresh && check.key === 'reasoningEffort' && value?.protocolValue === null
-            ? 'Codex chưa lưu mức Effort cho task này. Chọn Medium hoặc High trong menu Effort, rồi bấm Nộp bài.'
+            ? 'Triết chưa xác minh được mức Effort của task này. Bấm Mở lại task Codex để kiểm tra rồi nộp lại.'
             : 'Triết chưa đọc được ' + check.label + ' hiện tại. Mở đúng task Codex rồi thử kiểm tra lại.'
     }
   })
@@ -64,7 +64,7 @@ function evaluateConfiguration(
     verdict: passed ? 'passed' : 'needs-work',
     criteria,
     summary: passed
-      ? 'Triết đã xác minh trực tiếp: cả ba thiết lập của task đều khớp cấu hình khuyến nghị.'
+      ? 'Triết đã xác minh Effort và Approval trong task Codex của bài này.'
       : 'Triết chưa thể xác nhận cấu hình an toàn vì còn giá trị chưa khớp hoặc chưa xác minh được.',
     reviewedAt,
     sourceDigest: reviewSourceDigest({
@@ -84,8 +84,9 @@ function configurationIdentity(
   return JSON.stringify({
     freshness: configuration.freshness,
     connection: configuration.connection,
+    model: configuration.model,
     reasoningEffort: configuration.reasoningEffort,
-    approvalPolicy: configuration.approvalPolicy,
+    approvalMode: configuration.approvalMode,
     fullAccess: configuration.fullAccess,
     sandboxType: configuration.sandboxType,
     activePermissionProfile: configuration.activePermissionProfile
@@ -142,7 +143,7 @@ export class PracticeReviewService {
       ? await this.activity.read(active.binding)
       : null
     if (definition.evidenceProfile === 'codex-task-configuration') {
-      activity = await this.activity.read(active.binding)
+      activity = await this.activity.read(active.binding, { setupReview: true })
       const refreshed = await this.runs.saveConfiguration({
         runId: active.runId,
         generation: active.generation,
@@ -250,7 +251,7 @@ export class PracticeReviewService {
             portfolioPackage: envelope.portfolioPackage
           })
       if (definition.evidenceProfile === 'codex-task-configuration') {
-        const latestActivity = await this.activity.read(reviewRun.binding)
+        const latestActivity = await this.activity.read(reviewRun.binding, { setupReview: true })
         if (latestActivity.status === 'working' || latestActivity.status === 'waiting-for-learner') {
           throw new Error('PRACTICE_SNAPSHOT_BUSY')
         }
@@ -340,7 +341,7 @@ export class PracticeReviewService {
               ? 'Năm tài liệu và bản mẫu HTML đã được kiểm tra cấu trúc, phạm vi và nội dung; PRD và kế hoạch được người học duyệt trên phiên bản hiện tại.'
               : definition.evidenceProfile === 'planning-package'
               ? 'Triết đã duyệt semantic PRD, implementation plan, alignment, phạm vi và quyền sở hữu của người học trên đúng hai digest hiện tại.'
-              : 'Triết đã xác minh đủ ba thiết lập Codex bắt buộc từ metadata hiệu lực của đúng task.',
+              : 'Triết đã xác minh Effort và Approval trong đúng task Codex.',
             destination: structuredClone(definition.completionDestination),
             ...(portfolioPackage ? { submissionDigest: envelope.portfolioPackage!.evidenceDigest } : {}),
             ...((envelope.portfolioPackage?.kind === 'build' || envelope.portfolioPackage?.kind === 'release')

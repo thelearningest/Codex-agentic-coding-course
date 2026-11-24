@@ -18,8 +18,7 @@ const definition: PracticeDefinition = {
   evidenceProfile: 'codex-task-configuration',
   checklist: [
     { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', dependsOn: [] },
-    { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-effort'] },
-    { id: 'disable-full-access', title: 'Tắt Full access', dependsOn: ['set-approval'] }
+    { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-effort'] }
   ],
   criteria: [],
   completionDestination: {
@@ -36,7 +35,7 @@ function activity(threadId = 'thread-1') {
     payload: {
       threadSettings: {
         model: 'gpt-5.6-sol', effort: 'high', serviceTier: null,
-        approvalPolicy: 'on-request', sandboxPolicy: { type: 'workspaceWrite' },
+        approvalPolicy: 'on-request', approvalsReviewer: 'auto_review', sandboxPolicy: { type: 'workspaceWrite' },
         activePermissionProfile: null
       }
     },
@@ -59,16 +58,16 @@ const context = {
 }
 
 describe('CodexConfigurationEvidenceAdapter', () => {
-  it('emits bounded structured evidence for the three required configuration settings', async () => {
+  it('emits bounded structured evidence for the two required configuration settings', async () => {
     const adapter = new CodexConfigurationEvidenceAdapter({ current: async () => activity() })
     const result = await adapter.collect(context)
 
     expect(result.freshness).toBe('fresh')
-    expect(result.evidence).toHaveLength(3)
+    expect(result.evidence).toHaveLength(2)
     expect(result.configuration?.model.label).toBe('5.6 Sol')
     expect(result.sourceDigest).toMatch(/^[a-f0-9]{64}$/)
     expect(result.steps.map((step) => step.status)).toEqual([
-      'completed', 'completed', 'completed'
+      'completed', 'completed'
     ])
   })
 

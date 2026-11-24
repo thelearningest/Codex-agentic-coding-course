@@ -52,7 +52,8 @@ function configuration(
     model: { protocolValue: 'gpt-5.6-sol', label: '5.6 Sol' },
     reasoningEffort: { protocolValue: 'high', label: 'High' },
     serviceTier: { protocolValue: 'standard', label: 'Standard' },
-    approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
+    approvalPolicy: { protocolValue: 'on-request', label: 'On request' },
+    approvalMode: { protocolValue: 'approve-for-me', label: 'Approve for me' },
     fullAccess: { protocolValue: 'off', label: 'Off' },
     sandboxType: 'workspaceWrite',
     activePermissionProfile: null,
@@ -84,7 +85,7 @@ function activity(config: CodexTaskConfigurationSnapshot | null): ExecutorActivi
 }
 
 describe('Module 1 Practice review context', () => {
-  it('uses only four fresh effective configuration values from the bound task', async () => {
+  it('uses only three fresh effective configuration values from the bound task', async () => {
     const definition = await definitions.load('m1-codex-safe-setup', '2.0.0')
     const envelope = buildPracticeReviewEnvelope({
       definition,
@@ -94,7 +95,7 @@ describe('Module 1 Practice review context', () => {
       generatedAt: timestamp
     })
 
-    expect(envelope.evidence).toHaveLength(4)
+    expect(envelope.evidence).toHaveLength(3)
     expect(new Set(envelope.evidence.map((item) => item.kind))).toEqual(
       new Set(['codex-task-configuration'])
     )

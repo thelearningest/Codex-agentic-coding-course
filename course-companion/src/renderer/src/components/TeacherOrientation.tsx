@@ -50,7 +50,7 @@ export function TeacherOrientation() {
       <div className="teacher-orientation-next">
         <p>
           Khi vào Practice, khung chat chuyển sang chế độ hướng dẫn và duyệt bài.
-          Nếu vướng ở bước nào, bấm <strong>Cần gợi ý?</strong> Khi chỉnh xong cấu hình trong task Codex, hãy bấm <strong>nút Nộp bài</strong> để Triết check bài cho bạn.
+          Nếu vướng ở bước nào, bấm <strong>Cần gợi ý?</strong> Khi cài đặt trong task Codex đã đúng, bấm <strong>Nộp bài</strong> để Triết kiểm tra.
         </p>
       </div>
     </section>

@@ -8,7 +8,6 @@
 - Model: tự chọn, không dùng để đánh giá
 - Effort: Medium hoặc High
 - Approval: Approve for me
-- Full access: Tắt
 
 ## Nguồn metadata
 

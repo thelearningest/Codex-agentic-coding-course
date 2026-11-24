@@ -24,10 +24,10 @@ function evidence(snapshot: CodexTaskConfigurationSnapshot): PracticeEvidenceRef
   return setupSettings.map(({ key }) => ({
     id: 'configuration-' + key,
     kind: 'codex-task-configuration',
-    text: snapshot[key].label === null
+    text: !snapshot[key]?.label
       ? key + ': không xác minh được'
-      : key + ': ' + snapshot[key].label,
-    freshness: snapshot.freshness === 'fresh' && snapshot.connection === 'connected' && snapshot[key].label !== null ? 'fresh' : 'stale'
+      : key + ': ' + snapshot[key]?.label,
+    freshness: snapshot.freshness === 'fresh' && snapshot.connection === 'connected' && snapshot[key]?.label ? 'fresh' : 'stale'
   }))
 }
 
@@ -37,7 +37,7 @@ function stepStates(
   sourceDigest: string | null
 ): PracticeAdapterStepState[] {
   const checks = snapshot
-    ? setupSettings.map(setting => setting.matches(snapshot[setting.key].protocolValue))
+    ? setupSettings.map(setting => setting.matches(snapshot[setting.key]?.protocolValue))
     : []
   const current = snapshot?.freshness === 'fresh' && snapshot.connection === 'connected'
   const firstUnmet = current ? checks.indexOf(false) : 0

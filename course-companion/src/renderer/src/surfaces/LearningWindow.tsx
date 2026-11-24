@@ -479,13 +479,13 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     panelLabel: 'PRACTICE · METADATA TRỰC TIẾP',
     panelStatus: 'KHÔNG CẦN ẢNH CHỤP',
     tone: 'neutral',
-    request: 'Bạn đổi cấu hình ngay trong task; Course Companion đọc metadata hiệu lực để Triết duyệt.',
+    request: 'Kiểm tra Effort và Approval ngay trong task Codex của bài.',
     evidence: [
       { label: 'CẤU HÌNH', value: 'Medium hoặc High' },
-      { label: 'QUYỀN', value: 'Approve for me · Full access tắt' },
+      { label: 'QUYỀN', value: 'Approve for me' },
       { label: 'BẰNG CHỨNG', value: 'Metadata đúng task và còn mới' }
     ],
-    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn Medium hoặc High, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp ba giá trị Course Companion đọc được.',
+    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong task đó, kiểm tra Effort là Medium hoặc High và Approval là Approve for me. Nếu hai mục đã đúng, bấm Nộp bài. Bạn tự chọn Model và có thể nộp ngay trong Course Companion.',
     practice: setupPracticeDefinition,
     choices: [{ label: 'Sang Codex thiết lập cấu hình', action: 'practice', primary: true }]
   },
@@ -503,7 +503,7 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
       { label: 'EFFORT', value: 'Medium hoặc High', ready: true },
-      { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
+      { label: 'QUYỀN', value: 'Approve for me', ready: true }
     ],
     dialogue: 'Bây giờ hãy cùng nhau trả lời các câu hỏi ôn tập để củng cố kiến thức vừa học nhen!',
     choices: [{ label: 'Bắt đầu 4 câu ôn tập', next: 'module-1-final-1', primary: true, decision: { key: 'setupPractice', value: 'teacher-reviewed-setup' } }],
@@ -1445,9 +1445,9 @@ function ApprovalTourDialogue({
     <>
       Được rồi, vậy chúng ta sẽ bắt đầu tìm hiểu Codex cùng nhau nha. Khi bắt đầu thực hiện một tác vụ trong Codex, có ba cài đặt căn bản bạn cần chú ý. Đầu tiên, hãy nhìn qua Approval. Khi nhấn vào biểu tượng Codex bên trái dấu cộng, bạn sẽ thấy một hộp gồm ba lựa chọn. Đây là phần cài đặt Approval, nơi bạn thiết lập mức độ kiểm soát đối với coding agent.
       <br /><br />
-      Trước tiên, <ApprovalTerm activeFocus={activeFocus} focus="ask" onSelect={onSelect}>Ask for approval</ApprovalTerm> luôn hỏi bạn trước khi chỉnh sửa tệp bên ngoài dự án hoặc sử dụng Internet. Tiếp theo, <ApprovalTerm activeFocus={activeFocus} focus="approve" onSelect={onSelect}>Approve for me</ApprovalTerm> chỉ hỏi khi phát hiện một hành động có thể không an toàn. Cuối cùng, <ApprovalTerm activeFocus={activeFocus} focus="full" onSelect={onSelect}>Full access</ApprovalTerm> cho phép Codex truy cập Internet và mọi tệp trên máy tính mà không bị giới hạn.
+      Trước tiên, <ApprovalTerm activeFocus={activeFocus} focus="ask" onSelect={onSelect}>Ask for approval (Yêu cầu phê duyệt)</ApprovalTerm> luôn hỏi bạn trước khi chỉnh sửa tệp bên ngoài dự án hoặc sử dụng Internet. Tiếp theo, <ApprovalTerm activeFocus={activeFocus} focus="approve" onSelect={onSelect}>Approve for me (Phê duyệt giúp tôi)</ApprovalTerm> chỉ hỏi khi phát hiện một hành động có thể không an toàn. Cuối cùng, <ApprovalTerm activeFocus={activeFocus} focus="full" onSelect={onSelect}>Full access (Toàn quyền truy cập)</ApprovalTerm> cho phép Codex truy cập Internet và mọi tệp trên máy tính mà không bị giới hạn.
       <br /><br />
-      Nếu mới bắt đầu, mình khuyên bạn dùng <ApprovalTerm activeFocus={activeFocus} focus="approve" onSelect={onSelect}>Approve for me</ApprovalTerm>. Chế độ này không yêu cầu bạn duyệt mọi hành động, nhưng cũng không trao toàn bộ quyền kiểm soát cho coding agent.
+      Nếu mới bắt đầu, mình khuyên bạn dùng <ApprovalTerm activeFocus={activeFocus} focus="approve" onSelect={onSelect}>Approve for me (Phê duyệt giúp tôi)</ApprovalTerm>. Chế độ này không yêu cầu bạn duyệt mọi hành động, nhưng cũng không trao toàn bộ quyền kiểm soát cho coding agent.
     </>
   )
 }
