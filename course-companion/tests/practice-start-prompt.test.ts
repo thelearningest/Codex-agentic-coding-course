@@ -90,6 +90,25 @@ describe('Module 2 learner-owned start prompt', () => {
     expect(portfolioAgentsTemplate).not.toContain('Không chọn công nghệ và không tạo ứng dụng')
   })
 
+  it('presents the four PRD and implementation plan review points in step 5 before asking for learner approval', () => {
+    const stepFive = portfolioAgentsTemplate.slice(
+      portfolioAgentsTemplate.indexOf('### Bước 5 — planning/implementation-plan.md'),
+      portfolioAgentsTemplate.indexOf('## Module 3: xây website')
+    )
+    const reviewPoints = [
+      'Trước khi hỏi duyệt, trình bày ngắn PRD và implementation plan theo bốn ý:',
+      '1. Hai tài liệu có đúng mục tiêu và phạm vi đã thống nhất không.',
+      '2. Còn thiếu nội dung, tư liệu hay quyết định nào.',
+      '3. Công việc sẽ làm theo thứ tự nào.',
+      '4. Người học kiểm tra kết quả bằng cách nào.',
+      'Chỉ giải thích và nêu rõ những quyết định người học cần đưa ra. Không tự duyệt thay người học.'
+    ]
+    const positions = reviewPoints.map((point) => stepFive.indexOf(point))
+    expect(positions.every((position) => position >= 0)).toBe(true)
+    expect(positions).toEqual([...positions].sort((a, b) => a - b))
+    expect(positions.at(-1)).toBeLessThan(stepFive.indexOf('Bạn duyệt PRD và implementation plan này chưa, hay muốn sửa gì?'))
+  })
+
   it('preserves the exact course prompt in a collapsed disclosure with an always-available copy action', () => {
     const html = renderToStaticMarkup(createElement(PracticeStartPrompt, { practiceId: 'm2-portfolio-planning' }))
     expect(html).toContain(`<p>${moduleTwoStartPrompt}</p>`)

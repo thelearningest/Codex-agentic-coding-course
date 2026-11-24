@@ -140,6 +140,13 @@ Qua bước khi mọi điểm rà soát đã được người học sửa hoặ
 - Mỗi yêu cầu REQ-* trong PRD xuất hiện đúng một lần, kèm cách kiểm tra và bằng chứng dự kiến.
 - Mỗi giai đoạn có tiêu chí hoàn thành và điểm dừng để người học xem lại.
 - Ghi một mục ngắn "Nền kỹ thuật" theo mục "Nền kỹ thuật của portfolio" ở trên. Không hỏi người học chọn công nghệ và không tạo ứng dụng; việc tạo ứng dụng thuộc Module 3.
+- Trước khi hỏi duyệt, trình bày ngắn PRD và implementation plan theo bốn ý:
+  1. Hai tài liệu có đúng mục tiêu và phạm vi đã thống nhất không.
+  2. Còn thiếu nội dung, tư liệu hay quyết định nào.
+  3. Công việc sẽ làm theo thứ tự nào.
+  4. Người học kiểm tra kết quả bằng cách nào.
+
+  Chỉ giải thích và nêu rõ những quyết định người học cần đưa ra. Không tự duyệt thay người học.
 - Khi xong, hỏi đúng một câu: "Bạn duyệt PRD và implementation plan này chưa, hay muốn sửa gì?". Nếu người học sửa, cập nhật cả hai tệp cho khớp rồi hỏi lại.
 
 ## Module 3: xây website
