@@ -12,14 +12,13 @@ const definition: PracticeDefinition = {
   version: '2.0.0',
   checkpointId: 'm1-setup-checklist',
   objective: 'Thiết lập Codex an toàn.',
-  expectedOutcome: 'Bốn cấu hình được xác nhận.',
+  expectedOutcome: 'Ba cấu hình được xác nhận.',
   workspaceKind: 'pilot-workspace',
   taskPolicy: 'inherit-configuration-only',
   evidenceProfile: 'codex-task-configuration',
   checklist: [
     { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', dependsOn: [] },
-    { id: 'set-speed', title: 'Chọn Speed Standard', dependsOn: ['set-effort'] },
-    { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-speed'] },
+    { id: 'set-approval', title: 'Chọn Approval', dependsOn: ['set-effort'] },
     { id: 'disable-full-access', title: 'Tắt Full access', dependsOn: ['set-approval'] }
   ],
   criteria: [],
@@ -60,16 +59,16 @@ const context = {
 }
 
 describe('CodexConfigurationEvidenceAdapter', () => {
-  it('emits bounded structured evidence for the four required configuration settings', async () => {
+  it('emits bounded structured evidence for the three required configuration settings', async () => {
     const adapter = new CodexConfigurationEvidenceAdapter({ current: async () => activity() })
     const result = await adapter.collect(context)
 
     expect(result.freshness).toBe('fresh')
-    expect(result.evidence).toHaveLength(4)
+    expect(result.evidence).toHaveLength(3)
     expect(result.configuration?.model.label).toBe('5.6 Sol')
     expect(result.sourceDigest).toMatch(/^[a-f0-9]{64}$/)
     expect(result.steps.map((step) => step.status)).toEqual([
-      'completed', 'completed', 'completed', 'completed'
+      'completed', 'completed', 'completed'
     ])
   })
 

@@ -46,6 +46,7 @@ and must never be inferred from a passing automated check.
 |---|---|---|---|---|---|
 | Foundation | `in-progress` — preserved integration and Practice lifecycle repairs; native macOS and overall acceptance remain outstanding | `passed` for the 22 October Windows Practice batch: typecheck, lint, 711 unit tests (three skips), nine startup checks, build, full Electron smoke/chat/guide, disposable Module 2→3→4 rehearsal and preservation/diff audits; the later exact restart-copy edit received narrow verification | `pending` overall; existing scoped approvals and requested merge remain recorded | `pending` | Present the owned workflow and obtain native macOS/overall acceptance evidence. |
 | Module 1 / I4 screenshot guide and Effort | `implemented` | `passed` in the isolated macOS build | HTML design, video removal and Medium or High approved on 17 November | `pending` | Review the implemented Module 1 handoff in Course Companion. |
+| Module 1 / `m1-setup-checklist` | `implemented` | `passed` for the three-setting Practice and Teacher review | Owner approved removing Speed from instructions, hints and grading on 24 November | `pending` | Observe a learner submit the three settings in a linked Codex task. |
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
@@ -229,6 +230,12 @@ later resume, review and release continuity at desktop and narrow sizes.
 The full unit run had 885 passes and two existing failures in the frozen
 Module 1 image manifest and CSS palette. Pilot acceptance is pending.
 The next step is a learner rehearsal with a live Codex Project.
+
+### Module 1 setup Practice, 24 November 2026
+
+The learner's instructions now appear above **Bắt đầu thực hành**. The linked task must show Medium or High effort, Approve for me, and Full access off. Fast, Standard and an absent speed value all allow the same review outcome. A previously saved attempt keeps its task and review history when it drops the retired speed step. New receipts record no approved speed. Later portfolio tasks retain their existing Standard launch policy.
+
+Typecheck, lint, build, 126 focused tests, 15 startup checks and the disposable Electron suite passed. The guide fits at 1180, 390 and 320 px. With a canonical temporary directory the full unit suite passed 913 tests and failed the same two tests as the unmodified checkout (the frozen image source manifest and the CSS palette). A live learner rehearsal is pending.
 
 ### Module 1 orientation and final quiz, 24 November 2026
 

@@ -103,7 +103,6 @@ function digest(value: unknown): string {
 const configurationFields = [
   ['model', 'Model'],
   ['reasoningEffort', 'Effort'],
-  ['serviceTier', 'Speed'],
   ['approvalPolicy', 'Approval'],
   ['fullAccess', 'Full access']
 ] as const

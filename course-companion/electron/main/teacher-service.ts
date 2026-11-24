@@ -140,11 +140,12 @@ export class TeacherService {
         ? setupSettings.map(setting => setting.matches(configuration[setting.key].protocolValue))
         : []
       const firstConfigurationMismatch = configurationMatches.findIndex((matches) => !matches)
+      const setupChecklist = active.checklist.filter(step => step.id !== 'set-model')
       const configurationTarget = active.evidenceProfile === 'codex-task-configuration'
-        ? active.checklist.filter((step) => step.id !== 'set-model')[
+        ? setupChecklist[
             configuration?.freshness === 'fresh'
               ? firstConfigurationMismatch === -1
-                ? active.checklist.length - 1
+                ? setupChecklist.length - 1
                 : firstConfigurationMismatch
               : 0
           ]?.id ?? null

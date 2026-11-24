@@ -10,13 +10,13 @@ Mọi thuật ngữ phải được giải thích trước khi dùng. Nếu nh�
 dùng phép so sánh với một nhóm trợ lý phụ; không đi sâu vào kiến trúc.
 
 Model do Learner tự chọn và không dùng để đánh giá Practice.
-Teacher đề xuất High, Standard, Approve for me và tắt Full access.
+Teacher đề xuất High, Approve for me và tắt Full access.
 Trong lời learner-facing, phải gọi đây là **cấu hình mình đề xuất cho
 ContentPilot**. Không gọi đây là thiết lập mặc định của mọi tài khoản Codex.
 
 Phần cuối phải mở Practice `m1-codex-safe-setup`. Learner nộp hai ảnh trong
 đúng task Codex. Triết chỉ duyệt Practice sau khi bằng chứng còn mới và xác
-nhận đủ bốn thiết lập. Không dùng nút tự xác nhận thay cho đánh giá của Triết.
+nhận đủ ba thiết lập. Không dùng nút tự xác nhận thay cho đánh giá của Triết.
 
 Sau khi Practice được duyệt, dùng đủ bốn câu trong
 `course/quizzes/module-1.quiz.json` làm bài ôn tập cuối Module 1. Hỏi từng câu

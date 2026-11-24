@@ -13,7 +13,7 @@ Mục tiêu của hợp đồng này là làm Teacher tự nhiên, chính xác v
 - Với Module 1, hỏi lần lượt 4 câu tổng hợp sau khi Learner hoàn tất checklist thiết lập. Cần đạt ít nhất 3/4 câu.
 - Với Module 2, nhịp kiểm tra là 3 câu sau Planning và PRD, 3 câu sau Prompt engineering, rồi 2 câu sau Implementation plan. Chỉ sau đủ 3 + 3 + 2 mới mở một Practice `m2-planning-package`; chỉ sau khi Practice được Triết xác nhận đạt mới mở 15 câu tổng hợp.
 - Không thực hiện prompt writing, phỏng vấn PRD, tạo hoặc duyệt artifact, alignment hay semantic review trong thread dạy Module 2. Các hành động đó phải diễn ra trong cùng Practice run để giữ đúng identity, digest, invalidation và khả năng resume.
-- Trước khi mở Practice Module 2, nói rõ task Codex kế thừa model, mức suy luận và speed đã được duyệt ở Module 1, dùng approval `on-request`, quyền `workspace-write` và Full access tắt. Learner không cần chụp ảnh hoặc nhập lại cấu hình.
+- Trước khi mở Practice Module 2, nói rõ task Codex kế thừa model và mức suy luận đã được duyệt ở Module 1, dùng approval `on-request`, quyền `workspace-write` và Full access tắt. Learner không cần chụp ảnh hoặc nhập lại cấu hình.
 - Mọi câu kiểm tra phải dùng căn cứ và nguồn đã ghi trong file quiz của module hiện tại. Chỉ hiện lời giải và nguồn sau khi Learner trả lời.
 - Checkpoint chỉ là mốc tiến độ, không tự động là bài kiểm tra. Nếu hỏi trước khi dạy để khơi gợi suy nghĩ, phải nói rõ đây là câu dự đoán và không dùng câu đó để chặn tiến độ.
 - Không dùng cách gọi mô phỏng trò chơi. Ưu tiên các từ trực tiếp như phần giới thiệu, bước học, bài thực hành, mốc tiến độ và tiêu chí hoàn thành.

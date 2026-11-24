@@ -63,6 +63,31 @@ function activeRecord(run = activeRun()): PracticeWorkspaceRecord {
 }
 
 describe('PracticeRunRepository', () => {
+  it('resumes a four-setting setup attempt without its retired speed step or correction', async () => {
+    const directory = await temporaryDirectory()
+    const run = activeRun()
+    run.checklist = [
+      { id: 'set-effort', title: 'Effort', status: 'completed' },
+      { id: 'set-speed', title: 'Speed Standard', status: 'current' },
+      { id: 'set-approval', title: 'Approval', status: 'pending' },
+      { id: 'disable-full-access', title: 'Full access', status: 'pending' }
+    ]
+    run.reviewStatus = 'needs-work'
+    run.reviewResult = {
+      schemaVersion: 1, practiceId: run.practiceId, practiceVersion: run.practiceVersion, runId: run.runId,
+      verdict: 'needs-work', criteria: [], summary: 'Speed Standard', reviewedAt: run.updatedAt, sourceDigest: 'a'.repeat(64)
+    }
+    run.reviewHistory = [run.reviewResult]
+    await writeFile(join(directory, 'practice-runs.json'), JSON.stringify(activeRecord(run)))
+    const loaded = (await new PracticeRunRepository(directory).load()).activeRun
+    expect(loaded?.checklist.map(step => step.id)).toEqual(['set-effort', 'set-approval', 'disable-full-access'])
+    expect(loaded?.checklist[1]?.status).toBe('current')
+    expect(loaded?.reviewStatus).toBe('not-reviewed')
+    expect(loaded?.reviewResult).toBeUndefined()
+    expect(loaded?.reviewHistory).toEqual(run.reviewHistory)
+    expect(loaded?.binding).toEqual(run.binding)
+  })
+
   it('persists a schema-2 run with explicit identity and policy fields', async () => {
     const directory = await temporaryDirectory()
     const repository = new PracticeRunRepository(directory)

@@ -99,7 +99,6 @@ const portfolioIssueLabels: Record<string, string> = {
 
 const criterionNextActions: Record<string, string> = {
   'effort-matches': 'Trong task Codex, chọn Effort Medium hoặc High rồi duyệt lại.',
-  'speed-matches': 'Trong task Codex, chọn Speed Standard rồi duyệt lại.',
   'approval-matches': 'Trong task Codex, chọn Approve for me rồi duyệt lại.',
   'full-access-off': 'Trong task Codex, tắt Full access rồi duyệt lại.',
   'prd-quality': 'Sửa vấn đề đầu tiên trong PRD rồi phê duyệt lại phiên bản mới.',
@@ -167,8 +166,8 @@ export function PracticeProgress({
     : configurationMismatches.length
       ? `Cần kiểm tra: ${configurationMismatches.map((row) => row.label).join(', ')}.`
       : reviewStatus === 'passed'
-          ? 'Bốn cài đặt đang khớp.'
-          : 'Bốn cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
+          ? 'Ba cài đặt đang khớp.'
+          : 'Ba cài đặt đang khớp. Nhờ Triết duyệt để ghi nhận kết quả.'
   const planning = workspace.planning
   const portfolioStages = workspace.portfolioPlanning ?? workspace.portfolioBuild
   const currentPlanningStep = workspace.checklist.find((step) =>
@@ -201,7 +200,6 @@ export function PracticeProgress({
   } as const
   const compactConfigurationGuidance: Record<string, string> = {
     'set-effort': 'Mở Effort trong task Codex và chọn Medium hoặc High.',
-    'set-speed': 'Mở Speed trong task Codex và chọn Standard.',
     'set-approval': 'Mở Approval trong task Codex và chọn Approve for me.',
     'disable-full-access': 'Giữ Full access ở trạng thái tắt trong task Codex.'
   }

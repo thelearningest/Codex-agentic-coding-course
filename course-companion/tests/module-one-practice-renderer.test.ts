@@ -42,7 +42,7 @@ function workspace(
     phase: 'active',
     title: 'Thiết lập Codex an toàn',
     objective: 'Thiết lập Codex an toàn.',
-    expectedOutcome: 'Đủ bốn giá trị.',
+    expectedOutcome: 'Đủ ba giá trị.',
     checklist: [
       { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'current' }
     ],
@@ -78,7 +78,7 @@ describe('Module 1 Practice renderer', () => {
     ), 'utf8')
     expect(source).toContain('PRACTICE · METADATA TRỰC TIẾP')
     expect(source).toContain('KHÔNG CẦN ẢNH CHỤP')
-    expect(source).toContain('Triết duyệt trực tiếp bốn giá trị')
+    expect(source).toContain('Triết duyệt trực tiếp ba giá trị')
     expect(source).not.toContain('PRACTICE · 2 ẢNH')
   })
 
@@ -117,7 +117,7 @@ describe('Module 1 Practice renderer', () => {
     expect(source).toContain('aria-live')
   })
 
-  it('shows the four required values and a fresh Effort mismatch without assessing Model', () => {
+  it('shows the three required values and a fresh Effort mismatch without assessing Model', () => {
     const html = renderToStaticMarkup(createElement(PracticeProgress, {
       workspace: workspace(configuration({
         model: { protocolValue: 'gpt-6-astra', label: null },
@@ -126,7 +126,7 @@ describe('Module 1 Practice renderer', () => {
     }))
     expect(html).toContain('Cấu hình task được phát hiện')
     expect(html).not.toContain('Cần 5.6 Sol')
-    expect(html.match(/<dt>/g)).toHaveLength(4)
+    expect(html.match(/<dt>/g)).toHaveLength(3)
     expect(html).toContain('Cần kiểm tra: Effort.')
     expect(html.indexOf('Cần kiểm tra: Effort.')).toBeLessThan(html.indexOf('<details'))
     expect(html).not.toContain('<dt>Model</dt>')
@@ -253,7 +253,7 @@ describe('Module 1 Practice renderer', () => {
     expect(compact).toContain('aria-expanded="false"')
     expect(compact).not.toContain('Mở bộ chọn Model trong task Codex')
     expect(compact).not.toContain('Thiết lập Codex an toàn.')
-    expect(compact).not.toContain('Đủ bốn giá trị.')
+    expect(compact).not.toContain('Đủ ba giá trị.')
     expect(compact).not.toContain('PRIVATE CRITERION EXPLANATION')
     expect(compact).not.toContain('PRIVATE REVIEW SUMMARY')
     expect(compact).not.toContain('Cấu hình task được phát hiện')

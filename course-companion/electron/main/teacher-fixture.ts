@@ -104,7 +104,7 @@ function replyFor(context?: TeacherContext): string {
     return 'Mình đề xuất 5.6 Sol, Effort Medium hoặc High và Speed Standard cho ContentPilot. Đây là lựa chọn cho dự án này, không phải mặc định của mọi tài khoản Codex.'
   }
   if (context.checkpointId === 'm1-setup-checklist') {
-    return 'Hãy sửa từng giá trị trong đúng task Codex. Triết sẽ đối chiếu trực tiếp Model, Effort, Speed, Approval và Full access; nội dung chat không thể tự đánh dấu đạt.'
+    return 'Hãy sửa từng giá trị trong đúng task Codex. Triết sẽ đối chiếu trực tiếp Effort, Approval và Full access; nội dung chat không thể tự đánh dấu đạt.'
   }
 
   if (context.checkpointId === 'm2-prd-interview') {

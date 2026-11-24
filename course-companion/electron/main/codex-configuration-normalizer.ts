@@ -142,7 +142,7 @@ export function normalizeCodexTaskConfiguration(input: {
   const reasoningEffort = normalizeString(source.effort ?? source.reasoningEffort, effortLabels)
   const serviceTier = normalizeTier(source)
   const approvalPolicy = normalizeString(source.approvalPolicy, approvalLabels)
-  const fields = [reasoningEffort, serviceTier, approvalPolicy, fullAccess.value]
+  const fields = [reasoningEffort, approvalPolicy, fullAccess.value]
   return {
     schemaVersion: 1,
     runId: input.runId,

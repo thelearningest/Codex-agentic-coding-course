@@ -137,7 +137,7 @@ describe('CodexTaskMetadataReader', () => {
     const { reader, binding } = await fixture({ omitServiceTier: true })
     const snapshot = await reader.read(binding)
     expect(snapshot.serviceTier).toEqual({ protocolValue: null, label: null })
-    expect(snapshot.freshness).toBe('unverifiable')
+    expect(snapshot.freshness).toBe('fresh')
   })
 
   it('reads settings after the same task is reopened with another matching session header', async () => {

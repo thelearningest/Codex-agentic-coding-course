@@ -84,7 +84,7 @@ function activity(config: CodexTaskConfigurationSnapshot | null): ExecutorActivi
 }
 
 describe('Module 1 Practice review context', () => {
-  it('uses only five fresh effective configuration values from the bound task', async () => {
+  it('uses only four fresh effective configuration values from the bound task', async () => {
     const definition = await definitions.load('m1-codex-safe-setup', '2.0.0')
     const envelope = buildPracticeReviewEnvelope({
       definition,
@@ -94,7 +94,7 @@ describe('Module 1 Practice review context', () => {
       generatedAt: timestamp
     })
 
-    expect(envelope.evidence).toHaveLength(5)
+    expect(envelope.evidence).toHaveLength(4)
     expect(new Set(envelope.evidence.map((item) => item.kind))).toEqual(
       new Set(['codex-task-configuration'])
     )

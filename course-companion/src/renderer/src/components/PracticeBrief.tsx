@@ -253,9 +253,26 @@ export function PracticeBrief({
           <PortfolioPlanningGuide introduction={introduction} controls={controls} />
         ) : buildGuide && introduction ? (
           <PortfolioBuildGuide introduction={introduction} controls={controls} prompt={startPrompt} />
+        ) : setupPractice && !hasRequestedPractice ? (
+          <>
+            <TeacherOrientation />
+            <PracticeScreenshotGuide key={courseRunId}>
+              <section className="practice-setup-guide" aria-label="Hướng dẫn thực hành">
+                <p>Sau khi bấm "bắt đầu thực hành", bạn sẽ được đưa đến giao diện Codex.</p>
+                <p>Tại đây, tất cả những gì bạn cần làm là chỉnh giao diện theo hướng dẫn. Cụ thể là</p>
+                <ul>
+                  <li>Effort (Mức nỗ lực): <strong>Medium (Vừa)</strong> hoặc <strong>High (Cao)</strong></li>
+                  <li>Approval: <strong>Approve for me (Phê duyệt giúp tôi)</strong></li>
+                  <li>Full access (Toàn quyền truy cập): <strong>Tắt</strong></li>
+                </ul>
+                <p>Sau khi đã chỉnh xong, bạn hãy mở teacher agent (bấm vào nút <strong>Trò chuyện với Triết</strong> xuất hiện trên một nhân vật đẹp trai), sau đó bấm nút <strong>Nộp bài</strong> để teacher agent xem tiến độ của bạn và duyệt là được.</p>
+                <p>Tác vụ này nhằm giúp bạn làm quen với giao diện của Codex,</p>
+              </section>
+              {controls}
+            </PracticeScreenshotGuide>
+          </>
         ) : introduction ? (
-          <PracticeIntroduction introduction={introduction} showReference={setupPractice && !hasRequestedPractice} imageFirst={setupPractice}>
-            {setupPractice && !hasRequestedPractice ? <TeacherOrientation /> : null}
+          <PracticeIntroduction introduction={introduction} showReference={false} imageFirst={setupPractice}>
             {setupPractice ? <PracticeScreenshotGuide key={courseRunId}>{controls}</PracticeScreenshotGuide> : controls}
           </PracticeIntroduction>
         ) : <>

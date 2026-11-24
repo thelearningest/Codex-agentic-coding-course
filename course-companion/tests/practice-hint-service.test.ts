@@ -67,6 +67,7 @@ describe('Practice hints', () => {
     for (let index = 0; index < 4; index++) levels.push((await h.service.request(request)).level)
     expect(levels).toEqual([1, 2, 3, 3])
     expect(h.record).toEqual(before)
+    expect(h.respond.mock.calls[0]![0]).not.toMatch(/serviceTier|set-speed|speed-matches|Speed Standard/)
     expect(h.read).toHaveBeenCalledTimes(8)
     expect(h.read).toHaveBeenCalledWith(h.run.binding)
     expect(JSON.parse(h.respond.mock.calls[1]![0]).previousHints).toHaveLength(1)

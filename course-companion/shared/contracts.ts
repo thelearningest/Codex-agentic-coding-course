@@ -593,7 +593,7 @@ export type ApprovedCodexConfiguration = {
   sourcePracticeVersion: string
   model?: string
   reasoningEffort: 'medium' | 'high'
-  serviceTier: 'standard'
+  serviceTier?: 'standard'
   approvedAt: string
 }
 

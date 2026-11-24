@@ -135,12 +135,10 @@ lập mặc định của mọi tài khoản Codex:
 
 - Model: **Tự chọn**, không dùng để đánh giá Practice
 - Effort: **Medium hoặc High**
-- Speed: **Standard**
 - Approval: **Approve for me**
 - Full access: **Tắt**
 
-High cho người học thêm khoảng trống khi yêu cầu còn mới. Standard giữ
-mức sử dụng hợp lý trong quá trình học. Approve for me giữ nhịp học. Việc tắt
+High cho người học thêm khoảng trống khi yêu cầu còn mới. Approve for me giữ nhịp học. Việc tắt
 Full access giữ ranh giới an toàn.
 
 ## Làm quen với Project trong Codex
@@ -159,24 +157,24 @@ Project giúp Codex làm việc với ngữ cảnh liên quan đến dự án, c
 
 ## Practice cuối Module 1
 
-Bạn sẽ mở một task Codex riêng và chỉnh trực tiếp bốn thiết lập
-của task: Effort, Speed, Approval và Full access. Model do bạn tự chọn. Bạn không cần chụp ảnh,
+Bạn sẽ mở một task Codex riêng và chỉnh trực tiếp ba thiết lập
+của task: Effort, Approval và Full access. Model do bạn tự chọn. Bạn không cần chụp ảnh,
 đính kèm tệp hay yêu cầu Codex lập báo cáo.
 
 Course Companion chỉ đọc metadata cấu hình hiệu lực của đúng task Codex đang
-được liên kết. Ứng dụng hiển thị bốn giá trị được phát hiện, độ mới và mục nào
+được liên kết. Ứng dụng hiển thị ba giá trị được phát hiện, độ mới và mục nào
 chưa khớp; ứng dụng không tự thay đổi cài đặt của bạn.
 
 Course Companion không gửi task hay lệnh nào vào Codex trước khi cấu hình
 đạt. Cơ chế này không chặn việc bạn tự nhập vào Codex, vì vậy ở bước thiết lập
-hãy chỉ đổi bốn cài đặt rồi quay lại chọn **Yêu cầu Triết duyệt tiến độ**.
+hãy chỉ đổi ba cài đặt rồi quay lại chọn **Yêu cầu Triết duyệt tiến độ**.
 
 > Hãy kiểm tra cấu hình trong hai ảnh. Chỉ quan sát, không thay đổi cài đặt.
-> Báo cáo dưới tiêu đề `Verification`, gồm Effort, Speed, Approval và
+> Báo cáo dưới tiêu đề `Verification`, gồm Effort, Approval và
 > trạng thái Full access. Cảnh báo nếu có mục nào khác cấu hình Triết khuyên dùng.
 
 Sau đó, quay lại Course Companion và chọn **Yêu cầu Triết duyệt tiến độ**.
-Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ bốn mục.
+Mình chỉ xác nhận đạt khi bằng chứng đến từ đúng task, còn mới và đủ ba mục.
 Nếu chưa đạt, mình sẽ chỉ rõ mục cần sửa để bạn nộp lại.
 
 ## Bài ôn tập cuối Module 1

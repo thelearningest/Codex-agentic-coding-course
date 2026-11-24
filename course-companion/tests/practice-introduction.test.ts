@@ -18,7 +18,6 @@ describe('beginner Practice introductions', () => {
   )
 
   it.each([
-    ['m1-codex-safe-setup', 'Làm quen với cài đặt Codex', 4, 3],
     ['m2-portfolio-planning', 'Lập kế hoạch cho portfolio', 6, 3],
     ['m3-portfolio-build', 'Xây portfolio theo kế hoạch', 3, 4],
     ['m4-portfolio-release', 'Đưa portfolio lên mạng', 1, 3]

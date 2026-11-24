@@ -651,6 +651,15 @@ function normalizeWorkspaceRecord(record: PracticeWorkspaceRecord, recoverInterr
   }))
   if (!record.activeRun) return { ...record, archivedRuns }
   const active = record.activeRun
+  const retiredSpeedStep = active.practiceId === 'm1-codex-safe-setup'
+    ? active.checklist.find(step => step.id === 'set-speed')
+    : undefined
+  const checklist = retiredSpeedStep ? active.checklist.filter(step => step !== retiredSpeedStep) : active.checklist
+  if (retiredSpeedStep?.status === 'current') {
+    const nextStep = checklist.findIndex(step => step.status !== 'completed')
+    if (nextStep >= 0) checklist[nextStep] = { ...checklist[nextStep]!, status: 'current' }
+  }
+  const retryOldReview = retiredSpeedStep && active.reviewResult?.verdict === 'needs-work'
   const reviewStatus = recoverInterruptedReview && active.reviewStatus === 'reviewing'
     ? active.reviewResult?.verdict ?? 'not-reviewed'
     : active.reviewStatus
@@ -660,7 +669,9 @@ function normalizeWorkspaceRecord(record: PracticeWorkspaceRecord, recoverInterr
     activeRun: {
       ...active,
       reviewHistory: structuredClone(active.reviewHistory ?? (active.reviewResult ? [active.reviewResult] : [])),
-      reviewStatus
+      reviewStatus,
+      checklist,
+      ...(retryOldReview ? { reviewResult: undefined, reviewStatus: 'not-reviewed' as const } : {})
     }
   }
 }

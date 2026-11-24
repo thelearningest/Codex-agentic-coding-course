@@ -69,8 +69,8 @@ describe('Codex configuration normalizer', () => {
       item.protocolValue === protocolValue)).toBe(true)
   })
 
-  it('rejects unknown nonstandard values and missing fields as unverifiable', () => {
-    expect(normalize(startPayload({ serviceTier: 'mystery' })).freshness).toBe('unverifiable')
+  it('ignores unknown speeds but requires a known effort for fresh evidence', () => {
+    expect(normalize(startPayload({ serviceTier: 'mystery' })).freshness).toBe('fresh')
     const missing = startPayload()
     delete missing.reasoningEffort
     expect(normalize(missing).freshness).toBe('unverifiable')

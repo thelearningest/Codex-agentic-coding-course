@@ -16,7 +16,7 @@ export type EffectivePracticeTask = {
   cwd: string
   model: string
   reasoningEffort: string | null
-  serviceTier: string | null
+  serviceTier?: string | null
   approvalPolicy: unknown
   sandbox: unknown
 }
@@ -47,7 +47,7 @@ export function isApprovedCodexConfiguration(
     && (value.model === undefined || (typeof value.model === 'string'
       && value.model.trim().length > 0 && value.model.length <= 160))
     && isSetupEffort(value.reasoningEffort)
-    && value.serviceTier === 'standard'
+    && (value.serviceTier === undefined || value.serviceTier === 'standard')
     && typeof value.approvedAt === 'string'
     && !Number.isNaN(Date.parse(value.approvedAt))
 }
@@ -76,7 +76,7 @@ export function buildPracticeTaskStartPlan(input: {
     startParams: {
       ...common,
       ...(input.approvedConfiguration.model ? { model: input.approvedConfiguration.model } : {}),
-      serviceTier: input.approvedConfiguration.serviceTier,
+      serviceTier: 'standard',
       approvalPolicy: 'on-request',
       sandbox: 'workspace-write',
       config: { model_reasoning_effort: input.approvedConfiguration.reasoningEffort }
@@ -90,7 +90,7 @@ export function parseEffectivePracticeTask(value: unknown): EffectivePracticeTas
     typeof value.cwd !== 'string' ||
     typeof value.model !== 'string' ||
     (value.reasoningEffort !== null && typeof value.reasoningEffort !== 'string') ||
-    (value.serviceTier !== null && typeof value.serviceTier !== 'string')) {
+    (value.serviceTier != null && typeof value.serviceTier !== 'string')) {
     throw new Error('Codex returned incomplete effective task settings')
   }
   return {
@@ -104,7 +104,7 @@ export function parseEffectivePracticeTask(value: unknown): EffectivePracticeTas
   }
 }
 
-function standardTier(value: string | null): boolean {
+function standardTier(value: string | null | undefined): boolean {
   return value === null || value === 'standard' || value === 'default'
 }
 

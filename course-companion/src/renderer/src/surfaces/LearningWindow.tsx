@@ -480,11 +480,11 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     tone: 'neutral',
     request: 'Bạn đổi cấu hình ngay trong task; Course Companion đọc metadata hiệu lực để Triết duyệt.',
     evidence: [
-      { label: 'CẤU HÌNH', value: 'Medium hoặc High · Standard' },
+      { label: 'CẤU HÌNH', value: 'Medium hoặc High' },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt' },
       { label: 'BẰNG CHỨNG', value: 'Metadata đúng task và còn mới' }
     ],
-    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn Medium hoặc High, Standard, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp bốn giá trị Course Companion đọc được.',
+    dialogue: 'Course Companion sẽ mở một task riêng bằng cấu hình mặc định và chưa gửi prompt nào. Trong chính task đó, hãy chọn Medium hoặc High, Approve for me và tắt Full access. Bạn tự chọn Model phù hợp. Bạn không cần chụp ảnh hoặc gửi báo cáo; Triết duyệt trực tiếp ba giá trị Course Companion đọc được.',
     practice: setupPracticeDefinition,
     choices: [{ label: 'Sang Codex thiết lập cấu hình', action: 'practice', primary: true }]
   },
@@ -502,7 +502,6 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
     request: 'Bốn câu tiếp theo yêu cầu bạn giải thích, áp dụng hoặc phân tích kiến thức vừa học.',
     evidence: [
       { label: 'EFFORT', value: 'Medium hoặc High', ready: true },
-      { label: 'SPEED', value: 'Standard', ready: true },
       { label: 'QUYỀN', value: 'Approve for me · Full access tắt', ready: true }
     ],
     dialogue: 'Bây giờ hãy cùng nhau trả lời các câu hỏi ôn tập để củng cố kiến thức vừa học nhen!',

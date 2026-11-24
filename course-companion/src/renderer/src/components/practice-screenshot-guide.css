@@ -83,3 +83,11 @@
     .receipt { left: 46%; }
   }
 }
+
+.practice-setup-guide {
+  max-width: 76ch;
+  margin: 20px 0 16px;
+  line-height: 1.65;
+}
+.practice-setup-guide p { margin: 0 0 10px; }
+.practice-setup-guide ul { padding-inline-start: 1.45em; }

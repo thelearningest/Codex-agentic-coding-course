@@ -88,6 +88,8 @@ export class PracticeHintService {
     const envelope = buildPracticeReviewEnvelope({ definition, run: { ...run, evidence }, activity,
       decisions: run.learnerDecisions, generatedAt: this.now().toISOString() })
     const recent = (values: string[]) => values.slice(-6).map((value) => redact(value).slice(0, 1500))
+    // Setup evidence already lists the learner-facing fields for this hint.
+    delete envelope.configuration
     const task = definition.evidenceProfile === 'codex-task-configuration' ? null : {
       // The availability check permits stale only for freshly read portfolio
       // tasks lacking optional Git evidence. Keep that limitation separate so

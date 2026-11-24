@@ -181,7 +181,7 @@ async function harness(
 }
 
 describe('Module 1 Practice review service', () => {
-  it('passes only all four required fresh values and persists the observed task configuration', async () => {
+  it('passes only all three required fresh values and persists the observed task configuration', async () => {
     const { progress, runs, service, releaseCount } = await harness()
 
     const response = await service.review()
@@ -197,8 +197,7 @@ describe('Module 1 Practice review service', () => {
       destination: { checkpointId: 'm1-mastery', sceneId: 'module-1-mastery' },
       approvedConfiguration: {
         model: 'gpt-5.6-sol',
-        reasoningEffort: 'high',
-        serviceTier: 'standard'
+        reasoningEffort: 'high'
       }
     })
     expect((await progress.load()).status).toBe('returning')
@@ -210,7 +209,6 @@ describe('Module 1 Practice review service', () => {
 
   it.each([
     ['Effort', { reasoningEffort: { protocolValue: 'low', label: 'Low' } }],
-    ['Speed', { serviceTier: { protocolValue: 'fast', label: 'Fast' } }],
     ['Approval', { approvalPolicy: { protocolValue: 'never', label: 'Never' } }],
     ['Full access', { fullAccess: { protocolValue: 'on', label: 'On' } }]
   ])('rejects a %s mismatch and gives exactly one next settings action', async (
@@ -228,6 +226,16 @@ describe('Module 1 Practice review service', () => {
     await expect(service.passedCompletion()).rejects.toThrow()
   })
 
+  it.each([{ protocolValue: 'priority', label: 'Fast' }, { protocolValue: null, label: null }])(
+    'passes with an unassessed service tier %j', async (serviceTier) => {
+      const { service } = await harness(configuration({ serviceTier }))
+      const { workspace } = await service.review()
+      expect(workspace.review?.status).toBe('passed')
+      expect(workspace.review?.result?.criteria.map(item => item.criterionId))
+        .toEqual(['effort-matches', 'approval-matches', 'full-access-off'])
+      expect((await service.passedCompletion()).approvedConfiguration).not.toHaveProperty('serviceTier')
+    })
+
   it('preserves Medium in the approved configuration for the next module', async () => {
     const { service } = await harness(configuration({ reasoningEffort: { protocolValue: 'medium', label: 'Medium' } }))
     const response = await service.review()
@@ -239,7 +247,7 @@ describe('Module 1 Practice review service', () => {
     const { service } = await harness(configuration({ model: { protocolValue: model, label: model } }))
     const response = await service.review()
     expect(response.workspace.review?.status).toBe('passed')
-    expect(response.workspace.review?.result?.criteria).toHaveLength(4)
+    expect(response.workspace.review?.result?.criteria).toHaveLength(3)
     const receipt = await service.passedCompletion()
     expect(receipt.approvedConfiguration?.model).toBe(model ?? undefined)
   })

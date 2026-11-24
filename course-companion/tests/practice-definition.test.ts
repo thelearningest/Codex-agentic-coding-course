@@ -62,7 +62,6 @@ describe('Module 1 Practice definition', () => {
       practice.requiredSettings.map((setting) => [setting.label, setting.value])
     )).toEqual({
       Effort: 'Medium hoặc High',
-      Speed: 'Standard',
       Approval: 'Approve for me',
       'Full access': 'Tắt'
     })

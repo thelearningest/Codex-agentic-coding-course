@@ -7,7 +7,6 @@
 
 - Model: tự chọn, không dùng để đánh giá
 - Effort: Medium hoặc High
-- Speed: Standard
 - Approval: Approve for me
 - Full access: Tắt
 
