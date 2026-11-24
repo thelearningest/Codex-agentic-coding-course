@@ -175,22 +175,26 @@ Chỉ nhắn khi cửa sổ khóa học đã mở hoặc khi có bước mình p
 chẳng hạn như nhập mật khẩu hay bấm cho phép.
 ```
 
-Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo bốn bước sau:
+Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo năm bước sau:
 
-1. Trong Codex, bấm dấu **+** cạnh chữ **Projects** ở thanh bên trái.
+1. Trong ứng dụng ChatGPT, bấm **ChatGPT** ở góc trên bên trái, rồi chọn **Codex**.
+
+   ![Mục Codex trong menu ChatGPT ở góc trên bên trái](docs/assets/readme/chatgpt-codex-menu.png)
+
+2. Trong Codex, bấm dấu **+** cạnh chữ **Projects** ở thanh bên trái.
 
    ![Dấu + cạnh chữ Projects ở thanh bên trái của Codex](docs/assets/readme/codex-folder-1-projects.png)
 
-2. Hộp **Create project** hiện ra. Ở mục **Source folders**, bấm **Add**.
+3. Hộp **Create project** hiện ra. Ở mục **Source folders**, bấm **Add**.
 
    ![Hộp Create project với nút Add trong mục Source folders](docs/assets/readme/codex-folder-2-create-project.png)
 
-3. Cửa sổ chọn thư mục mở ra. Chọn **Documents** ở cột bên trái, bấm
+4. Cửa sổ chọn thư mục mở ra. Chọn **Documents** ở cột bên trái, bấm
    **New Folder**, đặt tên `vibecoding-101`, bấm **Create**, rồi bấm **Open**.
 
    ![Hộp New Folder tạo thư mục mới trong Documents](docs/assets/readme/codex-folder-3-new-folder.png)
 
-4. Kiểm tra ô **Project name**. Nếu ô còn trống, nhập `vibecoding-101`. Bấm
+5. Kiểm tra ô **Project name**. Nếu ô còn trống, nhập `vibecoding-101`. Bấm
    **Create project**.
 
 Ảnh được chụp trên macOS. Trên Windows, các nút có tên tương tự.
