@@ -259,12 +259,12 @@ export function PracticeBrief({
             <PracticeScreenshotGuide key={courseRunId}>
               <section className="practice-setup-guide" aria-label="Hướng dẫn thực hành">
                 <p>Sau khi bấm "bắt đầu thực hành", bạn sẽ được đưa đến giao diện Codex.</p>
-                <p>Trong task Codex của bài, hãy kiểm tra hai cài đặt sau.</p>
+                <p>Tại đây, tất cả những gì bạn cần làm là chỉnh giao diện theo hướng dẫn. Cụ thể là</p>
                 <ul>
                   <li>Effort (Mức nỗ lực): <strong>Medium (Vừa)</strong> hoặc <strong>High (Cao)</strong></li>
                   <li>Approval: <strong>Approve for me (Phê duyệt giúp tôi)</strong></li>
                 </ul>
-                <p>Nếu hai mục đã đúng, bạn có thể giữ nguyên. Mở <strong>Trò chuyện với Triết</strong> rồi bấm <strong>Nộp bài</strong>.</p>
+                <p>Sau khi đã chỉnh xong, bạn hãy mở teacher agent (bấm vào nút <strong>Trò chuyện với Triết</strong> xuất hiện trên một nhân vật đẹp trai), sau đó bấm nút <strong>Nộp bài</strong> để teacher agent xem tiến độ của bạn và duyệt là được.</p>
                 <p>Tác vụ này nhằm giúp bạn làm quen với giao diện của Codex,</p>
               </section>
               {controls}
