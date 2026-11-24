@@ -33,8 +33,6 @@ import m1ModelSettingsImage from '../../../../../pilot-workspace/course/codex-se
 import { ModelLessonBoard, type ModelLessonTopic } from '../components/ModelLessonBoard'
 import { ProjectsLessonBoard } from '../components/ProjectsLessonBoard'
 import projectsCopy from '../../../../../pilot-workspace/course/codex-setup/projects.vi.json'
-import m1SlashCommandsImage from '../../../../../pilot-workspace/course/codex-setup/images/slash-commands.png'
-import m1AtMenuImage from '../../../../../pilot-workspace/course/codex-setup/images/at-menu.png'
 import m1AssessmentImage from '../assets/lesson-visuals/m1-assessment.webp'
 import m2WhenToPlanImage from '../assets/lesson-visuals/m2-when-to-plan.webp'
 import m2ProductRequirementsImage from '../assets/lesson-visuals/m2-product-requirements.webp'
@@ -374,26 +372,6 @@ const staticScenes: Partial<Record<SceneId, SceneContent>> = {
       { label: 'ĐỀ XUẤT', value: 'Medium hoặc High · Standard' }
     ],
     dialogue: 'Effort điều chỉnh mức suy luận của model. Speed điều chỉnh tốc độ xử lý và mức dùng credit. Với ContentPilot, mình đề xuất Effort Medium hoặc High và Speed Standard.',
-    choices: [{ label: 'Tiếp theo: Lệnh /', next: 'module-1-codex-slash-commands', primary: true }]
-  },
-  'module-1-codex-slash-commands': {
-    lessonId: 'module-1',
-    checkpointId: 'm1-codex-orientation',
-    step: 1,
-    totalSteps: 6,
-    lessonLabel: 'MODULE 1 · THIẾT LẬP CODEX',
-    mission: 'Làm quen với giao diện Codex',
-    objective: 'Dùng / và @ để mở nhanh các chức năng',
-    panelLabel: 'LỆNH / VÀ @',
-    panelStatus: 'MỞ NGAY TRONG Ô SOẠN TIN',
-    tone: 'neutral',
-    request: 'Mở lệnh, nguồn hoặc công cụ ngay trong ô soạn tin.',
-    evidence: [
-      { label: '/STATUS', value: 'Xem mức sử dụng context' },
-      { label: '/GOAL', value: 'Tạo mục tiêu bền vững' },
-      { label: '@', value: 'Mở thêm nguồn và công cụ' }
-    ],
-    dialogue: 'Khi bạn gõ dấu / vào ô chat, Codex sẽ giới thiệu cho bạn một số lệnh có sẵn của hệ thống. Một số lệnh / bạn có thể thường xuyên sử dụng là /status và /goal. Lệnh /status cho biết mức sử dụng context window — bạn có thể hiểu đây là trí nhớ ngắn hạn của model. Nếu lượng context đã dùng vượt quá 150.000 token, bạn nên chuyển sang chat mới. Lệnh /goal tạo một mục tiêu bền vững để Codex tiếp tục theo đuổi qua nhiều lượt cho đến khi hoàn thành, bị tạm dừng hoặc cần bạn cung cấp thêm thông tin.\n\nNgoài ra, @ cũng mở một danh sách chọn nhanh tương tự /. Tuy nhiên, @ cho phép bạn truy cập thêm một số nguồn và công cụ. Chẳng hạn, bạn có thể chọn một skill cụ thể hoặc một đoạn chat trong tài khoản ChatGPT.',
     choices: [{ label: 'Tiếp theo: AGENTS.md', next: 'module-1-agents-intro', primary: true }]
   },
   'module-1-agents-intro': {
@@ -1220,10 +1198,6 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
     image: m1ModelSettingsImage,
     alt: 'Menu Codex với GPT-6 Astra, High, thanh trượt và biểu tượng tia sét'
   },
-  'module-1-codex-slash-commands': {
-    image: m1SlashCommandsImage,
-    alt: 'Danh sách lệnh mở trong Codex sau khi người dùng nhập dấu gạch chéo vào ô soạn tin'
-  },
   'module-2-portfolio-workspace': {
     image: m2WhenToPlanImage,
     alt: 'Codex đọc các nguồn liên quan và nêu cách tiếp cận trước khi bắt đầu thực hiện',
@@ -1297,10 +1271,6 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
 }
 
 const sceneSecondaryVisuals: Partial<Record<SceneId, LessonVisual>> = {
-  'module-1-codex-slash-commands': {
-    image: m1AtMenuImage,
-    alt: 'Danh sách nguồn và công cụ mở trong Codex sau khi người dùng nhập dấu @ vào ô soạn tin'
-  },
   'module-2-prd-agent-workflow': {
     image: m2AwwwardsImage,
     alt: 'Ảnh chụp trang Site of the Day trên Awwwards',
@@ -1320,8 +1290,7 @@ const courseLessonPages = {
     ['module-1-why-codex'],
     ['module-1-codex-examples'],
     ['module-1-codex-model-intro'],
-    ['module-1-codex-effort-speed'],
-    ['module-1-codex-slash-commands']
+    ['module-1-codex-effort-speed']
   ],
   'm1-agents-and-skills': [
     ['module-1-agents-intro'],
@@ -3432,10 +3401,8 @@ export function LearningWindow() {
       {canShowSceneMedia && lessonVisual && secondaryLessonVisual && !usesLessonBoard
         ? (
             <div
-              className={`pixel-lesson-visual-group${lessonVisual.caption ? ' is-reference-gallery' : ''}`}
-              aria-label={lessonVisual.caption
-                ? 'Hai nguồn tham khảo thiết kế'
-                : 'Hai cách mở nhanh chức năng trong Codex'}
+              className="pixel-lesson-visual-group is-reference-gallery"
+              aria-label="Hai nguồn tham khảo thiết kế"
             >
               {[lessonVisual, secondaryLessonVisual].map((visual, index) => (
                 <figure className="pixel-lesson-visual is-grouped" key={visual.image}>
@@ -3446,11 +3413,7 @@ export function LearningWindow() {
                   />
                   {canExpandLessonVisual ? (
                     <button
-                      aria-label={visual.caption
-                        ? `Phóng to ảnh ${visual.caption}`
-                        : index === 0
-                          ? 'Phóng to ảnh minh họa lệnh /'
-                          : 'Phóng to ảnh minh họa dấu @'}
+                      aria-label={`Phóng to ảnh ${visual.caption}`}
                       className="pixel-visual-expand"
                       type="button"
                       onClick={() => index === 0 ? setVisualExpanded(true) : setSecondaryVisualExpanded(true)}

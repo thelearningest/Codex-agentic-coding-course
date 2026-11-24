@@ -13,7 +13,6 @@ export const courseOutline: Record<LessonId, readonly OutlineSection[]> = {
     { title: 'Chat, Work và Codex', startSceneId: 'module-1-chat-work' },
     { title: 'Approval: quyền thực hiện thao tác', startSceneId: 'module-1-codex-examples' },
     { title: 'Model và mức suy luận', startSceneId: 'module-1-codex-model-intro' },
-    { title: 'Lệnh / và menu @', startSceneId: 'module-1-codex-slash-commands' },
     { title: 'AGENTS.md và Skills', startSceneId: 'module-1-agents-intro' },
     { title: 'Thực hành: Thiết lập Codex', startSceneId: 'module-1-codex-projects' },
     { title: 'Kiểm tra cuối Module 1', startSceneId: 'module-1-mastery' },

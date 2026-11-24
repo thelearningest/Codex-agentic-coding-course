@@ -230,6 +230,16 @@ The full unit run had 885 passes and two existing failures in the frozen
 Module 1 image manifest and CSS palette. Pilot acceptance is pending.
 The next step is a learner rehearsal with a live Codex Project.
 
+### Module 1 orientation and final quiz, 24 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| `m1-codex-orientation` and `m1-mastery` | `implemented` | `passed` for navigation, saved progress and the revised quiz | Owner approved removing the commands page and replacing its question | `pending` | Observe a learner move from Effort and Speed to AGENTS.md and answer the approval question. |
+
+The first lesson now has five pages. The four-question quiz still requires three correct answers. Its second question asks how to select Approve for me while keeping Full access off. A learner saved on the removed page resumes at AGENTS.md. An unfinished quiz keeps answers to the other questions and requests a fresh answer to the replacement.
+
+Typecheck, lint, the production build, 57 focused tests, 15 startup checks and the full disposable Electron suite passed. The full unit run had 912 passes and two existing failures in the image source manifest and CSS palette.
+
 ### Module 1 opening, 19 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

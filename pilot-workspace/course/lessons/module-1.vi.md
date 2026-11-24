@@ -64,21 +64,6 @@ Cá nhân mình thường dùng Medium hoặc high, medium cho các tác vụ th
 
 Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast. Ngốn tiền và usage kinh khủng
 
-## Lệnh `/` và `@`: mở nhanh chức năng cần dùng
-
-Trong ô soạn tin, bạn có thể gõ `/` để mở danh sách lệnh nhanh. Hai lệnh hữu
-ích khi làm việc với Codex là:
-
-- `/status` để xem mức sử dụng context của cuộc trò chuyện; và
-- `/goal` để đặt một mục tiêu bền vững mà Codex tiếp tục theo đuổi qua nhiều
-  lượt.
-
-Dấu `@` mở thêm các nguồn và công cụ mà bạn có thể đưa vào cuộc trò chuyện.
-Chẳng hạn, bạn có thể chọn một skill hoặc một đoạn chat liên quan.
-
-[OpenAI Docs — Slash commands](https://learn.chatgpt.com/docs/reference/slash-commands)
-giải thích cách mở danh sách lệnh và chức năng của `/status` cùng `/goal`.
-
 ## Làm sao để agent ghi nhớ một thông tin?
 
 Vậy, giả dụ có một thông tin mình muốn agent ghi nhớ mà không cần phải nhắc đi
@@ -208,7 +193,6 @@ lại bài ôn tập sau khi xem phản hồi.
 Bạn hoàn thành Module 1 khi:
 
 - mô tả được Codex là coding agent của OpenAI,
-- dùng `/status` để xem mức sử dụng context và `/goal` để tạo mục tiêu bền vững,
 - chọn Approve for me và không bật Full access,
 - dùng Sol, chọn Effort Medium hoặc High và giữ Speed Standard cho ContentPilot,
 - nộp đủ hai ảnh trong đúng task Codex, và

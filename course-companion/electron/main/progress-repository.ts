@@ -39,6 +39,7 @@ const SAFE_ID = /^[A-Za-z0-9_-]{1,160}$/
 const courseLessonSet = new Set<string>(courseLessonIds)
 const lessonSet = new Set<string>(lessonIds)
 const RETIRED_MODULE_ONE_SCENES = new Set([
+  'module-1-codex-slash-commands',
   'module-1-permissions',
   'module-1-approval-choice',
   'module-1-agents-guidance',
@@ -53,8 +54,8 @@ const RETIRED_MODULE_ONE_SCENES = new Set([
 const RETIRED_MODULE_ONE_ASSESSMENT_SCENES = new Set<string>()
 // The Module 1 review keeps four questions; the former questions 3 and 4 and
 // their fifth and sixth question pages are retired.
-const MODULE_ONE_MASTERY_QUESTION_IDS = ['m1-q1', 'm1-q2', 'm1-q5-agents', 'm1-q6-skills'] as const
-const RETIRED_MODULE_ONE_MASTERY_QUESTION_IDS = new Set(['m1-q3', 'm1-q4'])
+const MODULE_ONE_MASTERY_QUESTION_IDS = ['m1-q1', 'm1-q2-approval', 'm1-q5-agents', 'm1-q6-skills'] as const
+const RETIRED_MODULE_ONE_MASTERY_QUESTION_IDS = new Set(['m1-q2', 'm1-q3', 'm1-q4'])
 const RETIRED_MODULE_ONE_QUESTION_SCENES = new Set(['module-1-final-5', 'module-1-final-6'])
 const RETIRED_MODULE_TWO_PLAN_SCENES = new Set([
   'module-2-plan-example',
@@ -200,7 +201,8 @@ function hasRetiredModuleOneReferences(value: Record<string, unknown>): boolean 
 
 function redirectRetiredModuleOneReferences(raw: Record<string, unknown>): Record<string, unknown> {
   if (!hasRetiredModuleOneReferences(raw)) return raw
-  const retiredSceneDestination = raw.sceneId === 'module-1-agents-guidance'
+  const leavingCommandPage = raw.sceneId === 'module-1-codex-slash-commands'
+  const retiredSceneDestination = leavingCommandPage || raw.sceneId === 'module-1-agents-guidance'
     ? 'module-1-agents-intro'
     : raw.sceneId === 'module-1-skills'
       ? 'module-1-skills-intro'
@@ -238,9 +240,10 @@ function redirectRetiredModuleOneReferences(raw: Record<string, unknown>): Recor
         ))
       : raw.sceneHistory,
     completedCheckpointIds: Array.isArray(raw.completedCheckpointIds)
-      ? raw.completedCheckpointIds.filter(
-          (checkpointId) => typeof checkpointId !== 'string' || !RETIRED_MODULE_ONE_CHECKPOINTS.has(checkpointId)
-        )
+      ? [...new Set([
+          ...raw.completedCheckpointIds.filter((id) => !RETIRED_MODULE_ONE_CHECKPOINTS.has(id)),
+          ...(leavingCommandPage ? ['m1-codex-orientation'] : [])
+        ])]
       : raw.completedCheckpointIds,
     decisions: isRecord(raw.decisions)
       ? Object.fromEntries(Object.entries(raw.decisions).filter(([key]) => key !== 'modelChoice'))
@@ -260,10 +263,11 @@ function redirectRetiredModuleOneAssessment(raw: Record<string, unknown>): Recor
   const decisions = isRecord(raw.decisions)
     ? Object.fromEntries(Object.entries(raw.decisions).filter(([key]) => !isRetiredAnswerKey(key)))
     : raw.decisions
-  // A learner part-way through the old six-question review resumes at the
-  // first remaining question still unanswered, or at the summary.
+  // Resume an unfinished review at the first question that still needs an answer.
   const isOnQuestionPage = typeof raw.sceneId === 'string' && /^module-1-final-[0-9]+$/.test(raw.sceneId)
-  const resumesReview = isOnQuestionPage && (hasRetiredAnswer || isRetiredPage)
+  const needsReplacementAtSummary = raw.sceneId === 'module-1-final-summary'
+    && isRecord(raw.decisions) && Object.hasOwn(raw.decisions, 'assessment:m1-q2')
+  const resumesReview = needsReplacementAtSummary || (isOnQuestionPage && (hasRetiredAnswer || isRetiredPage))
   const firstUnanswered = MODULE_ONE_MASTERY_QUESTION_IDS.findIndex((questionId) =>
     !(isRecord(decisions) && typeof decisions[`assessment:${questionId}`] === 'string'))
   return {

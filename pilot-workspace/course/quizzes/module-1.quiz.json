@@ -33,23 +33,23 @@
       }
     },
     {
-      "id": "m1-q2",
+      "id": "m1-q2-approval",
       "type": "multiple-choice",
       "bloomLevel": 3,
       "bloomLabel": "Vận dụng",
-      "prompt": "Bạn muốn xem cuộc trò chuyện đã dùng bao nhiêu context và sau đó giao cho Codex một mục tiêu cần tiếp tục theo đuổi qua nhiều lượt. Bạn nên dùng cặp lệnh nào?",
+      "prompt": "Bạn đang thiết lập Codex để làm portfolio. Bạn muốn Codex tự xử lý các thao tác thông thường nhưng vẫn giữ giới hạn truy cập tệp và Internet. Bạn nên chọn gì trong menu Approval?",
       "choices": [
-        "Dùng /model để xem context, rồi dùng /status để đặt mục tiêu bền vững.",
-        "Dùng /status để xem mức sử dụng context, rồi dùng /goal để đặt mục tiêu bền vững.",
-        "Dùng @ để xem context, rồi dùng /reasoning để đặt mục tiêu bền vững.",
-        "Dùng /compact để đặt mục tiêu, rồi dùng /goal để xem mức sử dụng context."
+        "Chọn Ask for approval để Codex tự duyệt các thao tác thông thường.",
+        "Chọn Approve for me và để Full access ở trạng thái tắt.",
+        "Bật Full access để Codex chỉ truy cập được thư mục portfolio.",
+        "Bật Full access rồi nhắn Codex chỉ làm việc trong thư mục portfolio."
       ],
       "answerIndex": 1,
-      "explanation": "/status hiển thị mức sử dụng context của cuộc trò chuyện. /goal tạo một mục tiêu bền vững để Codex tiếp tục theo đuổi cho đến khi hoàn thành, tạm dừng hoặc cần thêm thông tin.",
+      "explanation": "Approve for me giúp Codex tự xử lý các thao tác thông thường. Khi bạn để Full access ở trạng thái tắt, Codex vẫn phải tuân theo giới hạn truy cập tệp và Internet.",
       "source": {
-        "label": "OpenAI Docs — Slash commands",
-        "url": "https://learn.chatgpt.com/docs/reference/slash-commands",
-        "basis": "Tài liệu mô tả /status là lệnh xem mức sử dụng context và /goal là lệnh đặt mục tiêu bền vững."
+        "label": "OpenAI Docs — Sandboxing and approvals",
+        "url": "https://learn.chatgpt.com/docs/sandboxing",
+        "basis": "Tài liệu phân biệt cách duyệt thao tác với giới hạn truy cập tệp và Internet. Bài học áp dụng hai thiết lập này cho dự án portfolio."
       }
     },
     {

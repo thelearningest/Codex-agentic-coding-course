@@ -2,7 +2,7 @@ Dùng `$start-course-lesson module-1` để bắt đầu bài
 **Bắt đầu làm việc với Codex**.
 
 Teacher phải đi theo đúng thứ tự trong script: Codex và coding agent → approval
-→ model → reasoning effort → lệnh `/` và `@` → `AGENTS.md` và Skills → cấu hình
+→ model → reasoning effort → `AGENTS.md` và Skills → cấu hình
 ContentPilot → Practice nộp ảnh. Không hỏi Learner chọn cấu hình trước khi đã
 giải thích xong Codex, approval, ba dòng model và các mức reasoning.
 

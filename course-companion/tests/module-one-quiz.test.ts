@@ -182,7 +182,7 @@ describe('Course module assessment banks', () => {
     expect(setupQuestions.filter((question) => question.type === 'short-answer')).toHaveLength(0)
     expect(setupQuestions.map((question) => question.id)).toEqual([
       'm1-q1',
-      'm1-q2',
+      'm1-q2-approval',
       'm1-q5-agents',
       'm1-q6-skills'
     ])

@@ -307,7 +307,7 @@ async function closeLessonOnboardingTip(page) {
 
 async function completeSetupModule(page, companionPage, electronApp, verifyResponsiveLayout = false, expectLessonTip = false) {
   await page.getByRole('button', { name: /^01.*MỞ BÀI HỌC/ }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 1/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 1/5', { exact: true }).first().waitFor()
   if (expectLessonTip) await closeLessonOnboardingTip(page)
   assert.equal(await page.locator('[data-onboarding-tour]').count(), 0)
   await verifyOutlineNavigation(page, 'module-1', join(userDataDirectory, 'learner-state.json'), screenshotDirectory)
@@ -320,7 +320,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await images.evaluateAll(items => Promise.all(items.map(image => image.decode())))
     await scene.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   }
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 3/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 3/5', { exact: true }).first().waitFor()
   assert.equal(
     await page.getByRole('button', { name: '← Trang trước', exact: true }).isDisabled(),
     false
@@ -398,7 +398,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await page.setViewportSize({ width: 1180, height: 780 })
   }
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 4/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 4/5', { exact: true }).first().waitFor()
   const modelIntroBoard = page.locator('.model-controls')
   await modelIntroBoard.waitFor()
   await modelIntroBoard.getByRole('heading', { name: 'Có 3 cấu hình bạn cần để ý', exact: true }).waitFor()
@@ -452,7 +452,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await capture(page, 'module-1-model-controls-390px-scrolled.png')
   await page.setViewportSize({ width: 1180, height: 780 })
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 5/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 5/5', { exact: true }).first().waitFor()
   const effortSpeedBoard = page.locator('.model-controls')
   await effortSpeedBoard.getByRole('heading', { name: 'Effort', exact: true }).waitFor()
   assert.deepEqual(await effortSpeedBoard.locator('.model-controls__personal-copy p').allTextContents(), approvedModelCopy.effort)
@@ -461,58 +461,16 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.deepEqual(await effortSpeedBoard.locator('.model-controls__tabs button').allTextContents(),
     ['Tổng quan', '01 Model', '02 Effort', '03 Speed'])
   await effortSpeedBoard.getByRole('button', { name: '01 Model', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 4/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 4/5', { exact: true }).first().waitFor()
   await modelIntroBoard.getByRole('heading', { name: 'Model', exact: true }).waitFor()
   await modelIntroBoard.getByRole('button', { name: '02 Effort', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 5/6', { exact: true }).first().waitFor()
+  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 5/5', { exact: true }).first().waitFor()
   await effortSpeedBoard.getByRole('heading', { name: 'Effort', exact: true }).waitFor()
   await page.getByRole('button', { name: 'Tìm hiểu Speed →', exact: true }).click()
   await effortSpeedBoard.getByRole('heading', { name: 'Speed', exact: true }).waitFor()
   assert.deepEqual(await effortSpeedBoard.locator('.model-controls__personal-copy p').allTextContents(), approvedModelCopy.speed)
   assert.equal(await effortSpeedBoard.locator('[data-highlight="speed"]').count(), 1)
   await capture(page, 'module-1-codex-speed.png')
-  await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
-  await page.getByText('MODULE 1 · BÀI 1/3 · TRANG 6/6', { exact: true }).first().waitFor()
-  const commandVisuals = page.locator('.pixel-lesson-visual-group .pixel-lesson-visual')
-  assert.equal(await commandVisuals.count(), 2)
-  const commandDialogueText = await page.locator('.pixel-dialogue > p').textContent()
-  assert.match(commandDialogueText, /\/status/)
-  assert.match(commandDialogueText, /\/goal/)
-  assert.match(commandDialogueText, /150\.000 token/)
-  assert.match(commandDialogueText, /một đoạn chat trong tài khoản ChatGPT/)
-  const slashExpandButton = page.getByRole('button', { name: 'Phóng to ảnh minh họa lệnh /', exact: true })
-  const atExpandButton = page.getByRole('button', { name: 'Phóng to ảnh minh họa dấu @', exact: true })
-  await slashExpandButton.click()
-  await visualLightbox.waitFor()
-  assert.match(await visualLightbox.locator('img').getAttribute('alt'), /dấu gạch chéo/)
-  await page.getByRole('button', { name: 'Đóng ảnh phóng to', exact: true }).click()
-  await atExpandButton.click()
-  await visualLightbox.waitFor()
-  assert.match(await visualLightbox.locator('img').getAttribute('alt'), /dấu @/)
-  await page.keyboard.press('Escape')
-  await capture(page, 'module-1-codex-slash-commands.png')
-  if (verifyResponsiveLayout) {
-    await page.setViewportSize({ width: 390, height: 844 })
-    const commandNarrowWidths = await page.evaluate(() => {
-      const browserDocument = globalThis.document
-      return {
-        body: browserDocument.body.scrollWidth,
-        document: browserDocument.documentElement.scrollWidth,
-        viewport: globalThis.innerWidth
-      }
-    })
-    assert.equal(commandNarrowWidths.body, commandNarrowWidths.viewport)
-    assert.equal(commandNarrowWidths.document, commandNarrowWidths.viewport)
-    const firstCommandVisualBounds = await commandVisuals.nth(0).boundingBox()
-    const secondCommandVisualBounds = await commandVisuals.nth(1).boundingBox()
-    assert.ok(firstCommandVisualBounds)
-    assert.ok(secondCommandVisualBounds)
-    assert.ok(firstCommandVisualBounds.width <= commandNarrowWidths.viewport)
-    assert.ok(secondCommandVisualBounds.width <= commandNarrowWidths.viewport)
-    assert.ok(secondCommandVisualBounds.y >= firstCommandVisualBounds.y + firstCommandVisualBounds.height)
-    await capture(page, 'module-1-codex-slash-commands-390px.png')
-    await page.setViewportSize({ width: 1180, height: 780 })
-  }
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.getByText('MODULE 1 · BÀI 2/3 · TRANG 1/5', { exact: true }).first().waitFor()
   const agentsBoard = page.locator('.pixel-guidance-board.is-agents')

@@ -210,7 +210,27 @@ describe('ProgressRepository', () => {
     })
   })
 
-  it('moves progress from a retired fifth Module 1 question to the first unanswered remaining question', async () => {
+  it('resumes from the removed command page at AGENTS.md and closes the orientation checkpoint', async () => {
+    const directory = await temporaryDirectory()
+    const repository = new ProgressRepository(directory)
+    const started = await repository.save(moduleOneStart)
+    const retired = 'module-1-codex-slash-commands'
+    await writeFile(join(directory, 'learner-state.json'), JSON.stringify({
+      ...started, sceneId: retired, sceneHistory: [retired, 'module-1-codex-effort-speed']
+    }))
+    await expect(repository.load()).resolves.toMatchObject({
+      status: 'returning',
+      progress: {
+        currentCourseLessonId: 'm1-agents-and-skills',
+        checkpointId: 'm1-agents-and-skills',
+        sceneId: 'module-1-agents-intro',
+        sceneHistory: ['module-1-codex-effort-speed'],
+        completedCheckpointIds: [...started.completedCheckpointIds, 'm1-codex-orientation']
+      }
+    })
+  })
+
+  it.each(['module-1-final-5', 'module-1-final-summary'])('resumes an old review at the new approval question from %s', async (sceneId) => {
     const directory = await temporaryDirectory()
     const repository = new ProgressRepository(directory)
     const started = await repository.save(moduleOneStart)
@@ -218,7 +238,7 @@ describe('ProgressRepository', () => {
       ...started,
       currentCourseLessonId: 'm1-assessment',
       checkpointId: 'm1-mastery',
-      sceneId: 'module-1-final-5',
+      sceneId,
       sceneHistory: [
         ...started.sceneHistory,
         'module-1-final-4',
@@ -244,21 +264,22 @@ describe('ProgressRepository', () => {
       progress: {
         currentCourseLessonId: 'm1-assessment',
         checkpointId: 'm1-mastery',
-        // Questions 1 and 2 are kept; the former fifth question is now third.
-        sceneId: 'module-1-final-3',
+        // The approval scenario replaces the old commands question.
+        sceneId: 'module-1-final-2',
         sceneHistory: ['intro-visual-onboarding', 'module-1-final-4']
       }
     })
     if (loaded.status !== 'returning') throw new Error('Expected returning progress')
     expect(loaded.progress.decisions).toMatchObject({
-      'assessment:m1-q1': 'correct:0',
-      'assessment:m1-q2': 'correct:0'
+      'assessment:m1-q1': 'correct:0'
     })
+    expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q2')
+    expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q2-approval')
     expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q3')
     expect(loaded.progress.decisions).not.toHaveProperty('assessment:m1-q4')
   })
 
-  it('moves a completed old Module 1 review on a retired question page to the summary', async () => {
+  it('returns a review with all current answers to the summary from a retired question page', async () => {
     const directory = await temporaryDirectory()
     const repository = new ProgressRepository(directory)
     const started = await repository.save(moduleOneStart)
@@ -271,7 +292,7 @@ describe('ProgressRepository', () => {
       decisions: {
         ...started.decisions,
         'assessment:m1-q1': 'correct:0',
-        'assessment:m1-q2': 'correct:0',
+        'assessment:m1-q2-approval': 'correct:0',
         'assessment:m1-q3': 'correct:0',
         'assessment:m1-q4': 'correct:0',
         'assessment:m1-q5-agents': 'correct:0',

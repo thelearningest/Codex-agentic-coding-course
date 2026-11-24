@@ -50,15 +50,9 @@ Teacher nói: "Cá nhân mình thường dùng Medium hoặc high, medium cho c�
 
 Teacher nói: "Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast. Ngốn tiền và usage kinh khủng"
 
-Teacher nói: "Trong ô soạn tin, dấu `/` mở danh sách lệnh nhanh. `/status` cho
-bạn xem mức sử dụng context của cuộc trò chuyện. `/goal` đặt một mục tiêu bền
-vững để Codex tiếp tục theo đuổi qua nhiều lượt. Dấu `@` mở thêm các nguồn và
-công cụ mà bạn có thể đưa vào cuộc trò chuyện."
-
 [Giữ hai trang học hiện có. Trang đầu có Tổng quan và Model; trang kế tiếp có Effort và Speed. Đặt ảnh `model-controls.png` bên trái, nội dung bên phải. Dùng mũi tên và highlight để chỉ vị trí tương ứng trên ảnh, không thêm chữ chú thích ở cột ảnh.]
 
-[Dừng chờ Learner xem phần giới thiệu Codex, màn hình Model, Effort, Speed và
-các lệnh nhanh.
+[Dừng chờ Learner xem phần giới thiệu Codex, màn hình Model, Effort và Speed.
 Sau đó hỏi: "Coding agent khác một chatbot chỉ trả lời ở điểm nào?" Đạt khi
 Learner nêu được ít nhất một khả năng hành động như đọc tệp, dùng công cụ, chạy
 lệnh hoặc kiểm tra kết quả. Checkpoint `m1-codex-orientation`.]
