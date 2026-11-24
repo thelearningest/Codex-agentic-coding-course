@@ -128,8 +128,8 @@ export function selectStartupPresentation(report, installPlan) {
     && report?.platformSupported === true
     && report.nodeCompatible === true
     && report.npmAvailable === true
-    && report.codexAvailable === true
-    && report.appServerAvailable === true
+    && (report.checkCodex === false
+      || (report.codexAvailable === true && report.appServerAvailable === true))
     && report.lockMatches === true
     && report.electronRuntimeAvailable === true;
   return ready ? "returning" : "first-run";
@@ -141,6 +141,7 @@ export async function main({
   execute = executeInstallPlan,
   launch = launchElectron,
   output = process.stdout,
+  agent = process.argv.includes("--agent"),
   readFirstRun = () => readFile(firstRunPresentationPath, "utf8"),
   dependencyOverrides = {},
 } = {}) {
@@ -163,6 +164,7 @@ export async function main({
   const deps = {
     platform: process.platform,
     nodeVersion: process.versions.node,
+    checkCodex: !agent,
     commandExists: (name) => name === "codex" && desktopCli ? true : commandExists(name),
     commandSucceeds: (name, args) => commandSucceeds(name === "codex" && desktopCli ? desktopCli : name, args),
     fileExists,
@@ -171,7 +173,7 @@ export async function main({
     stampPath,
     electronRuntimePath,
     readFile,
-    confirm: process.argv.includes("--agent") ? agentInstallConsent : confirmInstall,
+    confirm: agent ? agentInstallConsent : confirmInstall,
     run: runProcess,
     writeFile,
     ...dependencyOverrides,
@@ -199,7 +201,7 @@ export async function main({
   if (plan.length > 0) await execute(plan, deps);
 
   const finalReport = await detect(deps);
-  if (!finalReport.codexAvailable || !finalReport.appServerAvailable) {
+  if (!agent && (!finalReport.codexAvailable || !finalReport.appServerAvailable)) {
     throw Object.assign(new Error("Codex App Server is still unavailable."), {
       code: "INSTALL_FAILED",
       actionId: "codex-cli",
@@ -218,9 +220,12 @@ export async function main({
     });
   }
 
-  output.write("Setup complete — opening Course Companion.\n");
+  output.write(agent
+    ? "Course Companion files are ready. Opening the lessons.\n"
+    : "Setup complete — opening Course Companion.\n");
   const exitCode = await launch({
     root: appRoot,
+    agent,
   });
   if (exitCode !== 0) {
     throw Object.assign(new Error("Electron exited unexpectedly."), {

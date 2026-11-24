@@ -51,11 +51,11 @@ export function PracticeBrief({
 
   const load = async () => {
     try {
-      setWorkspace(
-        window.courseCompanion
-          ? await window.courseCompanion.loadPracticeWorkspace(identity)
-          : previewWorkspace
-      )
+      const current = window.courseCompanion
+        ? await window.courseCompanion.loadPracticeWorkspace(identity)
+        : previewWorkspace
+      setWorkspace(current)
+      return current
     } catch {
       setError('Không thể đọc trạng thái Practice. Hãy thử lại.')
     }
@@ -111,7 +111,7 @@ export function PracticeBrief({
       )
     } catch {
       setError('Không thể mở task Codex đang hoạt động. Hãy thử lại.')
-      await load()
+      if ((await load())?.error) setError('')
     } finally {
       setBusy(false)
     }

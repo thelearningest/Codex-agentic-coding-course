@@ -18,7 +18,8 @@ export function PracticeTaskLink({ task, api, disabled }: Props) {
     setBusy(true)
     setError('')
     try {
-      await api.openPracticeTask(task)
+      const recovery = await api.openPracticeTask(task)
+      if (recovery) setError(recovery)
     } catch {
       setError('Chưa thể mở task Codex. Hãy thử lại; nếu bạn vừa đổi Practice, hãy đóng rồi mở lại bảng này.')
     } finally {

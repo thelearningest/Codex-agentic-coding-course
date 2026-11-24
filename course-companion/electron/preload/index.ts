@@ -59,7 +59,7 @@ const courseCompanionApi: CourseCompanionApi = {
   resumePractice: (identity?: PracticeIdentity) =>
     ipcRenderer.invoke('course:resume-practice', identity) as Promise<PracticeWorkspaceView>,
   openPracticeTask: (request: PracticeTaskOpenRequest) =>
-    ipcRenderer.invoke('course:open-practice-task', request) as Promise<void>,
+    ipcRenderer.invoke('course:open-practice-task', request) as Promise<string | void>,
   retryPracticeSwitch: () =>
     ipcRenderer.invoke('course:retry-practice-switch') as Promise<PracticeWorkspaceView>,
   cancelPracticeSwitch: () =>

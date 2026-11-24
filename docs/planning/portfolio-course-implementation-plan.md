@@ -75,6 +75,31 @@ prompt on a learner's Windows machine, including missing prerequisites and
 repeat launch. Native prerequisite installer dialogs and learner acceptance
 still need direct observation.
 
+### Codex CLI readiness during agent setup, 24 November 2026
+
+| Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
+|---|---|---|---|---|---|
+| Foundation / F0.4 / I2 / M2.5, agent launch and Practice compatibility | `implemented` | `passed` for focused runtime, launcher and Practice recovery checks. The full unit gate remains `failed` on three baseline assertions. | Agent-facing setup and Practice recovery approved for implementation | `pending` | Run the setup prompt and open Module 1 Practice with a Windows learner using a real Codex installation. |
+
+The launcher reports the visible lesson window and CLI readiness separately.
+The running Course Companion checks the same executable it would use for
+Practice. The setup guide tells the agent what to report in chat and how to
+recheck after the learner updates the selected installation. Practice supplies
+the detected and required versions when it blocks an outdated CLI. The existing
+retry uses the pending transition or previously bound task.
+
+Typecheck, lint, build, 31 focused tests and 15 startup tests passed. Native
+macOS Electron opened a disposable profile with a simulated 0.147.0 CLI and
+reported it as outdated. A repeat launch with 0.164.0 reported ready in the same
+process. The Module 1 Practice recovery message and retry fit at 1180 and
+390 pixels. Windows CLI discovery and setup were checked with fixtures. Native
+Windows, a live setup-agent conversation and an authenticated task handoff
+remain pending. With a canonical macOS temporary path, the full unit suite had
+909 passes and reproduced the original checkout's two frozen-content failures
+and one palette failure. Electron smoke passed. The combined Electron run
+timed out in Teacher chat. Teacher chat passed on its isolated rerun, followed
+by passing Practice guide and review feedback runs.
+
 ### Impeccable skill in Module 2, 23 November 2026
 
 Module 2 now introduces the Impeccable design skill. A new page,

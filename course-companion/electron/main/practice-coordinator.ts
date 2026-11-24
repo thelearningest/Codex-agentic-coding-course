@@ -1,5 +1,6 @@
 import { isPortfolioBuildPackageVersion, portfolioBuildVersion } from '../../shared/contracts'
 import { randomUUID } from 'node:crypto'
+import { codexPracticeRecovery } from './codex-runtime'
 import { portfolioContinuationInstructions } from './portfolio-continuation-instructions'
 import { portfolioBuildSliceIds } from '../../shared/contracts'
 import type { PortfolioPackageApprovalRequest, PortfolioPackageHandoff } from '../../shared/contracts'
@@ -58,6 +59,8 @@ function transitionLabel(transition: PracticeTransitionRecord, failed: boolean):
 }
 
 function safeCreationError(error: unknown): string {
+  const recovery = codexPracticeRecovery(error)
+  if (recovery) return recovery
   const message = error instanceof Error ? error.message : ''
   if (message === 'PORTFOLIO_RELEASE_CONTINUATION_UNAVAILABLE') {
     return 'Chưa thể tiếp tục task portfolio từ Module 3. Hãy kiểm tra bàn giao và kết nối lại đúng task; dữ liệu đã lưu vẫn được giữ.'
@@ -292,7 +295,8 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       task: ExecutorChatBinding
       workspace: { canonicalPath: string }
       sourceCheckpoint: string
-    } | null>
+    } | null>,
+    private readonly checkCodexRuntime?: () => Promise<string>
   ) {}
 
   async loadWorkspace(identity?: PracticeIdentity): Promise<PracticeWorkspaceView> {
@@ -363,8 +367,8 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       try {
         record = await this.refreshPracticeEvidence(record)
         if (this.lastError === refreshError && !archiveRefreshFailed) this.lastError = ''
-      } catch {
-        this.lastError = refreshError
+      } catch (error) {
+        this.lastError ||= codexPracticeRecovery(error) ?? refreshError
         refreshFailed = true
       }
       const view = await this.toView(record, identity, verifiedArchive)
@@ -449,6 +453,12 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
           || record.activeRun.practiceVersion !== identity.practiceVersion)) {
         throw new Error('Practice đang hoạt động không khớp nội dung được yêu cầu.')
       }
+      try {
+        await this.checkCodexRuntime?.()
+      } catch (error) {
+        this.lastError = safeCreationError(error)
+        throw new Error(this.lastError, { cause: error })
+      }
       // Earlier releases used one chat for both planning and building.
       const active = record.activeRun
       if (active.practiceId === 'm3-portfolio-build' && active.practiceVersion === portfolioBuildVersion
@@ -503,6 +513,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       if (transition.stage === 'target-created' && transition.targetBinding && !legacyBuildTarget) {
         let committed
         try {
+          await this.checkCodexRuntime?.()
           if (definition.evidenceProfile === 'planning-package') {
             await this.prepareExecutor?.(transition.targetBinding, true)
           }
@@ -572,6 +583,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
   }
 
   private async createPracticeTarget(input: Parameters<ExecutorChatCoordinator['createTarget']>[0]): Promise<PracticeRunRecord['binding']> {
+    await this.checkCodexRuntime?.()
     if (input.definition.practiceId === 'm4-portfolio-release') {
       const handoff = await this.loadPortfolioReleaseHandoff?.()
       if (!handoff || !/^sha256:[a-f0-9]{64}$/.test(handoff.sourceCheckpoint)
@@ -607,6 +619,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
         await this.executor.prepareTarget(binding, definition, approvedConfiguration, handoff.sourceCheckpoint)
         return
       } catch (error) {
+        if (codexPracticeRecovery(error)) throw error
         throw new Error('PORTFOLIO_RELEASE_CONTINUATION_UNAVAILABLE', { cause: error })
       }
     }
@@ -622,6 +635,7 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       }
       await this.executor.prepareTarget(binding, definition, approvedConfiguration)
     } catch (error) {
+      if (codexPracticeRecovery(error)) throw error
       throw new Error('PORTFOLIO_CONTINUATION_UNAVAILABLE', { cause: error })
     }
   }
@@ -818,10 +832,11 @@ export class PracticeCoordinator implements PracticeWorkspaceAdapter {
       if (this.handoffExecutor) await this.handoffExecutor(open)
       else await open()
       this.lastError = ''
-    } catch {
+    } catch (error) {
       this.lastError =
-        'Task Codex đã được tạo nhưng chưa mở được. Hãy dùng Tiếp tục Practice để thử lại.'
-      throw new Error(this.lastError)
+        codexPracticeRecovery(error)
+        ?? 'Task Codex đã được tạo nhưng chưa mở được. Hãy dùng Tiếp tục Practice để thử lại.'
+      throw new Error(this.lastError, { cause: error })
     }
   }
 

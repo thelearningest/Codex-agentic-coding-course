@@ -10,7 +10,21 @@ export function agentInstallConsent(plan, args = process.argv.slice(2)) {
   return args.includes('--agent') && args.includes('--install')
 }
 
-export async function openCourseWindow(runtime, root) {
+async function readPracticeReadiness(directory) {
+  // Windows discovery and the version command can each take up to five seconds.
+  const deadline = Date.now() + 12_000
+  while (Date.now() < deadline) {
+    try {
+      return JSON.parse(await readFile(join(directory, 'practice-runtime'), 'utf8'))
+    } catch (error) {
+      if (error.code !== 'ENOENT') break
+    }
+    await delay(150)
+  }
+  return { status: 'unknown' }
+}
+
+export async function openCourseWindow(runtime, root, { report = console.log } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'course-launch-'))
   try {
     const env = { ...process.env }
@@ -31,7 +45,9 @@ export async function openCourseWindow(runtime, root) {
       try {
         const pid = (await readFile(join(directory, 'visible'), 'utf8')).trim()
         if (/^[1-9]\d*$/.test(pid)) {
-          console.log('COURSE_WINDOW_VISIBLE ' + pid)
+          report('COURSE_WINDOW_VISIBLE ' + pid)
+          const readiness = await readPracticeReadiness(directory)
+          report('COURSE_PRACTICE_RUNTIME ' + JSON.stringify(readiness))
           return 0
         }
       } catch (error) {

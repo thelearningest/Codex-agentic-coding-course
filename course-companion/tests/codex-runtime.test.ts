@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { resolveCodexRuntimeCommand } from '../electron/main/codex-runtime'
+import { inspectCodexRuntime, resolveCodexRuntimeCommand } from '../electron/main/codex-runtime'
 
 function fixture(overrides: Partial<Parameters<typeof resolveCodexRuntimeCommand>[0]> = {}) {
   return {
@@ -66,5 +66,33 @@ describe('Codex desktop runtime compatibility', () => {
   it('finds a macOS desktop runtime', async () => {
     const deps = fixture({ platform: 'darwin', exists: async (path) => path === '/Applications/Codex.app/Contents/Resources/codex' })
     expect(await resolveCodexRuntimeCommand(deps)).toBe('/Applications/Codex.app/Contents/Resources/codex')
+  })
+
+  it.each([
+    { platform: 'darwin' as const, installation: '/Applications/Codex.app/Contents/Resources/codex' },
+    { platform: 'win32' as const, installation: 'C:/Apps/Codex/app/resources/codex.exe' }
+  ])('reports the selected desktop CLI on $platform and rechecks after an update', async ({ platform, installation }) => {
+    let version = '0.147.0'
+    const deps = fixture({
+      platform,
+      env: { CODEX_APP_RUNTIME_CLI_PATH: '/stale/codex' },
+      exists: async (path) => path.replaceAll('\\', '/') === installation || path === '/stale/codex',
+      run: vi.fn(async (_command, args) => args[0] === '--version' ? 'codex-cli ' + version : 'C:/Apps/Codex')
+    })
+    await expect(inspectCodexRuntime(deps)).resolves.toMatchObject({
+      status: 'outdated', version, source: 'codex-desktop'
+    })
+    await expect(resolveCodexRuntimeCommand(deps)).rejects.toMatchObject({
+      code: 'CODEX_RUNTIME_INCOMPATIBLE', result: { status: 'outdated', version }
+    })
+    version = '0.164.0-alpha.11.1'
+    await expect(inspectCodexRuntime(deps)).resolves.toMatchObject({ status: 'ready', version })
+  })
+
+  it('distinguishes a missing standalone CLI from an unreadable version', async () => {
+    const deps = fixture({ platform: 'darwin', run: async () => { throw Object.assign(new Error(), { code: 'ENOENT' }) } })
+    await expect(inspectCodexRuntime(deps)).resolves.toEqual({ status: 'missing', source: 'standalone' })
+    await expect(inspectCodexRuntime({ ...deps, run: async () => 'unexpected output' }))
+      .resolves.toEqual({ status: 'unverified', source: 'standalone' })
   })
 })

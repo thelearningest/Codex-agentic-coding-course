@@ -2,7 +2,7 @@
 
 Use this guide for “Mở khóa học giúp mình”, “Open my course”, or first-time
 setup. The learner works in Vietnamese. Handle setup yourself and keep replies
-short. The task ends when the learning window is visible.
+short. Check both the learning window and the Codex connection needed for Practice.
 
 ## Find the course
 
@@ -54,11 +54,34 @@ The last column authorizes only the launcher's course setup plan. There is no
 Terminal question. After a successful launch the command exits and the app
 stays open. Repeating it restores the existing learning window for this profile.
 
-Only report success after `COURSE_WINDOW_VISIBLE` or direct observation of the
-visible learning window. Say “Course Companion đã mở. Bạn có thể bắt đầu học.”
-If the command fails, read its output yourself, address the named cause and
-retry. After two failures at the same step, report the specific error in plain
-Vietnamese. Ask the learner for help only when their input is needed.
+Wait for the command to finish and read both results. `COURSE_WINDOW_VISIBLE`
+confirms the lessons are open. `COURSE_PRACTICE_RUNTIME` is a JSON result from
+the running Course Companion and reports the status of the Codex CLI it would
+use for Practice.
+
+- With `ready` and a visible window, tell the learner in chat that they can
+  start learning and that the Codex version check for Practice passed.
+- With `outdated`, report that the lessons are open and Practice needs an
+  update. Use `version`, `requiredVersion`, and `source` to identify the right
+  update. Update Codex for `codex-desktop` or ChatGPT for `chatgpt-desktop`.
+  For `inherited` or `standalone`, identify the selected installation before
+  choosing how to update it. Updating another copy may leave the result unchanged.
+- With `missing`, help the learner get a compatible Codex installation. With
+  `unverified`, inspect the selected installation before choosing a recovery
+  step. With `unknown` or a missing readiness result, report that the version
+  could not be checked. If an older Course Companion instance is still running,
+  ask the learner to close and reopen it when convenient.
+
+Give setup feedback in chat. The learner may already be using the course window
+and may never see the launcher output. If fixing Codex requires an install,
+update, or a click in another app, follow the learner's consent and ask for
+only the action that needs their input. After the fix, rerun the same launcher
+and confirm the version check passed only after it reports `ready`. If the
+learner defers the fix, tell them they can start the lessons.
+
+If the launcher fails to open the window, read its output yourself, address the
+named cause and retry. After two failures at the same step, report the specific
+error in plain Vietnamese.
 
 Keep work scoped to setup. Do not edit course files, change pinned packages,
 reset progress, or teach a lesson during launch.

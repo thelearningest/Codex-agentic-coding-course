@@ -3,7 +3,7 @@ import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
 import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
-import { writeFile } from 'node:fs/promises'
+import { rename, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import type {
@@ -28,7 +28,7 @@ import type {
 } from '../../shared/contracts'
 import { isProgressUpdate, ProgressRepository } from './progress-repository'
 import { CodexAppServerClient } from './codex-app-server-client'
-import { resolveCodexRuntimeCommand } from './codex-runtime'
+import { codexPracticeRecovery, inspectCodexRuntime, minimumCodexVersion, resolveCodexRuntimeCommand } from './codex-runtime'
 import { AppServerLifecycle } from './app-server-lifecycle'
 import { ExecutorActivityObserver } from './executor-activity-observer'
 import { ExecutorActivityRepository } from './executor-activity-repository'
@@ -95,12 +95,23 @@ function rememberLaunch(ticket: unknown): void {
 
 function confirmVisibleWindow(window: BrowserWindow): void {
   if (!courseWindowLoaded || !window.isVisible() || window.isMinimized()) return
+  if (!launchTickets.size) return
+  const readiness = inspectCodexRuntime().then(
+    ({ status, source, version }) => ({ status, source, version, requiredVersion: minimumCodexVersion }),
+    () => ({ status: 'unknown', requiredVersion: minimumCodexVersion })
+  )
   for (const ticket of launchTickets) {
     launchTickets.delete(ticket)
     // The launcher owns this temporary directory and removes it on timeout.
-    void writeFile(join(tmpdir(), ticket, 'visible'), String(process.pid), { flag: 'wx' })
+    const receipt = join(tmpdir(), ticket)
+    void writeFile(join(receipt, 'visible'), String(process.pid), { flag: 'wx' })
+      .then(async () => {
+        const pending = join(receipt, 'practice-runtime.pending')
+        await writeFile(pending, JSON.stringify(await readiness), { flag: 'wx' })
+        await rename(pending, join(receipt, 'practice-runtime'))
+      })
       .catch((error: NodeJS.ErrnoException) => {
-        if (error.code !== 'ENOENT') console.error('Could not confirm the course window:', error.code)
+        if (error.code !== 'ENOENT') console.error('Could not report course launch readiness:', error.code)
       })
   }
 }
@@ -454,7 +465,8 @@ const practiceCoordinator = new PracticeCoordinator(
       completions: loaded.progress.practiceCompletions
     })
   },
-  loadPortfolioReleaseContinuation
+  loadPortfolioReleaseContinuation,
+  useTestCodexGateway ? undefined : resolveCodexRuntimeCommand
 )
 const portfolioModuleCompletionService = new PortfolioModuleCompletionService(
   progressRepository,
@@ -983,7 +995,13 @@ function registerIpcHandlers(): void {
       || !/^[A-Za-z0-9_-]{1,500}$/.test(request.runId)
       || typeof request.generation !== 'number' || !Number.isSafeInteger(request.generation)
       || request.generation < 1) throw new Error('Invalid Practice task open request')
-    await practiceCoordinator.openTask({ runId: request.runId, generation: request.generation })
+    try {
+      await practiceCoordinator.openTask({ runId: request.runId, generation: request.generation })
+    } catch (error) {
+      const recovery = codexPracticeRecovery(error)
+      if (recovery) return recovery
+      throw error
+    }
     await enterPracticeCompanion()
   })
 

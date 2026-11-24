@@ -30,6 +30,7 @@ export async function detectSetup({
   nodeVersion,
   commandExists,
   commandSucceeds,
+  checkCodex = true,
   fileExists,
   appRoot,
   lockPath,
@@ -45,7 +46,7 @@ export async function detectSetup({
     electronRuntimeAvailable,
   ] = await Promise.all([
     commandExists("npm"),
-    commandExists("codex"),
+    checkCodex ? commandExists("codex") : false,
     packageLockFingerprint(lockPath, { readFile }),
     fileExists(electronRuntimePath),
   ]);
@@ -59,6 +60,7 @@ export async function detectSetup({
     nodeMajor,
     nodeCompatible: nodeVersionSupported(nodeVersion),
     npmAvailable,
+    checkCodex,
     codexAvailable,
     appServerAvailable,
     electronRuntimeAvailable,
@@ -75,7 +77,7 @@ export async function detectSetup({
 export function buildInstallPlan(report) {
   const actions = [];
 
-  if (!report.codexAvailable || !report.appServerAvailable) {
+  if (report.checkCodex !== false && (!report.codexAvailable || !report.appServerAvailable)) {
     actions.push({
       id: "codex-cli",
       title: "Codex connection tool",

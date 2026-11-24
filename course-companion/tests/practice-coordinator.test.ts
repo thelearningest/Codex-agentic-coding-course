@@ -2,6 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
+import { CodexRuntimeError } from '../electron/main/codex-runtime'
 import { PracticeCoordinator } from '../electron/main/practice-coordinator'
 import { PracticeDefinitionRepository } from '../electron/main/practice-definition-repository'
 import { PracticeEvidenceAdapterRegistry } from '../electron/main/practice-evidence-adapter-registry'
@@ -135,6 +136,38 @@ function harness(options: { failCreate?: boolean; failPrepare?: string } = {}) {
 }
 
 describe('PracticeCoordinator', () => {
+  it('reports an outdated CLI, retries the pending start, and resumes the same task after recovery', async () => {
+    const repository = new PracticeRunRepository(await temporaryDirectory('practice-outdated-codex-'))
+    const testHarness = harness()
+    let outdated = true
+    const coordinator = new PracticeCoordinator(repository, await definitions(), testHarness.executor,
+      undefined, testHarness.createId, undefined, undefined, undefined, undefined, undefined, undefined,
+      undefined, undefined, async () => {
+        if (outdated) {
+          throw new CodexRuntimeError({ status: 'outdated', source: 'codex-desktop', version: '0.147.0' })
+        }
+        return 'codex'
+      })
+
+    await expect(coordinator.startNew({ ...m1Identity, transfer: false })).rejects.toThrow('0.147.0')
+    const blocked = await coordinator.loadWorkspace(m1Identity)
+    expect(blocked.error).toContain('0.164.0')
+    expect(blocked.transition?.canRetry).toBe(true)
+    expect(testHarness.calls).toEqual([])
+
+    outdated = false
+    await coordinator.retry()
+    const active = (await repository.load()).activeRun
+    expect(active?.binding.threadId).toBe('thread-1')
+    outdated = true
+    await expect(coordinator.resume(m1Identity)).rejects.toThrow('0.147.0')
+    expect((await coordinator.loadWorkspace(m1Identity)).error).toContain('0.164.0')
+    outdated = false
+    await coordinator.resume(m1Identity)
+    expect((await repository.load()).activeRun?.binding.threadId).toBe('thread-1')
+    expect(testHarness.calls).toEqual(['create:run-1', 'prepare-target:thread-1', 'open:thread-1', 'open:thread-1'])
+  })
+
   it('reopens only the exact active task without preparing it or changing saved Practice state', async () => {
     const repository = new PracticeRunRepository(await temporaryDirectory('practice-open-task-'))
     const testHarness = harness()
