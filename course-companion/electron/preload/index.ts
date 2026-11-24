@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type {
   CompanionMode,
+  PracticeReturnTarget,
   AppSettings,
   AppSettingsUpdate,
   CompanionState,
@@ -116,6 +117,15 @@ const courseCompanionApi: CourseCompanionApi = {
   saveAppSettings: (update: AppSettingsUpdate) =>
     ipcRenderer.invoke('course:save-app-settings', update) as Promise<AppSettings>,
   showFullTeacher: () => ipcRenderer.invoke('course:show-full-teacher') as Promise<void>,
+  showLessonDuringPractice: () => ipcRenderer.invoke('course:show-lesson-during-practice') as Promise<boolean>,
+  returnToPracticePanel: () => ipcRenderer.invoke('course:return-to-practice-panel') as Promise<boolean>,
+  onLessonReviewRequested: (callback: (returnTarget: PracticeReturnTarget) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, returnTarget: PracticeReturnTarget) => {
+      if (returnTarget === 'full' || returnTarget === 'compact') callback(returnTarget)
+    }
+    ipcRenderer.on('course:lesson-review-requested', listener)
+    return () => ipcRenderer.removeListener('course:lesson-review-requested', listener)
+  },
   setFullTeacherVisible: (visible: boolean) => ipcRenderer.invoke('course:set-full-teacher-visible', visible) as Promise<void>,
   setCompanionMode: (mode: CompanionMode) =>
     ipcRenderer.invoke('course:set-companion-mode', mode) as Promise<void>,

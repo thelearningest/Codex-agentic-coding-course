@@ -9,6 +9,7 @@ import {
   portfolioBuildVersion,
   type CourseLessonId,
   type PracticeState,
+  type PracticeReturnTarget,
   type CheckpointId,
   type LearnerProgress,
   type LessonId,
@@ -2244,12 +2245,13 @@ const currentModuleAnchor = { [ONBOARDING_ANCHOR_ATTRIBUTE]: 'current-module' }
 type TeacherOverlayProps = {
   onClose: () => void
   practiceMode?: boolean
+  hidden?: boolean
 }
 
-function TeacherOverlay({ onClose, practiceMode = false }: TeacherOverlayProps) {
+function TeacherOverlay({ onClose, practiceMode = false, hidden = false }: TeacherOverlayProps) {
   return (
-    <aside className={'pixel-teacher-overlay' + (practiceMode ? ' is-practice-full' : '')} aria-label="Triết, giáo viên đồng hành">
-      <TeacherWorkspace embedded onClose={onClose} />
+    <aside hidden={hidden} className={'pixel-teacher-overlay' + (practiceMode ? ' is-practice-full' : '')} aria-label="Triết, giáo viên đồng hành">
+      <TeacherWorkspace embedded visible={!hidden} onClose={onClose} />
     </aside>
   )
 }
@@ -2580,6 +2582,9 @@ export function LearningWindow() {
   const [hasTeacherConversation, setHasTeacherConversation] = useState<boolean | null>(null)
   const [practiceBriefOpen, setPracticeBriefOpen] = useState(false)
   const [practiceFullOpen, setPracticeFullOpen] = useState(false)
+  // Set while the learner rereads slides from an active Practice.
+  const [practiceReturnTarget, setPracticeReturnTarget] = useState<PracticeReturnTarget | null>(null)
+  const [practiceReturnBusy, setPracticeReturnBusy] = useState(false)
   const [outlineSceneId, setOutlineSceneId] = useState<SceneId | null>(null)
   const outlineRef = useRef<HTMLDetailsElement | null>(null)
   const [reviewHistoryIndex, setReviewHistoryIndex] = useState<number | null>(null)
@@ -2692,6 +2697,7 @@ export function LearningWindow() {
           setProgress(loadResult.progress)
           setPracticeBriefOpen(false)
           setPracticeFullOpen(false)
+          setPracticeReturnTarget(null)
           setTeacherOpen(false)
           setDestination('lesson')
           setView('app')
@@ -2737,8 +2743,31 @@ export function LearningWindow() {
     pendingDecisionsRef.current = {}
     setDecisionOverrides({})
   }
+  const returnToPractice = async () => {
+    const api = window.courseCompanion
+    if (!api || !practiceReturnTarget || practiceReturnBusy) return
+    setPracticeReturnBusy(true)
+    setError('')
+    try {
+      if (practiceReturnTarget === 'full') {
+        await api.showFullTeacher()
+      } else if (!(await api.returnToPracticePanel())) {
+        setPracticeReturnTarget(null)
+        return
+      }
+      setPracticeReturnTarget(null)
+    } catch {
+      setError('Chưa quay lại được Practice. Hãy thử lại.')
+    } finally {
+      setPracticeReturnBusy(false)
+    }
+  }
   // Every way into Triết chat from this window goes through here.
   const openTeacher = () => {
+    if (practiceReturnTarget === 'full') {
+      void returnToPractice()
+      return
+    }
     setTeacherOpen(true)
     if (effectiveDecisions[TEACHER_CHAT_OPENED_DECISION_KEY] !== 'yes') {
       saveOnboardingDecision(TEACHER_CHAT_OPENED_DECISION_KEY, 'yes')
@@ -2750,12 +2779,32 @@ export function LearningWindow() {
     const unsubscribe = window.courseCompanion?.onFullTeacherRequested(() => {
       setPracticeBriefOpen(false)
       setPracticeFullOpen(true)
+      setPracticeReturnTarget(null)
       openTeacher()
     })
     return () => {
       unsubscribe?.()
     }
   })
+
+  // Rereading slides keeps Practice active; resume the saved learning page.
+  useEffect(() => {
+    const unsubscribe = window.courseCompanion?.onLessonReviewRequested((returnTarget) => {
+      setPracticeBriefOpen(false)
+      // A full review stays mounted but hidden, so its hint and scroll survive the switch.
+      if (returnTarget === 'compact') {
+        setPracticeFullOpen(false)
+        setTeacherOpen(false)
+      }
+      setOutlineSceneId(null)
+      setReviewHistoryIndex(null)
+      setDestination('lesson')
+      setPracticeReturnTarget(returnTarget)
+    })
+    return () => unsubscribe?.()
+  }, [])
+
+
 
   const startNew = async () => {
     setBusy(true)
@@ -3091,8 +3140,10 @@ export function LearningWindow() {
     setVisualExpanded(false)
     setSecondaryVisualExpanded(false)
     setPracticeBriefOpen(false)
-    setPracticeFullOpen(false)
-    setTeacherOpen(false)
+    if (practiceReturnTarget !== 'full') {
+      setPracticeFullOpen(false)
+      setTeacherOpen(false)
+    }
     setError('')
   }
 
@@ -3317,7 +3368,7 @@ export function LearningWindow() {
     <main data-scene-id={displayedSceneId} data-outline-preview={outlineSceneId !== null} className={`pixel-learning-shell${scene.lessonId === 'module-2' ? ' is-module-two' : ''}${scene.lessonId === 'module-3' ? ' is-module-three' : ''}${scene.lessonId === 'module-4' ? ' is-module-four' : ''}${lessonVisual?.annotations ? ' has-publication-walkthrough' : ''}${usesLessonBoard ? ' has-model-lesson-board' : ''}${floatingCopyPrompt ? ' has-stacked-copy-prompt' : ''}${usesModuleTwoVisualDialogue ? ' has-module-two-visual-dialogue' : ''}${usesModuleTwoVisualGallery ? ' has-module-two-visual-gallery' : ''}${displayedSceneId === 'module-3-git-commit' || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-1-setup-checklist' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual?.annotations ? ' has-stacked-visual-dialogue' : ''}`}>
       <div className="pixel-scene-world" style={sceneStyle} aria-hidden="true" />
 
-      <header className="pixel-hud">
+      <header className={`pixel-hud${practiceReturnTarget ? ' has-practice-return' : ''}`}>
         <button className="pixel-brand pixel-brand--button" type="button" onClick={() => {
           setApprovalFocus(null)
           setVisualExpanded(false)
@@ -3335,9 +3386,12 @@ export function LearningWindow() {
         }}>
           <summary aria-label={`Mở mục lục ${outlineModuleLabel}`}>
             <span className="pixel-outline__dots" aria-hidden="true">•••</span>
-            <span>{scene.lessonId === 'module-2'
+            <span className="pixel-outline__label">{scene.lessonId === 'module-2'
               ? `${outlineModuleLabel} · PHẦN ${outlineCurrentIndex + 1}/${outlineItems.length}`
               : lessonContextLabel}</span>
+            {practiceReturnTarget ? (
+              <span className="pixel-outline__short" aria-hidden="true">{outlineCurrentIndex + 1}/{outlineItems.length}</span>
+            ) : null}
           </summary>
           <div className="pixel-outline-menu">
             <strong>{outlineModuleLabel} · {outlineItems.length} PHẦN</strong>
@@ -3363,6 +3417,18 @@ export function LearningWindow() {
           </div>
         </details>
         <div className="pixel-hud-actions">
+          {practiceReturnTarget ? (
+            <button
+              className="pixel-practice-return"
+              type="button"
+              aria-busy={practiceReturnBusy}
+              disabled={practiceReturnBusy}
+              onClick={() => void returnToPractice()}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" /></svg>
+              Quay lại Practice
+            </button>
+          ) : null}
           {/* The button clips its zoomed portrait, so the dot sits on a wrapper. */}
           <span className="pixel-teacher-dot-anchor">
             <button className="pixel-hud-teacher" type="button" onClick={openTeacher} aria-label="Trò chuyện với Triết" title="Trò chuyện với Triết" {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'lesson-teacher' }}>
@@ -3744,11 +3810,16 @@ export function LearningWindow() {
       {teacherOpen ? (
         <TeacherOverlay
           practiceMode={practiceFullOpen}
+          hidden={practiceReturnTarget === 'full'}
           onClose={() => {
             const returningToLesson = practiceFullOpen
             setTeacherOpen(false)
             setPracticeFullOpen(false)
-            if (returningToLesson) void refreshAfterPractice()
+            if (returningToLesson) {
+              void refreshAfterPractice()
+              // Closing the full review must not leave an active Practice without Triết.
+              void window.courseCompanion?.showLessonDuringPractice().catch(() => false)
+            }
           }}
         />
       ) : null}

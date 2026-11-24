@@ -6237,3 +6237,72 @@ button:focus-visible {
   .pixel-reset-dialog > div { flex-direction: column-reverse; }
   .pixel-reset-dialog button { width: 100%; }
 }
+
+/* Switching between lesson slides and an active Practice */
+.pixel-practice-return {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px 0 11px;
+  border: 1px solid var(--pixel-yellow);
+  border-radius: var(--obsidian-radius-control);
+  color: var(--obsidian-canvas);
+  background: var(--pixel-yellow);
+  font: 800 12px/1 var(--app-font);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.pixel-practice-return:hover:not(:disabled) { filter: brightness(1.06); }
+.pixel-practice-return:focus-visible { outline: 3px solid var(--pixel-white); outline-offset: 2px; }
+.pixel-practice-return:disabled { cursor: wait; opacity: .72; }
+.pixel-practice-return svg,
+.pixel-lesson-review svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pixel-outline__short { display: none; }
+
+.pixel-chat-context.has-lesson-review {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  align-items: center;
+}
+.pixel-chat-context.has-lesson-review > span,
+.pixel-chat-context.has-lesson-review > strong { grid-column: 1; }
+.pixel-lesson-review {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 10px;
+  border: 1px solid var(--pixel-yellow);
+  border-radius: var(--obsidian-radius-control);
+  color: var(--pixel-yellow);
+  background: transparent;
+  font: 700 12px/1 var(--app-font);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+.pixel-lesson-review:hover:not(:disabled) { color: var(--obsidian-canvas); background: var(--pixel-yellow); }
+.pixel-lesson-review:focus-visible { outline: 3px solid var(--pixel-yellow); outline-offset: 2px; }
+.pixel-lesson-review:disabled { cursor: wait; opacity: .72; }
+.pixel-lesson-review-error { margin: 6px 0 0; color: var(--pixel-white); font: 600 12px/1.4 var(--app-font); }
+
+@media (max-width: 820px) {
+  .pixel-hud.has-practice-return { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .pixel-hud.has-practice-return .pixel-outline__label { display: none; }
+  .pixel-hud.has-practice-return .pixel-outline__short { display: inline; font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+  .pixel-practice-return { min-height: 32px; padding: 0 10px 0 8px; gap: 6px; }
+}
+.pixel-teacher-overlay[hidden] { display: none; }

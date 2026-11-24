@@ -8,6 +8,7 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import type {
   CompanionMode,
+  PracticeReturnTarget,
   AppSettingsUpdate,
   PracticeFixtureRequest,
   PracticeGuideContext,
@@ -1203,6 +1204,33 @@ function registerIpcHandlers(): void {
     mainWindow?.webContents.send('course:full-teacher-requested')
     companionWindow?.hide()
     companionWindow?.webContents.send('course:companion-mode-changed', companionMode)
+  })
+
+  // Lets the learner reread lesson slides while Practice stays active. The
+  // Teacher bubble stays visible so Practice is never left without Triết.
+  ipcMain.handle('course:show-lesson-during-practice', async (event): Promise<boolean> => {
+    if (!(await practiceRunRepository.load()).activeRun) return false
+    const returnTarget: PracticeReturnTarget = event.sender.id === mainWindow?.webContents.id ? 'full' : 'compact'
+    companionMode = 'compact'
+    companionWindow?.webContents.send('course:companion-mode-changed', companionMode)
+    positionCompanion(companionMode)
+    await teacherRepository.saveMode(companionMode)
+    if (mainWindow?.isMinimized()) mainWindow.restore()
+    mainWindow?.show()
+    mainWindow?.focus()
+    mainWindow?.webContents.send('course:lesson-review-requested', returnTarget)
+    return true
+  })
+
+  ipcMain.handle('course:return-to-practice-panel', async (event): Promise<boolean> => {
+    if (event.sender.id !== mainWindow?.webContents.id) throw new Error('Invalid Practice return request')
+    if (!(await practiceRunRepository.load()).activeRun) return false
+    mainWindow?.hide()
+    companionMode = 'expanded'
+    companionWindow?.webContents.send('course:companion-mode-changed', companionMode)
+    positionCompanion(companionMode)
+    await teacherRepository.saveMode(companionMode)
+    return true
   })
 
   ipcMain.handle('course:set-full-teacher-visible', (event, visible: unknown) => {

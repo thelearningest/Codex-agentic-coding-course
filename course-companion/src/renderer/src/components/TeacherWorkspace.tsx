@@ -128,6 +128,8 @@ export function TeacherWorkspace({
   const [hint, setHint] = useState<PracticeHint | null>(null)
   const [hintError, setHintError] = useState('')
   const [returnBusy, setReturnBusy] = useState(false)
+  const [lessonReviewBusy, setLessonReviewBusy] = useState(false)
+  const [lessonReviewError, setLessonReviewError] = useState('')
   const [planningActionBusy, setPlanningActionBusy] = useState(false)
   const [testFixturesEnabled, setTestFixturesEnabled] = useState(false)
   const composerRef = useRef<HTMLTextAreaElement>(null)
@@ -178,10 +180,10 @@ export function TeacherWorkspace({
   }, [reviewPresentationKey, reviewBusy, visible, workspaceLoaded])
 
   useEffect(() => {
-    if (!embedded || !window.courseCompanion) return
+    if (!embedded || !visible || !window.courseCompanion) return
     void window.courseCompanion.setFullTeacherVisible(true)
     return () => { void window.courseCompanion?.setFullTeacherVisible(false) }
-  }, [embedded])
+  }, [embedded, visible])
 
   useEffect(() => {
     if (hint && practiceRef.current) practiceRef.current.scrollTop = 0
@@ -547,6 +549,22 @@ export function TeacherWorkspace({
   const firstBuild = workspace?.activePractice?.practiceId === 'm3-portfolio-build'
     && isPortfolioBuildLesson(context?.checkpointId)
   const practicePassed = workspace?.review?.status === 'passed' && workspace.review.canReturn
+  // The first Module 3 build already has its own "Quay lại bài học" action.
+  const canReviewLesson = Boolean(practiceMode && workspace?.activePractice && !firstBuild && window.courseCompanion)
+  const reviewLesson = async () => {
+    if (!window.courseCompanion || lessonReviewBusy) return
+    setLessonReviewBusy(true)
+    setLessonReviewError('')
+    try {
+      if (!(await window.courseCompanion.showLessonDuringPractice())) {
+        setLessonReviewError('Practice này đã kết thúc. Hãy mở lại khóa học từ cửa sổ chính.')
+      }
+    } catch {
+      setLessonReviewError('Chưa mở được bài học. Hãy thử lại.')
+    } finally {
+      setLessonReviewBusy(false)
+    }
+  }
   const contextFreshnessNote = teacherRuntime.contextFreshness === 'stale'
     ? 'Ngữ cảnh Codex đã cũ.'
     : teacherRuntime.contextFreshness === 'disconnected'
@@ -607,14 +625,26 @@ export function TeacherWorkspace({
         <span>{teacherStatusDetail}</span>
       </div> : null}
 
-      {!compactPractice ? <div className="pixel-chat-context">
+      {!compactPractice || canReviewLesson ? <div className={'pixel-chat-context' + (canReviewLesson ? ' has-lesson-review' : '')}>
         <span>{practiceMode ? 'Bước học hiện tại' : 'BƯỚC HỌC HIỆN TẠI'}</span>
         <strong>
           {workspace?.activePractice
             ? workspace.title
             : context ? 'Bước hiện tại trong khóa học' : 'Chưa bắt đầu bài học'}
         </strong>
+        {canReviewLesson ? (
+          <button
+            className="pixel-lesson-review"
+            type="button"
+            disabled={lessonReviewBusy || returnBusy}
+            onClick={() => void reviewLesson()}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 1 4 17.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 0 1.5-1.5z" /></svg>
+            Xem lại bài học
+          </button>
+        ) : null}
       </div> : null}
+      {lessonReviewError ? <p className="pixel-lesson-review-error" role="alert">{lessonReviewError}</p> : null}
 
       {!workspaceLoaded ? (
         <div className="pixel-practice-status" role="status">Đang tải không gian của Triết…</div>

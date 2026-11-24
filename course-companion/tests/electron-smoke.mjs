@@ -688,7 +688,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   assert.equal(await compactReview.getByText('Mục tiêu', { exact: true }).count(), 0)
   assert.equal(await compactReview.getByText('Kết quả theo từng tiêu chí', { exact: true }).count(), 0)
   assert.equal(await compactReview.getByText('CẤU HÌNH ĐÃ QUAN SÁT', { exact: true }).count(), 0)
-  assert.equal(await compactReview.getByText('Bước học hiện tại', { exact: true }).count(), 0)
+  await verifyLessonReviewFromCompactPractice(page, companionPage, electronApp, compactReview)
   await companionPage.getByRole('button', { name: 'Mở Triết toàn màn hình', exact: true }).click()
   await waitForSnapshot(
     electronApp,
@@ -711,6 +711,7 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
     await capture(page, 'practice-hint-narrow.png')
     await page.setViewportSize({ width: 1180, height: 780 })
   }
+  await verifyLessonReviewFromFullPractice(page, electronApp, fullTeacher)
   await fullTeacher.getByRole('button', { name: 'Đóng gợi ý', exact: true }).click()
   assert.equal(await fullTeacher.getByRole('button', { name: 'Cần gợi ý cho Practice?', exact: true }).evaluate(
     (element) => globalThis.document.activeElement === element), true)
@@ -760,6 +761,64 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()
   await page.getByText('HOÀN THÀNH', { exact: true }).first().waitFor()
+}
+
+// Issue #10: reread slides from Practice and come back with one action, keeping Triết and the hint.
+async function verifyLessonReviewFromCompactPractice(page, companionPage, electronApp, compactReview) {
+  const runBefore = (await companionPage.evaluate(() => globalThis.courseCompanion.loadPracticeWorkspace())).activePractice
+  const returnButton = page.getByRole('button', { name: 'Quay lại Practice', exact: true })
+  for (let round = 0; round < 2; round += 1) {
+    await compactReview.getByRole('button', { name: 'Xem lại bài học', exact: true }).click()
+    await waitForSnapshot(
+      electronApp,
+      (windows) => learningWindow(windows)?.visible === true && companionWindow(windows)?.visible === true,
+      'Expected the lesson to open while the Teacher bubble stays visible'
+    )
+    await returnButton.waitFor()
+    assert.equal(await companionPage.getByRole('button', { name: 'Mở cửa sổ Triết', exact: true }).isVisible(), true)
+    assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+    if (round === 0) {
+      await page.setViewportSize({ width: 390, height: 844 })
+      assert.equal(await returnButton.isVisible(), true)
+      assert.equal(await page.locator('.pixel-hud').evaluate((element) => element.scrollWidth > element.clientWidth), false)
+      await capture(page, 'practice-lesson-review-narrow.png')
+      await page.setViewportSize({ width: 1180, height: 780 })
+      await capture(page, 'practice-lesson-review-desktop.png')
+    }
+    await returnButton.click()
+    await waitForSnapshot(
+      electronApp,
+      (windows) => learningWindow(windows)?.visible === false && companionWindow(windows)?.visible === true,
+      'Expected "Quay lại Practice" to return to the compact Practice panel'
+    )
+    await compactReview.waitFor()
+    assert.equal(await returnButton.count(), 0)
+    assert.equal(await compactReview.locator('.practice-hint').count(), 1)
+  }
+  const runAfter = (await companionPage.evaluate(() => globalThis.courseCompanion.loadPracticeWorkspace())).activePractice
+  assert.equal(runAfter?.runId, runBefore?.runId)
+  assert.equal(runAfter?.generation, runBefore?.generation)
+}
+
+async function verifyLessonReviewFromFullPractice(page, electronApp, fullTeacher) {
+  const returnButton = page.getByRole('button', { name: 'Quay lại Practice', exact: true })
+  await fullTeacher.getByRole('button', { name: 'Xem lại bài học', exact: true }).click()
+  await waitForSnapshot(
+    electronApp,
+    (windows) => learningWindow(windows)?.visible === true && companionWindow(windows)?.visible === true,
+    'Expected the full Practice review to show the lesson and bring back the Teacher bubble'
+  )
+  await returnButton.waitFor()
+  assert.equal(await fullTeacher.isVisible(), false)
+  await returnButton.click()
+  await waitForSnapshot(
+    electronApp,
+    (windows) => learningWindow(windows)?.visible === true && companionWindow(windows)?.visible === false,
+    'Expected "Quay lại Practice" to reopen the full Practice review'
+  )
+  await fullTeacher.waitFor()
+  assert.equal(await returnButton.count(), 0)
+  assert.equal(await fullTeacher.getByRole('status', { name: 'Gợi ý của Triết', exact: true }).count(), 1)
 }
 
 async function assertNavigationAlignment(page, label) {

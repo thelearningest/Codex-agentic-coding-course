@@ -19,6 +19,8 @@ export type RuntimeInfo = {
 }
 
 export type CompanionMode = 'compact' | 'expanded'
+/** Where "Quay lại Practice" takes the learner: the full review screen or the compact Teacher panel. */
+export type PracticeReturnTarget = 'full' | 'compact'
 
 export type AppSettings = {
   companionMode: CompanionMode
@@ -1426,6 +1428,9 @@ export type CourseCompanionApi = {
   loadAppSettings: () => Promise<AppSettings>
   saveAppSettings: (update: AppSettingsUpdate) => Promise<AppSettings>
   showFullTeacher: () => Promise<void>
+  showLessonDuringPractice: () => Promise<boolean>
+  returnToPracticePanel: () => Promise<boolean>
+  onLessonReviewRequested: (callback: (returnTarget: PracticeReturnTarget) => void) => () => void
   setFullTeacherVisible: (visible: boolean) => Promise<void>
   setCompanionMode: (mode: CompanionMode) => Promise<void>
   quitApp: () => Promise<void>
