@@ -4206,6 +4206,17 @@ button:focus-visible {
   background: transparent;
 }
 
+.practice-setup-feedback { min-width: 0; font: 400 13px/1.6 var(--app-font); }
+.practice-setup-feedback > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; cursor: pointer; list-style: none; }
+.practice-setup-feedback > summary::-webkit-details-marker { display: none; }
+.practice-setup-feedback > summary > span { margin-right: auto; color: var(--pixel-muted); }
+.practice-setup-feedback > summary > strong { padding: 5px 9px; border: 1px solid currentColor; border-radius: 6px; color: var(--pixel-yellow); font: inherit; }
+.practice-setup-feedback > summary > strong::after { content: ''; display: inline-block; width: 6px; height: 6px; margin: 0 2px 3px 8px; border: solid currentColor; border-width: 0 1px 1px 0; transform: rotate(45deg); }
+.practice-setup-feedback[open] > summary > strong::after { transform: rotate(225deg); margin-bottom: 0; }
+.practice-setup-feedback ul { list-style: none; padding: 0; }
+.practice-setup-feedback li { padding: 8px 0; border-bottom: 1px solid var(--obsidian-line-soft); overflow-wrap: anywhere; }
+.practice-setup-feedback li p { margin: 3px 0 0; }
+
 .practice-compact-progress {
   align-items: start;
   display: grid;

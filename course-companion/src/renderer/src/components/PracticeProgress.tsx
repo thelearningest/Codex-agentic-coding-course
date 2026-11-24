@@ -98,9 +98,6 @@ const portfolioIssueLabels: Record<string, string> = {
 }
 
 const criterionNextActions: Record<string, string> = {
-  'effort-matches': 'Trong task Codex, chọn Effort Medium hoặc High rồi duyệt lại.',
-  'approval-matches': 'Trong task Codex, chọn Approve for me rồi duyệt lại.',
-  'full-access-off': 'Trong task Codex, tắt Full access rồi duyệt lại.',
   'prd-quality': 'Sửa vấn đề đầu tiên trong PRD rồi phê duyệt lại phiên bản mới.',
   'plan-quality': 'Sửa vấn đề đầu tiên trong implementation plan rồi kiểm tra lại.',
   'artifact-alignment': 'Đối chiếu lại PRD và implementation plan, sau đó xác nhận alignment.',
@@ -139,6 +136,15 @@ export function PracticeProgress({
     ? 'Sửa các mục được ghi dưới tài liệu rồi kiểm tra lại.'
     : 'Lưu đủ sáu tệp rồi kiểm tra lại.'
   const reviewResult = workspace.review?.result
+  const configurationPractice = workspace.activePractice?.practiceId === 'm1-codex-safe-setup'
+    || workspace.checklist.some((step) => step.id === 'set-model')
+  const setupFeedback = configurationPractice && reviewStatus === 'needs-work'
+    ? setupSettings.flatMap(setting => {
+        const result = reviewResult?.criteria.find(criterion => criterion.criterionId === setting.criterionId)
+        return result ? [{ setting, result }] : []
+      })
+    : []
+  const nextSetupFeedback = setupFeedback.find(({ result }) => result.status !== 'satisfied')
   const unresolvedCriterion = reviewResult?.criteria.find((criterion) => criterion.status !== 'satisfied')
   const nextChecklistStep = workspace.checklist.find((step) =>
     step.status === 'current' || step.status === 'stale' || step.status === 'pending')
@@ -150,12 +156,11 @@ export function PracticeProgress({
     ? 'Quay lại khóa học để tiếp tục.'
     : needsPackageSubmission ? packageSubmissionLabel
     : planningReviewPending ? planningNextAction
+    : nextSetupFeedback ? nextSetupFeedback.result.explanation
     : unresolvedCriterion
       ? criterionNextActions[unresolvedCriterion.criterionId] ?? unresolvedCriterion.explanation
       : nextChecklistStep?.reason
         ?? (nextChecklistStep ? `Hoàn thành: ${nextChecklistStep.title}.` : 'Bổ sung bằng chứng rồi duyệt lại.')
-  const configurationPractice = workspace.activePractice?.practiceId === 'm1-codex-safe-setup'
-    || workspace.checklist.some((step) => step.id === 'set-model')
   const configuration = workspace.configuration
   const configurationFresh = configuration?.freshness === 'fresh'
     && configuration.connection === 'connected'
@@ -184,6 +189,7 @@ export function PracticeProgress({
     ? 'Quay lại khóa học để tiếp tục.'
     : needsPackageSubmission ? packageSubmissionLabel
     : planningReviewPending ? planningNextAction
+    : nextSetupFeedback ? nextSetupFeedback.result.explanation
     : unresolvedCriterion && criterionNextActions[unresolvedCriterion.criterionId]
       ? criterionNextActions[unresolvedCriterion.criterionId]
       : workspace.portfolioPackage && unresolvedCriterion
@@ -204,7 +210,8 @@ export function PracticeProgress({
     'disable-full-access': 'Giữ Full access ở trạng thái tắt trong task Codex.'
   }
   const compactGuidance = (step: PracticeWorkspaceView['checklist'][number]) =>
-    compactConfigurationGuidance[step.id]
+    setupFeedback.find(({ setting }) => setting.stepId === step.id)?.result.explanation
+      ?? compactConfigurationGuidance[step.id]
       ?? (step.status === 'completed'
         ? 'Bước này đã được xác minh trong lần duyệt gần nhất.'
         : step.status === 'pending' || step.status === 'upcoming'
@@ -230,6 +237,25 @@ export function PracticeProgress({
       {onReturn ? <PracticeReturnAction busy={returnBusy} disabled={returnDisabled} compact={compact} onReturn={onReturn} /> : null}
     </PracticeSuccess>
   ) : null
+  const progressCount = `${completedStepCount}/${workspace.checklist.length} bước đã xác minh`
+  const setupDisclosure = setupFeedback.length > 0 ? (
+    <details className="practice-setup-feedback" key={reviewResult?.sourceDigest}>
+      <summary>
+        {compact ? <span>{progressCount}</span> : null}
+        <strong>Cần bổ sung</strong>
+      </summary>
+      <ul aria-label="Kết quả kiểm tra từng thiết lập">
+        {setupFeedback.map(({ setting, result }) => (
+          <li key={setting.key}>
+            <b>{setting.label} · {result.status === 'satisfied' ? 'Đã xác minh'
+              : result.status === 'unsatisfied' ? 'Cần chỉnh sửa' : 'Chưa xác minh được'}</b>
+            <p>{result.explanation}</p>
+          </li>
+        ))}
+      </ul>
+      <p>Bấm Mở lại task Codex để kiểm tra các mục trên, rồi bấm Nộp bài.</p>
+    </details>
+  ) : null
   if (compact) {
     return (
       <section className="practice-progress is-compact" aria-label="Tiến độ Practice">
@@ -240,15 +266,15 @@ export function PracticeProgress({
             <strong>{compactNextAction}</strong>
           </div>
         ) : null}
-        {!planningPackage ? <div className="practice-compact-progress" role="status">
+        {setupDisclosure ?? (!planningPackage ? <div className="practice-compact-progress" role="status">
           <div>
             <small>Tiến độ</small>
-            <strong>{completedStepCount}/{workspace.checklist.length} bước đã xác minh</strong>
+            <strong>{progressCount}</strong>
           </div>
           {!practicePassed ? <b className={`is-${reviewStatus ?? 'not-reviewed'}`}>
             {reviewStatus === 'needs-work' ? 'Cần bổ sung' : 'Chưa duyệt'}
           </b> : null}
-        </div> : null}
+        </div> : null)}
         {workspace.portfolioPackage && !planningReviewPending && reviewStatus === 'needs-work' && reviewResult ? (
           <section className="practice-review-result is-needs-work" tabIndex={-1} aria-label="Kết quả duyệt Practice">
             <p>{reviewResult.summary}</p>
@@ -329,12 +355,12 @@ export function PracticeProgress({
               <strong>{reviewNextAction}</strong>
             </div> : null}
             <small>Kết quả duyệt</small>
-            <strong>{practicePassed ? 'Các tiêu chí đã đáp ứng' : reviewStatus === 'passed' ? 'Đã đạt' : 'Cần bổ sung'}</strong>
+            {setupDisclosure ?? <strong>{practicePassed ? 'Các tiêu chí đã đáp ứng' : reviewStatus === 'passed' ? 'Đã đạt' : 'Cần bổ sung'}</strong>}
             {comparisonSummary ? <p className="practice-review-change">{comparisonSummary}</p> : null}
             <p>{reviewResult?.summary ?? (reviewStatus === 'passed'
               ? 'Bằng chứng đáp ứng các tiêu chí bắt buộc.'
               : 'Hãy bổ sung bằng chứng theo các bước còn lại rồi yêu cầu duyệt lại.')}</p>
-            {reviewResult ? (
+            {reviewResult && !setupDisclosure ? (
               <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
                 {reviewResult.criteria.map((criterion) => (
                   <li className={`is-${criterion.status}`} key={criterion.criterionId}>

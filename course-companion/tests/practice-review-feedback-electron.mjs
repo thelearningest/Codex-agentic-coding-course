@@ -25,6 +25,7 @@ await writeFile(join(root, 'index.html'), '<meta charset="utf-8"><link rel="styl
 await build({
   stdin: { resolveDir: process.cwd(), loader: 'tsx', contents: `
 import { createRoot } from 'react-dom/client'
+import { PracticeProgress } from './src/renderer/src/components/PracticeProgress'
 import { TeacherWorkspace } from './src/renderer/src/components/TeacherWorkspace'
 import '@fontsource/be-vietnam-pro/400.css'
 import '@fontsource/be-vietnam-pro/700.css'
@@ -79,6 +80,21 @@ window.feedbackFixture = {
       <TeacherWorkspace key={fixtureId} embedded={embedded} onClose={() => {}} />
     </main>)
   },
+  mountSetup(compact) {
+    root.render(<div className="practice-workflow"><PracticeProgress compact={compact} workspace={{
+      activePractice: { practiceId: 'm1-codex-safe-setup' },
+      checklist: [
+        { id: 'set-effort', title: 'Chọn Effort Medium hoặc High', status: 'completed' },
+        { id: 'set-approval', title: 'Chọn Approval', status: 'current' },
+        { id: 'disable-full-access', title: 'Tắt Full access', status: 'upcoming' }
+      ],
+      review: { status: 'needs-work', result: { criteria: [
+        { criterionId: 'effort-matches', status: 'satisfied', explanation: 'Effort đang khớp: Medium.' },
+        { criterionId: 'approval-matches', status: 'unverifiable', explanation: 'Triết chưa đọc được Approval hiện tại. Mở đúng task Codex rồi thử kiểm tra lại.' },
+        { criterionId: 'full-access-off', status: 'unsatisfied', explanation: 'Full access hiện là On; cần Off.' }
+      ] } }
+    }} /></div>)
+  },
   isStartupPending() { return Boolean(releaseStartup) },
   releaseStartup() { holdStartup = false; releaseStartup(); releaseStartup = null },
   settle(verdict) {
@@ -107,6 +123,27 @@ try {
   app = await electron.launch({ executablePath: electronExecutable, args: [main] })
   const page = await app.firstWindow()
   await page.goto(pathToFileURL(join(root, 'index.html')).href)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  for (const width of [320, 1180]) {
+    const compact = width === 320
+    await page.setViewportSize({ width, height: 720 })
+    await page.evaluate(compact => globalThis.feedbackFixture.mountSetup(compact), compact)
+    const next = page.locator(compact ? '.practice-compact-next' : '.practice-review-next-action')
+    assert.match(await next.innerText(), /chưa đọc được Approval/)
+    const toggle = page.locator('.practice-setup-feedback > summary')
+    const list = page.getByRole('list', { name: 'Kết quả kiểm tra từng thiết lập' })
+    assert.equal(await list.isVisible(), false)
+    await toggle.focus()
+    await toggle.press('Enter')
+    assert.match(await list.innerText(), /Effort · Đã xác minh/)
+    assert.match(await list.innerText(), /Approval · Chưa xác minh được/)
+    assert.match(await list.innerText(), /Full access hiện là On/)
+    assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
+    await page.screenshot({ path: join(screenshots, `setup-feedback-${width}.png`), animations: 'disabled' })
+    await toggle.click()
+    await list.waitFor({ state: 'hidden' })
+  }
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   for (const embedded of [false, true]) {
     for (const verdict of ['needs-work', 'passed', 'error']) {
       await page.setViewportSize({ width: embedded ? 1180 : 380, height: embedded ? 780 : 640 })

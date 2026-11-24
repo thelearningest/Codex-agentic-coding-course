@@ -237,6 +237,8 @@ The learner's instructions now appear above **Bắt đầu thực hành**. The l
 
 Typecheck, lint, build, 126 focused tests, 15 startup checks and the disposable Electron suite passed. The guide fits at 1180, 390 and 320 px. With a canonical temporary directory the full unit suite passed 913 tests and failed the same two tests as the unmodified checkout (the frozen image source manifest and the CSS palette). A live learner rehearsal is pending.
 
+For `m1-codex-safe-setup`, **Cần bổ sung** now opens the saved review of Effort, Approval and Full access. The next action uses the first unresolved setting's review explanation. The focused feedback check passed in Electron at 320 and 1180 px with simulated results, including keyboard and pointer interaction. Typecheck, lint, build, 18 Module 1 renderer tests, 15 startup checks, Electron smoke and the Practice guide passed. The full unit run had 914 passes and the two previously recorded failures above. The separate Teacher chat check timed out twice waiting for a reply to appear in the windowed panel after minimizing the learning window. Next, verify the feedback against a live learner submission. Pilot acceptance is pending.
+
 ### Module 1 orientation and final quiz, 24 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
