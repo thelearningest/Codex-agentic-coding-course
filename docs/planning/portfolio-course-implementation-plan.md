@@ -239,6 +239,10 @@ Typecheck, lint, build, 126 focused tests, 15 startup checks and the disposable 
 
 For `m1-codex-safe-setup`, **Cần bổ sung** now opens the saved review of Effort, Approval and Full access. The next action uses the first unresolved setting's review explanation. The focused feedback check passed in Electron at 320 and 1180 px with simulated results, including keyboard and pointer interaction. Typecheck, lint, build, 18 Module 1 renderer tests, 15 startup checks, Electron smoke and the Practice guide passed. The full unit run had 914 passes and the two previously recorded failures above. The separate Teacher chat check timed out twice waiting for a reply to appear in the windowed panel after minimizing the learning window. Next, verify the feedback against a live learner submission. Pilot acceptance is pending.
 
+The setup review now checks each observed setting independently. A missing Effort can leave Approval and Full access verified. The reader checks the configured effort returned by the bound thread when the saved settings omit it, and can recover partial thread-start observations from older attempts. The reader keeps an absent value unknown when neither source supplies it. In an isolated Codex runtime check, a new task inherited Medium with zero turns and no settings edit. No change to task creation was needed.
+
+Typecheck, lint, build, 70 focused tests, 15 startup checks and the full Electron suite passed. The final Electron run passed the Module 2 link-color and Teacher chat checks that had failed on earlier attempts. The full unit run passed 917 tests with the same two recorded failures. Next, rehearse an untouched inherited setting through the desktop Practice submission with a learner. Pilot acceptance is pending.
+
 ### Module 1 orientation and final quiz, 24 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

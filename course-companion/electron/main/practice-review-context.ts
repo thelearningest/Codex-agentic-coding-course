@@ -180,7 +180,7 @@ export function buildPracticeReviewEnvelope(input: {
             id: 'configuration-' + key,
             kind: 'codex-task-configuration' as const,
             text: label + ': ' + (accepted[key].label ?? 'không xác minh được'),
-            freshness
+            freshness: accepted[key].label === null ? 'stale' as const : freshness
           }))
         : [],
       ...(accepted ? { configuration: structuredClone(accepted) } : {}),

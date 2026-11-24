@@ -89,6 +89,18 @@ function normalizeString(
   return value(raw, labels[raw] ?? null)
 }
 
+export function normalizeCodexEffort(raw: unknown): CodexConfigurationValue {
+  return normalizeString(raw, effortLabels)
+}
+
+export function configurationFreshness(
+  settings: Pick<CodexTaskConfigurationSnapshot, 'reasoningEffort' | 'approvalPolicy' | 'fullAccess'>
+): 'fresh' | 'unverifiable' {
+  // A current observation may contain only some of the required settings.
+  return [settings.reasoningEffort, settings.approvalPolicy, settings.fullAccess].some(field => field.label !== null)
+    ? 'fresh' : 'unverifiable'
+}
+
 function normalizeTier(settings: Record<string, unknown>): CodexConfigurationValue {
   if (!Object.hasOwn(settings, 'serviceTier')) return value(null, null)
   if (settings.serviceTier === null || settings.serviceTier === 'default' || settings.serviceTier === 'standard') {
@@ -139,10 +151,9 @@ export function normalizeCodexTaskConfiguration(input: {
   const profile = normalizePermissionProfile(source.activePermissionProfile)
   const fullAccess = normalizeFullAccess(source.sandboxPolicy ?? source.sandbox, profile)
   const model = normalizeString(source.model, modelLabels)
-  const reasoningEffort = normalizeString(source.effort ?? source.reasoningEffort, effortLabels)
+  const reasoningEffort = normalizeCodexEffort(source.effort ?? source.reasoningEffort)
   const serviceTier = normalizeTier(source)
   const approvalPolicy = normalizeString(source.approvalPolicy, approvalLabels)
-  const fields = [reasoningEffort, approvalPolicy, fullAccess.value]
   return {
     schemaVersion: 1,
     runId: input.runId,
@@ -150,7 +161,7 @@ export function normalizeCodexTaskConfiguration(input: {
     source: input.source,
     eventTimestampMs: input.eventTimestampMs,
     observedAt: input.observedAt,
-    freshness: fields.every((field) => field.label !== null) ? 'fresh' : 'unverifiable',
+    freshness: configurationFreshness({ reasoningEffort, approvalPolicy, fullAccess: fullAccess.value }),
     connection: 'connected',
     model,
     reasoningEffort,

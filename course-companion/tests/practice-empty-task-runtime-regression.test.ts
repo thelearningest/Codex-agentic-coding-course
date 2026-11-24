@@ -21,7 +21,7 @@ describe('newly created Codex task runtime regression', () => {
     expect(items.some((item) => item.type === 'event_msg'
       && item.payload?.type === 'thread_settings_applied')).toBe(false)
     expect(snapshot).not.toContain("'thread/resume'")
-    expect(snapshot).toContain('this.metadata.read(binding)')
+    expect(snapshot).toContain('this.metadata.read(binding,')
     expect(snapshot).not.toContain('thread_settings_applied')
     expect(main).toContain('CodexTaskMetadataReader')
   })

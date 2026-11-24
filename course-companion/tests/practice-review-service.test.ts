@@ -236,6 +236,14 @@ describe('Module 1 Practice review service', () => {
       expect((await service.passedCompletion()).approvedConfiguration).not.toHaveProperty('serviceTier')
     })
 
+  it('credits Approval and Full access when only Effort is unset', async () => {
+    const { service } = await harness(configuration({ reasoningEffort: { protocolValue: null, label: null } }))
+    const { workspace } = await service.review()
+    expect(workspace.review).toMatchObject({ status: 'needs-work', canReturn: false })
+    expect(workspace.review?.result?.criteria.map(c => c.status)).toEqual(['unverifiable', 'satisfied', 'satisfied'])
+    expect(workspace.checklist.map(step => step.status)).toEqual(['current', 'completed', 'completed'])
+  })
+
   it('preserves Medium in the approved configuration for the next module', async () => {
     const { service } = await harness(configuration({ reasoningEffort: { protocolValue: 'medium', label: 'Medium' } }))
     const response = await service.review()

@@ -15,6 +15,8 @@ async function fixture(overrides: {
   sessionThreadId?: string
   settingsWorkspace?: string
   omitSettings?: boolean
+  omitEffort?: boolean
+  modeEffort?: string
   omitBaseline?: boolean
   omitServiceTier?: boolean
   serviceTier?: unknown
@@ -54,7 +56,8 @@ async function fixture(overrides: {
         type: 'thread_settings_applied',
         thread_settings: {
           model: 'gpt-5.6-sol',
-          reasoning_effort: 'high',
+          ...(!overrides.omitEffort ? { reasoning_effort: 'high' } : {}),
+          collaboration_mode: { settings: { model: 'gpt-5.6-sol', reasoning_effort: overrides.modeEffort ?? null } },
           ...(!overrides.omitServiceTier ? { service_tier: overrides.serviceTier ?? null } : {}),
           approval_policy: 'on-request',
           permission_profile: {
@@ -133,6 +136,21 @@ describe('CodexTaskMetadataReader', () => {
     })
   })
 
+  it('reads the configured effort for the same model without guessing an unset default', async () => {
+    const { reader, binding } = await fixture({ omitEffort: true })
+    const sameModel = { id: THREAD_ID, model: 'gpt-5.6-sol', reasoningEffort: 'medium' }
+    expect((await reader.read(binding, sameModel)).reasoningEffort.protocolValue).toBe('medium')
+    for (const thread of [undefined, { ...sameModel, model: 'another-model' }]) {
+      expect(await reader.read(binding, thread)).toMatchObject({
+        freshness: 'fresh', reasoningEffort: { protocolValue: null },
+        approvalPolicy: { protocolValue: 'on-request' }, fullAccess: { protocolValue: 'off' }
+      })
+    }
+    await expect(reader.read(binding, { ...sameModel, id: 'other-task' })).rejects.toThrow('BINDING_MISMATCH')
+    const mode = await fixture({ omitEffort: true, modeEffort: 'high' })
+    expect((await mode.reader.read(mode.binding)).reasoningEffort.protocolValue).toBe('high')
+  })
+
   it('does not turn a missing service tier into Standard', async () => {
     const { reader, binding } = await fixture({ omitServiceTier: true })
     const snapshot = await reader.read(binding)
@@ -165,6 +183,17 @@ describe('CodexTaskMetadataReader', () => {
       approvalPolicy: { protocolValue: 'on-request', label: 'Approve for me' },
       fullAccess: { protocolValue: 'off', label: 'Off' }
     })
+  })
+
+  it('reads Medium on an untouched task with an older partial start snapshot', async () => {
+    const { reader, binding } = await fixture({ omitSettings: true })
+    binding.configuration!.reasoningEffort = { label: null, protocolValue: null }
+    binding.configuration!.freshness = 'unverifiable'
+    expect(await reader.read(binding)).toMatchObject({
+      freshness: 'fresh', reasoningEffort: { protocolValue: null }, fullAccess: { protocolValue: 'off' }
+    })
+    expect(await reader.read(binding, { id: THREAD_ID, model: 'gpt-5.6-sol', reasoningEffort: 'medium' }))
+      .toMatchObject({ freshness: 'fresh', reasoningEffort: { protocolValue: 'medium' } })
   })
 
   it('preserves the persisted priority tier as Fast', async () => {

@@ -69,11 +69,12 @@ describe('Codex configuration normalizer', () => {
       item.protocolValue === protocolValue)).toBe(true)
   })
 
-  it('ignores unknown speeds but requires a known effort for fresh evidence', () => {
+  it('keeps known settings fresh when effort is unset and ignores unknown speeds', () => {
     expect(normalize(startPayload({ serviceTier: 'mystery' })).freshness).toBe('fresh')
     const missing = startPayload()
     delete missing.reasoningEffort
-    expect(normalize(missing).freshness).toBe('unverifiable')
+    expect(normalize(missing)).toMatchObject({ freshness: 'fresh', reasoningEffort: { protocolValue: null } })
+    expect(normalize({}).freshness).toBe('unverifiable')
   })
 
   it('reads settings-update field names and treats a full-access profile as on', () => {

@@ -36,7 +36,7 @@ function evaluateConfiguration(
   const fresh = configuration?.freshness === 'fresh' && configuration.connection === 'connected'
   const criteria = setupSettings.map((check) => {
     const value = configuration?.[check.key]
-    const status = !fresh || !value || value.protocolValue === null
+    const status = !fresh || !value || value.protocolValue === null || value.label === null
       ? 'unverifiable' as const
       : check.matches(value.protocolValue)
         ? 'satisfied' as const
@@ -50,7 +50,9 @@ function evaluateConfiguration(
         : status === 'unsatisfied'
           ? check.label + ' hiện là ' + (value?.label ?? value?.protocolValue ?? 'không rõ')
             + '; cần ' + check.expectedLabel + '.'
-          : 'Triết chưa đọc được ' + check.label + ' hiện tại. Mở đúng task Codex rồi thử kiểm tra lại.'
+          : fresh && check.key === 'reasoningEffort' && value?.protocolValue === null
+            ? 'Codex chưa lưu mức Effort cho task này. Chọn Medium hoặc High trong menu Effort, rồi bấm Nộp bài.'
+            : 'Triết chưa đọc được ' + check.label + ' hiện tại. Mở đúng task Codex rồi thử kiểm tra lại.'
     }
   })
   const passed = criteria.every((criterion) => criterion.status === 'satisfied')

@@ -27,7 +27,7 @@ function evidence(snapshot: CodexTaskConfigurationSnapshot): PracticeEvidenceRef
     text: snapshot[key].label === null
       ? key + ': không xác minh được'
       : key + ': ' + snapshot[key].label,
-    freshness: snapshot.freshness === 'fresh' ? 'fresh' : 'stale'
+    freshness: snapshot.freshness === 'fresh' && snapshot.connection === 'connected' && snapshot[key].label !== null ? 'fresh' : 'stale'
   }))
 }
 
@@ -39,19 +39,17 @@ function stepStates(
   const checks = snapshot
     ? setupSettings.map(setting => setting.matches(snapshot[setting.key].protocolValue))
     : []
-  const firstUnmet = checks.findIndex((matches) => !matches)
-  const completedThrough = snapshot === null || snapshot.freshness !== 'fresh'
-    ? -1
-    : firstUnmet === -1 ? checks.length - 1 : firstUnmet - 1
+  const current = snapshot?.freshness === 'fresh' && snapshot.connection === 'connected'
+  const firstUnmet = current ? checks.indexOf(false) : 0
   return context.definition.checklist.map((step, index) => {
     const dependencyInputs: Record<string, string> = sourceDigest
       ? { configuration: sourceDigest }
       : {}
     return {
       stepId: step.id,
-      status: index <= completedThrough
+      status: current && checks[index]
         ? 'completed'
-        : index === completedThrough + 1
+        : index === firstUnmet
           ? 'current'
           : 'pending',
       ...(snapshot?.freshness === 'stale' && index > 0

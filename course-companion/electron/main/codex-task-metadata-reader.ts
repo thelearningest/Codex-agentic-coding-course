@@ -6,13 +6,21 @@ import { DatabaseSync } from 'node:sqlite'
 import type { CodexTaskConfigurationSnapshot } from '../../shared/contracts'
 import type { ExecutorChatBinding } from './practice-run-repository'
 import {
+  configurationFreshness,
   isCodexTaskConfigurationSnapshot,
+  normalizeCodexEffort,
   normalizeCodexTaskConfiguration
 } from './codex-configuration-normalizer.ts'
 
 const THREAD_ID = /^[A-Za-z0-9_-]{1,160}$/
 const MAX_ROLLOUT_BYTES = 128 * 1024 * 1024
 const MAX_LINE_LENGTH = 2 * 1024 * 1024
+
+type ReadThread = {
+  id: unknown
+  model?: unknown
+  reasoningEffort?: unknown
+}
 
 type ThreadRow = {
   id: string
@@ -75,8 +83,9 @@ export class CodexTaskMetadataReader {
     this.now = now
   }
 
-  async read(binding: ExecutorChatBinding): Promise<CodexTaskConfigurationSnapshot> {
+  async read(binding: ExecutorChatBinding, thread?: ReadThread): Promise<CodexTaskConfigurationSnapshot> {
     if (!THREAD_ID.test(binding.threadId)) throw new Error('PRACTICE_METADATA_BINDING_INVALID')
+    if (thread && thread.id !== binding.threadId) throw new Error('PRACTICE_METADATA_BINDING_MISMATCH')
     const row = this.readThreadRow(binding.threadId)
     if (!row || row.id !== binding.threadId || !samePath(row.cwd, binding.workspaceRoot)) {
       throw new Error('PRACTICE_METADATA_BINDING_MISMATCH')
@@ -120,18 +129,28 @@ export class CodexTaskMetadataReader {
         || baseline.runId !== binding.runId
         || baseline.threadId !== binding.threadId
         || baseline.source !== 'thread-start'
-        || baseline.freshness !== 'fresh'
+        || baseline.freshness === 'stale'
         || baseline.connection !== 'connected') {
         throw new Error('PRACTICE_METADATA_UNAVAILABLE')
       }
-      return structuredClone(baseline)
+      const snapshot = structuredClone(baseline)
+      if (thread && typeof thread.model === 'string' && thread.model === snapshot.model.protocolValue
+        && typeof thread.reasoningEffort === 'string') {
+        snapshot.reasoningEffort = normalizeCodexEffort(thread.reasoningEffort)
+      }
+      snapshot.freshness = configurationFreshness(snapshot)
+      return snapshot
     }
     const observed = this.now()
     return normalizeCodexTaskConfiguration({
       runId: binding.runId,
       threadId: binding.threadId,
       source: 'thread-settings-snapshot',
-      payload: latest.settings,
+      payload: {
+        ...latest.settings,
+        reasoningEffort: latest.settings.reasoningEffort ?? (thread && typeof thread.model === 'string' && thread.model === latest.settings.model
+          ? thread.reasoningEffort : null)
+      },
       observedAt: observed.toISOString(),
       eventTimestampMs: latest.eventTimestampMs
     })
@@ -204,10 +223,11 @@ export class CodexTaskMetadataReader {
         if (!source || typeof source.cwd !== 'string' || !samePath(source.cwd, binding.workspaceRoot)) {
           throw new Error('PRACTICE_METADATA_BINDING_MISMATCH')
         }
+        const modeSettings = record(record(source.collaboration_mode)?.settings)
         const activeProfile = record(source.active_permission_profile)
         const settings: Record<string, unknown> = {
             model: source.model,
-            reasoningEffort: source.reasoning_effort,
+            reasoningEffort: source.reasoning_effort ?? (modeSettings?.model === source.model ? modeSettings?.reasoning_effort : null),
             approvalPolicy: source.approval_policy,
             sandboxPolicy: source.permission_profile,
             activePermissionProfile: activeProfile ? {

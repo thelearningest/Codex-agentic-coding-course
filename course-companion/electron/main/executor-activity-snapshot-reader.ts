@@ -78,7 +78,7 @@ export class ExecutorActivitySnapshotReader {
     if ((Array.isArray(thread.turns) ? thread.turns : []).some((value) => record(value)?.status === 'inProgress')) {
       throw new Error('PRACTICE_SNAPSHOT_BUSY')
     }
-    const configuration = await this.metadata.read(binding)
+    const configuration = await this.metadata.read(binding, { id: thread.id, model: thread.model, reasoningEffort: thread.reasoningEffort })
     const projected = projectExecutorActivity(previous, binding, thread, configuration, this.now)
     const reconciled = await reconcileExecutorActivity(
       projected,
