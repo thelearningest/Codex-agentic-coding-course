@@ -252,6 +252,7 @@ When Codex leaves Effort unset, review checks the bound task's model catalog for
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |
 |---|---|---|---|---|---|
 | `m1-codex-orientation` and `m1-mastery` | `implemented` | `passed` for navigation, saved progress and the revised quiz | Owner approved removing the commands page and replacing its question | `pending` | Observe a learner move from Effort and Speed to AGENTS.md and answer the approval question. |
+| `m1-codex-orientation` bilingual Codex labels | `implemented` | `passed` for typecheck, lint, production build and Electron navigation through the approval and model controls | Owner approved the English and Vietnamese labels on 24 November | `pending` | Observe a learner locating these settings in Vietnamese Codex. |
 
 The first lesson now has five pages. The four-question quiz still requires three correct answers. Its second question asks how to select Approve for me while keeping Full access off. A learner saved on the removed page resumes at AGENTS.md. An unfinished quiz keeps answers to the other questions and requests a fresh answer to the replacement.
 

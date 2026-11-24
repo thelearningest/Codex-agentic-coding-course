@@ -83,7 +83,7 @@ export function ModelLessonBoard({ busy, canOpenPreviousPage, initialTopic, kind
     <section className="model-controls" aria-labelledby="model-controls-title" data-topic={topic}>
       <header className="model-controls__header">
         <h1 id="model-controls-title">Chọn cách Codex xử lý công việc</h1>
-        <p>Làm quen với ba mục Model, Effort và Speed trong menu bên dưới ô nhập.</p>
+        <p>Làm quen với ba mục Model (Mô hình), Effort (Mức nỗ lực) và Speed (Tốc độ) trong menu bên dưới ô nhập.</p>
         <nav className="model-controls__tabs" aria-label="Tìm hiểu các nút">
           {allTopics.map((item) => {
             const onThisPage = pageTopics.includes(item)

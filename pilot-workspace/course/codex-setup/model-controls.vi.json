@@ -8,12 +8,12 @@
   ],
   "effort": [
     "Nhìn chung, effort càng cao thì model AI càng dành nhiều thời gian để suy nghĩ, từ đó làm việc chất lượng hơn. Tuy nhiên kèm theo đó thì nó cũng làm việc lâu hơn và cũng đốt nhiều tiền hơn.",
-    "Cá nhân mình thường dùng Medium hoặc high, medium cho các tác vụ thông thường và high cho những tác vụ cần chi tiết như tạo plan, mình thường không bao giờ dùng Extra High vì chậm mà cũng không cần thiết.",
+    "Cá nhân mình thường dùng Medium (Vừa) hoặc high (Cao), medium cho các tác vụ thông thường và high cho những tác vụ cần chi tiết như tạo plan, mình thường không bao giờ dùng Extra High (Chuyên sâu) vì chậm mà cũng không cần thiết.",
     "Bạn nên tự thử các mức effort để chọn xem mức nào phù hợp với tác vụ mà bạn muốn.",
     "Không phải cứ chọn Extra High là model tự động thông minh hơn. Đôi khi chọn Extra High khiến model overthink và đưa ra những lựa chọn ngu không cần thiết."
   ],
   "speed": [
-    "Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast. Ngốn tiền và usage kinh khủng"
+    "Speed thì dễ thôi, nếu bạn không có gói pro 200$ thì đừng bật chế độ fast (Nhanh). Ngốn tiền và usage kinh khủng"
   ],
   "source": {
     "label": "Xem tài liệu từ OpenAI",
