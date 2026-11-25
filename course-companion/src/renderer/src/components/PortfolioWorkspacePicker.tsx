@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { PortfolioWorkspaceView } from '../../../../shared/contracts'
+import { AgentsMdTour } from './AgentsMdTour'
 import { PortfolioCodexProjectSetup } from './PortfolioCodexProjectSetup'
 
 function initialView(courseRunId: string): PortfolioWorkspaceView {
@@ -75,6 +76,8 @@ export function PortfolioWorkspaceStatusPanel({
           <div><strong>Đã tạo AGENTS.md</strong><p>Đây là luật làm việc của khoá học này, Codex sẽ dựa vào đây để hướng dẫn bạn.</p></div>
         </div>
       ) : null}
+
+      {isReady && view.agentsPath ? <AgentsMdTour /> : null}
 
       {view.status === 'awaiting-confirmation' ? (
         <p className="portfolio-workspace-consent">

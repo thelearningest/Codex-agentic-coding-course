@@ -5112,6 +5112,21 @@ button:focus-visible {
   color: #ffd666;
 }
 
+/* The ready folder panel (with the AGENTS.md tour) can be taller than the window.
+   Keep it below the HUD and let it scroll instead of growing up under the header. */
+@media (min-width: 821px) {
+  .pixel-learning-shell[data-scene-id="module-2-portfolio-folder"] .pixel-dialogue {
+    max-height: calc(100% - 114px);
+    overflow-y: auto;
+  }
+
+  .pixel-learning-shell[data-scene-id="module-2-portfolio-folder"] .pixel-lesson-actions.is-paired {
+    position: relative;
+    inset: auto;
+    margin-top: 18px;
+  }
+}
+
 .practice-start-prompt {
   min-width: 0;
   margin-top: 20px;
