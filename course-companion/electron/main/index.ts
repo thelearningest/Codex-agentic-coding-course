@@ -35,6 +35,7 @@ import { ExecutorActivityObserver } from './executor-activity-observer'
 import { ExecutorActivityRepository } from './executor-activity-repository'
 import { ExecutorActivitySnapshotReader } from './executor-activity-snapshot-reader'
 import { CodexTaskMetadataReader } from './codex-task-metadata-reader'
+import { readDesktopApprovalsReviewer } from './codex-desktop-approval'
 import { ExecutorChatCoordinator } from './executor-chat-coordinator'
 import { PracticeCoordinator } from './practice-coordinator'
 import { PracticeRunRepository, selectPortfolioPackageMigrationRecovery } from './practice-run-repository'
@@ -330,7 +331,13 @@ const openExecutorChat = useTestCodexGateway
 const executorChatCoordinator = new ExecutorChatCoordinator(
   executorBootstrapGateway,
   practiceWorkspaceResolver,
-  openExecutorChat
+  openExecutorChat,
+  undefined,
+  {
+    readDesktopApprovalsReviewer: useTestCodexGateway
+      ? undefined
+      : () => readDesktopApprovalsReviewer(codexDataDirectory)
+  }
 )
 const activityRepository = new ExecutorActivityRepository(app.getPath('userData'))
 const activityObserver = new ExecutorActivityObserver(appServerGateway, activityRepository)

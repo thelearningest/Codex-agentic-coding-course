@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile } from 'node:fs/promises'
+import { appendFile, mkdtemp, mkdir, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
@@ -106,6 +106,7 @@ async function fixture(overrides: {
     eventTimestampMs: Date.parse('2026-08-19T12:00:00.000Z')
   })
   return {
+    rollout,
     reader: new CodexTaskMetadataReader(databasePath, sessions, () => new Date('2026-08-19T12:02:00.000Z')),
     binding: {
       runId: 'run-1',
@@ -151,6 +152,34 @@ describe('CodexTaskMetadataReader', () => {
     await expect(reader.read(binding, { ...sameModel, id: 'other-task' })).rejects.toThrow('BINDING_MISMATCH')
     const mode = await fixture({ omitEffort: true, modeEffort: 'high' })
     expect((await mode.reader.read(mode.binding)).reasoningEffort.protocolValue).toBe('high')
+  })
+
+  it('re-reads each Approval change on the bound task with no learner turns', async () => {
+    const { binding, reader, rollout } = await fixture()
+    expect((await reader.read(binding)).approvalMode?.protocolValue).toBe('approve-for-me')
+
+    for (const [second, reviewer, expected] of [
+      ['01', 'user', 'ask-for-approval'],
+      ['02', 'auto_review', 'approve-for-me']
+    ]) {
+      await appendFile(rollout, JSON.stringify({
+        timestamp: `2026-08-19T12:01:${second}.000Z`,
+        type: 'event_msg',
+        payload: {
+          type: 'thread_settings_applied',
+          thread_settings: {
+            cwd: WORKSPACE,
+            model: 'gpt-5.6-sol',
+            reasoning_effort: 'medium',
+            approval_policy: 'on-request',
+            approvals_reviewer: reviewer,
+            permission_profile: { type: 'workspaceWrite' },
+            active_permission_profile: { id: ':workspace' }
+          }
+        }
+      }) + '\n')
+      expect((await reader.read(binding)).approvalMode?.protocolValue).toBe(expected)
+    }
   })
 
   it('does not turn a missing service tier into Standard', async () => {

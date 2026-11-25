@@ -247,6 +247,10 @@ The owner approved a two-setting Module 1 setup review. It accepts Medium or Hig
 
 When Codex leaves Effort unset, review checks the bound task's model catalog for support for the Medium fallback used by Codex Desktop's picker. An explicitly saved effort takes precedence. The standalone Codex and production Electron rehearsal submitted a disposable task with no saved Effort and zero turns, and passed both criteria without editing the task during the review. Typecheck, lint, build, all 15 startup checks and the full Electron suite passed. The setup guide and feedback were inspected at narrow and desktop widths. The unit suite passed 930 tests with the two previously recorded failures. Pilot acceptance is pending. The next step is to observe a learner submit an already-configured task in their own Codex profile.
 
+**Approval inheritance, 25 November 2026.** The owner approved inheriting the saved local Codex Desktop choice when creating a Module 1 task. With either standard workspace Approval preset selected, Companion passes the corresponding reviewer to Codex and saves it on the linked task before opening Desktop. An unrecognized or missing Desktop preference leaves the runtime defaults in effect. Submission checks the latest saved settings on the linked task. Missing Approval evidence is reported as unverifiable.
+
+Isolated checks with the installed Codex App Server reproduced the initial reviewer being lost on handoff and confirmed that persisting the reviewer keeps both choices through resume. The production metadata reader returned the correct initial and updated value in both directions on tasks with zero turns. Typecheck, lint, build, 87 focused checks, 15 startup checks and the full disposable Electron suite passed. The full unit run had 940 passes and the two previously recorded failures. Native learner acceptance remains `pending`. The next acceptance check is a new Module 1 Practice session in Codex Desktop with Approve for me already selected.
+
 ### Module 1 orientation and final quiz, 24 November 2026
 
 | Scope | Implementation | Verification | Owner approval | Pilot acceptance | Next permitted action |

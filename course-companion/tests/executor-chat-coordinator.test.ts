@@ -60,13 +60,18 @@ function binding(name = 'Làm quen với Codex · Module 1'): ExecutorChatBindin
   }
 }
 
-function coordinator(client: CodexRequestClient): ExecutorChatCoordinator {
+function coordinator(client: CodexRequestClient, reviewer?: 'user' | 'auto_review'): ExecutorChatCoordinator {
   return new ExecutorChatCoordinator(
     client,
     { resolve: async () => 'D:\\course\\pilot-workspace' },
     async () => undefined,
     () => new Date('2026-08-10T00:00:00.000Z'),
-    { attempts: 2, intervalMs: 0, wait: async () => undefined }
+    {
+      attempts: 2,
+      intervalMs: 0,
+      wait: async () => undefined,
+      readDesktopApprovalsReviewer: async () => reviewer
+    }
   )
 }
 
@@ -135,6 +140,35 @@ describe('ExecutorChatCoordinator', () => {
       threadId: 'thread-target',
       name: 'Làm quen với Codex · Module 1'
     }])
+  })
+
+  it.each([
+    ['user', 'ask-for-approval'],
+    ['auto_review', 'approve-for-me']
+  ] as const)('persists the Desktop reviewer %s before handing off a Module 1 task', async (reviewer, approvalMode) => {
+    const calls: Array<[string, Record<string, unknown>]> = []
+    const target = await coordinator({
+      async request(method, params = {}) {
+        calls.push([method, params])
+        return method === 'thread/start' ? effective({ approvalsReviewer: params.approvalsReviewer }) : {}
+      }
+    }, reviewer).createTarget({ runId: 'run-123456', definition: definition('inherit-configuration-only') })
+
+    expect(calls.map(([method]) => method)).toEqual(['thread/start', 'thread/name/set', 'thread/settings/update'])
+    expect(calls[0]?.[1]).toHaveProperty('approvalsReviewer', reviewer)
+    expect(calls[2]?.[1]).toEqual({ threadId: 'thread-target', approvalsReviewer: reviewer })
+    expect(target.configuration?.approvalMode?.protocolValue).toBe(approvalMode)
+  })
+
+  it('leaves Approval unverified at startup if Codex cannot persist the reviewer', async () => {
+    const target = await coordinator({
+      async request(method, params = {}) {
+        if (method === 'thread/settings/update') throw new Error('Codex App Server request failed: Method not found')
+        return method === 'thread/start' ? effective({ approvalsReviewer: params.approvalsReviewer }) : {}
+      }
+    }, 'auto_review').createTarget({ runId: 'run-123456', definition: definition('inherit-configuration-only') })
+
+    expect(target.configuration?.approvalMode?.protocolValue).toBeNull()
   })
 
   it('sends no turn while preparing an inherit-configuration-only task', async () => {

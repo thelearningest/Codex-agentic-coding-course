@@ -13,6 +13,7 @@ import {
 import type { PracticeWorkspaceResolverPort } from './practice-workspace-resolver'
 import { normalizeCodexTaskConfiguration } from './codex-configuration-normalizer'
 import { portfolioReleaseInstructions } from './portfolio-release-instructions'
+import type { DesktopApprovalsReviewer } from './codex-desktop-approval'
 
 export type CodexRequestClient = {
   request: (method: string, params?: Record<string, unknown>) => Promise<unknown>
@@ -20,10 +21,11 @@ export type CodexRequestClient = {
 }
 
 type OpenExternal = (url: string) => Promise<void>
-type DiscoveryOptions = {
+type CoordinatorOptions = {
   attempts?: number
   intervalMs?: number
   wait?: (milliseconds: number) => Promise<void>
+  readDesktopApprovalsReviewer?: () => Promise<DesktopApprovalsReviewer | undefined>
 }
 
 const THREAD_ID = /^[A-Za-z0-9_-]{1,160}$/
@@ -47,7 +49,7 @@ export class ExecutorChatCoordinator {
     private readonly workspaces: PracticeWorkspaceResolverPort,
     private readonly openExternal: OpenExternal,
     private readonly now: () => Date = () => new Date(),
-    private readonly discovery: DiscoveryOptions = {}
+    private readonly options: CoordinatorOptions = {}
   ) {}
 
   async createTarget(input: {
@@ -69,8 +71,13 @@ export class ExecutorChatCoordinator {
       workspaceRoot
     })
     return this.withBootstrap(async () => {
+      const approvalsReviewer = input.definition.practiceId === 'm1-codex-safe-setup'
+        ? await this.options.readDesktopApprovalsReviewer?.()
+        : undefined
       const started = await this.client.request('thread/start', {
-        ...plan.startParams, ...(projectId ? { projectId } : {})
+        ...plan.startParams,
+        ...(projectId ? { projectId } : {}),
+        ...(approvalsReviewer ? { approvalsReviewer } : {})
       })
       const effective = parseEffectivePracticeTask(started)
       if (!THREAD_ID.test(effective.threadId)) {
@@ -90,6 +97,24 @@ export class ExecutorChatCoordinator {
       const name = plan.name
       await this.client.request('thread/name/set', { threadId, name })
       const observed = this.now()
+      const configuration = normalizeCodexTaskConfiguration({
+        runId: input.runId,
+        threadId,
+        source: 'thread-start',
+        payload: started,
+        observedAt: observed.toISOString(),
+        eventTimestampMs: observed.getTime()
+      })
+      if (approvalsReviewer) {
+        // A start override alone can be lost when Desktop loads an empty task
+        // from a separate App Server. Record the choice before that handoff.
+        await this.client.request('thread/settings/update', { threadId, approvalsReviewer })
+          .catch((error: unknown) => {
+            // Older runtimes can still open and review a task using defaults.
+            if (!(error instanceof Error) || !/method not found|unknown method/i.test(error.message)) throw error
+            configuration.approvalMode = { protocolValue: null, label: null }
+          })
+      }
       return {
         runId: input.runId,
         threadId,
@@ -97,14 +122,7 @@ export class ExecutorChatCoordinator {
         workspaceRoot,
         ...(projectId ? { projectId } : {}),
         createdAt: observed.toISOString(),
-        configuration: normalizeCodexTaskConfiguration({
-          runId: input.runId,
-          threadId,
-          source: 'thread-start',
-          payload: started,
-          observedAt: observed.toISOString(),
-          eventTimestampMs: observed.getTime()
-        })
+        configuration
       }
     })
   }
@@ -253,9 +271,9 @@ export class ExecutorChatCoordinator {
     workspaceRoot: string,
     includeTurns: boolean
   ): Promise<Record<string, unknown>> {
-    const attempts = Math.max(1, this.discovery.attempts ?? 30)
-    const intervalMs = Math.max(0, this.discovery.intervalMs ?? 100)
-    const wait = this.discovery.wait ?? defaultWait
+    const attempts = Math.max(1, this.options.attempts ?? 30)
+    const intervalMs = Math.max(0, this.options.intervalMs ?? 100)
+    const wait = this.options.wait ?? defaultWait
     for (let attempt = 0; attempt < attempts; attempt += 1) {
       try {
         const read = await this.client.request('thread/read', {
