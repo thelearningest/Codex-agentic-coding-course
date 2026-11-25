@@ -1496,9 +1496,9 @@ try {
   await firstWindows.learningPage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   const prototypePage = firstWindows.learningPage
   await prototypePage.locator('main[data-scene-id="module-2-html-design-prototype"]').waitFor()
-  await prototypePage.getByRole('button', { name: 'Mở mẫu HTML' }).click()
-  await prototypePage.frameLocator('dialog iframe').getByRole('heading', { name: 'Tạo bản portfolio đầu tiên' }).waitFor()
-  await prototypePage.getByRole('button', { name: 'Đóng mẫu HTML' }).click()
+  await prototypePage.getByRole('img', { name: 'Bản mẫu Module 3 với trang Tạo bản portfolio đầu tiên' }).waitFor()
+  assert.equal(await prototypePage.locator('main iframe').count(), 0)
+  assert.equal(await prototypePage.getByRole('button', { name: 'Mở mẫu HTML' }).count(), 0)
   await prototypePage.getByRole('button', { name: '← Trang trước', exact: true }).click()
   await prototypePage.getByLabel('Hai nguồn tham khảo thiết kế', { exact: true }).waitFor()
   await prototypePage.getByRole('button', { name: 'Tiếp tục', exact: true }).click()

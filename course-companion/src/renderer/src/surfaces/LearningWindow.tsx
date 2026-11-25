@@ -43,7 +43,7 @@ import m2ImplementationPlanImage from '../assets/lesson-visuals/m2-implementatio
 import m2AssessmentImage from '../assets/lesson-visuals/m2-assessment.webp'
 import m2PafoliosImage from '../assets/lesson-visuals/m2-pafolios.webp'
 import prototypeThumbnail from '../../../../../plan/module-3-prototype/preview.png'
-import { CoursePrototypeButton } from '../components/CoursePrototypeButton'
+import '../components/course-prototype.css'
 import m2AwwwardsImage from '../assets/lesson-visuals/m2-awwwards.webp'
 import m3VisibleScreenErrorImage from '../assets/lesson-visuals/m3-visible-screen-error-example.png'
 import m3VisibleErrorPromptImage from '../assets/lesson-visuals/m3-visible-error-prompt-example.png'
@@ -3502,7 +3502,7 @@ export function LearningWindow() {
               {(isCoursePrototype || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual.annotations) && lessonVisual.caption ? (
                 <figcaption>{lessonVisual.caption}</figcaption>
               ) : null}
-              {isCoursePrototype ? <CoursePrototypeButton /> : canExpandLessonVisual ? (
+              {canExpandLessonVisual ? (
                 <button
                   aria-label="Phóng to ảnh minh họa"
                   className="pixel-visual-expand"
