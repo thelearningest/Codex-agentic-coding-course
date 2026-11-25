@@ -54,15 +54,15 @@
           "id": "mastery-4",
           "sceneId": "module-2-mastery-scenario-prd",
           "type": "multiple-choice",
-          "prompt": "Trong lúc soạn PRD cho portfolio, coding agent đề nghị chọn React, đặt tên tệp và cài thư viện. Tuy nhiên, hai bên vẫn chưa thống nhất portfolio dành cho ai và người xem cần nhận được điều gì. Bạn nên yêu cầu agent làm gì trước?",
+          "prompt": "Trong lúc soạn PRD cho portfolio, coding agent đề nghị chọn công nghệ để xây web, đặt tên tệp và cài thư viện. Tuy nhiên, hai bên vẫn chưa thống nhất portfolio dành cho ai và người xem cần nhận được điều gì. Bạn nên yêu cầu agent làm gì trước?",
           "choices": [
-            "Chọn React trước để coding agent có thể quyết định phần còn lại dựa trên công nghệ.",
+            "Chọn công nghệ trước để coding agent có thể dựa vào đó quyết định phần còn lại.",
             "Tạo ngay phiên bản đầu, rồi dùng kết quả đó để đoán người xem phù hợp.",
             "Viết danh sách tệp và thư viện trước, còn mục tiêu của portfolio sẽ bổ sung sau.",
             "Làm rõ người xem, vấn đề, kết quả cần đạt và phạm vi triển khai đầu tiên; để lựa chọn kỹ thuật sang Implementation plan."
           ],
           "answerIndex": 3,
-          "explanation": "Trước khi bắt đầu làm, hãy thống nhất sản phẩm dành cho ai, giải quyết vấn đề gì và cần đạt kết quả nào. Sau đó mới chọn các chi tiết kỹ thuật như React, thư viện và cách sắp xếp tệp.",
+          "explanation": "Trước khi bắt đầu làm, hãy thống nhất sản phẩm dành cho ai, giải quyết vấn đề gì và cần đạt kết quả nào. Sau đó mới chọn các chi tiết kỹ thuật như dùng công nghệ nào, thư viện nào và sắp xếp tệp ra sao.",
           "source": {
             "kind": "authoritative-source",
             "label": "Microsoft Engineering Playbook — Task Design Review",

@@ -144,17 +144,16 @@ kết quả cùng Codex.
 
 ## Trước khi bắt đầu
 
-Bạn không cần biết lập trình, Git hay dòng lệnh trước khi học. Chỉ cần biết thao tác máy tính cơ bản như tạo thư mục, mở và lưu tệp, cài ứng dụng.
+Bạn không cần biết lập trình hay từng dùng công cụ kỹ thuật nào trước khi học. Chỉ cần biết thao tác máy tính cơ bản như tạo thư mục, mở và lưu tệp, cài ứng dụng.
 
 Để học và làm bài thực hành, bạn cần:
 
 - Ứng dụng ChatGPT desktop phiên bản mới có Codex, đã đăng nhập bằng tài khoản ChatGPT của bạn. Khóa học dùng Codex để thực hành trên các tệp và dự án trong máy.
 - **Khuyến nghị dùng ChatGPT Plus hoặc cao hơn để có trải nghiệm học tốt nhất.**
 
-Để tải và mở khóa học, bạn cần chuẩn bị thêm:
+Nếu máy còn thiếu phần mềm cần để mở khóa học, agent sẽ giúp bạn cài.
 
-- **Git**, công cụ dùng để tải khóa học và lưu các phiên bản dự án.
-- **Node.js 22.12 trở lên**, phần mềm cần để chạy ứng dụng học. Trên macOS, bạn cần cài trước. Trên Windows, trình khởi động sẽ đề xuất cài nếu còn thiếu và hỏi bạn trước khi thực hiện.
+<sub>[Khóa học sẽ cài những gì? (không bắt buộc, đọc nếu bạn tò mò)](docs/khoa-hoc-se-cai-gi.md)</sub>
 
 Bạn chưa cần biết cách sử dụng những công cụ này. Hãy nhờ agent giúp bạn làm theo phần hướng dẫn thiết lập bên dưới.
 
