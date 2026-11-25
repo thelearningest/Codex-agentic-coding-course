@@ -166,7 +166,7 @@ Tạo một thư mục trống, mở thư mục đó trong Codex, rồi dán
 
 ```text
 Mở khóa học Vibecoding 101 giúp mình. Nếu thư mục này chưa có khóa học,
-hãy tải từ https://github.com/thelearningest/Vibe-coding-101-with-Codex.git.
+hãy tải từ https://github.com/thelearningest/Vibe-coding-101.git.
 
 Mình đồng ý cho bạn tải khóa học và cài các công cụ cần thiết để mở
 Course Companion. Hãy làm theo SETUP_FOR_AGENTS.md và mở ứng dụng giúp mình.

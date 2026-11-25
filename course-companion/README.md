@@ -30,15 +30,15 @@ bị phát hành portfolio.
 ### Bước 1 — Tải khóa học hoặc mở thư mục đã có
 
 **Nếu bạn đã tải khóa học theo README chính**, hãy mở thư mục
-`Vibe-coding-101-with-Codex` trên máy. Bạn không cần tải thêm một bản nữa.
+`Vibe-coding-101` trên máy. Bạn không cần tải thêm một bản nữa.
 
 **Nếu chưa tải**, mở **Command Prompt** hoặc **PowerShell** trên Windows,
 hoặc **Terminal** trên macOS, trong thư mục bạn muốn lưu khóa học. Chạy lần
 lượt:
 
 ```text
-git clone https://github.com/thelearningest/Vibe-coding-101-with-Codex.git
-cd Vibe-coding-101-with-Codex
+git clone https://github.com/thelearningest/Vibe-coding-101.git
+cd Vibe-coding-101
 ```
 
 Thư mục dùng để khởi động là thư mục có hai file `start-course.cmd` và
@@ -177,7 +177,7 @@ Nếu ứng dụng đề nghị đặt lại tiến độ, hãy đọc kỹ trư
 | Bạn đang thấy gì? | Bạn có thể thử gì? |
 | --- | --- |
 | Lệnh `git` không được nhận diện | Kiểm tra Git đã được cài, rồi mở lại cửa sổ dòng lệnh và thử lại bước tải khóa học. |
-| Không tìm thấy `start-course.cmd` hoặc `start-course.command` | Kiểm tra bạn đang ở thư mục `Vibe-coding-101-with-Codex`, nơi có hai file khởi động, thay vì thư mục con `course-companion`. |
+| Không tìm thấy `start-course.cmd` hoặc `start-course.command` | Kiểm tra bạn đang ở thư mục `Vibe-coding-101`, nơi có hai file khởi động, thay vì thư mục con `course-companion`. |
 | Thông báo thiếu Node.js hoặc npm | Trên Windows, đọc đề xuất cài đặt của trình khởi động. Trên macOS, chuẩn bị Node.js 22.12 trở lên cùng npm, rồi chạy lại lệnh khởi động. |
 | Quá trình chuẩn bị dừng sau khi bạn từ chối cài | Đây là hành vi bình thường. Khi sẵn sàng, chạy lại lệnh khởi động và xem lại phần chuẩn bị. |
 | Thông báo Codex chưa tương thích | Cập nhật Codex theo thông báo, rồi đóng và mở lại Course Companion. |

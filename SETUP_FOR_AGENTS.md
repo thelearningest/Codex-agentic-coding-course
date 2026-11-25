@@ -9,7 +9,7 @@ short. Check both the learning window and the Codex connection needed for Practi
 1. Use the selected folder if it contains this guide and both launchers. Also
    check for an existing course checkout immediately inside it. Reuse it.
 2. For a first download, use the official repository from the learner's prompt:
-   `https://github.com/thelearningest/Vibe-coding-101-with-Codex.git`. Clone
+   `https://github.com/thelearningest/Vibe-coding-101.git`. Clone
    into the selected empty folder, or a new child folder if it contains other
    work. Leave existing files, versions and learning progress intact.
 
