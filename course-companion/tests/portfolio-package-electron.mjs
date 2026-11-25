@@ -71,7 +71,7 @@ try {
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
   await page.getByRole('button', { name: 'Chọn thư mục', exact: true }).click()
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
-  await page.getByRole('button', { name: 'Tạo thư mục planning', exact: true }).click()
+  await page.getByRole('button', { name: 'Thiết lập thư mục portfolio', exact: true }).click()
   await page.getByRole('heading', { name: 'Chưa kết nối được với Codex', exact: true }).waitFor()
   const folderContinue = page.getByRole('button', { name: 'Tiếp tục với thư mục này', exact: true })
   assert.equal(await folderContinue.isDisabled(), true)

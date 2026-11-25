@@ -39,7 +39,7 @@ describe('portfolio workspace picker', () => {
     ), 'utf8')
     expect(source).toContain('choosePortfolioWorkspace')
     expect(source).toContain('confirmPortfolioPlanning')
-    expect(source).toContain('Tạo thư mục planning')
+    expect(source).toContain('Thiết lập thư mục portfolio')
     expect(source).toContain('Chưa có tệp ứng dụng nào được tạo.')
     expect(source).not.toContain('pilot-workspace')
   })

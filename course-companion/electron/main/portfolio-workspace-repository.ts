@@ -172,7 +172,7 @@ export class PortfolioWorkspaceRepository {
       await this.writeState(state)
       return this.view(request.courseRunId, 'awaiting-confirmation', {
         canonicalPath,
-        message: 'Hãy kiểm tra đường dẫn trước khi tạo thư mục planning.'
+        message: 'Hãy kiểm tra đường dẫn trước khi thiết lập thư mục portfolio.'
       })
     })
   }
@@ -342,7 +342,7 @@ export class PortfolioWorkspaceRepository {
       if (!record.planningApprovedAt) {
         return this.view(courseRunId, 'awaiting-confirmation', {
           canonicalPath,
-          message: 'Hãy kiểm tra đường dẫn trước khi tạo thư mục planning.'
+          message: 'Hãy kiểm tra đường dẫn trước khi thiết lập thư mục portfolio.'
         })
       }
 

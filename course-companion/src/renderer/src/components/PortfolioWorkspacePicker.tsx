@@ -78,7 +78,7 @@ export function PortfolioWorkspaceStatusPanel({
 
       {view.status === 'awaiting-confirmation' ? (
         <p className="portfolio-workspace-consent">
-          Bước tiếp theo sẽ tạo thư mục <code>planning</code> và tệp <code>AGENTS.md</code> chứa quy tắc cho Codex. Chưa có tệp ứng dụng nào được tạo.
+          Bước tiếp theo sẽ thiết lập thư mục portfolio: tạo thư mục <code>planning</code> và tệp <code>AGENTS.md</code> chứa quy tắc cho Codex. Chưa có tệp ứng dụng nào được tạo.
         </p>
       ) : null}
 
@@ -90,7 +90,7 @@ export function PortfolioWorkspaceStatusPanel({
         ) : null}
         {view.canConfirmPlanning ? (
           <button className="is-primary" disabled={busy} type="button" onClick={onConfirm}>
-            {busy ? 'Đang tạo…' : 'Tạo thư mục planning'}
+            {busy ? 'Đang tạo…' : 'Thiết lập thư mục portfolio'}
           </button>
         ) : null}
       </div>
