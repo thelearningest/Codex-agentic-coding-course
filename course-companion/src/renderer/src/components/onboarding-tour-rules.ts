@@ -55,3 +55,16 @@ export function shouldShowTeacherDot(
 ): boolean {
   return hasConversation === false && decisions?.[TEACHER_CHAT_OPENED_DECISION_KEY] !== 'yes'
 }
+
+// Saved once the learner has seen the tip about reviewing lessons from the outline.
+export const OUTLINE_REVIEW_TIP_DECISION_KEY = 'outlineReviewTipSeen'
+
+// Shown once, on the first module summary the learner passes on their own
+// learning page (not while browsing), when every section of that module is open.
+export function shouldShowOutlineReviewTip(
+  decisions: Record<string, string> | undefined,
+  page: { onSummary: boolean; passed: boolean; browsing: boolean }
+): boolean {
+  return page.onSummary && page.passed && !page.browsing
+    && decisions?.[OUTLINE_REVIEW_TIP_DECISION_KEY] !== 'yes'
+}

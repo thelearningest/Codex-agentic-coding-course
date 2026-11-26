@@ -755,8 +755,16 @@ async function completeSetupModule(page, companionPage, electronApp, verifyRespo
   await capture(page, 'module-1-final-questions.png')
   await answerAssessmentGroup(page, 'setup-final-assessment')
 
-  await page.getByText(/Bạn đạt 4\/4 câu/).waitFor()
+  const moduleOneResult = page.locator('.pixel-assessment-summary[data-result="pass"]')
+  await moduleOneResult.getByText('ĐẠT', { exact: true }).waitFor()
+  await moduleOneResult.getByText('4/4 câu', { exact: true }).waitFor()
   await page.locator('.pixel-outline summary').getByText(/TRANG 6\/6/).waitFor()
+  // The first passed summary points at the outline once, then never again.
+  const reviewTip = page.getByRole('dialog', { name: 'Xem lại bài đã học' })
+  await reviewTip.waitFor()
+  await capture(page, 'module-1-outline-review-tip.png')
+  await reviewTip.getByRole('button', { name: 'Đã hiểu', exact: true }).click()
+  await page.locator('[data-onboarding-tour]').waitFor({ state: 'detached' })
   await capture(page, 'module-1-final-review.png')
   await page.getByRole('button', { name: 'Tiếp tục', exact: true }).click()
   await page.getByRole('heading', { name: 'Lộ trình khóa học' }).waitFor()

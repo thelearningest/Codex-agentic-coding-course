@@ -70,6 +70,8 @@ import {
   shouldShowTeacherDot,
   moduleUnlockedBetween,
   TEACHER_CHAT_OPENED_DECISION_KEY,
+  OUTLINE_REVIEW_TIP_DECISION_KEY,
+  shouldShowOutlineReviewTip,
   type OnboardingTourState
 } from '../components/onboarding-tour-rules'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
@@ -2226,6 +2228,19 @@ const lessonTipSteps = [
   }
 ] as const satisfies readonly OnboardingTourStep[]
 
+// End-of-module reminder, approved 26 November 2026.
+const outlineReviewTipSteps = [
+  {
+    id: 'outline-review',
+    anchor: 'outline-menu',
+    title: 'Xem lại bài đã học',
+    body: 'Bấm vào đây bất cứ lúc nào để mở mục lục và xem lại các phần bạn đã học. Các phần phía sau sẽ mở dần khi bạn học tới.',
+    hint: 'Bấm thử để mở mục lục.',
+    action: true,
+    nextLabel: 'Đã hiểu'
+  }
+] as const satisfies readonly OnboardingTourStep[]
+
 // Unlock moment: wording from the approved prototype, numbered for each module.
 const unlockStepsFor = (lessonId: LessonId): OnboardingTourStep[] => {
   const module = Number(lessonId.slice(-1))
@@ -3385,7 +3400,7 @@ export function LearningWindow() {
         <details className="pixel-outline" ref={outlineRef} onKeyDown={(event) => {
           if (event.key === 'Escape') closeOutline()
         }}>
-          <summary aria-label={`Mở mục lục ${outlineModuleLabel}`}>
+          <summary aria-label={`Mở mục lục ${outlineModuleLabel}`} {...{ [ONBOARDING_ANCHOR_ATTRIBUTE]: 'outline-menu' }}>
             <span className="pixel-outline__dots" aria-hidden="true">•••</span>
             <span className="pixel-outline__label">{scene.lessonId === 'module-2'
               ? `${outlineModuleLabel} · PHẦN ${outlineCurrentIndex + 1}/${outlineItems.length}`
@@ -3837,6 +3852,16 @@ export function LearningWindow() {
           steps={lessonTipSteps}
           onComplete={() => saveOnboardingState('complete')}
           onSkip={() => saveOnboardingState('complete')}
+        />
+      ) : shouldShowOutlineReviewTip(effectiveDecisions, {
+        onSummary: Boolean(scene.assessmentSummary),
+        passed: isPassFailSummary ? finalPassed : true,
+        browsing: isReviewing
+      }) && !teacherOpen && !practiceBriefOpen && !practiceFullOpen ? (
+        <OnboardingTour
+          steps={outlineReviewTipSteps}
+          onComplete={() => saveOnboardingDecision(OUTLINE_REVIEW_TIP_DECISION_KEY, 'yes')}
+          onSkip={() => saveOnboardingDecision(OUTLINE_REVIEW_TIP_DECISION_KEY, 'yes')}
         />
       ) : null}
     </main>

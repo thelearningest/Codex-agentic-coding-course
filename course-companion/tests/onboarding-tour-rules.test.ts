@@ -6,7 +6,9 @@ import {
   shouldShowLessonTip,
   shouldShowTeacherDot,
   moduleUnlockedBetween,
-  TEACHER_CHAT_OPENED_DECISION_KEY
+  TEACHER_CHAT_OPENED_DECISION_KEY,
+  OUTLINE_REVIEW_TIP_DECISION_KEY,
+  shouldShowOutlineReviewTip
 } from '../src/renderer/src/components/onboarding-tour-rules'
 
 describe('onboarding tour rules', () => {
@@ -57,5 +59,15 @@ describe('onboarding tour rules', () => {
     expect(moduleUnlockedBetween('module-2', 'module-2')).toBeNull()
     expect(moduleUnlockedBetween('module-3', 'module-2')).toBeNull()
     expect(moduleUnlockedBetween('module-2', null)).toBeNull()
+  })
+
+  it('shows the outline review tip once, on a passed summary the learner is actually on', () => {
+    const passed = { onSummary: true, passed: true, browsing: false }
+    expect(shouldShowOutlineReviewTip({}, passed)).toBe(true)
+    expect(shouldShowOutlineReviewTip(undefined, passed)).toBe(true)
+    expect(shouldShowOutlineReviewTip({ [OUTLINE_REVIEW_TIP_DECISION_KEY]: 'yes' }, passed)).toBe(false)
+    expect(shouldShowOutlineReviewTip({}, { ...passed, passed: false })).toBe(false)
+    expect(shouldShowOutlineReviewTip({}, { ...passed, browsing: true })).toBe(false)
+    expect(shouldShowOutlineReviewTip({}, { ...passed, onSummary: false })).toBe(false)
   })
 })
