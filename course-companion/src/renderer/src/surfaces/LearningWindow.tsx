@@ -3397,18 +3397,27 @@ export function LearningWindow() {
           <div className="pixel-outline-menu">
             <strong>{outlineModuleLabel} · {outlineItems.length} PHẦN</strong>
             <ol>
-              {outlineItems.map((item, index) => (
-                <li
-                  className={index === outlineCurrentIndex ? 'is-active' : reviewPages.includes(item.startSceneId) ? undefined : 'is-locked'}
-                  aria-current={index === outlineCurrentIndex ? 'step' : undefined}
-                  key={item.startSceneId}
-                >
-                  <button type="button" disabled={busy || !reviewPages.includes(item.startSceneId)} onClick={() => openOutlinePage(item.startSceneId)}>
-                    <i aria-hidden="true" />
-                    <span>{item.title}</span>
-                  </button>
-                </li>
-              ))}
+              {outlineItems.map((item, index) => {
+                const locked = !reviewPages.includes(item.startSceneId)
+                return (
+                  <li
+                    className={index === outlineCurrentIndex ? 'is-active' : locked ? 'is-locked' : undefined}
+                    aria-current={index === outlineCurrentIndex ? 'step' : undefined}
+                    title={locked ? 'Hoàn thành phần trước để mở' : undefined}
+                    key={item.startSceneId}
+                  >
+                    <button type="button" disabled={busy || locked} aria-label={locked ? `${item.title} (Hoàn thành phần trước để mở)` : undefined} onClick={() => openOutlinePage(item.startSceneId)}>
+                      {locked ? (
+                        <svg className="pixel-outline-lock" viewBox="0 0 12 12" aria-hidden="true">
+                          <path d="M3.5 5V3.75a2.5 2.5 0 0 1 5 0V5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                          <rect x="2" y="5" width="8" height="6" rx="1.5" fill="currentColor" />
+                        </svg>
+                      ) : <i aria-hidden="true" />}
+                      <span>{item.title}</span>
+                    </button>
+                  </li>
+                )
+              })}
             </ol>
             {isReviewing ? (
               <button className="pixel-outline-resume" type="button" onClick={returnToLearningPage}>

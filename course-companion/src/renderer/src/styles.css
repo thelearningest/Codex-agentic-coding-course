@@ -235,6 +235,11 @@ button:focus-visible {
   opacity: .45;
 }
 
+.pixel-outline-lock {
+  width: 11px;
+  height: 11px;
+}
+
 .pixel-outline-menu li > button:not(:disabled):hover,
 .pixel-outline-menu li > button:focus-visible {
   background: rgba(255, 214, 102, .12);

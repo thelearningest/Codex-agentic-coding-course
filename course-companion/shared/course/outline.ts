@@ -86,25 +86,21 @@ export function adjacentOutlinePage(pages: readonly SceneId[], sceneId: SceneId,
   return index < 0 ? undefined : pages[index + direction]
 }
 
-// Module summaries are reached only after the module's Practice and final check.
-export const moduleSummaryPages: readonly SceneId[] = [
-  'module-1-final-summary',
-  'module-2-final-summary',
-  'module-2-portfolio-mastery-summary',
-  'module-3-mastery-summary'
-]
-
 // The release success page remains available after the authoritative return.
-// Reading lessons through the outline must not announce an unearned result,
-// so a summary opens only after the learner has reached it.
+// Reading lessons through the outline must not skip Practice or announce an
+// unearned result: in the module the learner is on, only pages up to the
+// furthest page they have reached open. A module the learner has moved past
+// (reviewed from Home Base) opens in full.
 export function reviewableOutlinePages(pages: readonly SceneId[], progress: Pick<LearnerProgress,
   'courseRunId' | 'completedCheckpointIds' | 'practiceCompletions' | 'sceneId' | 'sceneHistory'>): SceneId[] {
   const releaseCompleted = progress.completedCheckpointIds.includes('m4-portfolio-release')
     && progress.practiceCompletions.some((receipt) => receipt.courseRunId === progress.courseRunId
       && receipt.practiceId === 'm4-portfolio-release' && receipt.practiceVersion === '1.0.0'
       && receipt.destination.sceneId === 'module-4-complete' && Boolean(receipt.submissionDigest))
-  const reached = (page: SceneId) => page === progress.sceneId || progress.sceneHistory.includes(page)
-  return pages.filter((page) => page === 'module-4-complete'
+  const furthestReached = pages.includes(progress.sceneId)
+    ? Math.max(...[progress.sceneId, ...progress.sceneHistory].map((page) => pages.indexOf(page)))
+    : pages.length - 1
+  return pages.filter((page, index) => page === 'module-4-complete'
     ? releaseCompleted
-    : !moduleSummaryPages.includes(page) || reached(page))
+    : index <= furthestReached)
 }

@@ -57,19 +57,25 @@ describe('course outline coverage and reading order', () => {
     expect(reviewableOutlinePages(pages, { ...progress, practiceCompletions: [{ ...receipt, submissionDigest: undefined }] })).toEqual([pages[0]])
     expect(pages).toEqual(['module-4-portfolio-practice', 'module-4-complete'])
   })
-  for (const [summary, before] of [
-    ['module-1-final-summary', 'module-1-codex-projects'],
-    ['module-2-portfolio-mastery-summary', 'module-2-portfolio-practice'],
-    ['module-3-mastery-summary', 'module-3-pre-practice-summary']
-  ] as const) {
-    it(`keeps ${summary} closed in the outline until the learner reaches it`, () => {
-      const pages: SceneId[] = [before, summary]
-      const progress = { courseRunId: 'current', completedCheckpointIds: [], practiceCompletions: [], sceneId: before, sceneHistory: [] as SceneId[] }
-      expect(reviewableOutlinePages(pages, progress)).toEqual([before])
-      expect(reviewableOutlinePages(pages, { ...progress, sceneId: summary, sceneHistory: [before] })).toEqual(pages)
-      expect(reviewableOutlinePages(pages, { ...progress, sceneHistory: [summary] })).toEqual(pages)
+  describe('locks outline pages ahead of the learner', () => {
+    const pages: SceneId[] = ['module-1-chat-work', 'module-1-codex-projects', 'module-1-mastery', 'module-1-final-summary']
+    const progress = { courseRunId: 'current', completedCheckpointIds: [], practiceCompletions: [], sceneHistory: [] as SceneId[] }
+
+    it('opens only pages up to the current page, so Practice cannot be skipped', () => {
+      expect(reviewableOutlinePages(pages, { ...progress, sceneId: 'module-1-chat-work' })).toEqual(pages.slice(0, 1))
+      expect(reviewableOutlinePages(pages, { ...progress, sceneId: 'module-1-codex-projects' })).toEqual(pages.slice(0, 2))
     })
-  }
+
+    it('keeps pages the learner already reached open after going back', () => {
+      expect(reviewableOutlinePages(pages, {
+        ...progress, sceneId: 'module-1-mastery', sceneHistory: ['module-1-final-summary']
+      })).toEqual(pages)
+    })
+
+    it('opens every page of a module the learner has moved past', () => {
+      expect(reviewableOutlinePages(pages, { ...progress, sceneId: 'module-2-portfolio-workspace' })).toEqual(pages)
+    })
+  })
   for (const module of portfolioModuleDefinitions) {
     it(`covers every ${module.id} page with ordered, unique section starts`, () => {
       const pages = module.scenes.map((scene) => scene.id) as SceneId[]

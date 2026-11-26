@@ -35,7 +35,22 @@ export async function verifyOutlineNavigation(page, moduleId, statePath, screens
     assert.equal(await outline.getAttribute('open'), null)
   }
 
-  for (const [index, sceneId] of expectedStarts[moduleId].entries()) {
+  // Sections after the learner's furthest page stay locked so Practice and
+  // results cannot be skipped; only reached sections are opened below.
+  await summary.click()
+  const listItems = outline.locator('.pixel-outline-menu li')
+  const anchorSection = await listItems.evaluateAll((items) => items.findIndex((item) => item.classList.contains('is-active')))
+  assert.ok(anchorSection >= 0, `${moduleId}: the current section is marked`)
+  for (let index = anchorSection + 1; index < expectedStarts[moduleId].length; index += 1) {
+    const item = listItems.nth(index)
+    assert.equal(await item.getAttribute('class'), 'is-locked', `${moduleId}: section ${index + 1} is locked`)
+    assert.equal(await item.getAttribute('title'), 'Hoàn thành phần trước để mở')
+    assert.ok(await item.locator('button').isDisabled(), `${moduleId}: locked section ${index + 1} cannot be opened`)
+    assert.equal(await item.locator('.pixel-outline-lock').count(), 1)
+  }
+  await summary.press('Escape')
+
+  for (const [index, sceneId] of expectedStarts[moduleId].slice(0, anchorSection + 1).entries()) {
     await summary.click()
     const items = outline.locator('li > button')
     assert.equal(await items.count(), expectedStarts[moduleId].length)
