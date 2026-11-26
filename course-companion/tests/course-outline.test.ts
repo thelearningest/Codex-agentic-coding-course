@@ -49,7 +49,7 @@ describe('course outline coverage and reading order', () => {
       evidenceSummary: '', masterySummary: '', submissionDigest: 'a'.repeat(64),
       destination: { lessonId: 'module-4', checkpointId: 'm4-complete', sceneId: 'module-4-complete' }
     }
-    const progress = { courseRunId: 'current', completedCheckpointIds: ['m4-portfolio-release' as const], practiceCompletions: [receipt] }
+    const progress = { courseRunId: 'current', completedCheckpointIds: ['m4-portfolio-release' as const], practiceCompletions: [receipt], sceneId: 'module-4-portfolio-practice' as const, sceneHistory: [] }
     expect(reviewableOutlinePages(pages, progress)).toEqual(pages)
     expect(reviewableOutlinePages(pages, { ...progress, practiceCompletions: [] })).toEqual([pages[0]])
     expect(reviewableOutlinePages(pages, { ...progress, courseRunId: 'another' })).toEqual([pages[0]])
@@ -57,6 +57,19 @@ describe('course outline coverage and reading order', () => {
     expect(reviewableOutlinePages(pages, { ...progress, practiceCompletions: [{ ...receipt, submissionDigest: undefined }] })).toEqual([pages[0]])
     expect(pages).toEqual(['module-4-portfolio-practice', 'module-4-complete'])
   })
+  for (const [summary, before] of [
+    ['module-1-final-summary', 'module-1-codex-projects'],
+    ['module-2-portfolio-mastery-summary', 'module-2-portfolio-practice'],
+    ['module-3-mastery-summary', 'module-3-pre-practice-summary']
+  ] as const) {
+    it(`keeps ${summary} closed in the outline until the learner reaches it`, () => {
+      const pages: SceneId[] = [before, summary]
+      const progress = { courseRunId: 'current', completedCheckpointIds: [], practiceCompletions: [], sceneId: before, sceneHistory: [] as SceneId[] }
+      expect(reviewableOutlinePages(pages, progress)).toEqual([before])
+      expect(reviewableOutlinePages(pages, { ...progress, sceneId: summary, sceneHistory: [before] })).toEqual(pages)
+      expect(reviewableOutlinePages(pages, { ...progress, sceneHistory: [summary] })).toEqual(pages)
+    })
+  }
   for (const module of portfolioModuleDefinitions) {
     it(`covers every ${module.id} page with ordered, unique section starts`, () => {
       const pages = module.scenes.map((scene) => scene.id) as SceneId[]

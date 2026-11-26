@@ -3399,11 +3399,11 @@ export function LearningWindow() {
             <ol>
               {outlineItems.map((item, index) => (
                 <li
-                  className={index === outlineCurrentIndex ? 'is-active' : undefined}
+                  className={index === outlineCurrentIndex ? 'is-active' : reviewPages.includes(item.startSceneId) ? undefined : 'is-locked'}
                   aria-current={index === outlineCurrentIndex ? 'step' : undefined}
                   key={item.startSceneId}
                 >
-                  <button type="button" disabled={busy} onClick={() => openOutlinePage(item.startSceneId)}>
+                  <button type="button" disabled={busy || !reviewPages.includes(item.startSceneId)} onClick={() => openOutlinePage(item.startSceneId)}>
                     <i aria-hidden="true" />
                     <span>{item.title}</span>
                   </button>
