@@ -17,7 +17,7 @@
       "type": "multiple-choice",
       "bloomLevel": 2,
       "bloomLabel": "Hiểu",
-      "prompt": "Một người dùng yêu cầu Codex sửa lỗi trong dự án. Dấu hiệu nào cho thấy Codex đang hoạt động như một coding agent thay vì chatbot chỉ trả lời bằng văn bản?",
+      "prompt": "Một người dùng yêu cầu Codex sửa lỗi trong dự án. Dấu hiệu nào cho thấy Codex đang hoạt động như một coding agent thay vì chatbot thông thường?",
       "choices": [
         "Codex giải thích lỗi có thể nằm ở đâu nhưng không làm việc với dự án.",
         "Codex trả lời thật dài và dùng nhiều thuật ngữ kỹ thuật.",
@@ -37,7 +37,7 @@
       "type": "multiple-choice",
       "bloomLevel": 3,
       "bloomLabel": "Vận dụng",
-      "prompt": "Bạn đang thiết lập Codex để làm portfolio. Bạn muốn Codex tự xử lý các thao tác thông thường nhưng vẫn giữ giới hạn truy cập tệp và Internet. Bạn nên chọn gì trong menu Approval?",
+      "prompt": "Bạn đang thiết lập Codex để làm portfolio. Bạn muốn Codex tự xử lý các thao tác thông thường nhưng vẫn giữ giới hạn truy cập tệp và Internet. Bạn nên chọn thiết lập nào trong mục approval?",
       "choices": [
         "Chọn Ask for approval để Codex tự duyệt các thao tác thông thường.",
         "Chọn Approve for me và để Full access ở trạng thái tắt.",
@@ -77,7 +77,7 @@
       "type": "multiple-choice",
       "bloomLevel": 3,
       "bloomLabel": "Vận dụng",
-      "prompt": "Bạn có một quy trình chuyên biệt để viết nội dung portfolio. Quy trình gồm hướng dẫn, tài liệu tham khảo và một số bước kiểm tra, đồng thời sẽ được dùng lại khi task phù hợp. Cách đóng gói nào phù hợp nhất?",
+      "prompt": "Bạn có một quy trình chuyên biệt để viết nội dung portfolio. Quy trình gồm hướng dẫn, tài liệu tham khảo và một số bước để kiểm tra sau khi đã hoàn thành. Bạn sẽ dùng lại quy trình đó để viết nội dung portfolio cho tất cả các lần sau. Cách đóng gói nào phù hợp nhất?",
       "choices": [
         "Tạo một Skill với tệp SKILL.md.",
         "Đưa toàn bộ quy trình vào AGENTS.md để Codex luôn tải mọi chi tiết.",
