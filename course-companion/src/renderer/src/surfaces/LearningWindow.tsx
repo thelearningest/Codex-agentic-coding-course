@@ -3283,6 +3283,7 @@ export function LearningWindow() {
   const finalPassed = finalCorrectCount >= finalPassingCount
   const isPortfolioMasterySummary = displayedSceneId === 'module-2-portfolio-mastery-summary'
     || displayedSceneId === 'module-3-mastery-summary'
+  const isPassFailSummary = Boolean(scene.assessmentSummary) && !isPortfolioMasterySummary
   const portfolioPlanningHandoff = [...progress.practiceCompletions].reverse().find((receipt) =>
     receipt.practiceId === 'm2-portfolio-planning'
     && receipt.practiceVersion === '2.0.0'
@@ -3635,8 +3636,8 @@ export function LearningWindow() {
         aria-labelledby={isAssessmentQuestionPage || standaloneReadingPage ? undefined : 'teacherName'}
         className={standaloneReadingPage ? 'pixel-lesson-navigation' : `pixel-dialogue${displayedSceneId === 'module-3-git-intro' ? ' is-git-intro' : ''}${scene.choices.length === 1 ? ' has-single-choice' : ''}${scene.choices.length > 3 ? ' has-many-choices' : ''}${assessmentQuestion || scene.assessmentSummary ? ' has-assessment' : ''}${scene.assessmentSummary ? ' is-assessment-summary' : ''} has-no-scene-title${displayedSceneId === 'module-1-codex-examples' ? ' has-approval-tour' : ''}${approvalFocus ? ' has-manual-approval-focus' : ''}${usesLessonBoard ? ' is-model-board-source' : ''}${scene.practice ? ' has-practice-brief' : ''}${isReviewing && scene.lessonId === 'module-2' ? ' is-module-two-review' : ''}`}
       >
-        {isAssessmentQuestionPage || standaloneReadingPage ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
-        {isAssessmentQuestionPage || standaloneReadingPage ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
+        {isAssessmentQuestionPage || standaloneReadingPage || isPassFailSummary ? null : <div className="pixel-speaker"><img src={teacherImage} alt="" /><span>TEACHER</span><strong id="teacherName">Triết</strong></div>}
+        {isAssessmentQuestionPage || standaloneReadingPage || isPassFailSummary ? null : displayedSceneId === 'module-2-portfolio-folder' && !isReviewing ? (
           <PortfolioWorkspacePicker
             courseRunId={progress.courseRunId}
             onContinue={() => void advanceToScene('module-2-portfolio-practice', progress.decisions)}
@@ -3651,9 +3652,7 @@ export function LearningWindow() {
                 : displayedSceneId === 'module-3-mastery-summary'
                   ? `Bạn đã trả lời ${finalAnsweredCount}/${finalQuestionCount} câu. Course Companion sẽ đối chiếu câu trả lời với tám tài liệu và bằng chứng tạo bản dựng hiện tại.`
                   : `Bạn đã trả lời ${finalAnsweredCount}/${finalQuestionCount} câu. Kết quả tốt nghiệp chỉ được ghi nhận sau khi Practice và các bằng chứng phát hành đều đạt.`
-              : finalPassed
-              ? `Bạn đạt ${finalCorrectCount}/${finalQuestionCount} câu. Kết quả này đạt mốc ${finalPassingCount}/${finalQuestionCount} để hoàn thành ${scene.lessonId === 'module-1' ? 'Module 1' : 'Module 2'}.`
-              : `Bạn đạt ${finalCorrectCount}/${finalQuestionCount} câu. Hãy làm lại phần kiểm tra để đạt ít nhất ${finalPassingCount}/${finalQuestionCount}.`
+              : null
             : assessmentGroup
               ? 'Bạn có thể xem toàn bộ câu hỏi trước khi nộp.'
             : displayedSceneId === 'module-1-codex-examples'
