@@ -54,6 +54,23 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Portfolio project added in the background, 26 November 2026
+
+Implementation: `implemented` for issue 16. After the learner sets up the
+Module 2 portfolio folder, Course Companion still registers the Codex project
+through the `codex://new` link, but no longer brings Codex to the front. On
+macOS the link opens without activating Codex; on Windows the window that had
+focus is focused again afterwards. Opening a Practice chat still brings Codex
+forward. The learner reads the ready state on the same lesson page.
+
+Verification: typecheck, lint, build and the Electron suite `passed`. The unit
+suite had 853 passes and 91 failures in five frozen-content, palette and
+portfolio-package files that do not load the changed code. The Electron
+suite uses the simulated Codex. Whether real Codex registers the project
+without coming forward is `pending`. Next, set up a portfolio folder with live
+Codex on macOS and Windows and confirm the lesson stays in front and Continue
+unlocks.
+
 ### One-prompt desktop launch, 24 November 2026
 
 Agent-assisted launch is `implemented`. The README prompt gives consent for

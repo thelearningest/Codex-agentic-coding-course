@@ -309,7 +309,11 @@ const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGate
       open: (root) => (appServerGateway as TestCodexGateway).openDesktopProject(root)
     } : new CodexDesktopProjectRegistry(codexDataDirectory, async (url) => {
       await resolveCodexRuntimeCommand()
-      await shell.openExternal(url)
+      // Register the project without pulling the learner out of the lesson.
+      // `activate` only works on macOS, so elsewhere return focus afterwards.
+      const lessonWindow = BrowserWindow.getFocusedWindow()
+      await shell.openExternal(url, { activate: false })
+      if (process.platform !== 'darwin' && lessonWindow && !lessonWindow.isDestroyed()) lessonWindow.focus()
     }))
 
 async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
