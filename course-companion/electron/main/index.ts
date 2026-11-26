@@ -309,18 +309,26 @@ const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGate
       open: (root) => (appServerGateway as TestCodexGateway).openDesktopProject(root)
     } : new CodexDesktopProjectRegistry(codexDataDirectory, async (url) => {
       await resolveCodexRuntimeCommand()
-      // Register the project without pulling the learner out of the lesson.
-      // `activate` only works on macOS, so elsewhere return focus afterwards.
-      const lessonWindow = BrowserWindow.getFocusedWindow()
+      // Codex may still bring its own window forward when it handles the link,
+      // so remember the lesson window and return to it once registration ends.
+      portfolioProjectReturnWindow = BrowserWindow.getFocusedWindow()
       await shell.openExternal(url, { activate: false })
-      if (process.platform !== 'darwin' && lessonWindow && !lessonWindow.isDestroyed()) lessonWindow.focus()
     }))
+let portfolioProjectReturnWindow: BrowserWindow | null = null
+
+function returnToPortfolioLesson(): void {
+  const lessonWindow = portfolioProjectReturnWindow
+  portfolioProjectReturnWindow = null
+  if (!lessonWindow || lessonWindow.isDestroyed()) return
+  if (process.platform === 'darwin') app.focus({ steal: true })
+  lessonWindow.focus()
+}
 
 async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
   const workspace = await portfolioWorkspaceRepository.load({ courseRunId: request.courseRunId })
   if (workspace.status !== 'ready' || workspace.selectedPath !== request.expectedPath) return workspace
   try {
-    const project = await portfolioCodexProjects.ensure(request.expectedPath)
+    const project = await portfolioCodexProjects.ensure(request.expectedPath).finally(returnToPortfolioLesson)
     return await portfolioWorkspaceRepository.saveCodexProject(request, project)
   } catch {
     return { ...workspace, codexProjectError: 'Chưa thêm được portfolio vào Codex. Hãy mở hoặc cập nhật Codex rồi thử lại.' }

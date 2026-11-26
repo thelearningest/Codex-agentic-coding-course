@@ -58,18 +58,23 @@ and must never be inferred from a passing automated check.
 
 Implementation: `implemented` for issue 16. After the learner sets up the
 Module 2 portfolio folder, Course Companion still registers the Codex project
-through the `codex://new` link, but no longer brings Codex to the front. On
-macOS the link opens without activating Codex; on Windows the window that had
-focus is focused again afterwards. Opening a Practice chat still brings Codex
-forward. The learner reads the ready state on the same lesson page.
+through the `codex://new` link. On macOS the link opens without activating
+Codex. Codex still came to the front in the owner's first test, so Course
+Companion now remembers the focused lesson window and brings it back when
+registration finishes or fails, on macOS and Windows. Codex may appear briefly
+first. Opening a Practice chat still brings Codex forward.
 
-Verification: typecheck, lint, build and the Electron suite `passed`. The unit
-suite had 853 passes and 91 failures in five frozen-content, palette and
-portfolio-package files that do not load the changed code. The Electron
-suite uses the simulated Codex. Whether real Codex registers the project
-without coming forward is `pending`. Next, set up a portfolio folder with live
-Codex on macOS and Windows and confirm the lesson stays in front and Continue
-unlocks.
+Verification: typecheck, lint and build `passed`. The unit suite had 856
+passes and 91 failures in five frozen-content, palette and portfolio-package
+files that do not load the changed code. Practice guide and review feedback
+passed; Teacher chat failed once and passed on rerun. The Electron smoke test
+stopped at Module 1 outline navigation after the separate 7315510 outline
+lock. The portfolio Electron test got past folder setup and stopped at the
+existing "portfolio package changed" completion error. Both suites use the
+simulated Codex. Live behaviour is `pending`: with one app copy, a disposable
+profile and a new empty folder, set up the portfolio on macOS and Windows and
+confirm the lesson returns to the front and Continue unlocks. If Windows only
+flashes the taskbar, consider a notification fallback.
 
 ### One-prompt desktop launch, 24 November 2026
 
