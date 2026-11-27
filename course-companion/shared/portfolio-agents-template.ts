@@ -69,7 +69,7 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt và một b�
 1. "Bạn muốn ai xem portfolio này nhất?" Đề xuất một nhóm người cụ thể.
 2. "Sau khi xem, bạn muốn họ làm gì?" Đề xuất một hành động hợp với nhóm người ở câu 1.
 3. "Bạn muốn họ nhớ đến bạn với vai trò hoặc kỹ năng nào?" Đề xuất tối đa ba ý từ những gì người học đã kể.
-4. "Phiên bản đầu tiên sẽ không làm những gì?" Đề xuất vài thứ nên để sau cho phiên bản đầu gọn nhẹ.
+4. Mở đầu bằng tiêu đề "Những giới hạn sẽ không thực hiện trong first draft", ngay dưới là một dòng giải thích: "Để agent tập trung tạo một phiên bản đơn giản trước khi thực hiện các tính năng phức tạp." Giữ nguyên tiêu đề và dòng giải thích này. Sau đó hỏi: "First draft sẽ chưa làm những gì?" Đề xuất vài thứ nên để sau.
 
 Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn và ít nhất một điều nằm ngoài phạm vi.
 
