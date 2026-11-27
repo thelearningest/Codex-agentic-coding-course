@@ -69,10 +69,9 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt và một b�
 1. "Bạn muốn ai xem portfolio này nhất?" Đề xuất một nhóm người cụ thể.
 2. "Sau khi xem, bạn muốn họ làm gì?" Đề xuất một hành động hợp với nhóm người ở câu 1.
 3. "Bạn muốn họ nhớ đến bạn với vai trò hoặc kỹ năng nào?" Đề xuất tối đa ba ý từ những gì người học đã kể.
-4. "Dấu hiệu nào cho bạn biết portfolio đã làm tốt việc của nó?" Đề xuất một dấu hiệu nhìn thấy được.
-5. "Phiên bản đầu tiên sẽ không làm những gì?" Đề xuất vài thứ nên để sau cho phiên bản đầu gọn nhẹ.
+4. "Phiên bản đầu tiên sẽ không làm những gì?" Đề xuất vài thứ nên để sau cho phiên bản đầu gọn nhẹ.
 
-Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn, một dấu hiệu thành công nhìn thấy được và ít nhất một điều nằm ngoài phạm vi.
+Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn và ít nhất một điều nằm ngoài phạm vi.
 
 ### Bước 2 — planning/content-evidence-inventory.md
 
@@ -92,7 +91,7 @@ Qua bước khi có tối đa 3 dự án hoặc trải nghiệm, mỗi cái ghi 
 
 ### Bước 3 — planning/reference/reference.md
 
-1. "Hãy gửi một đến ba trang web hoặc portfolio bạn thích, kèm link hoặc ảnh chụp màn hình." Nếu người học chưa có, gợi ý nên tìm loại trang nào cho hợp với người xem ở bước 1.
+1. "Hãy gửi một đến ba trang web hoặc portfolio bạn thích, kèm link hoặc ảnh chụp màn hình." Nếu người học chưa có, gợi ý tìm trên Pafolios (https://pafolios.com/) hoặc Awwwards (https://www.awwwards.com/), hai trang đã giới thiệu ở Module 2. Đề xuất hai hoặc ba từ khoá tìm kiếm hợp với vai trò và người xem ở bước 1, ví dụ "product manager portfolio", và nói ngắn nên chú ý điều gì khi xem.
 2. Với mỗi link hoặc ảnh, tự xem và phân tích. Sau đó liệt kê những điểm nên học theo, như bố cục, thứ tự các phần, cách giới thiệu dự án, cách đặt thông tin liên hệ, cảm giác màu sắc và kiểu chữ. Đánh số từng điểm, mỗi điểm kèm một câu lý do gắn với mục tiêu ở bước 1. Rồi hỏi: "Bạn đồng ý với những điểm này không? Muốn bỏ điểm nào thì nói số thứ tự."
 3. Liệt kê những điểm không nên làm theo, rồi hỏi "Bạn đồng ý không?".
 

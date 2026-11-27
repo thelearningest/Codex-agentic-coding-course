@@ -82,13 +82,13 @@
   "criteria": [
     {
       "id": "brief-current-and-approved",
-      "description": "Bản mô tả xác định người xem, quyết định, dấu hiệu thành công và ranh giới.",
+      "description": "Bản mô tả xác định người xem, quyết định và ranh giới.",
       "required": true,
       "checklistStepId": "portfolio-brief",
       "acceptedEvidence": [
         "planning-artifact"
       ],
-      "assertion": "Assess whether the brief clearly defines the audience, intended decision, observable success and scope.",
+      "assertion": "Assess whether the brief clearly defines the audience, intended decision and scope.",
       "freshness": "fresh"
     },
     {
