@@ -1,7 +1,8 @@
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, describe, expect, it } from 'vitest'
+import { pathToFileURL } from 'node:url'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CodexDesktopProjectRegistry } from '../electron/main/codex-desktop-project-registry'
 
 const directories: string[] = []
@@ -50,6 +51,51 @@ describe('Codex desktop project registration readback', () => {
     state['app-server-project-id-by-legacy-project-id-by-host'] = { [`local:${join(home, 'other')}`]: { 'desktop-id': 'server-id' } }
     await writeFile(file, JSON.stringify(state))
     await expect(registry.find(root)).resolves.toBeNull()
+  })
+
+  it('finds the exact project after malformed saved host and project paths', async () => {
+    const { home, root, file, state, registry } = await fixture()
+    state['local-projects']['desktop-id'].rootPaths = [pathToFileURL(root).href]
+    await writeFile(file, JSON.stringify({
+      'local-projects': {
+        'broken-project': { id: 'broken-project', rootPaths: ['file:///C:/old%2Fproject'] },
+        ...state['local-projects']
+      },
+      'app-server-project-id-by-legacy-project-id-by-host': {
+        'local:file://%broken': { 'broken-project': 'wrong-server-id' },
+        [`local:${pathToFileURL(home).href}`]: { 'desktop-id': 'server-id' }
+      }
+    }))
+    await expect(registry.find(root)).resolves.toEqual({ id: 'desktop-id', serverId: 'server-id' })
+  })
+
+  it('does not confirm a project with an invalid primary path and a matching secondary path', async () => {
+    const { root, file, state, registry } = await fixture()
+    state['local-projects']['desktop-id'].rootPaths = ['file:///C:/broken%FF', root]
+    await writeFile(file, JSON.stringify(state))
+    await expect(registry.find(root)).resolves.toBeNull()
+  })
+
+  it('retries a busy or temporarily inaccessible registry and uses the readable result', async () => {
+    const { home, root, file, state } = await fixture()
+    const read = vi.fn()
+      .mockRejectedValueOnce(Object.assign(new Error('sharing violation'), { code: 'EBUSY' }))
+      .mockRejectedValueOnce(Object.assign(new Error('temporarily inaccessible'), { code: 'EPERM' }))
+      .mockResolvedValueOnce(JSON.stringify(state))
+    const registry = new CodexDesktopProjectRegistry(home, async () => {}, read)
+
+    await expect(registry.find(root)).resolves.toEqual({ id: 'desktop-id', serverId: 'server-id' })
+    expect(read.mock.calls).toEqual([[file, 'utf8'], [file, 'utf8'], [file, 'utf8']])
+  })
+
+  it.each([['EACCES', 3], ['EIO', 1]])('preserves %s after at most %i read attempts', async (code, attempts) => {
+    const { home, root } = await fixture()
+    const failure = Object.assign(new Error('registry read failed'), { code })
+    const read = vi.fn().mockRejectedValue(failure)
+    const registry = new CodexDesktopProjectRegistry(home, async () => {}, read)
+
+    await expect(registry.find(root)).rejects.toBe(failure)
+    expect(read).toHaveBeenCalledTimes(attempts)
   })
 
   it('opens only the encoded portfolio folder with no prompt or new persisted chat', async () => {

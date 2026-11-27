@@ -99,9 +99,26 @@ out when checking the minimized window, including on the unmodified checkout.
 The separate portfolio journey passed folder setup and stopped at a screenshot
 timeout during the later planning submission.
 
-Run the updated build on the affected Windows machine. Retry from the same
-folder and record the code if the warning persists. The learner's original
-failure and live Windows behaviour remain `pending`.
+The Windows learner retried with the diagnostic build and reported
+`M2-REGISTRY`.
+
+#### Module 2 registry recovery
+
+The follow-up is `implemented`. Companion skips malformed file URLs in saved
+Codex host and project paths. Confirmation still requires a matching primary
+folder and its desktop-to-server project ID mapping. Registry reads retry
+`EBUSY`, `EACCES`, and `EPERM` after 50 ms and 150 ms. If the read still fails,
+Companion keeps the final operating system error for its existing diagnostic.
+
+Focused verification `passed`. The 26 related unit tests, 15 startup checks,
+lint, typecheck, and build passed. The full unit run had 865 passes and the
+same 91 failures as before this change. Electron smoke, Practice guide, and
+review feedback passed. Teacher chat hit the previously reproduced timeout
+when checking its minimized window.
+
+Verification on the affected Windows machine remains `pending`. Run the
+updated build and retry the same folder. Record the exact code if setup still
+fails.
 
 ### One-prompt desktop launch, 24 November 2026
 
