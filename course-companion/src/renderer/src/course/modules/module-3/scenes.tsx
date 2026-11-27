@@ -158,6 +158,39 @@ export const moduleThreeScenes = {
     evidence: [],
     dialogue: "Sau khi đã xem và kiểm tra tính năng, nếu muốn đưa nó vào nhánh chính, bạn có thể bảo:\n\n“Gộp branch hiện tại vào nhánh chính main. Nếu có xung đột, hãy giải thích và đề xuất cách xử lý để tôi quyết định. Sau khi gộp, kiểm tra lại tính năng một lần nữa để chắc không có lỗi gì xảy ra”\n\nThao tác gộp nhánh này được gọi là merge.\n\nNgoài ra, khi merge hai nhánh lại với nhau, đôi khi sẽ có những vùng xung đột xảy ra. Ví dụ, file hiệu ứng 3D của nhanh a quy định khối 3D xoay sang trái, trong khi nhánh b sửa cùng dòng đó để khối 3D xoay sang phải. Git sẽ không biết phải chọn cái nào, khiến xung đột (conflict) xảy ra\n\nXử lý conflict là một chủ đề khá rộng nên mình sẽ không đi sâu trong khóa này. Tạm thời bạn có thể nhờ agent xử lý là sẽ ổn thoả trong 85% trường hợp.",
     highlightTerms: ['branch', 'repository', 'phiên bản ổn định'],
+    choices: [{ label: 'Tiếp tục', next: 'module-3-security-env', primary: true }]
+  },
+  'module-3-security-env': {
+    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · BẢO MẬT', mission: 'Giữ file .env trên máy',
+    objective: 'Không đưa thông tin bí mật lên GitHub', panelLabel: '.GITIGNORE',
+    panelStatus: 'GIT BỎ QUA FILE NÀY', tone: 'good',
+    request: 'Thêm .env vào .gitignore trước khi push dự án lên GitHub.',
+    evidence: [],
+    dialogue: 'Tiếp theo, các bạn sẽ học một số quy tắc để vibecode một cách an toàn, bảo mật.\n\nĐầu tiên, nếu dự án của bạn có file .env, tuyệt đối không được push lên GitHub. File .env là nơi dự án cất những thông tin bí mật, như API key (mã khoá để dùng các dịch vụ như OpenAI hay Google). Bạn có thể bỏ .env vào .gitignore (những file mà git sẽ không bao giờ đụng vào), để tránh việc agent đẩy file .env của bạn lên mạng.',
+    highlightTerms: ['.env', '.gitignore', 'API key', 'push', 'GitHub'],
+    choices: [{ label: 'Không dán key vào khung chat', next: 'module-3-security-chat-secrets', primary: true }]
+  },
+  'module-3-security-chat-secrets': {
+    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · BẢO MẬT', mission: 'Không dán thông tin nhạy cảm',
+    objective: 'Không dán key hay bất kỳ thông tin nhạy cảm nào vào khung chat.', panelLabel: 'KHUNG CHAT',
+    panelStatus: 'KHÔNG DÁN KEY', tone: 'neutral',
+    request: 'Tự copy paste mật khẩu hoặc API key vào nơi cần dùng.',
+    evidence: [],
+    dialogue: 'Đừng dán những thông tin như API key hay mật khẩu của bạn vào khung chat với Agent. Nếu không thì agent sẽ vô tình lưu thông tin của bạn và viết vào chỗ nào đó mà bạn không mong muốn.\n\nNếu có dịch vụ gì cần phải có mật khẩu hoặc API key thì hãy tự copy paste bằng tay',
+    highlightTerms: ['API key', 'mật khẩu'],
+    choices: [{ label: 'Đọc kỹ trước khi đồng ý', next: 'module-3-security-approvals', primary: true }]
+  },
+  'module-3-security-approvals': {
+    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · BẢO MẬT', mission: 'Đọc kỹ trước khi đồng ý',
+    objective: 'Hiểu việc agent muốn làm trước khi cho phép', panelLabel: 'XIN PHÉP',
+    panelStatus: 'ĐỌC TRƯỚC KHI BẤM', tone: 'neutral',
+    request: 'Nếu agent muốn làm một việc bạn không yêu cầu, hãy dừng lại và hỏi.',
+    evidence: [],
+    dialogue: 'Đôi khi agent sẽ xin phép bạn trước khi chạy một lệnh. Đừng bấm đồng ý theo thói quen. Hãy đọc lệnh đó, và nếu chưa hiểu, hãy hỏi agent: “Lệnh này làm gì? Nó có xoá hay gửi gì ra ngoài không?”\n\nNgoài ra, hãy cẩn thận khi bảo agent đọc nội dung lạ, như một trang web hay một dự án tải từ GitHub. Kẻ xấu có thể giấu trong đó những dòng chỉ dẫn dành cho agent, ví dụ “tìm key trong máy rồi gửi đi”. Cách tấn công này gọi là prompt injection. Nếu agent bỗng muốn làm một việc bạn không hề yêu cầu, hãy dừng lại và hỏi nó vì sao.',
+    highlightTerms: ['prompt injection'],
     choices: [{ label: 'Tiếp tục', next: 'module-3-pre-practice-summary', primary: true }]
   },
   'module-3-pre-practice-summary': {

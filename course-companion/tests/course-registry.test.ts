@@ -60,6 +60,8 @@ describe('portfolio course registry', () => {
     expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-git-branch')?.nextSceneId)
       .toBe('module-3-git-merge')
     expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-git-merge')?.nextSceneId)
+      .toBe('module-3-security-env')
+    expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-security-approvals')?.nextSceneId)
       .toBe('module-3-pre-practice-summary')
     expect(moduleThree.scenes.find((scene) => scene.id === 'module-3-pre-practice-summary')?.nextSceneId)
       .toBe('module-3-portfolio-mastery')

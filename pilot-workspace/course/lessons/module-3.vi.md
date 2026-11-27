@@ -112,6 +112,28 @@ Ngoài ra, khi merge hai nhánh lại với nhau, đôi khi sẽ có những vù
 
 Xử lý conflict là một chủ đề khá rộng nên mình sẽ không đi sâu trong khóa này. Tạm thời bạn có thể nhờ agent xử lý là sẽ ổn thoả trong 85% trường hợp.
 
+## Bảo mật khi vibecode
+
+Tiếp theo, các bạn sẽ học một số quy tắc để vibecode một cách an toàn, bảo mật.
+
+### Giữ file .env trên máy
+
+![File .gitignore liệt kê .env và các file môi trường khác để Git bỏ qua](../../../course-companion/src/renderer/src/assets/lesson-visuals/m3-gitignore-env.png)
+
+Đầu tiên, nếu dự án của bạn có file .env, tuyệt đối không được push lên GitHub. File .env là nơi dự án cất những thông tin bí mật, như API key (mã khoá để dùng các dịch vụ như OpenAI hay Google). Bạn có thể bỏ .env vào `.gitignore` (những file mà git sẽ không bao giờ đụng vào), để tránh việc agent đẩy file .env của bạn lên mạng.
+
+### Không dán key hay bất kỳ thông tin nhạy cảm nào vào khung chat.
+
+Đừng dán những thông tin như API key hay mật khẩu của bạn vào khung chat với Agent. Nếu không thì agent sẽ vô tình lưu thông tin của bạn và viết vào chỗ nào đó mà bạn không mong muốn.
+
+Nếu có dịch vụ gì cần phải có mật khẩu hoặc API key thì hãy tự copy paste bằng tay
+
+### Đọc kỹ trước khi đồng ý
+
+Đôi khi agent sẽ xin phép bạn trước khi chạy một lệnh. Đừng bấm đồng ý theo thói quen. Hãy đọc lệnh đó, và nếu chưa hiểu, hãy hỏi agent: “Lệnh này làm gì? Nó có xoá hay gửi gì ra ngoài không?”
+
+Ngoài ra, hãy cẩn thận khi bảo agent đọc nội dung lạ, như một trang web hay một dự án tải từ GitHub. Kẻ xấu có thể giấu trong đó những dòng chỉ dẫn dành cho agent, ví dụ “tìm key trong máy rồi gửi đi”. Cách tấn công này gọi là **prompt injection**. Nếu agent bỗng muốn làm một việc bạn không hề yêu cầu, hãy dừng lại và hỏi nó vì sao.
+
 ## Tóm lại
 
 4 điều cần nhớ trước khi bắt đầu Practice:

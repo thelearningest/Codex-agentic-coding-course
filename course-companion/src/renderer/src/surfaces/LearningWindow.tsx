@@ -53,6 +53,7 @@ import m3CommitHistoryImage from '../assets/lesson-visuals/m3-commit-history-exa
 import m3GitGithubImage from '../assets/lesson-visuals/m3-git-github.png'
 import m3GithubPushedCommitsImage from '../assets/lesson-visuals/m3-github-pushed-commits.png'
 import m3GithubBranchesImage from '../assets/lesson-visuals/m3-github-branches.png'
+import m3GitignoreEnvImage from '../assets/lesson-visuals/m3-gitignore-env.png'
 import m4ProjectsOverviewImage from '../assets/lesson-visuals/module-4/vercel-projects-overview.png'
 import m4PortfolioVideo from '../assets/lesson-visuals/module-4/vercel-portfolio-captioned.mp4'
 import { PracticeBrief } from '../components/PracticeBrief'
@@ -1268,6 +1269,11 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
     image: m3GithubPushedCommitsImage,
     alt: 'Danh sách commit của dự án trên GitHub sau khi push',
     caption: 'commit của dự án khi được push lên github',
+    fit: 'contain'
+  },
+  'module-3-security-env': {
+    image: m3GitignoreEnvImage,
+    alt: 'File .gitignore liệt kê .env và các file môi trường khác để Git bỏ qua',
     fit: 'contain'
   }
 }
