@@ -174,6 +174,8 @@ Chỉ nhắn khi cửa sổ khóa học đã mở hoặc khi có bước mình p
 chẳng hạn như nhập mật khẩu hay bấm cho phép.
 ```
 
+![Prompt mẫu để mở khóa học trong ô nhập của Codex](docs/assets/readme/codex-course-start-prompt.png)
+
 Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo năm bước sau:
 
 1. Trong ứng dụng ChatGPT, bấm **ChatGPT** ở góc trên bên trái, rồi chọn **Codex**.
@@ -200,7 +202,7 @@ Nếu chưa biết cách mở thư mục trong Codex, bạn làm theo năm bư�
 
 ### Bước 2 — Trước khi bắt đầu khoá học
 
-Gửi tin nhắn xong, bạn chỉ cần chờ Course Companion mở. Nếu máy yêu cầu nhập mật khẩu hoặc bấm cho phép, Codex sẽ hướng dẫn bạn. Lần sau, mở lại thư mục khóa học trong Codex và nhắn “Mở khóa học giúp mình”.
+Gửi tin nhắn xong, bạn chỉ cần chờ app khoá học mở. Nếu máy yêu cầu nhập mật khẩu hoặc bấm cho phép, Codex sẽ hướng dẫn bạn. Lần sau, mở lại thư mục khóa học trong Codex và nhắn “Mở khóa học giúp mình”.
 
 
 ### Bước 3 — Bắt đầu học
