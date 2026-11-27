@@ -1,11 +1,12 @@
 import type { PortfolioCodexProject } from '../../../../shared/contracts'
 
 export function PortfolioCodexProjectSetup({
-  path, project, error, busy, onRetry
+  path, project, error, errorCode, busy, onRetry
 }: {
   path: string
   project?: PortfolioCodexProject
   error?: string
+  errorCode?: string
   busy: boolean
   onRetry: () => void
 }) {
@@ -14,7 +15,10 @@ export function PortfolioCodexProjectSetup({
       <h3 id="portfolio-codex-project-title">
         {busy ? 'Đang thêm portfolio vào Codex…' : error ? 'Chưa kết nối được với Codex' : 'Project Codex đã sẵn sàng'}
       </h3>
-      {error ? <p role="alert">{error}</p> : <p>
+      {error ? <div role="alert">
+        <p>{error}</p>
+        {errorCode ? <p>Mã lỗi <code>{errorCode}</code></p> : null}
+      </div> : <p>
         Course Companion tự thêm thư mục portfolio vào Codex và dùng lại cùng project cho mọi bài thực hành portfolio trong Modules 2–4.
       </p>}
       <div className="portfolio-codex-project-path">

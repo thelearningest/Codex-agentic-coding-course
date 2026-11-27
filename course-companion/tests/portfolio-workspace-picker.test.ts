@@ -21,9 +21,10 @@ describe('portfolio workspace picker', () => {
 
   it('offers a retry when automatic registration failed', () => {
     const html = renderToStaticMarkup(createElement(PortfolioCodexProjectSetup, {
-      path: 'D:\\Portfolio', error: 'Chưa kết nối được.', busy: false, onRetry: () => {}
+      path: 'D:\\Portfolio', error: 'Chưa kết nối được.', errorCode: 'M2-READ/RPC(-32601)', busy: false, onRetry: () => {}
     }))
     expect(html).toContain('role="alert"')
+    expect(html).toContain('Mã lỗi <code>M2-READ/RPC(-32601)</code>')
     expect(html).toContain('Thử kết nối lại với Codex')
     expect(html).not.toContain('Project Codex đã sẵn sàng')
   })

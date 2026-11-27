@@ -35,6 +35,18 @@ describe('CodexAppServerClient JSON-RPC routing', () => {
     expect(internals.pending.has(7)).toBe(false)
   })
 
+  it('keeps the numeric RPC error code on a rejected request', () => {
+    const client = new CodexAppServerClient()
+    const internals = client as unknown as ClientInternals
+    const reject = vi.fn()
+    internals.pending.set(7, { resolve: vi.fn(), reject })
+
+    internals.handleLine(JSON.stringify({ id: 7, error: { code: -32601, message: 'Unknown method' } }))
+
+    expect(reject).toHaveBeenCalledWith(expect.objectContaining({ code: 'APP_SERVER_REQUEST_FAILED', rpcCode: -32601 }))
+    expect(internals.pending.has(7)).toBe(false)
+  })
+
   it('does not resolve stop until the owned AppServer process actually exits', async () => {
     const client = new CodexAppServerClient()
     const internals = client as unknown as ClientInternals

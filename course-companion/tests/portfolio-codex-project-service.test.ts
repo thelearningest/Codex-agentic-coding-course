@@ -89,4 +89,22 @@ describe('automatic portfolio Codex desktop project registration', () => {
     await expect(service.ensure(root)).resolves.toEqual({ id: target.id, name: target.name })
     expect(closed).toBe(2)
   })
+
+  it('keeps the App Server read failure when closing also fails', async () => {
+    const service = new PortfolioCodexProjectService({
+      async request() {
+        throw Object.assign(new Error('Private App Server details'), { code: 'APP_SERVER_REQUEST_FAILED', rpcCode: -32601 })
+      },
+      async close() { throw new Error('Close failed') }
+    }, { async find() { return desktopTarget }, async open() {} }, discovery)
+    await expect(service.ensure(root)).rejects.toMatchObject({ diagnosticCode: 'M2-READ/RPC(-32601)' })
+  })
+
+  it('distinguishes App Server startup failure from project read failure', async () => {
+    const service = new PortfolioCodexProjectService({
+      async start() { throw Object.assign(new Error('Private App Server details'), { code: 'APP_SERVER_EXITED' }) },
+      async request() { throw new Error('Unexpected project read') }
+    }, { async find() { return desktopTarget }, async open() {} }, discovery)
+    await expect(service.ensure(root)).rejects.toMatchObject({ diagnosticCode: 'M2-START-EXITED' })
+  })
 })

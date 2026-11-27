@@ -1284,6 +1284,7 @@ export type PortfolioWorkspaceView = {
   agentsPath?: string
   codexProject?: PortfolioCodexProject
   codexProjectError?: string
+  codexProjectErrorCode?: string
   observedAt: string
   message: string
   canChoose: boolean

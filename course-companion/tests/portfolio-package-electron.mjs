@@ -71,8 +71,27 @@ try {
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
   await page.getByRole('button', { name: 'Chọn thư mục', exact: true }).click()
   assert.equal(await page.locator('.portfolio-codex-project').count(), 0)
+  await app.evaluate(({ BrowserWindow }) => {
+    const learning = BrowserWindow.getAllWindows().find((window) => window.webContents.getURL().includes('#/learning'))
+    if (!learning) throw new Error('Learning window not found')
+    const focus = learning.focus
+    learning.focus = function () {
+      learning.focus = focus
+      globalThis.portfolioFocusAttempted = true
+      throw new Error('Simulated focus failure')
+    }
+  })
   await page.getByRole('button', { name: 'Thiết lập thư mục portfolio', exact: true }).click()
   await page.getByRole('heading', { name: 'Chưa kết nối được với Codex', exact: true }).waitFor()
+  const projectAlert = page.locator('.portfolio-codex-project').getByRole('alert')
+  assert.match(await projectAlert.innerText(), /Mã lỗi M2-READ/)
+  assert.equal(await app.evaluate(() => globalThis.portfolioFocusAttempted), true)
+  for (const width of [1180, 320]) {
+    await page.setViewportSize({ width, height: 844 })
+    assert.equal(await projectAlert.evaluate((alert) => alert.scrollWidth <= alert.clientWidth), true)
+    await projectAlert.screenshot({ path: join(screenshots, `portfolio-codex-project-alert-${width}.png`), animations: 'disabled' })
+  }
+  await page.setViewportSize({ width: 1180, height: 844 })
   const folderContinue = page.getByRole('button', { name: 'Tiếp tục với thư mục này', exact: true })
   assert.equal(await folderContinue.isDisabled(), true)
   assert.equal(await page.locator('.portfolio-codex-project input[type="checkbox"]').count(), 0)
