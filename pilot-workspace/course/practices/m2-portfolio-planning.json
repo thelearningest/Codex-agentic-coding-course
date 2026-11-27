@@ -114,15 +114,6 @@
       "freshness": "fresh"
     },
     {
-      "id": "prototype-reflects-design",
-      "description": "Bản mẫu HTML thể hiện bố cục và thứ tự nội dung phù hợp với mục tiêu portfolio và hướng thiết kế đã chọn.",
-      "required": true,
-      "checklistStepId": "visual-reference",
-      "acceptedEvidence": ["planning-artifact"],
-      "assertion": "Compare the HTML prototype with the brief and reference.md. Assess its layout, section order and content against the intended audience and agreed design choices. A static mockup is sufficient.",
-      "freshness": "fresh"
-    },
-    {
       "id": "prd-semantic-contract",
       "description": "PRD có yêu cầu ổn định, tiêu chí chấp nhận kiểm tra được, phạm vi, responsive và accessibility.",
       "required": true,

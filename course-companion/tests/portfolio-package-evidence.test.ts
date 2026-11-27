@@ -148,16 +148,28 @@ describe('collectPortfolioPackage', () => {
   )
 
   it.each([
-    ['<title>design-prototype</title><main>Projects</main>', 'design-protoype'],
-    ['<!-- <title>design-protoype</title> --><main>Projects</main>', 'design-protoype'],
-    ['<title>design-protoype</title><script>show()</script>', 'bố cục']
-  ])('blocks an invalid prototype and explains the correction', async (html, correction) => {
+    ['a different tab title', '<title>design-prototype</title><main>Projects</main>'],
+    ['no visible body', '<title>design-protoype</title><script>show()</script>'],
+    ['a 2 MB page', `<title>x</title><img src="data:image/png;base64,${'A'.repeat(2 * 1024 * 1024)}">`]
+  ])('accepts a prototype with %s by presence and fingerprint only', async (_label, html) => {
     const workspace = await temporaryWorkspace()
     await writeValidDocuments(workspace, { [portfolioPrototypePath]: html! })
     const { portfolioPlanning } = await collectPortfolioPackage(context(workspace))
-    expect(portfolioPlanning?.issues).toContainEqual(expect.objectContaining({
-      stageId: 'visual-reference', path: portfolioPrototypePath, message: expect.stringContaining(correction!)
-    }))
+    expect(portfolioPlanning?.issues).toEqual([])
+    const prototype = portfolioPlanning?.artifacts.find((artifact) => artifact.path === portfolioPrototypePath)
+    expect(prototype).toEqual(expect.objectContaining({ byteLength: Buffer.byteLength(html!), digest: expect.stringMatching(/^[a-f0-9]{64}$/) }))
+    expect(prototype?.content).toBeUndefined()
+    expect(portfolioPlanning?.stages.find((stage) => stage.stageId === 'visual-reference')?.artifactDigests[portfolioPrototypePath]).toBe(prototype?.digest)
+  })
+
+  it.each([
+    ['empty', ''],
+    ['oversized', Buffer.alloc(25 * 1024 * 1024 + 1, 0x41)]
+  ])('blocks an %s prototype', async (code, content) => {
+    const workspace = await temporaryWorkspace()
+    await writeValidDocuments(workspace, { [portfolioPrototypePath]: content! })
+    const { portfolioPlanning } = await collectPortfolioPackage(context(workspace))
+    expect(portfolioPlanning?.issues).toEqual([expect.objectContaining({ stageId: 'visual-reference', path: portfolioPrototypePath, code })])
     expect(portfolioPlanning?.stages.find((stage) => stage.stageId === 'visual-reference')?.status).toBe('blocked')
   })
 
@@ -271,7 +283,8 @@ describe('collectPortfolioPackage', () => {
     expect(evidence.freshness).toBe('fresh')
     expect(evidence.portfolioPlanning?.issues).toEqual([])
     expect(evidence.portfolioPlanning?.artifacts).toHaveLength(6)
-    expect(evidence.portfolioPlanning?.artifacts.every((artifact) => typeof artifact.content === 'string')).toBe(true)
+    expect(evidence.portfolioPlanning?.artifacts.every((artifact) =>
+      artifact.path === portfolioPrototypePath ? artifact.content === undefined : typeof artifact.content === 'string')).toBe(true)
     expect(evidence.portfolioPlanning?.stages.map(({ stageId, status }) => [stageId, status])).toEqual([
       ['portfolio-brief', 'ready'],
       ['content-evidence-inventory', 'ready'],

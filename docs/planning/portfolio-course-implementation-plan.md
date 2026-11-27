@@ -50,9 +50,35 @@ and must never be inferred from a passing automated check.
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
-| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 2 prototype checked by presence only, 28 November 2026
+
+Implementation: `implemented`. A learner's `planning/reference/design-prototype.html`
+exceeded the 128 KiB document limit at submission. The owner chose to keep the
+prototype required in the six-file package but stop reading its content.
+Course Companion now checks only that it exists, is a regular non-empty file of
+at most 25 MiB, and records its fingerprint. The tab-title and page-body checks
+are removed, the content never reaches the Teacher review in Module 2 or
+Module 3, and the owner approved removing the `prototype-reflects-design`
+criterion. The five Markdown documents keep the 128 KiB limit. Approvals,
+six-file handoffs and the Module 3 "Bản mẫu đã thay đổi" warning are unchanged.
+The passed-review message that says the prototype content was checked is
+left as is, and `parse5` is now unused; both await an owner decision.
+
+Verification `passed` for typecheck, lint, build, 15 startup checks and 957 of
+959 unit tests; the two failures (Module 1 quiz digest and CSS palette) also
+fail on the unmodified commit. Unit tests used a real-path `TMPDIR`: with the
+default macOS temp folder, 39 package tests fail on the unmodified commit too,
+because `/var` and `/private/var` give different workspace identities. The
+Electron smoke, Teacher chat, Practice guide and review feedback scripts
+passed. `portfolio-package-electron.mjs` passed the prototype change, fresh
+review and six-file handoff steps, then stopped at the Module 3 completion
+button, where the unmodified commit stops as well. Pilot acceptance is
+`pending`. Next step: submit a learner's real large prototype in the desktop
+app.
 
 ### Portfolio project added in the background, 26 November 2026
 

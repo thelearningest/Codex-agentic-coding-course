@@ -16,7 +16,9 @@ import { PortfolioPlanningEvidenceAdapter } from '../electron/main/portfolio-pla
 import { buildPracticeReviewEnvelope, buildPracticeReviewPrompt, type PracticeReviewEnvelope } from '../electron/main/practice-review-context'
 import { currentPortfolioPackageApproval, portfolioPackageIsReady } from '../electron/main/portfolio-package-state'
 import { buildActivity, buildRun, writeBuildPackage } from './fixtures/portfolio-build-fixture'
-import { portfolioPackageArtifactPaths, type PortfolioPackageHandoff } from '../shared/contracts'
+import { portfolioPackageTimestamp } from './fixtures/portfolio-package-fixture'
+import { collectPortfolioBuildPackage } from '../electron/main/portfolio-build-package-evidence'
+import { portfolioPackageArtifactPaths, portfolioPrototypePath, type PortfolioPackageHandoff } from '../shared/contracts'
 
 const roots: string[] = []
 afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))) })
@@ -440,5 +442,28 @@ describe('Module 3 plan-led build package', () => {
     expect(saved.activeRun?.binding.workspaceRoot).toBe(prior.binding.workspaceRoot)
     expect(saved.activeRun?.packageApproval).toBeUndefined()
     expect(saved.activeRun?.reviewStatus).toBe('not-reviewed')
+  })
+
+  it('fingerprints a 2 MB handed-off prototype without reading it into the build review, and flags later changes', async () => {
+    const f = await fixture()
+    const prototypePath = join(f.workspace, portfolioPrototypePath)
+    const large = `<img src="data:image/png;base64,${'A'.repeat(2 * 1024 * 1024)}">`
+    await writeFile(prototypePath, large)
+    const digest = createHash('sha256').update(large).digest('hex')
+    const handoff = {
+      artifacts: portfolioPackageArtifactPaths.map((path) => ({ path, digest: 'unused' })),
+      approval: { artifactDigests: { [portfolioPrototypePath]: digest } }
+    } as unknown as PortfolioPackageHandoff
+    const context = { definition: f.definition, runId: 'build-run', generation: 1, workspaceRoot: f.workspace, task: { threadId: 'build-task', workspaceRoot: f.workspace } }
+
+    const unchanged = (await collectPortfolioBuildPackage(context, portfolioPackageTimestamp, handoff)).portfolioBuild!
+    expect(unchanged.issues.filter((issue) => issue.path === portfolioPrototypePath)).toEqual([])
+    const prototype = unchanged.artifacts.find((artifact) => artifact.path === portfolioPrototypePath)
+    expect(prototype).toMatchObject({ digest, byteLength: Buffer.byteLength(large) })
+    expect(prototype?.content).toBeUndefined()
+
+    await writeFile(prototypePath, large.replace('AAAA', 'BBBB'))
+    const changed = (await collectPortfolioBuildPackage(context, portfolioPackageTimestamp, handoff)).portfolioBuild!
+    expect(changed.issues).toContainEqual(expect.objectContaining({ path: portfolioPrototypePath, message: expect.stringContaining('Bản mẫu đã thay đổi') }))
   })
 })

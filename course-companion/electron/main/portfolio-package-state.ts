@@ -1,7 +1,7 @@
 import { isPortfolioBuildPackageVersion } from '../../shared/contracts'
 import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
-import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPlanningDocumentPaths, portfolioPackageVersion, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
+import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPlanningDocumentPaths, portfolioPackageVersion, portfolioPrototypePath, portfolioReleaseRecordPath, portfolioReleaseVersion } from '../../shared/contracts'
 import type { PortfolioPackageApproval, PracticeAdapterEvidenceState } from '../../shared/contracts'
 import type { PracticeRunRecord } from './practice-run-repository'
 
@@ -46,7 +46,10 @@ export function portfolioPackageIsReady(run: PracticeRunRecord): boolean {
     && planning?.workspaceIdentityDigest === createHash('sha256').update(resolve(run.binding.workspaceRoot)).digest('hex')
     && planning.issues.length === 0 && planning.unexpectedPaths.length === 0
     && paths.every((path) => planning.artifacts.some((artifact) =>
-      artifact.path === path && Boolean(artifact.content?.trim()) && /^[a-f0-9]{64}$/.test(artifact.digest)))
+      artifact.path === path
+      // The prototype is required by presence and fingerprint only; its content is not read.
+      && (path === portfolioPrototypePath ? artifact.byteLength > 0 : Boolean(artifact.content?.trim()))
+      && /^[a-f0-9]{64}$/.test(artifact.digest)))
 }
 
 export function currentPortfolioPackageApproval(run: PracticeRunRecord, courseRunId?: string): PortfolioPackageApproval | null {

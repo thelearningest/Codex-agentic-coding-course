@@ -739,6 +739,8 @@ export const portfolioBuildRecordPaths = [
   'evidence/module-3/browser-validation.md'
 ] as const
 export const portfolioPrototypePath = 'planning/reference/design-prototype.html'
+// The prototype is checked by presence and fingerprint only; its content is never read for review.
+export const portfolioPrototypeMaximumBytes = 25 * 1024 * 1024
 export const portfolioPlanningDocumentPaths = [
   'planning/portfolio-brief.md',
   'planning/content-evidence-inventory.md',

@@ -87,6 +87,22 @@ describe('portfolioPlanningHandoffIsCurrent', () => {
     expect(portfolioPlanningHandoffIsCurrent(handoff, await collect())).toBe(false)
   })
 
+  it('hands off a 2 MB prototype by fingerprint without its content', async () => {
+    const { workspace, collect, handoff } = await fixture()
+    await writeFile(join(workspace, 'planning/reference/design-prototype.html'), `<img src="data:image/png;base64,${'A'.repeat(2 * 1024 * 1024)}">`)
+    const evidence = await collect()
+    expect(evidence.freshness).toBe('fresh')
+    const prototype = evidence.portfolioPlanning!.artifacts.find((item) => item.path === 'planning/reference/design-prototype.html')!
+    expect(prototype.content).toBeUndefined()
+    expect(prototype.byteLength).toBeGreaterThan(2 * 1024 * 1024)
+    handoff.approval.artifactDigests = Object.fromEntries(evidence.portfolioPlanning!.artifacts.map(({ path, digest }) => [path, digest]))
+    handoff.artifacts = portfolioPackageArtifactPaths.map((path) => ({ path, digest: handoff.approval.artifactDigests[path]! }))
+    handoff.moduleThreeInput.artifactReferences = handoff.artifacts
+    handoff.approval.sourceDigest = evidence.sourceDigest!
+    handoff.submission.sourceDigest = evidence.sourceDigest!
+    expect(portfolioPlanningHandoffIsCurrent(handoff, evidence)).toBe(true)
+  })
+
   it.each(['edit', 'delete', 'empty', 'invalid-utf8', 'oversized', 'directory'] as const)(
     'rejects a required source document after %s', async (change) => {
       const { workspace, collect, handoff } = await fixture()
