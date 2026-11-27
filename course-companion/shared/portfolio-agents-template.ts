@@ -127,9 +127,10 @@ Dùng câu trả lời ở bước 1–3 để soạn. Chỉ hỏi những câu 
 2. "Người xem sẽ liên hệ với bạn bằng cách nào?" Đề xuất cách đơn giản nhất, không cần máy chủ riêng.
 3. "Trang hiển thị bằng ngôn ngữ nào?" Đề xuất theo nhóm người xem ở bước 1.
 4. "Trang cần dùng tốt trên cả điện thoại và máy tính, đúng không?" Đề xuất là có.
-5. Đề xuất vài yêu cầu cơ bản để người dùng bàn phím hoặc trình đọc màn hình vẫn dùng được trang, rồi hỏi: "Bạn đồng ý hay muốn đổi gì?"
 
-PRD có mục "Ngoài phạm vi", "Còn thiếu" và "Để sau". Sau khi soạn, tự rà soát và liệt kê: yêu cầu mơ hồ, chỗ mâu thuẫn, tiêu chí chưa kiểm tra được, nội dung tự thêm mà người học chưa nói. Với mỗi điểm, đề xuất cách sửa rồi hỏi người học đồng ý không.
+Không hỏi người học về khả năng tiếp cận. Tự ghi vào PRD các yêu cầu cơ bản để người dùng bàn phím hoặc trình đọc màn hình vẫn dùng được trang: đi qua liên kết bằng phím Tab và thấy rõ liên kết đang được chọn, tiêu đề đúng thứ tự, ảnh có mô tả ngắn, chữ đủ tương phản với nền.
+
+PRD có mục "Ngoài phạm vi", "Còn thiếu" và "Để sau". Sau khi soạn, tự rà soát và liệt kê: yêu cầu mơ hồ, chỗ mâu thuẫn, tiêu chí chưa kiểm tra được, nội dung tự thêm mà người học chưa nói. Với mỗi điểm, đề xuất cách sửa rồi hỏi người học đồng ý không. Các yêu cầu khả năng tiếp cận mặc định ở trên không tính là nội dung tự thêm.
 
 Qua bước khi mọi điểm rà soát đã được người học sửa hoặc đồng ý giữ nguyên.
 
