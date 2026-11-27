@@ -76,6 +76,33 @@ profile and a new empty folder, set up the portfolio on macOS and Windows and
 confirm the lesson returns to the front and Continue unlocks. If Windows only
 flashes the taskbar, consider a notification fallback.
 
+#### Module 2 project diagnostics, 27 November 2026
+
+The follow-up is `implemented`. Companion attempts to bring the lesson window
+forward after it verifies and saves the project or handles a failure.
+If focusing the window fails, the main process reports `M2-FOCUS` separately.
+The Module 2 warning shows a code for the failed stage. For example, `M2-REGISTER`
+means Companion could not confirm the desktop registration, `M2-START` means it
+could not start Codex App Server, and `M2-READ` means the project request failed.
+The code may include a known CLI status or numeric RPC error.
+
+Focused verification `passed`. The 21 project and App Server tests, typecheck,
+lint, build, and 15 startup checks passed. With simulated Codex, the Module 2
+folder setup preserved the `M2-READ` warning when focusing the window also
+failed. The warning fit desktop and 320 px widths, and retry unlocked Continue.
+A separate run saved the verified project and unlocked Continue after a focus
+failure. The full unit run had 860 passes and the same 91 failures as the
+unmodified checkout.
+
+Electron smoke, Practice guide, and review feedback passed. Teacher chat timed
+out when checking the minimized window, including on the unmodified checkout.
+The separate portfolio journey passed folder setup and stopped at a screenshot
+timeout during the later planning submission.
+
+Run the updated build on the affected Windows machine. Retry from the same
+folder and record the code if the warning persists. The learner's original
+failure and live Windows behaviour remain `pending`.
+
 ### One-prompt desktop launch, 24 November 2026
 
 Agent-assisted launch is `implemented`. The README prompt gives consent for

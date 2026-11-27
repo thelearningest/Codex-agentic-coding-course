@@ -52,7 +52,7 @@ export type CodexAppServerLaunchOptions = {
   experimentalApi?: boolean
 }
 
-export type CodexClientError = Error & { code: string; detail?: string }
+export type CodexClientError = Error & { code: string; detail?: string; rpcCode?: number }
 
 const APP_SERVER_STOP_GRACE_MS = 1_000
 const APP_SERVER_STOP_TIMEOUT_MS = 5_000
@@ -261,7 +261,10 @@ export class CodexAppServerClient {
       this.pending.delete(id)
       clearTimeout(pending.timeout)
       if (message.error !== undefined) {
-        pending.reject(typedError('APP_SERVER_REQUEST_FAILED', 'Codex App Server request failed', safeRpcDetail(message.error)))
+        const failure = typedError('APP_SERVER_REQUEST_FAILED', 'Codex App Server request failed', safeRpcDetail(message.error))
+        const rpcCode = record(message.error)?.code
+        if (typeof rpcCode === 'number' && Number.isSafeInteger(rpcCode)) failure.rpcCode = rpcCode
+        pending.reject(failure)
       } else {
         pending.resolve(message.result)
       }

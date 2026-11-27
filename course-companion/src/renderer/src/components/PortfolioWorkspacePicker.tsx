@@ -200,6 +200,7 @@ export function PortfolioWorkspacePicker({
           path={view.selectedPath}
           project={view.codexProject}
           error={view.codexProjectError || error}
+          errorCode={error ? undefined : view.codexProjectErrorCode}
           busy={busy}
           onRetry={() => void retryProject()}
         />

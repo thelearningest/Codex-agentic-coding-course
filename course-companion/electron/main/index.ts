@@ -1,5 +1,5 @@
 import { isPortfolioBuildLesson, isPortfolioBuildPackageVersion } from '../../shared/contracts'
-import { PortfolioCodexProjectService } from './portfolio-codex-project-service'
+import { PortfolioCodexProjectError, PortfolioCodexProjectService } from './portfolio-codex-project-service'
 import { CodexDesktopProjectRegistry } from './codex-desktop-project-registry'
 import { app, BrowserWindow, dialog, ipcMain, screen, shell } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
@@ -230,7 +230,6 @@ const practiceSnapshotLifecycle = new AppServerLifecycle(
 )
 const executorBootstrapClient = new CodexAppServerClient({ experimentalApi: true })
 const portfolioProjectClient = new CodexAppServerClient({ experimentalApi: true })
-let portfolioProjectClientStarted = false
 let executorBootstrapStart: Promise<void> | null = null
 
 async function ensureAppServer(): Promise<void> {
@@ -293,45 +292,43 @@ const codexDataDirectory = process.env.CODEX_HOME?.trim()
 const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGateway
   ? { request: (method, params) => appServerGateway.request(method, params) }
   : {
-      async request(method, params) {
-        if (!portfolioProjectClientStarted) {
-          await portfolioProjectClient.start()
-          portfolioProjectClientStarted = true
-        }
-        return portfolioProjectClient.request(method, params)
-      },
-      async close() {
-        portfolioProjectClientStarted = false
-        await portfolioProjectClient.stop()
-      }
+      start: () => portfolioProjectClient.start(),
+      request: (method, params) => portfolioProjectClient.request(method, params),
+      close: () => portfolioProjectClient.stop()
     }, useTestCodexGateway ? {
       find: (root) => (appServerGateway as TestCodexGateway).findDesktopProject(root),
       open: (root) => (appServerGateway as TestCodexGateway).openDesktopProject(root)
     } : new CodexDesktopProjectRegistry(codexDataDirectory, async (url) => {
       await resolveCodexRuntimeCommand()
-      // Codex may still bring its own window forward when it handles the link,
-      // so remember the lesson window and return to it once registration ends.
-      portfolioProjectReturnWindow = BrowserWindow.getFocusedWindow()
       await shell.openExternal(url, { activate: false })
     }))
-let portfolioProjectReturnWindow: BrowserWindow | null = null
-
-function returnToPortfolioLesson(): void {
-  const lessonWindow = portfolioProjectReturnWindow
-  portfolioProjectReturnWindow = null
-  if (!lessonWindow || lessonWindow.isDestroyed()) return
-  if (process.platform === 'darwin') app.focus({ steal: true })
-  lessonWindow.focus()
-}
 
 async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
   const workspace = await portfolioWorkspaceRepository.load({ courseRunId: request.courseRunId })
   if (workspace.status !== 'ready' || workspace.selectedPath !== request.expectedPath) return workspace
+  const lessonWindow = mainWindow
+  let openedDesktop = false
   try {
-    const project = await portfolioCodexProjects.ensure(request.expectedPath).finally(returnToPortfolioLesson)
+    const project = await portfolioCodexProjects.ensure(request.expectedPath, () => { openedDesktop = true })
     return await portfolioWorkspaceRepository.saveCodexProject(request, project)
-  } catch {
-    return { ...workspace, codexProjectError: 'Chưa thêm được portfolio vào Codex. Hãy mở hoặc cập nhật Codex rồi thử lại.' }
+  } catch (error) {
+    return {
+      ...workspace,
+      codexProjectError: 'Chưa thêm được portfolio vào Codex. Hãy mở hoặc cập nhật Codex rồi thử lại.',
+      codexProjectErrorCode: error instanceof PortfolioCodexProjectError ? error.diagnosticCode : 'M2-SAVE'
+    }
+  } finally {
+    if (openedDesktop && lessonWindow) {
+      try {
+        if (!lessonWindow.isDestroyed()) {
+          if (process.platform === 'darwin') app.focus({ steal: true })
+          lessonWindow.focus()
+        }
+      } catch {
+        // Focusing the lesson is best-effort. It cannot change project readiness.
+        console.warn('M2-FOCUS')
+      }
+    }
   }
 }
 const openExecutorChat = useTestCodexGateway
