@@ -5468,6 +5468,7 @@ button:focus-visible {
 .practice-setup-reference > summary,
 .practice-package-progress > summary,
 .practice-success-details > summary,
+.practice-review-met > summary,
 .practice-configuration-disclosure details > summary {
   min-height: 44px;
   padding: 12px 0;
@@ -5478,10 +5479,12 @@ button:focus-visible {
 .practice-setup-reference > summary::marker,
 .practice-package-progress > summary::marker,
 .practice-success-details > summary::marker,
+.practice-review-met > summary::marker,
 .practice-configuration-disclosure details > summary::marker { color: var(--pixel-yellow); }
 .practice-setup-reference > summary:focus-visible,
 .practice-package-progress > summary:focus-visible,
 .practice-success-details > summary:focus-visible,
+.practice-review-met > summary:focus-visible,
 .practice-configuration-disclosure details > summary:focus-visible {
   outline: 2px solid var(--pixel-yellow);
   outline-offset: 4px;
@@ -6030,6 +6033,21 @@ button:focus-visible {
 .practice-workflow .practice-compact-step-disclosure { border-radius: 8px; }
 .practice-workflow .practice-review-criteria li { border: 0; background: var(--obsidian-surface); }
 .practice-workflow .practice-review-criteria li.is-satisfied > span { color: var(--obsidian-canvas); border-color: var(--pixel-yellow); background: var(--pixel-yellow); }
+/* Inset the content so the focus outline drawn after a review never covers text.
+   A negative margin would let the scrolling panel clip the outline's left side. */
+.practice-workflow .practice-review-result { padding-inline: 12px; }
+.practice-review-criterion-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.practice-review-criterion-status {
+  padding: 1px 7px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: var(--pixel-yellow);
+  font: 600 11px/1.5 var(--app-font);
+  white-space: nowrap;
+}
+.practice-review-criteria li.is-satisfied .practice-review-criterion-status { color: var(--pixel-muted); }
+.practice-review-met { margin-top: 12px; border-top: 1px solid var(--obsidian-line-soft); }
+.practice-review-met > .practice-review-criteria { margin-top: 4px; }
 .practice-workflow .practice-success {
   border: 0;
   box-shadow: none;

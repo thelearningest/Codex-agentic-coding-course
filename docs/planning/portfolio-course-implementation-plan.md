@@ -50,9 +50,30 @@ and must never be inferred from a passing automated check.
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
-| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; review feedback names documents as the learner sees them, without file paths; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; review feedback names documents as the learner sees them, without file paths; result cards show criterion names with unmet criteria first; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Practice result cards show criterion names, 28 November 2026
+
+Implementation: `implemented`. Each review card was titled only by its
+status, so learners could not tell what had been checked. The owner approved
+seven Module 2 criterion names (for example "Các bước làm và phạm vi") and
+the label "Xem N tiêu chí đã đáp ứng" on 28 November. Each card now shows the
+name as its heading with the unchanged status words as a badge. Unmet and
+unverifiable criteria come first; when something still needs work, passed
+criteria fold under that label. Criteria without a name, in Modules 1, 3
+and 4, keep their current heading but use the same order and folding. The
+review result also gained a 12 px side inset because the focus outline drawn
+after a review covered the first letters of "Kết quả duyệt", the summary and
+the "Duyệt lúc" time. The model-written explanations are unchanged.
+
+Verification `passed` for typecheck, lint, the Module 1 Practice renderer
+unit test and the review feedback Electron script. Scratch renders of a
+Module 2 needs-work result at 1180, 380 and 320 px showed no horizontal
+overflow. Pilot acceptance `pending`: the owner reviews a real Module 2 result
+in the desktop app. Next planned phase: 2b, which splits unmet criteria into
+a problem and a next step.
 
 ### Module 2 review feedback uses learner-facing document names, 28 November 2026
 

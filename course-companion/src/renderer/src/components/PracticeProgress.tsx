@@ -106,6 +106,53 @@ const criterionNextActions: Record<string, string> = {
   'evidence-freshness': 'Làm mới bằng chứng từ đúng task Codex rồi duyệt lại.'
 }
 
+const criterionNames: Record<string, string> = {
+  'brief-current-and-approved': 'Người xem, mục tiêu và phạm vi',
+  'inventory-honest-and-publishable': 'Tư liệu, nguồn và quyền sử dụng',
+  'reference-sourced-and-bounded': 'Học từ website tham khảo',
+  'prd-semantic-contract': 'PRD: website cần làm được gì',
+  'requirements-covered-once': 'Cách kiểm tra từng yêu cầu',
+  'plan-phased-and-bounded': 'Các bước làm và phạm vi',
+  'scope-control-clean': 'Thư mục chỉ có tài liệu kế hoạch'
+}
+
+type CriterionReview = NonNullable<NonNullable<PracticeWorkspaceView['review']>['result']>['criteria'][number]
+
+const criterionStatusLabels: Record<CriterionReview['status'], string> = {
+  satisfied: 'Đã đáp ứng',
+  unsatisfied: 'Cần chỉnh sửa',
+  unverifiable: 'Chưa thể xác minh'
+}
+
+const criterionStatusOrder: Record<CriterionReview['status'], number> = {
+  unsatisfied: 0,
+  unverifiable: 1,
+  satisfied: 2
+}
+
+function sortCriteria(criteria: readonly CriterionReview[]): CriterionReview[] {
+  return [...criteria].sort((a, b) => criterionStatusOrder[a.status] - criterionStatusOrder[b.status])
+}
+
+function CriterionItem({ criterion }: { criterion: CriterionReview }) {
+  const name = criterionNames[criterion.criterionId]
+  const status = criterionStatusLabels[criterion.status]
+  return (
+    <li className={`is-${criterion.status}`}>
+      <span aria-hidden="true">{criterion.status === 'satisfied' ? '✓' : criterion.status === 'unsatisfied' ? '!' : '?'}</span>
+      <div>
+        {name ? (
+          <div className="practice-review-criterion-heading">
+            <strong>{name}</strong>
+            <span className="practice-review-criterion-status">{status}</span>
+          </div>
+        ) : <strong>{status}</strong>}
+        <p>{criterion.explanation}</p>
+      </div>
+    </li>
+  )
+}
+
 export function PracticeProgress({
   workspace,
   api,
@@ -278,14 +325,8 @@ export function PracticeProgress({
           <section className="practice-review-result is-needs-work" tabIndex={-1} aria-label="Kết quả duyệt Practice">
             <p>{reviewResult.summary}</p>
             <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
-              {reviewResult.criteria.filter((criterion) => criterion.status !== 'satisfied').map((criterion) => (
-                <li className={`is-${criterion.status}`} key={criterion.criterionId}>
-                  <span aria-hidden="true">{criterion.status === 'unsatisfied' ? '!' : '?'}</span>
-                  <div>
-                    <strong>{criterion.status === 'unsatisfied' ? 'Cần chỉnh sửa' : 'Chưa thể xác minh'}</strong>
-                    <p>{criterion.explanation}</p>
-                  </div>
-                </li>
+              {sortCriteria(reviewResult.criteria).filter((criterion) => criterion.status !== 'satisfied').map((criterion) => (
+                <CriterionItem criterion={criterion} key={criterion.criterionId} />
               ))}
             </ol>
           </section>
@@ -359,19 +400,27 @@ export function PracticeProgress({
             <p>{reviewResult?.summary ?? (reviewStatus === 'passed'
               ? 'Bằng chứng đáp ứng các tiêu chí bắt buộc.'
               : 'Hãy bổ sung bằng chứng theo các bước còn lại rồi yêu cầu duyệt lại.')}</p>
-            {reviewResult && !setupDisclosure ? (
-              <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
-                {reviewResult.criteria.map((criterion) => (
-                  <li className={`is-${criterion.status}`} key={criterion.criterionId}>
-                    <span aria-hidden="true">{criterion.status === 'satisfied' ? '✓' : criterion.status === 'unsatisfied' ? '!' : '?'}</span>
-                    <div>
-                      <strong>{criterion.status === 'satisfied' ? 'Đã đáp ứng' : criterion.status === 'unsatisfied' ? 'Cần chỉnh sửa' : 'Chưa thể xác minh'}</strong>
-                      <p>{criterion.explanation}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            ) : null}
+            {reviewResult && !setupDisclosure ? (() => {
+              const sorted = sortCriteria(reviewResult.criteria)
+              const open = sorted.filter((criterion) => criterion.status !== 'satisfied')
+              const met = sorted.filter((criterion) => criterion.status === 'satisfied')
+              const foldMet = !practicePassed && open.length > 0 && met.length > 0
+              return <>
+                <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
+                  {(foldMet ? open : sorted).map((criterion) => (
+                    <CriterionItem criterion={criterion} key={criterion.criterionId} />
+                  ))}
+                </ol>
+                {foldMet ? (
+                  <details className="practice-review-met">
+                    <summary>Xem {met.length} tiêu chí đã đáp ứng</summary>
+                    <ol className="practice-review-criteria">
+                      {met.map((criterion) => <CriterionItem criterion={criterion} key={criterion.criterionId} />)}
+                    </ol>
+                  </details>
+                ) : null}
+              </>
+            })() : null}
             {reviewResult?.reviewedAt ? <time dateTime={reviewResult.reviewedAt}>Duyệt lúc {new Date(reviewResult.reviewedAt).toLocaleString('vi-VN')}</time> : null}
           </div>
         </ReviewContainer>
