@@ -672,7 +672,8 @@ export function TeacherWorkspace({
         </section>
       ) : practiceMode ? (
         <section className="pixel-practice-review" aria-label="Duyệt tiến độ Practice">
-          <div {...practiceGuideAnchor('review-progress')} className={'pixel-practice-review__primary practice-review-overview' + (practicePassed ? ' is-complete' : '')}>
+          <div {...practiceGuideAnchor('review-progress')} className={'pixel-practice-review__primary practice-review-overview' + (practicePassed ? ' is-complete' : '')}
+            data-awaiting-approval={workspace?.portfolioPackage?.ready && !workspace.portfolioPackage.approved || undefined}>
             {workspace?.activePractice ? <PracticeTaskLink
               key={`${workspace.activePractice.runId}:${workspace.activePractice.generation}`}
               task={{ runId: workspace.activePractice.runId, generation: workspace.activePractice.generation }}
@@ -686,7 +687,6 @@ export function TeacherWorkspace({
                 : workspace?.review?.status === 'needs-work'
                   ? 'Có mục cần bổ sung'
                   : 'Sẵn sàng đối chiếu tiến độ'}</strong>
-              {!compactPractice ? <p>Triết sẽ cập nhật bằng chứng từ đúng task Codex rồi duyệt tiến độ hiện tại.</p> : null}
             </div> : null}
             {workspace?.activePractice ? (
               <button
@@ -727,7 +727,7 @@ export function TeacherWorkspace({
                 }}>Đóng</button>
               </div>
               <p>{hint.content}</p>
-              <small>Mình xem tiến độ của bạn lúc {formatTime(hint.observedAt)}. Bạn thử bước này trong task Codex nhé; nếu còn vướng, mình sẽ gợi ý tiếp.</small>
+              <small>Tiến độ lúc <time dateTime={hint.observedAt}>{formatTime(hint.observedAt)}</time></small>
             </aside>
           ) : null}
           {hintError ? <div className="pixel-chat-warning practice-hint-error" ref={hintErrorRef} tabIndex={-1} role="alert">{hintError}</div> : null}

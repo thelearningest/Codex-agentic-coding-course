@@ -60,7 +60,7 @@ const introductions: Record<string, Introduction> = {
       'Khi hài lòng, nhờ agent tạo commit cho phiên bản này rồi nộp để teacher agent duyệt.'
     ],
     referenceTitle: 'Xem ba hồ sơ Codex cần ghi lại',
-    referenceNote: 'Codex ghi lại quá trình; bạn kiểm tra website và đưa ra quyết định. Sau khi Practice đạt, bạn còn năm câu tổng kết.',
+    referenceNote: 'Sau khi Practice đạt, bạn còn năm câu tổng kết.',
     reference: [
       ['Quá trình xây website', 'evidence/module-3/build-log.md', 'Phạm vi đã xây và kết quả kiểm tra kỹ thuật.'],
       ['Quan sát và quyết định', 'evidence/module-3/learning-record.md', 'Điều bạn đã thử và kết quả bạn quan sát được.'],
@@ -78,7 +78,6 @@ const introductions: Record<string, Introduction> = {
       'Chấp nhận portfolio trên mạng rồi nộp để Triết duyệt. Phần này không có bài kiểm tra cuối.'
     ],
     referenceTitle: 'Xem hồ sơ triển khai Codex cần ghi lại',
-    referenceNote: 'Bạn xem website và quyết định chấp nhận; Codex ghi kết quả vào một hồ sơ hỗ trợ.',
     reference: [
       ['Kết quả triển khai', 'evidence/module-4/deployment-record.json', 'Phiên bản website, đường link và kết quả kiểm tra trên máy tính, điện thoại.']
     ]

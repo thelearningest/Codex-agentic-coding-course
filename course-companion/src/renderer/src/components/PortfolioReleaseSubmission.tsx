@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { portfolioReleaseRecordPath } from '../../../../shared/contracts'
 import type { PortfolioPackageSubmissionProps } from './PortfolioPackageSubmission'
 
@@ -6,6 +6,12 @@ export function PortfolioReleaseSubmission({ workspace, api, disabled, onWorkspa
   const [approvedKey, setApprovedKey] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  useEffect(() => {
+    if (!error) return
+    errorRef.current?.focus({ preventScroll: true })
+    errorRef.current?.scrollIntoView({ block: 'nearest', behavior: 'instant' })
+  }, [error])
   const release = workspace.portfolioPackage
   const active = workspace.activePractice
   if (release?.kind !== 'release' || !active) return null
@@ -39,7 +45,7 @@ export function PortfolioReleaseSubmission({ workspace, api, disabled, onWorkspa
 
   return <section className="practice-planning-evidence practice-package-submission" aria-label="Nộp bài phát hành portfolio">
     <h3 className="practice-package-heading">Portfolio trên mạng của bạn</h3>
-    <p>Tiếp tục trong task Codex hiện tại để đưa portfolio lên Vercel. Bạn tự đăng nhập, cấp quyền và quyết định phát hành; Codex ghi kết quả vào một hồ sơ hỗ trợ.</p>
+    <p>Tiếp tục trong task Codex hiện tại để đưa portfolio lên Vercel. Bạn tự đăng nhập, cấp quyền và quyết định phát hành.</p>
     <p style={{ overflowWrap: 'anywhere' }}><code>{portfolioReleaseRecordPath}</code></p>
     {observation?.reachable && observation.finalUrl ? <p className="practice-package-notice" style={{ overflowWrap: 'anywhere' }}>
       Đường link đã phản hồi khi kiểm tra không dùng tài khoản: <a href={observation.finalUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>{observation.finalUrl}</a>.
@@ -56,6 +62,6 @@ export function PortfolioReleaseSubmission({ workspace, api, disabled, onWorkspa
       <button type="button" aria-busy={busy} disabled={busy || disabled || !approved || !api?.approvePortfolioPackage || !onWorkspaceChange}
         onClick={() => void submit()}>{busy ? 'Đang kiểm tra website…' : 'Chấp nhận portfolio trên mạng và nộp bài'}</button>
     </div>
-    {error ? <p className="practice-package-notice" role="alert">{error}</p> : null}
+    {error ? <p className="practice-package-notice" ref={errorRef} tabIndex={-1} role="alert">{error}</p> : null}
   </section>
 }

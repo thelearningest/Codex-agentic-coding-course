@@ -232,6 +232,124 @@ Verification on the affected Windows machine remains `pending`. Run the
 updated build and retry the same folder. Record the exact code if setup still
 fails.
 
+On 28 November, the Module 2 folder connection was reproduced on a separate
+Windows PC at `d98707c`, the fetched `main`. Three live attempts used disposable
+Companion profiles and fresh empty folders. A name with spaces and Vietnamese
+characters and a plain name both failed, including a repeat through the native
+Windows folder picker. Companion selected the correct folder and created
+`planning`. Companion polled the readable legacy JSON registry until
+`M2-REGISTER` timed out, so Continue
+stayed disabled. The installed Codex package was `26.1120.6357.0` with bundled CLI
+`0.171.0-alpha.13.2`. The production build and 42 focused tests passed, with one
+platform-specific skip.
+
+Codex's live project list contained all three folders. A read-only query of
+`.codex-global-state.sqlite` found the matching primary paths and local-host
+server ID mappings for all three. App Server's `project/read` confirmed every
+mapped ID and primary folder. The legacy JSON file lacked all three entries.
+
+**SQLite readback, 28 November.** Implementation is `implemented`. Companion
+reads the two global settings in one read-only SQLite query. It falls back to
+JSON when the SQLite file is absent. Stale JSON cannot confirm a project when
+the database exists. Desktop ID, server ID and primary-folder checks still
+apply. Registry and project-service tests passed (20), as did lint, typecheck
+and the production build.
+
+Live Windows verification `passed` for an already registered project. Companion
+reused the original mapped ID, enabled Continue and reached Module 2 Practice.
+First-attempt registration of a fresh folder `failed` with `M2-REGISTER`.
+Codex registered one test project 52 seconds after folder setup. Reopening its
+saved course session then verified the exact folder and ID, reached Practice
+and sent zero additional folder-open requests. Other fresh folders had no
+matching SQLite entry at timeout, including through the native Windows picker.
+An experimental 90-second wait also timed out and was removed. The next
+investigation is Windows delivery and processing of the folder-open request
+while the selected project is still absent. The original tester's retest
+and native macOS verification remain pending.
+
+The full unit run had 952 passes, three skips and three failures in frozen
+Module 1 content, Teacher review controls and the UI palette. Startup had 14
+passes and one Windows temporary-directory cleanup failure (`EBUSY`). Electron
+smoke stopped at the Module 1 compact Practice return-button assertion.
+Teacher chat, Practice guide and review feedback passed when run separately.
+
+**Fresh-folder follow-up, 28 November.** All eight earlier disposable folders
+eventually appeared in the desktop registry with local-host server ID mappings.
+The interval from creation of `planning` to the desktop project's recorded
+creation time ranged from 3 to 519 seconds. The installed desktop build checks
+folder trust and awaits folder consent for a new untrusted root before creating
+the project. These timings do not isolate how much time each earlier attempt
+spent awaiting consent or Windows activation.
+
+A new live first attempt passed. In a separate controlled run the test harness
+delayed delivery of the folder link by 35 seconds, leaving the course window
+open after `M2-REGISTER`. At about 45 seconds from setup the test root became
+trusted, and at 46 seconds the SQLite project entry appeared. The same screen
+still showed the timeout. Its existing **Thử kết nối lại với Codex** button
+verified the server ID and selected folder and unlocked Continue. The run sent
+one folder link in total and reached the Module 2 Practice introduction.
+
+**Automatic recheck on the folder screen, 28 November.** Implementation is
+`implemented`. The initial setup sends one folder link and shows a Vietnamese
+waiting state explaining Codex folder trust. Companion checks the registry
+every two seconds while pending and when the window regains focus. Checks
+do not reopen the folder. The screen cancels its timer and focus listener on
+navigation or selection change and ignores obsolete responses. Continue requires
+the verified desktop/server mapping and primary folder. A secondary control
+lets the learner explicitly reopen the folder in Codex.
+
+Live Windows verification `passed` with a fresh folder and a disposable course
+profile. At 32 seconds after the real folder-open request, the folder was still
+untrusted, its SQLite mapping was absent, and Continue was disabled. After the
+user trusted the folder, the original course screen unlocked Continue at 213
+seconds from setup while Companion was in the background. The saved server ID
+and primary path matched the selected project. The run recorded one folder-open
+request, no Retry click and no page reload. Clicking Continue then reached
+Module 2 Practice. The original tester's retest and native macOS verification
+remain pending.
+
+The production build, typecheck, lint and 27 focused tests passed. Desktop,
+390 px and 320 px waiting layouts fit without horizontal overflow. The full unit
+run had 953 passes, three skips, the three previously recorded failures, and a
+Module 3 timeout that passed on a focused rerun. Startup reproduced the Windows
+cleanup error; Electron smoke reproduced the Module 1 compact-return assertion.
+The Teacher chat, Practice guide and Practice review feedback Electron suites
+all passed individually.
+
+The revised folder screen shows local folder readiness above the Codex
+connection heading. A disclosure below Continue contains the created files
+and the AGENTS.md tour. Windows UI checks passed at 1440, 390 and 320 px.
+A disposable pending run kept Continue disabled. A registered folder enabled
+Continue and reached Practice. The disclosure opened by keyboard and the tour
+advanced in both states. The production build, typecheck, lint and six picker
+tests passed.
+
+The final live Windows run on the revised screen passed with a fresh folder.
+At 32 seconds it was untrusted and unmapped, and Continue was disabled. After
+folder trust, the original page verified an enabled Continue button, one folder
+open, zero course clicks and the same renderer load. The waiting screenshot
+was captured live. The connected screenshot timed out after the assertions
+passed and was captured by reopening the same disposable profile. That run
+reused the same mapped project and reached Module 2 Practice.
+
+**Practice copy and interaction follow-up, 28 November.** The connected folder
+page goes directly from status to the folder path and Continue. The picker
+distinguishes changing folders from setting up the selection, reports a failed
+action inline, and labels only the action in progress. The guide, hints,
+submission and success screens retain the learner's next action and specific
+feedback without repeating the surrounding controls. Release submission errors
+receive keyboard focus and scroll into view. Returning from lesson review
+clears the compact return control before the learning window hides.
+
+Windows verification passed for the Electron smoke, Teacher chat, Practice
+guide and review feedback suites, including release submission errors in both
+panel sizes. The four introduction layouts and folder selection passed desktop
+and narrow checks. Typecheck, lint and production build passed. The unit run
+with two workers had 955 passes, three skips and two pre-existing failures
+(frozen course content and palette). Startup had 14 passes and the existing
+Windows temporary-directory cleanup failure. The original tester's retest and
+native macOS verification remain pending.
+
 ### One-prompt desktop launch, 24 November 2026
 
 Agent-assisted launch is `implemented`. The README prompt gives consent for

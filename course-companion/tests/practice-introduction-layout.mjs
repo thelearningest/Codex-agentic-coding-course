@@ -80,7 +80,7 @@ try {
       })
       measurements.push({ module: index + 1, width, ...layout })
       assert.equal(layout.overflow, false)
-      assert.equal(layout.steps, 3)
+      assert.equal(layout.steps, introduction.steps.length)
       assert.equal(layout.referenceOpen, false)
       if (width === 1180) assert.ok(layout.actionBottom <= layout.viewportHeight, 'Desktop start action fits the first screen')
       await page.screenshot({ path: join(screenshots, `module-${index + 1}-${width}.png`), animations: 'disabled' })
@@ -128,7 +128,7 @@ try {
       assert.equal(await page.evaluate(() => globalThis.document.documentElement.scrollWidth > globalThis.innerWidth), false)
       if (state === 'needs-work') {
         const next = await page.locator('.practice-compact-next').boundingBox()
-        const progress = await page.locator('.practice-compact-progress').boundingBox()
+        const progress = await page.locator('.practice-setup-feedback > summary').filter({ hasText: '1/2 bước đã xác minh' }).boundingBox()
         const disclosure = await page.locator('.practice-compact-details > summary').boundingBox()
         assert.ok(next.y + next.height <= progress.y)
         assert.ok(progress.y + progress.height <= disclosure.y)

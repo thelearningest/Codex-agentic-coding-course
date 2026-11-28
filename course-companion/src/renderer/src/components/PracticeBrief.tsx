@@ -23,7 +23,7 @@ const previewWorkspace: PracticeWorkspaceView = {
   phase: 'brief',
   title: 'Bài thực hành',
   objective: 'Đang tải mục tiêu Practice…',
-  expectedOutcome: 'Course Companion sẽ hiển thị kết quả cần đạt từ định nghĩa Practice.',
+  expectedOutcome: '',
   checklist: [],
   presentation: { fullPanel: 'teacher', compactPanel: 'teacher' },
   capabilities: {
@@ -259,13 +259,12 @@ export function PracticeBrief({
             <PracticeScreenshotGuide key={courseRunId}>
               <section className="practice-setup-guide" aria-label="Hướng dẫn thực hành">
                 <p>Sau khi bấm "bắt đầu thực hành", bạn sẽ được đưa đến giao diện Codex.</p>
-                <p>Tại đây, tất cả những gì bạn cần làm là chỉnh giao diện theo hướng dẫn. Cụ thể là</p>
+                <p>Kiểm tra hai cài đặt sau trong Codex.</p>
                 <ul>
                   <li>Effort (Mức nỗ lực): <strong>Medium (Vừa)</strong> hoặc <strong>High (Cao)</strong></li>
                   <li>Approval: <strong>Approve for me (Phê duyệt giúp tôi)</strong></li>
                 </ul>
                 <p>Sau khi đã chỉnh xong, bạn hãy mở teacher agent (bấm vào nút <strong>Trò chuyện với Triết</strong> xuất hiện trên một nhân vật đẹp trai), sau đó bấm nút <strong>Nộp bài</strong> để teacher agent xem tiến độ của bạn và duyệt là được.</p>
-                <p>Tác vụ này nhằm giúp bạn làm quen với giao diện của Codex,</p>
               </section>
               {controls}
             </PracticeScreenshotGuide>
@@ -278,7 +277,7 @@ export function PracticeBrief({
         <small>Mục tiêu / kết quả</small>
         <h1 id="practiceObjective">{workspace.title}</h1>
         <p>{workspace.objective}</p>
-        <p>{workspace.expectedOutcome}</p>
+        {workspace.expectedOutcome && <p>{workspace.expectedOutcome}</p>}
         {controls}
         </>}
         {!guidePractice && <PracticeStartPrompt practiceId={identity.practiceId} prompt={startPrompt} title={workspace.title} />}

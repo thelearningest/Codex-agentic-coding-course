@@ -18,7 +18,6 @@ export function PracticeIntroduction({
       <p className="practice-setup-definition">{introduction.context}</p>
       {introduction.portfolioProject ? (
         <p className="practice-setup-definition">
-          Course Companion dùng cùng project Codex đã tạo ở Module 2 và mở đúng task portfolio cho bạn.
           Tiếp tục dùng task này khi sửa hoặc nộp lại bài.
         </p>
       ) : null}

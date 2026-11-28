@@ -67,7 +67,7 @@ function PortfolioDocumentSubmission({ workspace, api, disabled, onWorkspaceChan
         Đã đọc {artifactPaths.filter((path) => packageView.artifactPaths.includes(path)).length}/{artifactPaths.length} tệp.
         {!packageView.ready || !packageView.approved ? ' Chưa duyệt nội dung.' : ''}
       </p> : null}
-      {build ? <p>Trong task Codex, nêu những gì bạn đã thử và kết quả trên website. Codex ghi lại vào ba hồ sơ dưới đây.</p> : null}
+      {build ? <p>Trong task Codex, nêu những gì bạn đã thử và kết quả trên website.</p> : null}
       <ul className="practice-package-issues" role="list">{artifactPaths.map((path) => {
         const issues = [...new Set(packageView.issues.filter((issue) => issue.startsWith(`${path}: `)))]
         return <li key={path}>

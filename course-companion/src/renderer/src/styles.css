@@ -4941,24 +4941,6 @@ button:focus-visible {
   line-height: 1.55;
 }
 
-.portfolio-workspace-guidance {
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 10px 14px;
-  margin: 22px 0;
-  padding: 18px 0;
-  border-block: 1px solid rgba(255, 255, 255, .14);
-}
-
-.portfolio-workspace-guidance span {
-  color: #ffd666;
-  font-weight: 800;
-}
-
-.portfolio-workspace-guidance p {
-  color: rgba(255, 255, 255, .88);
-}
-
 .portfolio-workspace-path {
   display: grid;
   gap: 5px;
@@ -4968,8 +4950,7 @@ button:focus-visible {
   background: rgba(0, 0, 0, .34);
 }
 
-.portfolio-workspace-path small,
-.portfolio-workspace-ready small {
+.portfolio-workspace-path small {
   color: rgba(255, 255, 255, .58);
   letter-spacing: 0.08em;
 }
@@ -4982,22 +4963,10 @@ button:focus-visible {
 }
 
 .portfolio-workspace-ready {
-  display: flex;
-  gap: 12px;
-  margin: 20px 0;
-  padding: 14px 16px;
-  border: 1px solid rgba(255, 214, 102, .42);
-  background: rgba(255, 214, 102, .16);
-}
-
-.portfolio-workspace-ready > span {
-  color: #ffd666;
-  font-weight: 800;
-}
-
-.portfolio-workspace-ready > div {
   display: grid;
   gap: 4px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
 }
 
 .portfolio-workspace-consent {
@@ -5041,14 +5010,14 @@ button:focus-visible {
 }
 
 .portfolio-workspace-continue {
-  display: block;
-  width: min(100%, 720px);
   min-height: 46px;
-  margin: 16px auto 0;
+  padding: 8px 20px;
+  border-radius: var(--obsidian-radius-control);
   border: 1px solid #ffd666;
   background: #ffd666;
   color: #000;
   font: 700 14px/1.45 var(--app-font);
+  cursor: pointer;
 }
 
 .portfolio-workspace-continue:focus-visible {
@@ -5056,25 +5025,35 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
-.portfolio-codex-project,
-.portfolio-codex-project-error {
+.portfolio-folder-setup {
   width: min(100%, 720px);
-  margin: 24px auto 0;
+  margin: 16px auto 0;
   color: #fff;
   overflow-wrap: anywhere;
 }
 
 .portfolio-codex-project {
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, .14);
+  display: grid;
+  gap: 14px;
   font-size: 14px;
   line-height: 1.65;
 }
 
-.portfolio-codex-project h3 {
-  margin: 0 0 8px;
-  color: #ffd666;
-  font-size: 20px;
+.portfolio-folder-confirmed {
+  color: var(--pixel-muted);
+  font-size: 13px;
+}
+
+.portfolio-folder-confirmed span {
+  margin-right: 4px;
+  color: var(--pixel-yellow);
+}
+
+.portfolio-codex-project h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.3;
 }
 
 .portfolio-codex-project p {
@@ -5083,43 +5062,65 @@ button:focus-visible {
 }
 
 .portfolio-codex-project-path {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding-block: 6px;
 }
 
 .portfolio-codex-project-path code {
-  flex: 1 1 240px;
-  min-width: 0;
+  color: var(--pixel-muted);
+  overflow-wrap: anywhere;
   user-select: text;
-  font-size: 12px;
+  font: 400 13px/1.55 ui-monospace, Consolas, monospace;
 }
 
-.portfolio-codex-project button {
+.portfolio-connection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.portfolio-reopen {
   min-height: 44px;
   padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, .28);
+  border: 0;
   border-radius: var(--obsidian-radius-control);
   background: transparent;
-  color: #fff;
+  color: var(--pixel-muted);
   font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
 }
 
-.portfolio-codex-project button:focus-visible {
+.portfolio-codex-project button:focus-visible,
+.portfolio-folder-details summary:focus-visible {
   outline: 3px solid #ffd666;
   outline-offset: 3px;
 }
 
-.portfolio-workspace-continue:disabled,
-.portfolio-codex-project button:disabled {
-  opacity: .55;
+.portfolio-workspace-continue:disabled {
+  background: var(--obsidian-surface-raised);
+  border-color: var(--obsidian-line);
+  color: var(--pixel-muted);
   cursor: default;
 }
 
-.portfolio-codex-project-error {
-  color: #ffd666;
+.portfolio-folder-details {
+  margin-top: 24px;
+  padding-top: 8px;
+  border-top: 1px solid var(--obsidian-line);
+  font-size: 14px;
+}
+
+.portfolio-folder-details summary {
+  width: fit-content;
+  max-width: 100%;
+  padding-block: 12px;
+  color: var(--pixel-muted);
+  cursor: pointer;
 }
 
 /* The ready folder panel (with the AGENTS.md tour) can be taller than the window.
@@ -5517,7 +5518,6 @@ button:focus-visible {
 .practice-success > small { color: var(--pixel-yellow); font: 600 12px/1.5 var(--app-font); }
 .practice-success h3 { margin: 6px 0 10px; color: var(--pixel-white); font: 600 clamp(22px, 3vw, 28px)/1.3 var(--app-font); letter-spacing: -.02em; }
 .practice-success p { margin: 0; color: var(--pixel-white); font: 400 14px/1.6 var(--app-font); }
-.practice-success > .practice-success-next { margin-top: 6px; color: var(--pixel-muted); font-size: 12px; }
 .practice-success > .practice-return-action { width: 100%; margin-top: 20px; }
 .practice-workflow .practice-progress.is-compact > .practice-compact-next {
   margin: 0 0 24px;
@@ -6079,7 +6079,7 @@ button:focus-visible {
 .practice-workflow :is(.practice-brief-actions .is-primary, .pixel-review-primary, .practice-planning-evidence button:last-child, .practice-return-action:not(.is-quick)):not(:disabled):active {
   box-shadow: inset 0 1px 3px #0003;
 }
-.practice-workflow .practice-review-overview.is-complete .pixel-review-primary:not(:disabled) {
+.practice-workflow .practice-review-overview:is(.is-complete, [data-awaiting-approval]) .pixel-review-primary:not(:disabled) {
   border-color: var(--obsidian-line-soft);
   color: var(--pixel-muted);
   background: transparent;

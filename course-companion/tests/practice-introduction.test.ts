@@ -7,12 +7,11 @@ import { getPracticeIntroduction } from '../src/renderer/src/components/practice
 
 describe('beginner Practice introductions', () => {
   it.each(['m2-portfolio-planning', 'm3-portfolio-build', 'm4-portfolio-release'])(
-    'keeps %s in the same project and existing linked task', (id) => {
+    'tells learners where to make revisions and resubmit %s', (id) => {
       const html = renderToStaticMarkup(createElement(PracticeIntroduction, {
         introduction: getPracticeIntroduction(id)!, showReference: false, children: null
       }))
-      expect(html).toContain('Course Companion dùng cùng project Codex đã tạo ở Module 2')
-      expect(html).toContain('mở đúng task portfolio cho bạn')
+      expect(html).toContain('Tiếp tục dùng task này khi sửa hoặc nộp lại bài.')
       expect(getPracticeIntroduction('m1-codex-safe-setup')!.portfolioProject).toBeUndefined()
     }
   )

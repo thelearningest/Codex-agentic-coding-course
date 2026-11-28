@@ -2772,27 +2772,28 @@ export function LearningWindow() {
     try {
       if (practiceReturnTarget === 'full') {
         await api.showFullTeacher()
-      } else if (!(await api.returnToPracticePanel())) {
+      } else {
+        // The learning window can be suspended as soon as the compact panel opens.
         setPracticeReturnTarget(null)
-        return
+        await api.returnToPracticePanel()
       }
-      setPracticeReturnTarget(null)
     } catch {
+      setPracticeReturnTarget(practiceReturnTarget)
       setError('Chưa quay lại được Practice. Hãy thử lại.')
     } finally {
       setPracticeReturnBusy(false)
     }
   }
   // Every way into Triết chat from this window goes through here.
-  const openTeacher = () => {
-    if (practiceReturnTarget === 'full') {
-      void returnToPractice()
-      return
-    }
+  const showTeacher = () => {
     setTeacherOpen(true)
     if (effectiveDecisions[TEACHER_CHAT_OPENED_DECISION_KEY] !== 'yes') {
       saveOnboardingDecision(TEACHER_CHAT_OPENED_DECISION_KEY, 'yes')
     }
+  }
+  const openTeacher = () => {
+    if (practiceReturnTarget === 'full') void returnToPractice()
+    else showTeacher()
   }
 
   // Declared after openTeacher so the listener always uses the current version.
@@ -2801,7 +2802,7 @@ export function LearningWindow() {
       setPracticeBriefOpen(false)
       setPracticeFullOpen(true)
       setPracticeReturnTarget(null)
-      openTeacher()
+      showTeacher()
     })
     return () => {
       unsubscribe?.()
