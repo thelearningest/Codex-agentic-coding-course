@@ -69,6 +69,7 @@ import { PlanningPackageEvidenceAdapter } from './planning-package-evidence-adap
 import { PortfolioPlanningEvidenceAdapter } from './portfolio-planning-evidence-adapter'
 import { PortfolioBuildEvidenceAdapter } from './portfolio-build-evidence-adapter'
 import { PortfolioReleaseEvidenceAdapter } from './portfolio-release-evidence-adapter'
+import { checkPortfolioGitHubRepository } from './portfolio-github-check'
 import { portfolioPlanningHandoffIsCurrent } from './portfolio-planning-handoff-validation'
 import { PortfolioModuleCompletionService } from './portfolio-module-completion-service'
 import {
@@ -402,6 +403,16 @@ async function loadRecordedPlanningHandoff(workspaceRoot?: string) {
   const handoff = receipt?.portfolioPlanningHandoff
   if (handoff?.schemaVersion !== 2 || (workspaceRoot && resolve(workspaceRoot) !== resolve(handoff.workspace.canonicalPath))) return null
   return handoff
+}
+/** The Module 3 portfolio folder, taken from the recorded Module 2 handoff rather than from the renderer. */
+async function loadModuleThreePortfolioWorkspace(): Promise<string | null> {
+  const handoff = await loadRecordedPlanningHandoff()
+  const loaded = await progressRepository.load()
+  if (!handoff || (loaded.status !== 'returning' && loaded.status !== 'recovered')) return null
+  const workspace = await portfolioWorkspaceRepository.load({ courseRunId: loaded.progress.courseRunId })
+  if (workspace.status !== 'ready' || !workspace.selectedPath
+    || resolve(workspace.selectedPath) !== resolve(handoff.workspace.canonicalPath)) return null
+  return handoff.workspace.canonicalPath
 }
 async function loadPortfolioReleaseContinuation() {
   const loaded = await progressRepository.load()
@@ -959,6 +970,12 @@ function registerIpcHandlers(): void {
       portfolioWorkspaceFailure(request, error))
     return workspace.status === 'ready' && workspace.selectedPath
       ? ensurePortfolioCodexProject({ ...request, expectedPath: workspace.selectedPath }) : workspace
+  })
+
+  ipcMain.handle('course:check-portfolio-github-repository', async (_event, link: unknown) => {
+    if (typeof link !== 'string' || link.length > 2048) throw new Error('Invalid GitHub repository link')
+    const workspace = await loadModuleThreePortfolioWorkspace()
+    return workspace ? checkPortfolioGitHubRepository(workspace, link) : { status: 'unavailable' as const }
   })
 
   ipcMain.handle('course:ensure-portfolio-codex-project', (_event, request: unknown) => {

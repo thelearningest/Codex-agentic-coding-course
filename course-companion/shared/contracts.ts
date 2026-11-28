@@ -1311,6 +1311,15 @@ export type PortfolioCodexProjectRequest = PortfolioWorkspaceRequest & {
   expectedPath: string
 }
 
+/** Result of checking that the Module 3 portfolio folder was pushed to the pasted GitHub repository. */
+export type PortfolioGitHubCheckResult =
+  | { status: 'passed'; repository: string }
+  | { status: 'invalid-link' }
+  | { status: 'no-remote' }
+  | { status: 'different-repository'; repository: string }
+  | { status: 'not-pushed'; repository: string }
+  | { status: 'unavailable' }
+
 type PlanningActionIdentity = PracticeIdentity & {
   runId: string
   generation: number
@@ -1412,6 +1421,7 @@ export type CourseCompanionApi = {
   choosePortfolioWorkspace: (request: PortfolioWorkspaceRequest) => Promise<PortfolioWorkspaceView>
   confirmPortfolioPlanning: (request: PortfolioWorkspaceRequest) => Promise<PortfolioWorkspaceView>
   ensurePortfolioCodexProject: (request: PortfolioCodexProjectRequest) => Promise<PortfolioWorkspaceView>
+  checkPortfolioGitHubRepository: (link: string) => Promise<PortfolioGitHubCheckResult>
   loadPracticeWorkspace: (identity?: PracticeIdentity) => Promise<PracticeWorkspaceView>
   hasActivePractice: () => Promise<boolean>
   startPractice: (request: PracticeStartRequest) => Promise<PracticeWorkspaceView>

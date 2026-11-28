@@ -13,6 +13,7 @@ import type {
   PortfolioPackageApprovalRequest,
   PortfolioWorkspaceRequest,
   PortfolioCodexProjectRequest,
+  PortfolioGitHubCheckResult,
   PortfolioWorkspaceView,
   PracticeReviewResponse,
   PracticeHintResponse,
@@ -112,6 +113,8 @@ const courseCompanionApi: CourseCompanionApi = {
     ipcRenderer.invoke('course:confirm-portfolio-planning', request) as Promise<PortfolioWorkspaceView>,
   ensurePortfolioCodexProject: (request: PortfolioCodexProjectRequest) =>
     ipcRenderer.invoke('course:ensure-portfolio-codex-project', request) as Promise<PortfolioWorkspaceView>,
+  checkPortfolioGitHubRepository: (link: string) =>
+    ipcRenderer.invoke('course:check-portfolio-github-repository', link) as Promise<PortfolioGitHubCheckResult>,
   loadAppSettings: () =>
     ipcRenderer.invoke('course:load-app-settings') as Promise<AppSettings>,
   saveAppSettings: (update: AppSettingsUpdate) =>
