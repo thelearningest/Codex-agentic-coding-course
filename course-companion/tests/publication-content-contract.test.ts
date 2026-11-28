@@ -42,6 +42,7 @@ describe('GitHub and Vercel publication content', () => {
     expect(ids.slice(ids.indexOf('module-3-git-merge'), ids.indexOf('module-3-portfolio-mastery') + 1)).toEqual([
       'module-3-git-merge',
       'module-3-security-env', 'module-3-security-chat-secrets', 'module-3-security-approvals',
+      'module-3-github-intro', 'module-3-github-practice',
       'module-3-pre-practice-summary', 'module-3-portfolio-mastery'
     ])
     const source = await read(rendererPath(3))

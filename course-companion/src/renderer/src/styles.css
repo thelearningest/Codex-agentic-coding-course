@@ -2016,7 +2016,8 @@ button:focus-visible {
 .module-one-opening img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .pixel-learning-shell[data-scene-id="module-1-chat-work"],
 .pixel-learning-shell[data-scene-id="module-1-why-codex"],
-.pixel-learning-shell[data-scene-id="module-4-vercel-benefits"] {
+.pixel-learning-shell[data-scene-id="module-4-vercel-benefits"],
+.pixel-learning-shell[data-scene-id="module-3-github-practice"] {
   padding: 100px 5vw 24px;
   display: flex;
   flex-direction: column;

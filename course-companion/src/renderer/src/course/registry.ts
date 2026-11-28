@@ -61,7 +61,9 @@ const rendererModules = [
         ['module-3-git-merge'],
         ['module-3-security-env'],
         ['module-3-security-chat-secrets'],
-        ['module-3-security-approvals']
+        ['module-3-security-approvals'],
+        ['module-3-github-intro'],
+        ['module-3-github-practice']
       ],
       'm3-evidence-debugging': [
         ['module-3-pre-practice-summary']

@@ -77,6 +77,7 @@ import {
 } from '../components/onboarding-tour-rules'
 import { DesignReferenceDialogue } from '../components/DesignReferenceDialogue'
 import { PortfolioWorkspacePicker } from '../components/PortfolioWorkspacePicker'
+import { GitHubPracticeGuide } from '../components/GitHubPracticeGuide'
 import { HighlightedDialogue } from '../components/HighlightedDialogue'
 import { adjacentOutlinePage, courseOutline, outlineSectionIndex, reviewableOutlinePages, reviewTrail } from '../../../../shared/course/outline'
 import {
@@ -1266,6 +1267,12 @@ const sceneVisuals: Partial<Record<SceneId, LessonVisual>> = {
     fit: 'contain'
   },
   'module-3-git-push': {
+    image: m3GithubPushedCommitsImage,
+    alt: 'Danh sách commit của dự án trên GitHub sau khi push',
+    caption: 'commit của dự án khi được push lên github',
+    fit: 'contain'
+  },
+  'module-3-github-intro': {
     image: m3GithubPushedCommitsImage,
     alt: 'Danh sách commit của dự án trên GitHub sau khi push',
     caption: 'commit của dự án khi được push lên github',
@@ -2602,6 +2609,7 @@ export function LearningWindow() {
   // null while unknown; learners with an existing Triết conversation never see the "new" dot.
   const [hasTeacherConversation, setHasTeacherConversation] = useState<boolean | null>(null)
   const [practiceBriefOpen, setPracticeBriefOpen] = useState(false)
+  const [verifiedGitHubRepository, setVerifiedGitHubRepository] = useState<string>()
   const [practiceFullOpen, setPracticeFullOpen] = useState(false)
   // Set while the learner rereads slides from an active Practice.
   const [practiceReturnTarget, setPracticeReturnTarget] = useState<PracticeReturnTarget | null>(null)
@@ -3366,8 +3374,11 @@ export function LearningWindow() {
   const usesLessonBoard = usesModelLessonBoard || usesGuidanceLessonBoard || usesImplementationPlanBoard || usesProjectsLessonBoard
   const isApprovalTour = displayedSceneId === 'module-1-codex-examples'
   const isVercelTutorial = displayedSceneId === 'module-4-vercel-benefits'
+  const isGitHubPractice = displayedSceneId === 'module-3-github-practice'
+  // Saved when the learner continues; kept in state until then so a passed check is not lost.
+  const githubRepository = verifiedGitHubRepository ?? progress.decisions.portfolioGitHubRepository
   const isModuleOneOpening = displayedSceneId === 'module-1-chat-work' || displayedSceneId === 'module-1-why-codex'
-  const standaloneReadingPage = isModuleOneOpening || isVercelTutorial
+  const standaloneReadingPage = isModuleOneOpening || isVercelTutorial || isGitHubPractice
   const canExpandLessonVisual = scene.lessonId !== 'intro'
   const canShowSceneMedia = !assessmentQuestion && !scene.assessmentSummary
   const usesPairedLessonNavigation = isReviewing || (!assessmentQuestion && !scene.assessmentSummary)
@@ -3397,7 +3408,7 @@ export function LearningWindow() {
   )
 
   return (
-    <main data-scene-id={displayedSceneId} data-outline-preview={outlineSceneId !== null} className={`pixel-learning-shell${scene.lessonId === 'module-2' ? ' is-module-two' : ''}${scene.lessonId === 'module-3' ? ' is-module-three' : ''}${scene.lessonId === 'module-4' ? ' is-module-four' : ''}${lessonVisual?.annotations ? ' has-publication-walkthrough' : ''}${usesLessonBoard ? ' has-model-lesson-board' : ''}${floatingCopyPrompt ? ' has-stacked-copy-prompt' : ''}${usesModuleTwoVisualDialogue ? ' has-module-two-visual-dialogue' : ''}${usesModuleTwoVisualGallery ? ' has-module-two-visual-gallery' : ''}${displayedSceneId === 'module-3-git-commit' || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-1-setup-checklist' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual?.annotations ? ' has-stacked-visual-dialogue' : ''}`}>
+    <main data-scene-id={displayedSceneId} data-outline-preview={outlineSceneId !== null} className={`pixel-learning-shell${scene.lessonId === 'module-2' ? ' is-module-two' : ''}${scene.lessonId === 'module-3' ? ' is-module-three' : ''}${scene.lessonId === 'module-4' ? ' is-module-four' : ''}${lessonVisual?.annotations ? ' has-publication-walkthrough' : ''}${usesLessonBoard ? ' has-model-lesson-board' : ''}${floatingCopyPrompt ? ' has-stacked-copy-prompt' : ''}${usesModuleTwoVisualDialogue ? ' has-module-two-visual-dialogue' : ''}${usesModuleTwoVisualGallery ? ' has-module-two-visual-gallery' : ''}${displayedSceneId === 'module-3-git-commit' || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-github-intro' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-1-setup-checklist' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual?.annotations ? ' has-stacked-visual-dialogue' : ''}`}>
       <div className="pixel-scene-world" style={sceneStyle} aria-hidden="true" />
 
       <header className={`pixel-hud${practiceReturnTarget ? ' has-practice-return' : ''}`}>
@@ -3540,7 +3551,7 @@ export function LearningWindow() {
                 isApprovalTour={isApprovalTour}
                 visual={lessonVisual}
               />
-              {(isCoursePrototype || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual.annotations) && lessonVisual.caption ? (
+              {(isCoursePrototype || displayedSceneId === 'module-3-git-push' || displayedSceneId === 'module-3-github-intro' || displayedSceneId === 'module-3-git-merge' || displayedSceneId === 'module-4-hosting-intro' || lessonVisual.annotations) && lessonVisual.caption ? (
                 <figcaption>{lessonVisual.caption}</figcaption>
               ) : null}
               {canExpandLessonVisual ? (
@@ -3571,6 +3582,15 @@ export function LearningWindow() {
             aria-label="Video hướng dẫn đưa portfolio lên Vercel, có phụ đề tiếng Việt"
           />
         </div>
+      ) : null}
+
+      {isGitHubPractice ? (
+        <GitHubPracticeGuide
+          key={progress.courseRunId}
+          verifiedRepository={githubRepository}
+          onVerified={setVerifiedGitHubRepository}
+          api={window.courseCompanion}
+        />
       ) : null}
 
       {modelLessonBoardKind && lessonVisual ? (
@@ -3806,10 +3826,12 @@ export function LearningWindow() {
               {scene.choices.map((choice) => (
                 <button
                   className={`pixel-choice${scene.choices.length === 1 && choice.primary ? ' is-primary' : ''}${scene.choices.length === 1 && choice.danger ? ' is-danger' : ''}`}
-                  disabled={busy}
+                  disabled={busy || (isGitHubPractice && !githubRepository)}
                   key={choice.label}
                   type="button"
-                  onClick={() => void choose(choice)}
+                  onClick={() => void choose(isGitHubPractice && githubRepository
+                    ? { ...choice, decision: { key: 'portfolioGitHubRepository', value: githubRepository } }
+                    : choice)}
                 >
                   {busy ? 'Đang lưu checkpoint…' : yellowChoiceLabel(choice)}
                 </button>

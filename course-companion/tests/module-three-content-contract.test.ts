@@ -134,10 +134,13 @@ describe('Module 3 content and evidence contract', () => {
       'module-3-git-push',
       'module-3-git-branch',
       'module-3-git-merge',
+      'module-3-github-intro',
+      'module-3-github-practice',
       'module-3-pre-practice-summary'
     ]
     for (const sceneId of retainedKnowledgeScenes) expect(sceneSource).toContain(`'${sceneId}': {`)
-    expect(sceneSource).toContain("choices: [{ label: 'Tiếp tục', next: 'module-3-pre-practice-summary', primary: true }]")
+    expect(sceneSource).toContain("choices: [{ label: 'Tiếp tục', next: 'module-3-github-intro', primary: true }]")
+    expect(sceneSource).toContain("choices: [{ label: 'Tiếp tục bài học', next: 'module-3-pre-practice-summary', primary: true, preservePrimaryLabel: true }]")
     expect(sceneSource).toMatch(/'module-3-pre-practice-summary': \{[\s\S]*?choices: \[\{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true \}\]/)
     expect(sceneSource).not.toContain("'module-3-portfolio-practice': {")
     expect(lesson).toContain('4 điều cần nhớ trước khi bắt đầu Practice:')

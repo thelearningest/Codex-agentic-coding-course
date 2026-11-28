@@ -191,7 +191,28 @@ export const moduleThreeScenes = {
     evidence: [],
     dialogue: 'Đôi khi agent sẽ xin phép bạn trước khi chạy một lệnh. Đừng bấm đồng ý theo thói quen. Hãy đọc lệnh đó, và nếu chưa hiểu, hãy hỏi agent: “Lệnh này làm gì? Nó có xoá hay gửi gì ra ngoài không?”\n\nNgoài ra, hãy cẩn thận khi bảo agent đọc nội dung lạ, như một trang web hay một dự án tải từ GitHub. Kẻ xấu có thể giấu trong đó những dòng chỉ dẫn dành cho agent, ví dụ “tìm key trong máy rồi gửi đi”. Cách tấn công này gọi là prompt injection. Nếu agent bỗng muốn làm một việc bạn không hề yêu cầu, hãy dừng lại và hỏi nó vì sao.',
     highlightTerms: ['prompt injection'],
-    choices: [{ label: 'Tiếp tục', next: 'module-3-pre-practice-summary', primary: true }]
+    choices: [{ label: 'Tiếp tục', next: 'module-3-github-intro', primary: true }]
+  },
+  'module-3-github-intro': {
+    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · GITHUB', mission: 'Đưa portfolio lên GitHub',
+    objective: 'Tạo tài khoản GitHub và lưu portfolio lên mạng', panelLabel: 'THỰC HÀNH',
+    panelStatus: 'GITHUB', tone: 'neutral',
+    request: 'Tạo repo trên GitHub rồi nhờ agent push portfolio lên.',
+    evidence: [],
+    dialogue: "Bạn đã biết Git lưu lịch sử thay đổi trên máy, còn GitHub giữ thêm một bản trên mạng. Giờ mình làm thật nhé: tạo tài khoản GitHub và đưa portfolio của bạn lên đó.\n\nTrước khi đưa lên, agent sẽ kiểm tra để chắc code không có secret, đúng như phần bảo mật vừa học. Module 4 sẽ dùng chính bản trên GitHub này để đưa website lên mạng.",
+    choices: [{ label: 'Bắt đầu thực hành', next: 'module-3-github-practice', primary: true, preservePrimaryLabel: true }]
+  },
+  'module-3-github-practice': {
+    lessonId: 'module-3', checkpointId: 'm3-whole-page-revision', step: 3, totalSteps: 5,
+    lessonLabel: 'MODULE 3 · THỰC HÀNH', mission: 'Đưa portfolio lên GitHub',
+    objective: 'Đưa portfolio lên GitHub', panelLabel: 'THỰC HÀNH',
+    panelStatus: 'GITHUB', tone: 'neutral',
+    request: 'Dán link repo để app kiểm tra.',
+    evidence: [],
+    dialogue: "Làm lần lượt bốn bước. Ở bước cuối, app sẽ tự kiểm tra repo của bạn.",
+    choices: [{ label: 'Tiếp tục bài học', next: 'module-3-pre-practice-summary', primary: true, preservePrimaryLabel: true }],
+    showTitle: false, showPanel: false
   },
   'module-3-pre-practice-summary': {
     lessonId: 'module-3', checkpointId: 'm3-portfolio-build', step: 4, totalSteps: 5,

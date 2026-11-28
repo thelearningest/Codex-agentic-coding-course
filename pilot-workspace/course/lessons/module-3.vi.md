@@ -134,6 +134,16 @@ Nếu có dịch vụ gì cần phải có mật khẩu hoặc API key thì hãy
 
 Ngoài ra, hãy cẩn thận khi bảo agent đọc nội dung lạ, như một trang web hay một dự án tải từ GitHub. Kẻ xấu có thể giấu trong đó những dòng chỉ dẫn dành cho agent, ví dụ “tìm key trong máy rồi gửi đi”. Cách tấn công này gọi là **prompt injection**. Nếu agent bỗng muốn làm một việc bạn không hề yêu cầu, hãy dừng lại và hỏi nó vì sao.
 
+## Đưa portfolio lên GitHub
+
+Bạn đã biết Git lưu lịch sử thay đổi trên máy, còn GitHub giữ thêm một bản trên mạng. Giờ mình làm thật nhé: tạo tài khoản GitHub và đưa portfolio của bạn lên đó.
+
+Trước khi đưa lên, agent sẽ kiểm tra để chắc code không có secret, đúng như phần bảo mật vừa học. Module 4 sẽ dùng chính bản trên GitHub này để đưa website lên mạng.
+
+### Thực hành: đưa portfolio lên GitHub
+
+Làm lần lượt bốn bước. Ở bước cuối, app sẽ tự kiểm tra repo của bạn.
+
 ## Tóm lại
 
 4 điều cần nhớ trước khi bắt đầu Practice:
