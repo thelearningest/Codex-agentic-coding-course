@@ -8,6 +8,7 @@ const outcomes: Record<string, string> = {
 }
 
 export function PracticeSuccess({ practiceId, children }: { practiceId?: string; children?: ReactNode }) {
+  const outcome = practiceId && outcomes[practiceId]
   return (
     <section className="practice-success" tabIndex={-1} role="status" aria-label="Practice hoàn thành">
       <div className="practice-success-badge" aria-hidden="true">
@@ -17,8 +18,7 @@ export function PracticeSuccess({ practiceId, children }: { practiceId?: string;
       </div>
       <small>Đã đạt</small>
       <h3>Làm tốt lắm!</h3>
-      <p>{outcomes[practiceId ?? ''] ?? 'Bài thực hành của bạn đã đạt yêu cầu.'}</p>
-      <p className="practice-success-next">Lưu kết quả để tiếp tục khóa học nhé.</p>
+      {outcome && <p>{outcome}</p>}
       {children}
     </section>
   )

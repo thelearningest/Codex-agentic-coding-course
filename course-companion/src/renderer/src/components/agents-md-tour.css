@@ -184,13 +184,6 @@
   white-space: nowrap;
 }
 
-.agents-md-tour .agents-md-tour__note {
-  margin-top: 10px;
-  color: rgba(255, 255, 255, .65);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
 @media (max-width: 640px) {
   .agents-md-tour__shot ol { font-size: 12px; }
   .agents-md-tour .agents-md-tour__callout { font-size: 14px; }

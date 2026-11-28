@@ -48,7 +48,7 @@ describe('Teacher Practice review controls', () => {
     const reviewHandler = teacher.slice(reviewStart, reviewEnd)
 
     expect(start).toBeGreaterThan(-1)
-    expect(practiceBranch).toContain("{workspace?.activePractice ? (\n              <button\n                className={'pixel-review-primary'")
+    expect(practiceBranch).toMatch(/\{workspace\?\.activePractice \? \(\s*<button\s+className=\{'pixel-review-primary'/)
     expect(practiceBranch).not.toContain('onRefresh=')
     expect(reviewHandler.indexOf('if (!workspace?.review?.canReview)')).toBeGreaterThan(-1)
     expect(reviewHandler.indexOf('if (!workspace?.review?.canReview)'))

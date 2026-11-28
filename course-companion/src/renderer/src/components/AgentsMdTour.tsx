@@ -116,7 +116,6 @@ export function AgentsMdTour() {
         </figcaption>
         <p className="agents-md-tour__live" aria-live="polite">{`Đoạn ${index + 1}/${total}. ${slide.callout}`}</p>
       </figure>
-      <p className="agents-md-tour__note">Tẹo nữa đến phần thực hành, agent của khoá học sẽ làm theo những quy tắc này.</p>
     </section>
   )
 }

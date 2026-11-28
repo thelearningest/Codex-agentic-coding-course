@@ -356,9 +356,8 @@ export function PracticeProgress({
             <small>Kết quả duyệt</small>
             {setupDisclosure ?? <strong>{practicePassed ? 'Các tiêu chí đã đáp ứng' : reviewStatus === 'passed' ? 'Đã đạt' : 'Cần bổ sung'}</strong>}
             {comparisonSummary ? <p className="practice-review-change">{comparisonSummary}</p> : null}
-            <p>{reviewResult?.summary ?? (reviewStatus === 'passed'
-              ? 'Bằng chứng đáp ứng các tiêu chí bắt buộc.'
-              : 'Hãy bổ sung bằng chứng theo các bước còn lại rồi yêu cầu duyệt lại.')}</p>
+            {reviewResult?.summary ? <p>{reviewResult.summary}</p> : reviewStatus === 'needs-work' ?
+              <p>Hãy bổ sung bằng chứng theo các bước còn lại rồi yêu cầu duyệt lại.</p> : null}
             {reviewResult && !setupDisclosure ? (
               <ol className="practice-review-criteria" aria-label="Kết quả theo từng tiêu chí">
                 {reviewResult.criteria.map((criterion) => (
@@ -401,8 +400,7 @@ export function PracticeProgress({
           <details>
           <summary>Xem chi tiết cài đặt</summary>
           <p>
-            Course Companion chỉ đọc metadata hiệu lực của task Codex đang liên kết;
-            ứng dụng không tự thay đổi cài đặt của bạn.
+            Nếu cần chỉnh cài đặt, bạn mở task này trong Codex nhé.
           </p>
           <dl>
             {setupSettings.map((row) => {

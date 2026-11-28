@@ -57,7 +57,7 @@ window.courseCompanion = {
   reviewPractice: () => new Promise((resolve, reject) => { pending = { resolve, reject } })
 }
 window.feedbackFixture = {
-  mount(embedded, restoreSavedReview = false) {
+  mount(embedded, restoreSavedReview = false, kind = 'build') {
     const savedReview = restoreSavedReview ? structuredClone(workspace.review) : null
     holdStartup = restoreSavedReview
     releaseStartup = null
@@ -75,6 +75,11 @@ window.feedbackFixture = {
     if (savedReview) {
       savedReview.result.runId = workspace.activePractice.runId
       workspace.review = savedReview
+    }
+    if (kind === 'release') {
+      workspace.activePractice.practiceId = 'm4-portfolio-release'
+      workspace.portfolioPackage.kind = 'release'
+      workspace.portfolioPackage.deployment = { reachable: true, finalUrl: 'https://example.test/' }
     }
     root.render(<main className={embedded ? 'pixel-teacher-overlay is-practice-full' : 'pixel-companion-surface pixel-companion-surface--expanded'}>
       <TeacherWorkspace key={fixtureId} embedded={embedded} onClose={() => {}} />
@@ -203,6 +208,15 @@ try {
       }
       await page.emulateMedia({ reducedMotion: 'no-preference' })
     }
+    await page.evaluate(embedded => globalThis.feedbackFixture.mount(embedded, false, 'release'), embedded)
+    await page.getByRole('checkbox', { name: /Tôi đã mở đường link/ }).check()
+    await page.getByRole('button', { name: 'Chấp nhận portfolio trên mạng và nộp bài' }).click()
+    await page.getByRole('timer').waitFor()
+    await page.evaluate(() => globalThis.feedbackFixture.settle('error'))
+    const releaseError = page.getByRole('alert').filter({ hasText: 'Simulated review failure' })
+    await releaseError.waitFor()
+    await page.waitForFunction(() => globalThis.document.activeElement?.matches('.practice-package-notice[role="alert"]'))
+    assert.ok(await releaseError.evaluate(el => el.getBoundingClientRect().top >= 0 && el.getBoundingClientRect().bottom <= globalThis.innerHeight))
   }
   console.log('Review feedback: deferred Module 3 submissions, elapsed time with reduced motion, busy release, automatic visible needs-work/passed/error feedback, and stable background refresh passed in compact/full views')
 } finally {

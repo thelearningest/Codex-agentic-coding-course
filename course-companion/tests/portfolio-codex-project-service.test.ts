@@ -11,6 +11,28 @@ const desktopTarget = { id: 'desktop-project-1', serverId: target.id }
 const discovery = { attempts: 3, wait: async () => undefined }
 
 describe('automatic portfolio Codex desktop project registration', () => {
+  it('opens once, then checks without reopening or starting the server until the exact project appears', async () => {
+    let registered = false
+    let opens = 0
+    let reads = 0
+    const service = new PortfolioCodexProjectService({
+      async request(method, params) {
+        expect([method, params]).toEqual(['project/read', { projectId: target.id }])
+        reads += 1
+        return { project: target }
+      }
+    }, {
+      async find() { return registered ? desktopTarget : null },
+      async open() { opens += 1 }
+    }, { wait: async () => { throw new Error('Screen-driven checks must return immediately') } })
+    await expect(service.ensure(root, undefined, 'open')).resolves.toBeNull()
+    await expect(service.ensure(root, undefined, 'check')).resolves.toBeNull()
+    expect(reads).toBe(0)
+    registered = true
+    await expect(service.ensure(root, undefined, 'check')).resolves.toEqual({ id: target.id, name: target.name })
+    expect([opens, reads]).toEqual([1, 1])
+  })
+
   it('opens the native folder link once and verifies the visible project across concurrent retries', async () => {
     let registered = false
     let opens = 0

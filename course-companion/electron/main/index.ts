@@ -303,13 +303,18 @@ const portfolioCodexProjects = new PortfolioCodexProjectService(useTestCodexGate
       await shell.openExternal(url, { activate: false })
     }))
 
-async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }): Promise<PortfolioWorkspaceView> {
+async function ensurePortfolioCodexProject(request: { courseRunId: string; expectedPath: string }, mode: 'wait' | 'open' | 'check' = 'wait'): Promise<PortfolioWorkspaceView> {
   const workspace = await portfolioWorkspaceRepository.load({ courseRunId: request.courseRunId })
   if (workspace.status !== 'ready' || workspace.selectedPath !== request.expectedPath) return workspace
   const lessonWindow = mainWindow
   let openedDesktop = false
   try {
-    const project = await portfolioCodexProjects.ensure(request.expectedPath, () => { openedDesktop = true })
+    const project = await portfolioCodexProjects.ensure(request.expectedPath, () => { openedDesktop = true }, mode)
+    if (!project) {
+      // Leave Codex available for folder consent; rechecks only read the registry.
+      openedDesktop = false
+      return { ...workspace, codexProject: undefined, codexProjectPending: true }
+    }
     return await portfolioWorkspaceRepository.saveCodexProject(request, project)
   } catch (error) {
     return {
@@ -958,16 +963,18 @@ function registerIpcHandlers(): void {
     const workspace = await portfolioWorkspaceRepository.confirmPlanning(request).catch((error) =>
       portfolioWorkspaceFailure(request, error))
     return workspace.status === 'ready' && workspace.selectedPath
-      ? ensurePortfolioCodexProject({ ...request, expectedPath: workspace.selectedPath }) : workspace
+      ? ensurePortfolioCodexProject({ ...request, expectedPath: workspace.selectedPath }, 'open') : workspace
   })
 
   ipcMain.handle('course:ensure-portfolio-codex-project', (_event, request: unknown) => {
-    if (!isRecord(request) || Object.keys(request).length !== 2
+    if (!isRecord(request) || Object.keys(request).some(key => !['courseRunId', 'expectedPath', 'checkOnly'].includes(key))
+      || ('checkOnly' in request && request.checkOnly !== true)
       || !isPortfolioWorkspaceRequest({ courseRunId: request.courseRunId })
       || typeof request.expectedPath !== 'string' || !request.expectedPath) {
       throw new Error('Invalid portfolio Codex project request')
     }
-    return ensurePortfolioCodexProject({ courseRunId: String(request.courseRunId), expectedPath: request.expectedPath })
+    return ensurePortfolioCodexProject({ courseRunId: String(request.courseRunId), expectedPath: request.expectedPath },
+      request.checkOnly === true ? 'check' : 'open')
   })
 
   ipcMain.handle('course:load-practice-workspace', (_event, identity) => (

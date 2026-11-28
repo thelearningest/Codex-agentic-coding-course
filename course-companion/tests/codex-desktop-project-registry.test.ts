@@ -1,6 +1,7 @@
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { DatabaseSync } from 'node:sqlite'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CodexDesktopProjectRegistry } from '../electron/main/codex-desktop-project-registry'
@@ -25,6 +26,38 @@ async function fixture() {
 }
 
 describe('Codex desktop project registration readback', () => {
+  it('uses current global SQLite settings even when legacy JSON is stale', async () => {
+    const { home, root, file, state, registry } = await fixture()
+    const staleRoot = join(home, 'Old portfolio')
+    await writeFile(file, JSON.stringify({
+      ...state,
+      'local-projects': { 'desktop-id': { id: 'desktop-id', rootPaths: [staleRoot] } }
+    }))
+    const db = new DatabaseSync(join(home, '.codex-global-state.sqlite'))
+    try {
+      db.exec('CREATE TABLE settings (scope TEXT, key TEXT, value TEXT, PRIMARY KEY(scope, key))')
+      const insert = db.prepare('INSERT INTO settings VALUES (?, ?, ?)')
+      for (const [key, value] of Object.entries(state)) {
+        insert.run('global', key, JSON.stringify(value))
+        insert.run('other', key, '{}')
+      }
+      await expect(registry.find(root)).resolves.toEqual({ id: 'desktop-id', serverId: 'server-id' })
+      await expect(registry.find(staleRoot)).resolves.toBeNull()
+      db.exec("DELETE FROM settings WHERE key = 'app-server-project-id-by-legacy-project-id-by-host'")
+      await expect(registry.find(root)).resolves.toBeNull()
+      await expect(registry.find(staleRoot)).resolves.toBeNull()
+    } finally {
+      db.close()
+    }
+  })
+
+  it('surfaces an unreadable SQLite schema even if JSON could confirm the folder', async () => {
+    const { home, root, file, state, registry } = await fixture()
+    await writeFile(file, JSON.stringify(state))
+    new DatabaseSync(join(home, '.codex-global-state.sqlite')).close()
+    await expect(registry.find(root)).rejects.toThrow(/settings/)
+  })
+
   it('reads the visible primary-root project and its distinct server ID without changing desktop state', async () => {
     const { root, file, state, registry } = await fixture()
     const original = JSON.stringify(state)

@@ -69,24 +69,27 @@ export class PortfolioCodexProjectService {
     } = {}
   ) {}
 
-  ensure(root: string, onDesktopOpen?: () => void): Promise<{ id: string; name: string }> {
+  ensure(root: string, onDesktopOpen?: () => void, mode: 'wait' | 'open' | 'check' = 'wait') {
     const operation = this.queue.then(async () => {
       let stage: ProjectStage = 'ROOT'
       try {
         normalizedPath(root)
         stage = 'REGISTRY'
         let target = await this.desktop.find(root)
+        if (!target && mode === 'check') return null
         if (!target) {
           stage = 'OPEN'
           onDesktopOpen?.()
           await this.desktop.open(root)
           stage = 'REGISTER'
           const wait = this.discovery.wait ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)))
-          for (let attempt = 0; attempt < (this.discovery.attempts ?? 60); attempt += 1) {
+          const attempts = mode === 'open' ? 1 : this.discovery.attempts ?? 60
+          for (let attempt = 0; attempt < attempts; attempt += 1) {
             target = await this.desktop.find(root)
             if (target) break
-            await wait(this.discovery.intervalMs ?? 500)
+            if (attempt + 1 < attempts) await wait(this.discovery.intervalMs ?? 500)
           }
+          if (!target && mode === 'open') return null
         }
         if (!target) throw new Error('Codex desktop project registration was not confirmed')
         // The desktop ID and the server ID are different. Bind tasks to the

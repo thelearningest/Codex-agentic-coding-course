@@ -1283,6 +1283,7 @@ export type PortfolioWorkspaceView = {
   planningPath?: string
   agentsPath?: string
   codexProject?: PortfolioCodexProject
+  codexProjectPending?: true
   codexProjectError?: string
   codexProjectErrorCode?: string
   observedAt: string
@@ -1303,6 +1304,7 @@ export type PortfolioWorkspaceRequest = {
 
 export type PortfolioCodexProjectRequest = PortfolioWorkspaceRequest & {
   expectedPath: string
+  checkOnly?: true
 }
 
 type PlanningActionIdentity = PracticeIdentity & {

@@ -10,11 +10,13 @@ describe('portfolio workspace picker', () => {
     const path = 'D:\\Portfolio của tôi'
     const html = renderToStaticMarkup(createElement(PortfolioCodexProjectSetup, {
       path, project: { id: 'project-1', name: 'Portfolio của tôi', registeredAt: '2026-11-15T00:00:00.000Z' },
-      busy: false, onRetry: () => {}
+      busy: false, onRetry: () => {}, onContinue: () => {}
     }))
     expect(html).toContain(path)
     expect(html).toContain('Project Codex đã sẵn sàng')
-    expect(html).toContain('Modules 2–4')
+    expect(html).toContain('Tiếp tục với thư mục này')
+    expect(html).not.toContain('disabled=""')
+    expect(html).not.toContain('Course Companion tự thêm thư mục')
     expect(html).not.toContain('Sao chép đường dẫn')
     expect(html).not.toContain('type="checkbox"')
   })
@@ -26,6 +28,20 @@ describe('portfolio workspace picker', () => {
     expect(html).toContain('role="alert"')
     expect(html).toContain('Mã lỗi <code>M2-READ/RPC(-32601)</code>')
     expect(html).toContain('Thử kết nối lại với Codex')
+    expect(html).not.toContain('Project Codex đã sẵn sàng')
+  })
+
+  it('explains folder trust while waiting and keeps manual reopening secondary', () => {
+    const html = renderToStaticMarkup(createElement(PortfolioCodexProjectSetup, {
+      path: 'D:/Portfolio', pending: true, busy: false, onRetry: () => {}, onContinue: () => {}
+    }))
+    expect(html).toContain('Trust this folder?')
+    expect(html).toContain('Thư mục đã sẵn sàng trên máy bạn')
+    expect(html).toContain('Đang kết nối thư mục của bạn với Codex')
+    expect(html).toContain('disabled=""')
+    expect(html).toContain('D:/Portfolio')
+    expect(html).toContain('Mở lại trong Codex')
+    expect(html).not.toContain('role="alert"')
     expect(html).not.toContain('Project Codex đã sẵn sàng')
   })
 
@@ -47,7 +63,7 @@ describe('portfolio workspace picker', () => {
 
   it('announces the course AGENTS.md only when the ready workspace has one', async () => {
     const source = await readFile(join(process.cwd(), 'src', 'renderer', 'src', 'components', 'PortfolioWorkspacePicker.tsx'), 'utf8')
-    expect(source).toContain('{isReady && view.agentsPath ? (')
+    expect(source).toContain('{view.agentsPath &&')
     expect(source).toContain('<strong>Đã tạo AGENTS.md</strong>')
     expect(source).toContain('Đây là luật làm việc của khoá học này, Codex sẽ dựa vào đây để hướng dẫn bạn.')
   })

@@ -30,9 +30,9 @@ export function PracticeSwitchDialog({
       onCancel={(event) => { event.preventDefault(); if (!busy) onCancel() }}>
       <small>Practice đang hoạt động</small>
       <h2 id="practiceSwitchTitle">Bắt đầu một Practice mới?</h2>
-      <p id="practiceSwitchDescription">Task Codex hiện tại vẫn được giữ lại. Chỉ có một Practice được đánh dấu đang hoạt động.</p>
-
-      <p>{continuesTask ? 'Bắt đầu lượt Practice mới trong task Codex hiện tại; tệp và lịch sử trao đổi được giữ lại.' : 'Tạo task Codex trống cho Practice mới.'}</p>
+      <p id="practiceSwitchDescription">Lượt mới sẽ thay lượt bạn đang làm. {continuesTask
+        ? 'Bạn sẽ tiếp tục trong cùng task Codex, với các tệp và tin nhắn hiện có.'
+        : 'Bạn sẽ bắt đầu trong một task Codex trống. Task cũ vẫn còn trong Codex.'}</p>
       <div className="practice-switch-actions">
         <button className="practice-switch-cancel" type="button" disabled={busy} onClick={onCancel} autoFocus>
           Hủy
