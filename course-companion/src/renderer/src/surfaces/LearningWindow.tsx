@@ -2879,7 +2879,8 @@ export function LearningWindow() {
       setProgress(completed)
       setOutlineSceneId(null)
       setReviewHistoryIndex(null)
-      setDestination('lesson')
+      setTeacherOpen(false)
+      setDestination('home')
     } catch {
       setError('Gate chưa đạt. Hãy làm lại câu chưa đúng và làm mới Practice nếu artifact hoặc biên nhận đã thay đổi.')
     } finally {
@@ -3255,6 +3256,15 @@ export function LearningWindow() {
   const openNextReviewPage = () => {
     if (!isReviewing) return
     clearPageOverlays()
+    if (displayedSceneId === 'module-2-portfolio-mastery-summary'
+      && progress.completedCheckpointIds.includes('m2-portfolio-complete')) {
+      // A finished Module 2 returns to Home Base instead of paging into Module 3.
+      setOutlineSceneId(null)
+      setReviewHistoryIndex(null)
+      setTeacherOpen(false)
+      setDestination('home')
+      return
+    }
     if (outlineSceneId !== null) {
       // Browsing is session-only, including Practice and assessment pages.
       // Resuming the saved learning page is an explicit action.
