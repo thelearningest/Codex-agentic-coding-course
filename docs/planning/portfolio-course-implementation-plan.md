@@ -50,9 +50,121 @@ and must never be inferred from a passing automated check.
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
-| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; review feedback names documents as the learner sees them, without file paths; result cards show criterion names with unmet criteria first, and unmet cards show a problem and a next step; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 2 fix prompt to paste into Codex, 28 November 2026
+
+Implementation: `implemented`. The owner asked for a way to send review
+feedback straight to Codex and approved the plan and wording on 28 November.
+Below the unmet cards, in the full and narrow views, a block titled "Nhờ Codex
+sửa những điểm trên" copies a prompt with the unmet criteria in screen order,
+each with its name and problem and next step (or the explanation for older
+results). The prompt asks Codex to fix them, to ask the learner first where a
+decision is theirs, and to summarise what changed in which document. It
+reuses the existing copy-prompt style and status message. It appears only for
+Module 2, because Modules 3 and 4 read learner-written Codex messages as
+authorship and publishing-consent evidence. Re-approval after Codex edits
+still relies on the existing approval checkbox.
+
+Verification `passed` for typecheck, lint, build, the review feedback Electron
+script and focused card, controls and renderer tests. Scratch renders at 1180,
+380 and 320 px showed no overflow. Copying to the real clipboard in the
+desktop app is not verified. Pilot acceptance `pending`: the owner copies the
+prompt from a real Module 2 result and pastes it into Codex.
+
+### Module 2 unmet criteria show a problem and a next step, 28 November 2026
+
+Implementation: `implemented`. The owner approved phase 2b on 28 November,
+including the labels "Vấn đề" and "Việc cần làm". The Module 2 review prompt
+now asks for one short sentence on each satisfied criterion and, on each
+unsatisfied or unverifiable one, a `problem` sentence and a single `nextStep`
+action ending with submitting again. Both fields are optional in the result
+format, at most 300 characters, kept only as a pair and only on unmet
+criteria; otherwise the card falls back to the explanation, so older saved
+results and Modules 1, 3 and 4 look as before. The "Tiếp theo" box shows the
+next step and now follows the first card on screen. `explanation` stays
+required because step reasons, review comparison and Teacher memory read it.
+A source-text test still expected the pre-step-1 criteria loop and was updated.
+
+Verification `passed` for typecheck, lint, build, the Electron smoke, Teacher
+chat, Practice guide and review feedback scripts, and focused parser, prompt
+and card-rendering tests. The full unit suite had the same 90 failures in the
+same five portfolio-package, frozen-content and palette files as before this
+work. A scratch render showed both labelled lines and no overflow at 1180,
+380 and 320 px. Model behaviour is not covered by tests. Pilot acceptance
+`pending`: resubmit Module 2 in the desktop app and read the unmet cards.
+
+### Practice result cards show criterion names, 28 November 2026
+
+Implementation: `implemented`. Each review card was titled only by its
+status, so learners could not tell what had been checked. The owner approved
+seven Module 2 criterion names (for example "Các bước làm và phạm vi") and
+the label "Xem N tiêu chí đã đáp ứng" on 28 November. Each card now shows the
+name as its heading with the unchanged status words as a badge. Unmet and
+unverifiable criteria come first; when something still needs work, passed
+criteria fold under that label. Criteria without a name, in Modules 1, 3
+and 4, keep their current heading but use the same order and folding. The
+review result also gained a 12 px side inset because the focus outline drawn
+after a review covered the first letters of "Kết quả duyệt", the summary and
+the "Duyệt lúc" time. The model-written explanations are unchanged.
+
+Verification `passed` for typecheck, lint, the Module 1 Practice renderer
+unit test and the review feedback Electron script. Scratch renders of a
+Module 2 needs-work result at 1180, 380 and 320 px showed no horizontal
+overflow. Pilot acceptance `pending`: the owner reviews a real Module 2 result
+in the desktop app. Next planned phase: 2b, which splits unmet criteria into
+a problem and a next step.
+
+### Module 2 review feedback uses learner-facing document names, 28 November 2026
+
+Implementation: `implemented`. The Module 2 review prompt asked the model to
+"report concrete issues and document paths", so feedback cards quoted paths
+such as `planning/portfolio-brief.md`, a file the lesson never introduces.
+The owner approved a prompt-only change: the model now names documents as
+the "Xem sáu tệp cần nộp" table shows them (PRD keeps its taught name), must
+not write file paths, file names or backticked identifiers, and may describe
+a Codex-drafted document by the learner's conversation instead. A test keeps
+the prompt's names equal to that table. Module 3 and Module 4 prompts and all
+app copy are unchanged. The app-written "package not ready" message still
+prefixes issues with a path; changing it awaits an owner decision.
+
+Verification `passed` for typecheck, lint, build and the Electron smoke,
+Teacher chat, Practice guide and review feedback scripts. The unit suite had
+90 failures in five portfolio-package, frozen-content and palette files; the
+unmodified commit has the same failures in the same environment (91, plus one
+Module 2 instruction-contract test). Automated tests confirm only the prompt
+text, not model behaviour. Pilot acceptance `pending`: resubmit Module 2 in
+the desktop app and confirm the cards contain no file paths. Planned next:
+split each unmet criterion into a problem and a next step (phase 2b), and show
+criterion names on the result screen (step 1).
+
+### Module 2 prototype checked by presence only, 28 November 2026
+
+Implementation: `implemented`. A learner's `planning/reference/design-prototype.html`
+exceeded the 128 KiB document limit at submission. The owner chose to keep the
+prototype required in the six-file package but stop reading its content.
+Course Companion now checks only that it exists, is a regular non-empty file of
+at most 25 MiB, and records its fingerprint. The tab-title and page-body checks
+are removed, the content never reaches the Teacher review in Module 2 or
+Module 3, and the owner approved removing the `prototype-reflects-design`
+criterion. The five Markdown documents keep the 128 KiB limit. Approvals,
+six-file handoffs and the Module 3 "Bản mẫu đã thay đổi" warning are unchanged.
+The passed-review message that says the prototype content was checked is
+left as is, and `parse5` is now unused; both await an owner decision.
+
+Verification `passed` for typecheck, lint, build, 15 startup checks and 957 of
+959 unit tests; the two failures (Module 1 quiz digest and CSS palette) also
+fail on the unmodified commit. Unit tests used a real-path `TMPDIR`: with the
+default macOS temp folder, 39 package tests fail on the unmodified commit too,
+because `/var` and `/private/var` give different workspace identities. The
+Electron smoke, Teacher chat, Practice guide and review feedback scripts
+passed. `portfolio-package-electron.mjs` passed the prototype change, fresh
+review and six-file handoff steps, then stopped at the Module 3 completion
+button, where the unmodified commit stops as well. Pilot acceptance is
+`pending`. Next step: submit a learner's real large prototype in the desktop
+app.
 
 ### Portfolio project added in the background, 26 November 2026
 

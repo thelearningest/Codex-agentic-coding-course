@@ -63,19 +63,20 @@ Gói nộp Module 2 phải có đủ năm tài liệu riêng biệt và một b�
 - Nếu câu trả lời còn mơ hồ, chỉ hỏi lại một lần. Nếu vẫn chưa rõ, ghi vào mục "Còn thiếu" của tài liệu rồi sang câu tiếp theo.
 - Nếu người học nhắc đến công nghệ, hosting, tên miền hay hiệu ứng, ghi vào mục "Để sau" của PRD rồi quay lại câu đang hỏi.
 - Cuối mỗi bước, tóm tắt bản nháp ngắn và hỏi "Ghi vào tệp nhé?". Chỉ ghi khi người học đồng ý.
+- Cuối mỗi bước, trước khi hỏi ghi tệp hoặc duyệt, đọc lại các tài liệu đã ghi ở những bước trước và so với bản nháp: người xem, mục tiêu, danh sách dự án và những gì chưa làm ở phiên bản đầu. Chỗ nào không còn khớp thì chỉ ra đúng câu cần sửa, đề xuất câu mới rồi hỏi "Cập nhật [tên tệp] cho khớp nhé?". Chỉ sửa khi người học đồng ý.
 
 ### Bước 1 — planning/portfolio-brief.md
 
 1. "Bạn muốn ai xem portfolio này nhất?" Đề xuất một nhóm người cụ thể.
 2. "Sau khi xem, bạn muốn họ làm gì?" Đề xuất một hành động hợp với nhóm người ở câu 1.
 3. "Bạn muốn họ nhớ đến bạn với vai trò hoặc kỹ năng nào?" Đề xuất tối đa ba ý từ những gì người học đã kể.
-4. "Phiên bản đầu tiên sẽ không làm những gì?" Đề xuất vài thứ nên để sau cho phiên bản đầu gọn nhẹ.
+4. Mở đầu bằng tiêu đề "Những giới hạn sẽ không thực hiện trong first draft", ngay dưới là một dòng giải thích: "Để agent tập trung tạo một phiên bản đơn giản trước khi thực hiện các tính năng phức tạp." Giữ nguyên tiêu đề và dòng giải thích này. Sau đó hỏi: "First draft sẽ chưa làm những gì?" Đề xuất vài thứ nên để sau.
 
-Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn và ít nhất một điều nằm ngoài phạm vi.
+Qua bước khi có một nhóm người xem cụ thể, một hành động mong muốn và ít nhất một điều nằm ngoài phạm vi. Bản mô tả chưa ghi số lượng hay tên dự án, vì bước 2 mới chọn dự án.
 
 ### Bước 2 — planning/content-evidence-inventory.md
 
-1. "Bạn muốn giới thiệu những dự án hoặc trải nghiệm nào trong portfolio?" Phiên bản đầu chọn tối đa 3 dự án hoặc trải nghiệm. Nếu người học chưa kể gì, gợi ý vài loại dự án hoặc trải nghiệm hợp với vai trò ở bước 1, kèm ví dụ ngắn. Nếu người học kể nhiều hơn 3, đề xuất 3 dự án hoặc trải nghiệm hợp nhất với người xem ở bước 1, mỗi cái kèm một câu lý do, rồi hỏi "Bạn đồng ý không?". Ghi những dự án hoặc trải nghiệm còn lại vào phần "Để sau" của tài liệu này, kèm ghi chú: người học tự bổ sung sau khi hoàn thành khoá học.
+1. "Bạn muốn giới thiệu những dự án hoặc trải nghiệm nào trong portfolio?" Phiên bản đầu chọn tối đa 3 dự án hoặc trải nghiệm. Nên có 2 hoặc 3 để người xem thấy bạn làm được nhiều việc khác nhau. Nếu người học chỉ kể một, hỏi thêm một lần: "Bạn còn dự án hay trải nghiệm nào khác không? Bài tập ở trường, dự án cá nhân hay một ý tưởng bạn tự phát triển đều được." Gợi ý vài ví dụ hợp với vai trò ở bước 1. Nếu người học vẫn chỉ có một, giữ một và không ép thêm. Nếu dự án là ý tưởng chưa làm thật, ghi rõ điều đó trong tài liệu. Nếu người học chưa kể gì, gợi ý vài loại dự án hoặc trải nghiệm hợp với vai trò ở bước 1, kèm ví dụ ngắn. Nếu người học kể nhiều hơn 3, đề xuất 3 dự án hoặc trải nghiệm hợp nhất với người xem ở bước 1, mỗi cái kèm một câu lý do, rồi hỏi "Bạn đồng ý không?". Ghi những dự án hoặc trải nghiệm còn lại vào phần "Để sau" của tài liệu này, kèm ghi chú: người học tự bổ sung sau khi hoàn thành khoá học.
 
 Với từng dự án hoặc trải nghiệm đã chọn, gọi bằng đúng tên người học đã nêu và hỏi lần lượt. Đây là thông tin chỉ người học biết, nên chỉ đưa câu trả lời mẫu:
 
@@ -127,9 +128,10 @@ Dùng câu trả lời ở bước 1–3 để soạn. Chỉ hỏi những câu 
 2. "Người xem sẽ liên hệ với bạn bằng cách nào?" Đề xuất cách đơn giản nhất, không cần máy chủ riêng.
 3. "Trang hiển thị bằng ngôn ngữ nào?" Đề xuất theo nhóm người xem ở bước 1.
 4. "Trang cần dùng tốt trên cả điện thoại và máy tính, đúng không?" Đề xuất là có.
-5. Đề xuất vài yêu cầu cơ bản để người dùng bàn phím hoặc trình đọc màn hình vẫn dùng được trang, rồi hỏi: "Bạn đồng ý hay muốn đổi gì?"
 
-PRD có mục "Ngoài phạm vi", "Còn thiếu" và "Để sau". Sau khi soạn, tự rà soát và liệt kê: yêu cầu mơ hồ, chỗ mâu thuẫn, tiêu chí chưa kiểm tra được, nội dung tự thêm mà người học chưa nói. Với mỗi điểm, đề xuất cách sửa rồi hỏi người học đồng ý không.
+Không hỏi người học về khả năng tiếp cận. Tự ghi vào PRD các yêu cầu cơ bản để người dùng bàn phím hoặc trình đọc màn hình vẫn dùng được trang: đi qua liên kết bằng phím Tab và thấy rõ liên kết đang được chọn, tiêu đề đúng thứ tự, ảnh có mô tả ngắn, chữ đủ tương phản với nền.
+
+PRD có mục "Ngoài phạm vi", "Còn thiếu" và "Để sau". Sau khi soạn, tự rà soát và liệt kê: yêu cầu mơ hồ, chỗ mâu thuẫn, tiêu chí chưa kiểm tra được, nội dung tự thêm mà người học chưa nói. Với mỗi điểm, đề xuất cách sửa rồi hỏi người học đồng ý không. Các yêu cầu khả năng tiếp cận mặc định ở trên không tính là nội dung tự thêm.
 
 Qua bước khi mọi điểm rà soát đã được người học sửa hoặc đồng ý giữ nguyên.
 

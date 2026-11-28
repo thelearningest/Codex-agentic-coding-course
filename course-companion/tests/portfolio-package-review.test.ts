@@ -24,6 +24,7 @@ import {
   savePortfolioPackageRun,
   writePortfolioPackage
 } from './fixtures/portfolio-package-fixture'
+import { portfolioPrototypePath } from '../shared/contracts'
 
 const temporaryDirectories: string[] = []
 
@@ -247,7 +248,6 @@ async function harness(options: {
 describe('six-file portfolio package review', () => {
   it.each([
     ['valid prose', 'passed', undefined],
-    ['prototype contradicts the agreed layout', 'needs-work', 'prototype-reflects-design'],
     ['missing dependencies', 'needs-work', 'plan-phased-and-bounded'],
     ['uncovered requirements', 'needs-work', 'requirements-covered-once'],
     ['unverifiable acceptance criteria', 'needs-work', 'prd-semantic-contract']
@@ -289,17 +289,23 @@ describe('six-file portfolio package review', () => {
     expect(test.evaluatorCallCount()).toBe(1)
   })
 
-  it('sends the bounded contents of all six required files to the semantic evaluator', async () => {
+  it('sends the five planning documents but never the prototype content to the semantic evaluator', async () => {
     const test = await harness({ approve: true })
 
     await test.service.review()
 
-    const packageEnvelope = test.observedEnvelopes[0]?.portfolioPackage
-    expect(packageEnvelope?.artifacts.map((artifact) => artifact.path).sort()).toEqual(
-      Object.keys(portfolioPackageDocuments).sort())
+    const envelope = test.observedEnvelopes[0]
+    const packageEnvelope = envelope?.portfolioPackage
+    const documents = Object.fromEntries(Object.entries(portfolioPackageDocuments).filter(([path]) => path !== portfolioPrototypePath))
+    expect(packageEnvelope?.artifacts.map((artifact) => artifact.path).sort()).toEqual(Object.keys(documents).sort())
     expect(Object.fromEntries(packageEnvelope!.artifacts.map(({ path, content }) => [path, content])))
-      .toEqual(portfolioPackageDocuments)
+      .toEqual(documents)
     expect(packageEnvelope?.artifacts.every(({ content }) => content.length <= 128 * 1024)).toBe(true)
+    expect(envelope?.evidence).toContainEqual(expect.objectContaining({
+      kind: 'planning-artifact',
+      text: expect.stringMatching(new RegExp(`^${portfolioPrototypePath.replaceAll('.', '\\.')} \\| sha256=[a-f0-9]{64} \\| .*content-not-reviewed$`))
+    }))
+    expect(JSON.stringify(envelope)).not.toContain(portfolioPackageDocuments[portfolioPrototypePath]!)
   })
 
   it('migrates, refreshes, approves and reviews with both preserved legacy files', async () => {

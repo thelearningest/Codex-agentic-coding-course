@@ -5,7 +5,8 @@ import type {
   ExecutorActivitySnapshot
 } from '../shared/contracts'
 import { PracticeDefinitionRepository } from '../electron/main/practice-definition-repository'
-import { buildPracticeReviewEnvelope, buildPracticeReviewPrompt, type PracticeReviewEnvelope } from '../electron/main/practice-review-context'
+import { buildPracticeReviewEnvelope, buildPracticeReviewPrompt, PLANNING_DOCUMENT_LEARNER_NAMES, type PracticeReviewEnvelope } from '../electron/main/practice-review-context'
+import { getPracticeIntroduction } from '../src/renderer/src/components/practice-introduction-copy'
 import type { PracticeRunRecord } from '../electron/main/practice-run-repository'
 
 const timestamp = '2026-08-10T00:00:00.000Z'
@@ -186,6 +187,17 @@ describe('beginner portfolio review policy', () => {
       expect(prompt).toContain('absent meaningful validation')
       expect(prompt).toContain('must still prevent a pass')
       expect(prompt).toContain('A particular REQ-* naming convention is not required')
+      expect(prompt).not.toContain('Report concrete issues and document paths')
+      expect(prompt).toContain('Report concrete issues by naming the document')
+      expect(prompt).toContain('Never write file paths, file names or backticked identifiers in learner-facing text')
+      for (const [path, name] of PLANNING_DOCUMENT_LEARNER_NAMES) expect(prompt).toContain(path + ' = "' + name + '"')
+      expect(prompt).toContain('"problem":"unmet criteria only')
+      expect(prompt).toContain('"nextStep":"unmet criteria only')
+      expect(prompt).toContain('For an unsatisfied or unverifiable criterion, also return problem and nextStep')
+    } else {
+      expect(prompt).not.toContain('Never write file paths, file names or backticked identifiers')
+      expect(prompt).not.toContain('"problem"')
+      expect(prompt).not.toContain('nextStep')
     }
     if (kind === 'build') {
       expect(prompt).toContain('Judge build records by meaning')
@@ -195,6 +207,16 @@ describe('beginner portfolio review policy', () => {
     if (kind === 'release') {
       expect(prompt).toContain('Equivalent commands, different package managers, brief concrete observations')
       expect(prompt).toContain('independently confirmed failures still block completion')
+    }
+  })
+
+  it('names Module 2 documents the way the Practice introduction shows them', () => {
+    const reference = getPracticeIntroduction('m2-portfolio-planning')?.reference ?? []
+    const shown = new Map(reference.map(([name, path]) => [path, name]))
+    expect(PLANNING_DOCUMENT_LEARNER_NAMES.map(([path]) => path)).toEqual([...shown.keys()])
+    for (const [path, name] of PLANNING_DOCUMENT_LEARNER_NAMES) {
+      // The lesson teaches "PRD"; every other name matches the introduction table.
+      if (path !== 'planning/PRD.md') expect(name).toBe(shown.get(path))
     }
   })
 })

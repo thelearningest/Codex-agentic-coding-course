@@ -173,7 +173,7 @@ describe('Teacher Practice review controls', () => {
 
   it('renders structured review criteria and one persisted next action', async () => {
     const progress = await source('src/renderer/src/components/PracticeProgress.tsx')
-    expect(progress).toContain('reviewResult.criteria.map')
+    expect(progress).toContain('sortCriteria(reviewResult.criteria)')
     expect(progress).toContain('Kết quả theo từng tiêu chí')
     expect(progress).toContain('practice-review-next-action')
     expect(progress).toContain('workspace.review?.canReturn')

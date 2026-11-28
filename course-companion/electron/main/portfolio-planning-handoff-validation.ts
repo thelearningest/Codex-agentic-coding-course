@@ -2,6 +2,7 @@ import { isAbsolute, resolve } from 'node:path'
 import {
   portfolioPackageArtifactPaths,
   portfolioPlanningDocumentPaths,
+  portfolioPrototypeMaximumBytes,
   portfolioPrototypePath,
   type PortfolioPackageHandoff,
   type PracticeAdapterEvidenceState
@@ -56,12 +57,14 @@ export function portfolioPlanningHandoffIsCurrent(
   const current: Record<string, string> = {}
   for (const artifact of planning.artifacts) {
     const document = requiredPaths.has(artifact.path)
+    // The prototype is handed off by presence and fingerprint; its content is optional.
+    const prototype = document && artifact.path === portfolioPrototypePath
     if ((!document && !referenceScreenshot.test(artifact.path))
       || Object.hasOwn(current, artifact.path)
       || !digestPattern.test(artifact.digest)
       || !Number.isSafeInteger(artifact.byteLength) || artifact.byteLength <= 0
-      || artifact.byteLength > (document ? 128 * 1024 : 12 * 1024 * 1024)
-      || (document && (typeof artifact.content !== 'string' || !artifact.content.trim()))) return false
+      || artifact.byteLength > (prototype ? portfolioPrototypeMaximumBytes : document ? 128 * 1024 : 12 * 1024 * 1024)
+      || (document && !prototype && (typeof artifact.content !== 'string' || !artifact.content.trim()))) return false
     current[artifact.path] = artifact.digest
   }
   if (!paths.every((path) => Object.hasOwn(current, path))

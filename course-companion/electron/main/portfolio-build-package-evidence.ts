@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto'
 import { lstat, readFile, readdir, realpath } from 'node:fs/promises'
 import { relative, resolve, sep } from 'node:path'
-import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPrototypePath, type PortfolioPackageHandoff, type PortfolioPlanningArtifactSnapshot, type PortfolioPlanningIssue, type PracticeAdapterEvidenceState } from '../../shared/contracts'
+import { portfolioBuildRecordPaths, portfolioPackageArtifactPaths, portfolioPrototypeMaximumBytes, portfolioPrototypePath, type PortfolioPackageHandoff, type PortfolioPlanningArtifactSnapshot, type PortfolioPlanningIssue, type PracticeAdapterEvidenceState } from '../../shared/contracts'
 import type { PracticeEvidenceAdapterContext } from './practice-evidence-adapter'
 import { correlateValidationSource } from './validation-source-correlation'
 
@@ -77,14 +77,21 @@ export async function collectPortfolioBuildPackage(context: Readonly<PracticeEvi
       const absolute = resolve(root, path)
       await containedFile(root, absolute)
       const info = await lstat(absolute)
+      if (path === portfolioPrototypePath) {
+        // Fingerprint only: the prototype's content is never read into the build review.
+        if (!info.isFile() || info.size === 0 || info.size > portfolioPrototypeMaximumBytes) throw new Error('Bản mẫu HTML phải là tệp không trống, tối đa 25 MiB.')
+        const digest = hash(await readFile(absolute))
+        if (handoff && handoff.approval.artifactDigests[path] !== digest) {
+          problem(path, 'Bản mẫu đã thay đổi từ khi Module 2 bàn giao. Hãy xem lại bản đã duyệt.')
+        }
+        artifacts.push({ path, digest, byteLength: info.size, modifiedAt: info.mtime.toISOString(), observedAt })
+        continue
+      }
       if (!info.isFile() || info.size === 0 || info.size > 128 * 1024) throw new Error('Cần một tệp văn bản không trống, tối đa 128 KB.')
       const bytes = await readFile(absolute)
       const content = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
       if (!content.trim()) throw new Error('Tài liệu không có nội dung.')
       const digest = hash(bytes)
-      if (path === portfolioPrototypePath && handoff && handoff.approval.artifactDigests[path] !== digest) {
-        problem(path, 'Bản mẫu đã thay đổi từ khi Module 2 bàn giao. Hãy xem lại bản đã duyệt.')
-      }
       artifacts.push({ path, content, digest, byteLength: bytes.length, modifiedAt: info.mtime.toISOString(), observedAt })
       // Meaning, completeness and honest deferred work are assessed by the AI
       // against the approved plan and bound task, never by heading/keyword tests.

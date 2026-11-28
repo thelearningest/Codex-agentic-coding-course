@@ -2,10 +2,10 @@ import { createHash } from 'node:crypto'
 import type { Stats } from 'node:fs'
 import { lstat, opendir, readFile, realpath } from 'node:fs/promises'
 import { isAbsolute, posix, relative, resolve, sep } from 'node:path'
-import { parse, type DefaultTreeAdapterTypes } from 'parse5'
 import { portfolioAgentsFileName } from '../../shared/portfolio-agents-template'
 import {
   portfolioPackageArtifactPaths,
+  portfolioPrototypeMaximumBytes,
   portfolioPrototypePath,
   type PortfolioPlanningArtifactSnapshot,
   type PortfolioPlanningIssue,
@@ -418,25 +418,41 @@ async function inspectTextArtifact(
   }
 }
 
-function prototypeProblem(content: string): string | null {
-  const childElement = (parent: DefaultTreeAdapterTypes.ParentNode | undefined, tag: string) =>
-    parent?.childNodes.find((node): node is DefaultTreeAdapterTypes.Element => 'tagName' in node && node.tagName === tag)
-  const html = childElement(parse(content), 'html')
-  const title = childElement(childElement(html, 'head'), 'title')
-  const titleText = title?.childNodes.map((node) => 'value' in node ? node.value : '').join('').trim()
-  if (titleText !== 'design-protoype') return 'Đặt tiêu đề tab của bản mẫu là design-protoype trong thẻ <title>.'
-
-  const body = childElement(html, 'body')
-  const pending = [...(body?.childNodes ?? [])]
-  while (pending.length) {
-    const node = pending.pop()!
-    if ('value' in node && node.value.trim()) return null
-    if (!('tagName' in node) || ['script', 'style', 'template', 'noscript', 'title'].includes(node.tagName)
-      || node.attrs.some((attr) => attr.name === 'hidden')) continue
-    if (['img', 'svg', 'canvas', 'video'].includes(node.tagName)) return null
-    for (const child of node.childNodes) pending.push(child)
+// The prototype must exist and be fingerprinted, but its content is never read
+// into the package or the review, so its size cannot block a submission.
+async function inspectPrototypeArtifact(
+  root: string,
+  path: string,
+  observedAt: string
+): Promise<{ artifact: PortfolioPlanningArtifactSnapshot } | { issue: PortfolioPlanningIssue }> {
+  const entry = await safeEntry(root, path)
+  if ('code' in entry) {
+    const messages = {
+      missing: 'Chưa có tài liệu bắt buộc.',
+      symlink: 'Tài liệu hoặc một thư mục cha không được là symlink.',
+      escaping: 'Không thể đọc tài liệu an toàn bên trong portfolio workspace.'
+    }
+    return { issue: issue('visual-reference', path, entry.code, messages[entry.code]) }
   }
-  return 'Thêm bố cục và nội dung portfolio vào phần thân trang để người xem có thể xem bản mẫu.'
+  if (!entry.info.isFile()) {
+    return { issue: issue('visual-reference', path, 'directory', 'Đường dẫn này phải trỏ đến một tệp thông thường.') }
+  }
+  if (entry.info.size === 0) {
+    return { issue: issue('visual-reference', path, 'empty', 'Tài liệu bắt buộc đang trống.') }
+  }
+  if (entry.info.size > portfolioPrototypeMaximumBytes) {
+    return { issue: issue('visual-reference', path, 'oversized', 'Bản mẫu HTML vượt giới hạn 25 MiB.') }
+  }
+  const bytes = await readFile(entry.absolutePath)
+  return {
+    artifact: {
+      path,
+      digest: sha256(bytes),
+      byteLength: bytes.byteLength,
+      modifiedAt: entry.info.mtime.toISOString(),
+      observedAt
+    }
+  }
 }
 
 async function inspectImageArtifact(
@@ -607,16 +623,17 @@ export async function collectPortfolioPackage(
   const artifacts = new Map<string, TextArtifact>()
   let issues: PortfolioPlanningIssue[] = []
 
+  let prototypeArtifact: PortfolioPlanningArtifactSnapshot | null = null
   for (const path of portfolioPackageArtifactPaths) {
+    if (path === portfolioPrototypePath) {
+      const inspected = await inspectPrototypeArtifact(canonicalRoot, path, observedAt)
+      if ('issue' in inspected) issues.push(inspected.issue)
+      else prototypeArtifact = inspected.artifact
+      continue
+    }
     const inspected = await inspectTextArtifact(canonicalRoot, path, observedAt)
     if ('issue' in inspected) issues.push(inspected.issue)
-    else {
-      artifacts.set(path, inspected.artifact)
-      if (path === portfolioPrototypePath) {
-        const problem = prototypeProblem(inspected.artifact.content)
-        if (problem) issues.push(issue('visual-reference', path, 'missing-section', problem))
-      }
-    }
+    else artifacts.set(path, inspected.artifact)
   }
   // Content quality, organization and requirement coverage belong to the AI
   // review of the current approved package, not a heading or keyword precheck.
@@ -662,6 +679,7 @@ export async function collectPortfolioPackage(
   issues = sortedIssues(issues)
   const snapshots: PortfolioPlanningArtifactSnapshot[] = [
     ...artifacts.values(),
+    ...(prototypeArtifact ? [prototypeArtifact] : []),
     ...imageArtifacts
   ].sort((left, right) => left.path.localeCompare(right.path, 'en'))
   const stageEvidence: PortfolioPlanningStageEvidence[] = stageDescriptors.map((stage) => {
@@ -689,7 +707,9 @@ export async function collectPortfolioPackage(
     ...snapshots.map((artifact) => ({
       id: `portfolio-package-artifact-${sha256(artifact.path).slice(0, 12)}`,
       kind: 'planning-artifact' as const,
-      text: artifact.content === undefined
+      text: artifact.path === portfolioPrototypePath
+        ? `${artifact.path} | sha256=${artifact.digest} | bytes=${artifact.byteLength} | presence-and-digest-only | content-not-reviewed`
+        : artifact.content === undefined
         ? `${artifact.path} | sha256=${artifact.digest} | bytes=${artifact.byteLength} | referenced-by=planning/reference/reference.md | source-metadata-in=reference-document`
         : `${artifact.path} | sha256=${artifact.digest} | bytes=${artifact.byteLength}`,
       freshness: 'fresh' as const
@@ -697,7 +717,7 @@ export async function collectPortfolioPackage(
     {
       id: 'portfolio-package-workspace-scope',
       kind: 'workspace-confirmed-change',
-      text: `Đã kiểm tra độc lập phạm vi workspace: tài liệu bắt buộc=${artifacts.size}/${portfolioPackageArtifactPaths.length}; ảnh được tham chiếu=${referencedImagePaths.size}; đường dẫn ngoài phạm vi=${unexpectedPaths.length}.`,
+      text: `Đã kiểm tra độc lập phạm vi workspace: tài liệu bắt buộc=${artifacts.size + (prototypeArtifact ? 1 : 0)}/${portfolioPackageArtifactPaths.length}; ảnh được tham chiếu=${referencedImagePaths.size}; đường dẫn ngoài phạm vi=${unexpectedPaths.length}.`,
       freshness: 'fresh'
     }
   ]
