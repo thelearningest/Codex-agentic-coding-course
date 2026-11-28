@@ -19,8 +19,8 @@ export const moduleThreeScenes = {
     panelStatus: 'CHẠY TRÊN MÁY CỦA BẠN', tone: 'neutral',
     request: 'Nhờ agent chạy portfolio và gửi đường dẫn để xem.',
     evidence: [],
-    dialogue: "Lần đầu, bạn đã mở portfolio từ đường dẫn agent gửi. Lần sau, nếu đường dẫn đó không còn hoạt động, hãy mở lại task Codex và nhắn: “Hãy chạy lại portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”\n\nVới một số dự án, agent sẽ dùng lệnh npm run dev để chạy website trên máy của bạn. Đây là cách xem website trong môi trường local. Bạn có thể nhờ agent chỉ cách mở lại dự án của mình.",
-    highlightTerms: ['npm run dev', 'local'],
+    dialogue: "Từ giờ, mỗi lần bạn muốn xem lại bản portfolio hiện tại của mình, bạn có thể nhắn cho agent “Hãy chạy lại portfolio và gửi tôi đường dẫn để xem trên trình duyệt.”\n\nBây giờ, bản portfolio của bạn đang ở môi trường local, tức là chỉ tồn tại trong máy tính của bạn. Đừng copy link mà bạn thấy trên trình duyệt rồi gửi cho người khác xem portfolio, sẽ có vấn đề đấy :> Module 4 sẽ chỉ bạn cách để triển khai website trên cloud để người khác xem được.",
+    highlightTerms: ['local'],
     choices: [{ label: 'Debug cùng coding agent', next: 'module-3-debugging-intro', primary: true }]
   },
   'module-3-debugging-intro': {
