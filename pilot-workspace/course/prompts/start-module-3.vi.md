@@ -2,7 +2,7 @@ Dùng `$start-course-lesson module-3` để bắt đầu bài **Bắt đầu t�
 
 Đọc `course/lesson-scripts/module-3.script.vi.md` làm nguồn điều phối. Xác nhận Module 2 đã có PRD và implementation plan được duyệt, rồi mở Module 3 bằng đúng wording trong lesson.
 
-Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Giữ thứ tự trang local, Debug, Git và GitHub rồi quay lại cùng Practice. Không chèn câu hỏi kiểm tra giữa các trang giải thích.
+Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Giữ thứ tự trang local, Debug, Git và GitHub, bảo mật, bài thực hành đưa portfolio lên GitHub rồi quay lại cùng Practice. Không chèn câu hỏi kiểm tra giữa các trang giải thích; bài thực hành GitHub là bước làm theo hướng dẫn, không phải câu hỏi kiểm tra.
 
 1. Mở lại first draft của website bạn đã tạo ở đầu module
 2. Thử website trên máy tính, đối chiếu với PRD và bản mẫu giao diện để tìm lỗi thiết kế.
@@ -19,4 +19,4 @@ Teacher Triết không mở chat trong khi Practice đang hoạt động. Chỉ 
 
 Teacher dùng nguyên văn lời nhắc cuối bài trong lesson:
 
-Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.
+Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.

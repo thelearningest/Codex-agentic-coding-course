@@ -221,7 +221,7 @@ export const moduleThreeScenes = {
     panelStatus: 'TÓM LẠI', tone: 'good',
     request: 'trước khi bắt đầu Practice',
     evidence: [],
-    dialogue: '- Khi debug, trong đa số trường hợp, bạn chỉ cần chụp screenshot và mô tả kỹ lỗi của bạn cho agent là được. Nếu vẫn không được thì bảo agent add log để xem lỗi là gì, paste cái log đó vào coding agent và bảo nó sửa lại lần nữa\n\n- Bạn nên bảo agent hãy commit sau mỗi quyết định lớn, để sau này bạn sẽ dễ quay lại phiên bản cũ hơn nếu gặp bug.\n\n- Mỗi khi muốn phát triển một tính năng mới, hãy tạo một branch mới để lỡ agent có quậy thì cũng không ảnh hưởng đến tính năng hiện tại. Bạn chỉ cần bảo agent tạo branch là nó sẽ tự động hướng dẫn cho bạn\n\n- Bạn có thể tạo một tài khoản github rồi bảo agent push code hiện tại của bạn lên đó nếu bạn muốn hợp tác với một người khác',
+    dialogue: '- Khi debug, trong đa số trường hợp, bạn chỉ cần chụp screenshot và mô tả kỹ lỗi của bạn cho agent là được. Nếu vẫn không được thì bảo agent add log để xem lỗi là gì, paste cái log đó vào coding agent và bảo nó sửa lại lần nữa\n\n- Bạn nên bảo agent hãy commit sau mỗi quyết định lớn, để sau này bạn sẽ dễ quay lại phiên bản cũ hơn nếu gặp bug.\n\n- Mỗi khi muốn phát triển một tính năng mới, hãy tạo một branch mới để lỡ agent có quậy thì cũng không ảnh hưởng đến tính năng hiện tại. Bạn chỉ cần bảo agent tạo branch là nó sẽ tự động hướng dẫn cho bạn\n\n- Sau mỗi phiên bản quan trọng, hãy nhờ agent commit rồi push lên GitHub để luôn có một bản lưu trên mạng.',
     choices: [{ label: 'Mở Practice', action: 'practice', preservePrimaryLabel: true, primary: true }]
   },
   'module-3-portfolio-mastery': {
@@ -231,7 +231,7 @@ export const moduleThreeScenes = {
     panelStatus: '5 CÂU', tone: 'good',
     request: 'Các câu hỏi được đặt cùng nhau ở cuối bài.',
     evidence: [],
-    dialogue: "Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.",
+    dialogue: "Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.",
     highlightTerms: ['publish', 'repo', 'github'],
     choices: [{ label: 'Bắt đầu ôn tập', preservePrimaryLabel: true, next: 'module-3-mastery-plan', primary: true }]
   },

@@ -2,9 +2,9 @@
 
 ## Hợp đồng điều phối
 
-Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Sau khi người học quay lại, mở trang **Mở portfolio trên máy**, tiếp tục phần Debug, Git và GitHub, trang chốt, lượt Practice cuối và năm câu hỏi tổng kết.
+Tiếp tục task Codex từ Module 2 và yêu cầu agent thực hiện implementation plan đã duyệt. Khi agent gửi đường dẫn, mở website. Khi thấy nội dung portfolio của mình, chọn **Quay lại bài học** trong cửa sổ Triết. Sau khi người học quay lại, mở trang **Mở portfolio trên máy**, tiếp tục phần Debug, Git và GitHub, bảo mật, bài thực hành đưa portfolio lên GitHub, trang chốt, lượt Practice cuối và năm câu hỏi tổng kết.
 
-Trong phần giải thích, Teacher không chèn câu hỏi kiểm tra giữa các trang. Người học chỉ trả lời câu hỏi ở cuối bài.
+Trong phần giải thích, Teacher không chèn câu hỏi kiểm tra giữa các trang. Người học chỉ trả lời câu hỏi ở cuối bài. Bài thực hành GitHub là bước làm theo hướng dẫn, không phải câu hỏi kiểm tra.
 
 Teacher không yêu cầu người học đọc code hoặc diff. Khi cần đánh giá kết quả, Teacher hướng người học đến hành vi có thể quan sát, phần giải thích của Codex và kết quả kiểm tra hiện tại.
 
@@ -28,6 +28,13 @@ Teacher dạy từng khái niệm theo đúng thứ tự: Git, GitHub, commit, p
 
 Teacher giải thích mục đích và hệ quả, không yêu cầu người học ghi nhớ câu lệnh. Khi nói về push, Teacher nhắc rằng đây là hành động đưa commit lên GitHub và không tự động xảy ra sau mỗi giai đoạn.
 
+## Thực hành đưa portfolio lên GitHub
+
+Teacher dùng nguyên văn phần **Đưa portfolio lên GitHub** trong lesson, gồm bốn bước thực hành.
+
+- Teacher không tạo repo hay push thay người học. Người học tự đăng nhập GitHub trên trình duyệt và không gửi mật khẩu cho agent.
+- Course Companion chỉ mở trang tiếp theo khi repo khớp với thư mục portfolio và commit mới nhất đã được push.
+
 ## Trang chốt trước Practice
 
 Teacher dùng nguyên văn phần **Tóm lại** trong lesson. Không thêm nội dung về implementation plan vào trang này.
@@ -47,7 +54,7 @@ Người học xem website rồi chọn **Chấp nhận website và nộp bài**
 
 ## Câu hỏi tổng kết
 
-Sau khi Practice đạt và người học đã publish repo lên GitHub, Teacher đưa năm câu hỏi trong `course/quizzes/module-3.quiz.json`, từng câu một. Teacher chỉ hiện lời giải sau khi người học đã trả lời.
+Sau khi Practice đạt và người học đã push phiên bản mới nhất lên GitHub, Teacher đưa năm câu hỏi trong `course/quizzes/module-3.quiz.json`, từng câu một. Teacher chỉ hiện lời giải sau khi người học đã trả lời.
 
 Sau câu thứ năm, Course Companion đối chiếu kết quả câu hỏi với receipt Practice hiện tại trước khi đánh dấu Module 3 hoàn thành.
 
@@ -55,4 +62,4 @@ Sau câu thứ năm, Course Companion đối chiếu kết quả câu hỏi vớ
 
 Teacher dùng nguyên văn lời nhắc cuối bài trong lesson:
 
-Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.
+Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.

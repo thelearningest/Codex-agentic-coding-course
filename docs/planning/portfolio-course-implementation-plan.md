@@ -51,8 +51,36 @@ and must never be inferred from a passing automated check.
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
 | Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; review feedback names documents as the learner sees them, without file paths; result cards show criterion names with unmet criteria first, and unmet cards show a problem and a next step; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
-| Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
+| Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review; since 28 November a required GitHub practice page (create an account, create a private repository on the web, ask the agent to push, paste the link for an on-device check) sits between the security pages and the recap | `passed` for the chat handoff and disposable desktop journey recorded below, and for the 28 November GitHub practice checks recorded below | First-build flow and revised assessment approved for integration on 18 November. GitHub practice flow, screenshots and copy approved on 28 November. Runtime acceptance is pending. | `pending` | Push to a real GitHub repository from a Module 3 profile on macOS and Windows, then rehearse the two Practice visits with a learner. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 3 GitHub practice, 28 November 2026
+
+Implementation: `implemented`. The owner asked for a required GitHub step in
+Module 3 and approved the flow, their own screenshots and the copy on 28
+November. After the three security pages, an intro page leads to a four-step
+practice page: create a GitHub account, create a private repository on the web
+and copy its HTTPS link, paste a ready-made prompt with that link so the agent
+checks for secrets and pushes, then paste the link back into Course Companion.
+The app compares the link with the portfolio folder's GitHub remote and checks
+that the latest commit is on that remote's tracking branches, without network
+access, so private repositories work. Continue stays locked until the check
+passes, and the verified repository is saved as a progress decision. The
+lesson, Teacher script and start prompt describe the new page; the recap line
+about GitHub and the pre-quiz reminder now ask learners to push their latest
+version, as the owner approved.
+
+Verification `passed` for 21 repository-check tests with temporary Git
+repositories, the scene-order and content contracts, typecheck, lint and build.
+A scratch Electron mount of the real component covered all five failure
+messages, the locked and unlocked Continue button, keyboard focus moving to the
+next step, and no horizontal overflow at 1440, 800 and 420 px. The full unit
+suite kept its 90 existing failures in five files, which fail identically on a
+clean copy of the previous commit. Of the Electron scripts, the smoke, Practice
+guide and review feedback scripts passed; the Teacher chat script times out the
+same way on that clean copy. Not verified: the two pages inside the full
+lesson window (a temporary profile cannot reach Module 3 without a Module 2
+receipt), a real push to GitHub, and Windows. Pilot acceptance `pending`.
 
 ### Module 2 fix prompt to paste into Codex, 28 November 2026
 

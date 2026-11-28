@@ -144,6 +144,20 @@ Trước khi đưa lên, agent sẽ kiểm tra để chắc code không có secr
 
 Làm lần lượt bốn bước. Ở bước cuối, app sẽ tự kiểm tra repo của bạn.
 
+1. **Tạo tài khoản GitHub.** GitHub là nơi lưu code của bạn trên mạng. Nếu chưa có tài khoản, hãy đăng ký miễn phí. Bạn tự nhập email và mật khẩu. Đừng gửi mật khẩu cho agent.
+2. **Tạo repo trên GitHub.**
+   - Mở trang GitHub của bạn, chọn tab **Repositories** rồi bấm nút xanh **New**.
+   - Đặt tên repo, ví dụ `portfolio`. Ở mục **Choose visibility**, chọn **Private** để chỉ mình bạn xem được code. Để nguyên các mục còn lại rồi bấm **Create repository**.
+   - GitHub mở trang repo còn trống. Ở ô **Quick setup**, giữ lựa chọn **HTTPS** rồi bấm nút sao chép ở cuối ô link.
+3. **Nhờ agent push portfolio lên repo.** Sao chép prompt dưới đây, dán vào task Codex của portfolio, rồi dán link repo vừa sao chép ngay sau chữ “Link repo:”.
+
+   > Hãy push portfolio này lên repo GitHub có link bên dưới. Trước khi push, kiểm tra để chắc trong code không có secret hay thông tin riêng tư. Nếu cần đăng nhập GitHub, hãy hướng dẫn tôi từng bước. Push xong thì báo cho tôi.
+   >
+   > Link repo:
+
+   Nếu agent cần bạn đăng nhập GitHub, bạn tự đăng nhập trên trình duyệt. Đừng gửi mật khẩu cho agent.
+4. **Dán link repo để kiểm tra.** Dán link repo vào ô kiểm tra trên trang thực hành. Bạn có thể dùng lại link đã sao chép ở bước 2. Course Companion chỉ mở trang tiếp theo khi repo khớp với thư mục portfolio và phiên bản mới nhất đã được push.
+
 ## Tóm lại
 
 4 điều cần nhớ trước khi bắt đầu Practice:
@@ -151,7 +165,7 @@ Làm lần lượt bốn bước. Ở bước cuối, app sẽ tự kiểm tra r
 - Khi debug, đa số bạn chỉ cần chụp screenshot và mô tả kỹ lỗi của bạn cho agent là được. Nếu vẫn không được thì bảo agent add log vào terminal để xem lỗi là gì, paste cái log đó vào coding agent và bảo nó sửa lại lần nữa
 - Bạn nên bảo agent hãy commit sau mỗi quyết định lớn, để sau này bạn sẽ dễ quay lại phiên bản cũ hơn nếu gặp bug.
 - Mỗi khi muốn phát triển một tính năng mới, hãy tạo một branch mới để lỡ agent có quậy thì cũng không ảnh hưởng đến tính năng hiện tại. Bạn chỉ cần bảo agent tạo branch là nó sẽ tự động hướng dẫn cho bạn
-- Bạn có thể tạo một tài khoản github rồi bảo agent push code hiện tại của bạn lên đó nếu bạn muốn hợp tác với một người khác
+- Sau mỗi phiên bản quan trọng, hãy nhờ agent commit rồi push lên GitHub để luôn có một bản lưu trên mạng.
 
 ## Practice: Xây portfolio
 
@@ -164,7 +178,7 @@ Khi hài lòng với phiên bản hiện tại, bạn có thể chấp nhận we
 
 ## Publish repo trước bài tổng kết
 
-Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.
+Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.
 
 ## Điều kiện hoàn thành
 

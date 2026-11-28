@@ -47,10 +47,10 @@ describe('GitHub and Vercel publication content', () => {
     ])
     const source = await read(rendererPath(3))
     const mastery = sceneBlocks(source).find((scene) => scene.id === 'module-3-portfolio-mastery')!
-    expect(mastery.body).toContain("Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.")
+    expect(mastery.body).toContain("Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.")
     expect(mastery.body).toContain('preservePrimaryLabel: true')
     const script = await read('pilot-workspace/course/lesson-scripts/module-3.script.vi.md')
-    expect(script).toContain("Trước khi kết thúc bài học, bạn hãy nhờ agent publish repo của bạn lên github. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.")
+    expect(script).toContain("Trước khi kết thúc bài học, bạn hãy nhờ agent push phiên bản mới nhất lên GitHub. Sau khi hoàn thành, chúng ta sẽ cùng làm một vài câu hỏi để ôn tập nhé.")
   })
 
   it('preserves instructional Module 4 pages without mid-lesson questions and preserves the target Practice action', async () => {
