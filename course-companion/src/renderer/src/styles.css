@@ -6046,6 +6046,8 @@ button:focus-visible {
   white-space: nowrap;
 }
 .practice-review-criteria li.is-satisfied .practice-review-criterion-status { color: var(--pixel-muted); }
+.practice-review-criteria li p.practice-review-guidance + p.practice-review-guidance { margin-top: 4px; }
+.practice-review-guidance b { color: var(--pixel-yellow); font-weight: 700; }
 .practice-review-met { margin-top: 12px; border-top: 1px solid var(--obsidian-line-soft); }
 .practice-review-met > .practice-review-criteria { margin-top: 4px; }
 .practice-workflow .practice-success {

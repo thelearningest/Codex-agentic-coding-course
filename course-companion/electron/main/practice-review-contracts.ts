@@ -17,6 +17,8 @@ function bounded(value: unknown, maximum: number): value is string {
   return typeof value === 'string' && value.length > 0 && value.length <= maximum
 }
 
+const MAX_GUIDANCE = 300
+
 function jsonText(text: string): string {
   const trimmed = text.trim()
   if (!trimmed.startsWith('```')) return trimmed
@@ -57,7 +59,9 @@ export function parsePracticeReviewResult(input: {
       || !['satisfied', 'unsatisfied', 'unverifiable'].includes(String(item.status))
       || !Array.isArray(item.evidenceRefs)
       || !item.evidenceRefs.every((reference) => typeof reference === 'string' && evidenceIds.has(reference))
-      || !bounded(item.explanation, 1000)) {
+      || !bounded(item.explanation, 1000)
+      || (item.problem !== undefined && !bounded(item.problem, MAX_GUIDANCE))
+      || (item.nextStep !== undefined && !bounded(item.nextStep, MAX_GUIDANCE))) {
       throw new Error('Invalid Practice criterion review')
     }
     const criterionDefinition = input.definition.criteria.find((criterion) =>
@@ -74,11 +78,17 @@ export function parsePracticeReviewResult(input: {
       throw new Error('Practice criterion used unacceptable evidence')
     }
     seen.add(item.criterionId)
+    // Problem and next step only describe unmet criteria; keep them as a pair.
+    const guidance = item.status !== 'satisfied'
+      && typeof item.problem === 'string' && typeof item.nextStep === 'string'
+      ? { problem: item.problem, nextStep: item.nextStep }
+      : {}
     return {
       criterionId: item.criterionId,
       status: item.status as 'satisfied' | 'unsatisfied' | 'unverifiable',
       evidenceRefs: [...new Set(item.evidenceRefs as string[])],
-      explanation: item.explanation
+      explanation: item.explanation,
+      ...guidance
     }
   })
   const required = input.definition.criteria.filter((criterion) => criterion.required)

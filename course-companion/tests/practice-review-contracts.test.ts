@@ -114,6 +114,41 @@ describe('Practice review contracts', () => {
     ])
   })
 
+  it('keeps problem and next step only as a pair on unmet criteria', () => {
+    const parse = (value: unknown) => parsePracticeReviewResult({
+      text: JSON.stringify(value),
+      definition,
+      runId: 'run-1',
+      evidence,
+      reviewedAt: '2026-08-09T00:00:00.000Z'
+    })
+    const withGuidance = JSON.parse(proposal('unsatisfied'))
+    withGuidance.criteria[0].problem = 'Đã đạt nên không cần.'
+    withGuidance.criteria[0].nextStep = 'Không cần làm gì.'
+    withGuidance.criteria[1].problem = 'Kế hoạch chưa khớp PRD.'
+    withGuidance.criteria[1].nextStep = 'Nhắn Codex sửa kế hoạch rồi nộp lại.'
+    const parsed = parse(withGuidance)
+    expect(parsed.criteria[0]).not.toHaveProperty('problem')
+    expect(parsed.criteria[0]).not.toHaveProperty('nextStep')
+    expect(parsed.criteria[1]).toMatchObject({
+      problem: 'Kế hoạch chưa khớp PRD.',
+      nextStep: 'Nhắn Codex sửa kế hoạch rồi nộp lại.'
+    })
+
+    const half = JSON.parse(proposal('unsatisfied'))
+    half.criteria[1].problem = 'Kế hoạch chưa khớp PRD.'
+    expect(parse(half).criteria[1]).not.toHaveProperty('problem')
+
+    expect(parse(JSON.parse(proposal('unsatisfied'))).criteria[1]).not.toHaveProperty('nextStep')
+
+    for (const invalid of ['', 'x'.repeat(301), 42]) {
+      const bad = JSON.parse(proposal('unsatisfied'))
+      bad.criteria[1].problem = 'Kế hoạch chưa khớp PRD.'
+      bad.criteria[1].nextStep = invalid
+      expect(() => parse(bad)).toThrow('Invalid Practice criterion review')
+    }
+  })
+
   it('rejects conversational or contradictory pass output', () => {
     expect(() => parsePracticeReviewResult({
       text: 'You passed!',

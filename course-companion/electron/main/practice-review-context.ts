@@ -39,6 +39,14 @@ const PLANNING_FEEDBACK_NAMING_RULE = [
   'When Codex drafted a document during the learner\'s conversation, you may describe it by that activity, for example "lúc trao đổi với Codex về phạm vi".'
 ].join(' ')
 
+const PLANNING_CRITERION_GUIDANCE_RULE = [
+  'For a satisfied criterion, write explanation as one short sentence and omit problem and nextStep.',
+  'For an unsatisfied or unverifiable criterion, also return problem and nextStep, each at most 300 characters.',
+  'problem is one plain sentence saying what is wrong and in which document.',
+  'nextStep is one concrete action: what the learner decides or asks Codex to change, ending with submitting again (nộp lại).',
+  'Do not repeat the problem inside nextStep, and give only one action even if several fixes are possible.'
+].join(' ')
+
 export function redact(value: string): string {
   return value
     .replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?-----END [^-\r\n]*PRIVATE KEY-----/gi, '[REDACTED PRIVATE KEY]')
@@ -414,6 +422,9 @@ export function buildPracticeReviewEnvelope(input: {
 }
 
 export function buildPracticeReviewPrompt(envelope: PracticeReviewEnvelope): string {
+  const planningPackage = Boolean(envelope.portfolioPackage)
+    && envelope.portfolioPackage?.kind !== 'build'
+    && envelope.portfolioPackage?.kind !== 'release'
   return [
     'PRACTICE_REVIEW_ENVELOPE',
     JSON.stringify(envelope),
@@ -428,7 +439,11 @@ export function buildPracticeReviewPrompt(envelope: PracticeReviewEnvelope): str
         criterionId: criterion.id,
         status: 'satisfied | unsatisfied | unverifiable',
         evidenceRefs: ['evidence-id'],
-        explanation: 'concise Vietnamese explanation'
+        explanation: 'concise Vietnamese explanation',
+        ...(planningPackage ? {
+          problem: 'unmet criteria only: one Vietnamese sentence on what is wrong',
+          nextStep: 'unmet criteria only: one Vietnamese action the learner can take'
+        } : {})
       })),
       summary: 'concise Vietnamese summary'
     }),
@@ -476,7 +491,8 @@ export function buildPracticeReviewPrompt(envelope: PracticeReviewEnvelope): str
       'Only authenticated package approval is learner approval. Missing approval, structural issues, stale evidence or unexpected paths cannot pass.',
       'Screenshots are optional. Do not demand seven documents, separate validation maps, a first-task file, repeated comprehension questions or stage approvals.',
       'Report concrete issues by naming the document; do not invent learner facts or settled decisions.',
-      PLANNING_FEEDBACK_NAMING_RULE
+      PLANNING_FEEDBACK_NAMING_RULE,
+      PLANNING_CRITERION_GUIDANCE_RULE
     ] : []),
     ...(envelope.planning
       ? [

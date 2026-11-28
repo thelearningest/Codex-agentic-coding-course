@@ -147,7 +147,10 @@ function CriterionItem({ criterion }: { criterion: CriterionReview }) {
             <span className="practice-review-criterion-status">{status}</span>
           </div>
         ) : <strong>{status}</strong>}
-        <p>{criterion.explanation}</p>
+        {criterion.status !== 'satisfied' && criterion.problem && criterion.nextStep ? <>
+          <p className="practice-review-guidance"><b>Vấn đề:</b> {criterion.problem}</p>
+          <p className="practice-review-guidance"><b>Việc cần làm:</b> {criterion.nextStep}</p>
+        </> : <p>{criterion.explanation}</p>}
       </div>
     </li>
   )
@@ -192,7 +195,9 @@ export function PracticeProgress({
       })
     : []
   const nextSetupFeedback = setupFeedback.find(({ result }) => result.status !== 'satisfied')
-  const unresolvedCriterion = reviewResult?.criteria.find((criterion) => criterion.status !== 'satisfied')
+  // Match the first card on screen, where unmet criteria come before unverifiable ones.
+  const unresolvedCriterion = sortCriteria(reviewResult?.criteria ?? []).find((criterion) => criterion.status !== 'satisfied')
+  const unresolvedGuidance = unresolvedCriterion?.nextStep ?? unresolvedCriterion?.explanation
   const nextChecklistStep = workspace.checklist.find((step) =>
     step.status === 'current' || step.status === 'stale' || step.status === 'pending')
   const needsPackageSubmission = workspace.portfolioPackage?.ready && !workspace.portfolioPackage.approved
@@ -205,7 +210,7 @@ export function PracticeProgress({
     : planningReviewPending ? planningNextAction
     : nextSetupFeedback ? nextSetupFeedback.result.explanation
     : unresolvedCriterion
-      ? criterionNextActions[unresolvedCriterion.criterionId] ?? unresolvedCriterion.explanation
+      ? criterionNextActions[unresolvedCriterion.criterionId] ?? unresolvedGuidance
       : nextChecklistStep?.reason
         ?? (nextChecklistStep ? `Hoàn thành: ${nextChecklistStep.title}.` : 'Bổ sung bằng chứng rồi duyệt lại.')
   const configuration = workspace.configuration
@@ -240,7 +245,7 @@ export function PracticeProgress({
     : unresolvedCriterion && criterionNextActions[unresolvedCriterion.criterionId]
       ? criterionNextActions[unresolvedCriterion.criterionId]
       : workspace.portfolioPackage && unresolvedCriterion
-        ? unresolvedCriterion.explanation
+        ? unresolvedGuidance
       : compactCurrentStep
         ? `Hoàn thành bước hiện tại: ${compactCurrentStep.title}.`
         : 'Bổ sung bằng chứng rồi duyệt lại.'

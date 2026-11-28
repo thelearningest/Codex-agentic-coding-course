@@ -191,8 +191,13 @@ describe('beginner portfolio review policy', () => {
       expect(prompt).toContain('Report concrete issues by naming the document')
       expect(prompt).toContain('Never write file paths, file names or backticked identifiers in learner-facing text')
       for (const [path, name] of PLANNING_DOCUMENT_LEARNER_NAMES) expect(prompt).toContain(path + ' = "' + name + '"')
+      expect(prompt).toContain('"problem":"unmet criteria only')
+      expect(prompt).toContain('"nextStep":"unmet criteria only')
+      expect(prompt).toContain('For an unsatisfied or unverifiable criterion, also return problem and nextStep')
     } else {
       expect(prompt).not.toContain('Never write file paths, file names or backticked identifiers')
+      expect(prompt).not.toContain('"problem"')
+      expect(prompt).not.toContain('nextStep')
     }
     if (kind === 'build') {
       expect(prompt).toContain('Judge build records by meaning')

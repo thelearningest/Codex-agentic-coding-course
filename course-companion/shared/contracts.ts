@@ -902,6 +902,10 @@ export type PracticeCriterionReview = {
   status: 'satisfied' | 'unsatisfied' | 'unverifiable'
   evidenceRefs: string[]
   explanation: string
+  /** Unmet criteria only: one sentence on what is wrong. */
+  problem?: string
+  /** Unmet criteria only: one action the learner can take. */
+  nextStep?: string
 }
 
 export type PracticeReviewResult = {
