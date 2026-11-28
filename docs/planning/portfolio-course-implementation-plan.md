@@ -50,9 +50,32 @@ and must never be inferred from a passing automated check.
 | Module 2 / M2.2 and M2.5 HTML prototype example | `implemented` | `passed` for the new scene, interactive example and two-way navigation on 20 November | Example, placement and caption approved for integration | `pending` | Review the integrated page with a learner. |
 | Foundation / M2.5 web links | `implemented` | `passed` for popup routing, follow-up links, close and scroll restoration on macOS on 22 November | Popup behavior and reference tooltip approved for implementation | `pending` | Try a live reference site during learner review. |
 | Module 2 / M2.5 Impeccable skill | `implemented` — lesson page after the HTML prototype example; Codex installs it globally in Practice step 3 without a yes/no question | `passed` for typecheck, lint, build, focused tests, Electron smoke, Practice guide and review feedback on 23 November; unit suite kept its 92 existing failures; Teacher chat script flaky | Global install, upstream 4.10.0 and the lesson copy approved 23 November; exact Practice `AGENTS.md` wording awaits owner review | `pending` | Owner reviews the page and the step 3 wording, then a learner rehearses the install on macOS and Windows. |
-| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
+| Module 2 | `in-progress` overall — six-file Practice and flexible AI content review are implemented; since 28 November the HTML prototype is checked by presence and fingerprint only (up to 25 MiB) and is no longer graded; review feedback names documents as the learner sees them, without file paths; original-task continuity and incoming theory/mastery preserved | `passed` for the 17 November Practice validity batch and Module 2→3→4 rehearsal below | `pending` overall; 17 November validity/feedback repair requested, not final runtime acceptance | `pending` | Obtain live learner/AI evidence and explicit runtime acceptance. |
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
+
+### Module 2 review feedback uses learner-facing document names, 28 November 2026
+
+Implementation: `implemented`. The Module 2 review prompt asked the model to
+"report concrete issues and document paths", so feedback cards quoted paths
+such as `planning/portfolio-brief.md`, a file the lesson never introduces.
+The owner approved a prompt-only change: the model now names documents as
+the "Xem sáu tệp cần nộp" table shows them (PRD keeps its taught name), must
+not write file paths, file names or backticked identifiers, and may describe
+a Codex-drafted document by the learner's conversation instead. A test keeps
+the prompt's names equal to that table. Module 3 and Module 4 prompts and all
+app copy are unchanged. The app-written "package not ready" message still
+prefixes issues with a path; changing it awaits an owner decision.
+
+Verification `passed` for typecheck, lint, build and the Electron smoke,
+Teacher chat, Practice guide and review feedback scripts. The unit suite had
+90 failures in five portfolio-package, frozen-content and palette files; the
+unmodified commit has the same failures in the same environment (91, plus one
+Module 2 instruction-contract test). Automated tests confirm only the prompt
+text, not model behaviour. Pilot acceptance `pending`: resubmit Module 2 in
+the desktop app and confirm the cards contain no file paths. Planned next:
+split each unmet criterion into a problem and a next step (phase 2b), and show
+criterion names on the result screen (step 1).
 
 ### Module 2 prototype checked by presence only, 28 November 2026
 
