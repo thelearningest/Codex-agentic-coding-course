@@ -56,6 +56,35 @@ describe('Practice review criterion cards', () => {
     expect(nextAction).toContain('Nhắn Codex sửa để mọi tài liệu ghi giống nhau, rồi nộp lại.')
   })
 
+  it('builds a fix prompt from unmet cards in screen order', () => {
+    const unverifiable: PracticeCriterionReview = {
+      criterionId: 'inventory-honest-and-publishable', status: 'unverifiable', evidenceRefs: [],
+      explanation: 'Chưa rõ ai cho phép đăng ảnh Vanver.'
+    }
+    const rendered = renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleTwo([met, unverifiable, unmet]) }))
+    const promptStart = rendered.indexOf('<p>', rendered.indexOf('Prompt để dán vào Codex'))
+    const prompt = rendered.slice(promptStart, rendered.indexOf('</p>', promptStart))
+    expect(prompt).toContain('Nếu điểm nào cần mình quyết định, hãy hỏi mình trước.')
+    expect(prompt).toContain('1. Các bước làm và phạm vi\nVấn đề: Bản mô tả portfolio ghi vài dự án, nhưng PRD chỉ làm Vanver.\nViệc cần làm: Nhắn Codex sửa để mọi tài liệu ghi giống nhau, rồi nộp lại.')
+    expect(prompt).toContain('2. Tư liệu, nguồn và quyền sử dụng\nChưa rõ ai cho phép đăng ảnh Vanver.')
+    expect(prompt).not.toContain('Người xem, mục tiêu và phạm vi')
+
+    const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleTwo([met, unmet]) }))
+    expect(html).toContain('Nhờ Codex sửa những điểm trên')
+    expect(html).toContain('Sao chép prompt')
+    expect(html.indexOf('Nhờ Codex sửa những điểm trên')).toBeLessThan(html.indexOf('Xem 1 tiêu chí đã đáp ứng'))
+    const compact = renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleTwo([met, unmet]), compact: true }))
+    expect(compact).toContain('Nhờ Codex sửa những điểm trên')
+  })
+
+  it('offers the fix prompt only for Module 2 results that still need work', () => {
+    const moduleThree = moduleTwo([met, unmet])
+    moduleThree.activePractice = { ...moduleThree.activePractice!, practiceId: 'm3-portfolio-build', practiceVersion: '2.1.0' }
+    expect(renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleThree }))).not.toContain('Nhờ Codex sửa')
+    const allMet = renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleTwo([met]) }))
+    expect(allMet).not.toContain('Nhờ Codex sửa')
+  })
+
   it('falls back to the explanation for results without a problem and next step', () => {
     const older = { ...unmet, problem: undefined, nextStep: undefined }
     const html = renderToStaticMarkup(createElement(PracticeProgress, { workspace: moduleTwo([met, older]) }))

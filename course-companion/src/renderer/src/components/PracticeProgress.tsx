@@ -1,5 +1,5 @@
 import { setupSettings } from '../../../../shared/setup-settings'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import type {
   PlanningPracticeActionRequest,
   PortfolioStageActionRequest,
@@ -134,6 +134,61 @@ function sortCriteria(criteria: readonly CriterionReview[]): CriterionReview[] {
   return [...criteria].sort((a, b) => criterionStatusOrder[a.status] - criterionStatusOrder[b.status])
 }
 
+// Module 2 only: later modules read learner-written Codex messages as evidence,
+// so a prepared prompt there would blur what the learner wrote themselves.
+const FIX_PROMPT_PRACTICE_ID = 'm2-portfolio-planning'
+
+function buildReviewFixPrompt(criteria: readonly CriterionReview[]): string {
+  const items = sortCriteria(criteria)
+    .filter((criterion) => criterion.status !== 'satisfied')
+    .map((criterion, index) => {
+      const name = criterionNames[criterion.criterionId] ?? criterionStatusLabels[criterion.status]
+      const body = criterion.problem && criterion.nextStep
+        ? `Vấn đề: ${criterion.problem}\nViệc cần làm: ${criterion.nextStep}`
+        : criterion.explanation
+      return `${index + 1}. ${name}\n${body}`
+    })
+  return [
+    'Triết vừa duyệt gói planning và góp ý những điểm dưới đây. Hãy sửa giúp mình. Nếu điểm nào cần mình quyết định, hãy hỏi mình trước. Sửa xong, hãy tóm tắt ngắn gọn bạn đã đổi gì trong tài liệu nào.',
+    ...items
+  ].join('\n\n')
+}
+
+function ReviewFixPrompt({ criteria }: { criteria: readonly CriterionReview[] }) {
+  const titleId = useId()
+  const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle')
+  const text = buildReviewFixPrompt(criteria)
+  const copyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setStatus('copied')
+    } catch {
+      setStatus('error')
+    }
+  }
+  return (
+    <aside className="practice-start-prompt practice-review-fix-prompt" data-copy-state={status} aria-labelledby={titleId}>
+      <header>
+        <strong id={titleId}>Nhờ Codex sửa những điểm trên</strong>
+        <button type="button" onClick={() => void copyPrompt()}>
+          {status === 'copied' ? 'Đã sao chép' : status === 'error' ? 'Thử lại' : 'Sao chép prompt'}
+        </button>
+      </header>
+      <details>
+        <summary>Prompt để dán vào Codex</summary>
+        <p>{text}</p>
+      </details>
+      {status !== 'idle' ? (
+        <p className="practice-start-prompt-status" role="status">
+          {status === 'copied'
+            ? 'Đã sao chép prompt. Bạn có thể dán vào Codex.'
+            : 'Chưa thể sao chép. Hãy thử lại.'}
+        </p>
+      ) : null}
+    </aside>
+  )
+}
+
 function CriterionItem({ criterion }: { criterion: CriterionReview }) {
   const name = criterionNames[criterion.criterionId]
   const status = criterionStatusLabels[criterion.status]
@@ -198,6 +253,8 @@ export function PracticeProgress({
   // Match the first card on screen, where unmet criteria come before unverifiable ones.
   const unresolvedCriterion = sortCriteria(reviewResult?.criteria ?? []).find((criterion) => criterion.status !== 'satisfied')
   const unresolvedGuidance = unresolvedCriterion?.nextStep ?? unresolvedCriterion?.explanation
+  const showFixPrompt = workspace.activePractice?.practiceId === FIX_PROMPT_PRACTICE_ID
+    && reviewStatus === 'needs-work' && Boolean(unresolvedCriterion)
   const nextChecklistStep = workspace.checklist.find((step) =>
     step.status === 'current' || step.status === 'stale' || step.status === 'pending')
   const needsPackageSubmission = workspace.portfolioPackage?.ready && !workspace.portfolioPackage.approved
@@ -334,6 +391,7 @@ export function PracticeProgress({
                 <CriterionItem criterion={criterion} key={criterion.criterionId} />
               ))}
             </ol>
+            {showFixPrompt ? <ReviewFixPrompt criteria={reviewResult.criteria} /> : null}
           </section>
         ) : null}
         {!practicePassed ? packageSubmission : null}
@@ -416,6 +474,7 @@ export function PracticeProgress({
                     <CriterionItem criterion={criterion} key={criterion.criterionId} />
                   ))}
                 </ol>
+                {showFixPrompt && open.length > 0 ? <ReviewFixPrompt criteria={reviewResult.criteria} /> : null}
                 {foldMet ? (
                   <details className="practice-review-met">
                     <summary>Xem {met.length} tiêu chí đã đáp ứng</summary>

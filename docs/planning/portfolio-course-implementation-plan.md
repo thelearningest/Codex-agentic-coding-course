@@ -54,6 +54,26 @@ and must never be inferred from a passing automated check.
 | Module 3 | `implemented` — Practice 2.1 opens a dedicated build chat in the Module 2 Project and resumes it for final review | `passed` for the chat handoff and disposable desktop journey recorded below | First-build flow and revised assessment approved for integration on 18 November. Runtime acceptance is pending. | `pending` | Rehearse the two visits with a learner and review their own portfolio. |
 | Module 4 | `in-progress` overall — Practice, flexible release evidence review, course-page entry and reviewed completion are `implemented`; course-wide acceptance remains separate | `passed` for the 17 November Practice validity batch and disposable journey below; real beginner/AI/native acceptance is separate | Prior scoped implementation/publication approvals remain recorded; expanded validity repairs and commit/push requested 17 November; final learner/runtime acceptance `pending` | `pending` | Commit and push the verified repair as requested, then obtain live learner/AI and owner acceptance. |
 
+### Module 2 fix prompt to paste into Codex, 28 November 2026
+
+Implementation: `implemented`. The owner asked for a way to send review
+feedback straight to Codex and approved the plan and wording on 28 November.
+Below the unmet cards, in the full and narrow views, a block titled "Nhờ Codex
+sửa những điểm trên" copies a prompt with the unmet criteria in screen order,
+each with its name and problem and next step (or the explanation for older
+results). The prompt asks Codex to fix them, to ask the learner first where a
+decision is theirs, and to summarise what changed in which document. It
+reuses the existing copy-prompt style and status message. It appears only for
+Module 2, because Modules 3 and 4 read learner-written Codex messages as
+authorship and publishing-consent evidence. Re-approval after Codex edits
+still relies on the existing approval checkbox.
+
+Verification `passed` for typecheck, lint, build, the review feedback Electron
+script and focused card, controls and renderer tests. Scratch renders at 1180,
+380 and 320 px showed no overflow. Copying to the real clipboard in the
+desktop app is not verified. Pilot acceptance `pending`: the owner copies the
+prompt from a real Module 2 result and pastes it into Codex.
+
 ### Module 2 unmet criteria show a problem and a next step, 28 November 2026
 
 Implementation: `implemented`. The owner approved phase 2b on 28 November,
